@@ -1,0 +1,46 @@
+{% block extracss %}
+
+    <!-- CSS -->
+    <link rel="stylesheet" href={{ url_for('static', filename="css/views/sites/style.css") }}>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <h2 class="site-header-name">
+            <ol class="breadcrumb">
+              <li class="active"><a href="/sites/site/{{ site_id }}"><i class="fa fa-globe fa-fw"></i>{{ site_name }}</a></li>
+            </ol>
+        </h2>
+    </div>
+    
+    <div class="anv all">
+        <ul id="site-overview-tabs" class="nav of anw any" role="tablist">
+            <li class="active" role="presentation">
+                <a href="/sites/site/{{ site_id }}/overview/info" role="tab" data-toggle="tab" aria-controls="sales">Site Info</a>
+            </li>
+            <li role="presentation">
+                <a href="/sites/site/{{ site_id }}/overview/timeline" role="tab" data-toggle="tab" aria-controls="inventory">Timeline</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div id="overview">
+    {% block overview %}
+    {% endblock %}
+    </div>
+    
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+    $(function() {
+        
+        $('#site-overview-tabs li a').on('click', function(event) {
+            event.preventDefault();
+            $('#overview').load($(this).attr('href'));
+        });
+    });
+    </script>
+{% endblock %}

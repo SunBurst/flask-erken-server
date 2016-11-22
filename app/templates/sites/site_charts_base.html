@@ -1,0 +1,40 @@
+{% block sitechartsbase %}
+    <div class="col-lg-2">
+        <div class="well well-sm">
+            <ul id="parameter-pills" class="nav nav-pills nav-stacked"></ul>
+        </div>
+    </div>
+    <div id="chart-div" class="col-lg-10">{% block sitecharts %}{% endblock %}</div>
+{% endblock %}
+
+<script type="text/javascript">
+$(function () {
+
+    var siteId = '{{ site_id }}';
+    var getParametersUrl = 'get_parameters?site_id=' + siteId;
+
+    Highcharts.setOptions({
+        global: {
+          useUTC: false
+        }
+    });
+
+    var getParameterDataBaseUrl = '/sites/get_parameter_data?site_id=' + siteId;
+
+    $.getJSON(getParametersUrl, function(data) {
+        $.each(data, function (param, paramData) {
+            var paramId = paramData.parameter_id;
+            var paramName = paramData.parameter_name;
+            $('#parameter-pills').append('<li><a class="param-choice" href="#chart-div"' +
+                'param-id="' + paramId + '">' + paramName + '</a></li>');
+        });
+    });
+
+    $(document).on('click', '.param-choice', function() {
+        var paramId = $(this).attr('param-id');
+        var siteChartsUrl = 'site_charts?site_id=' + siteId + '&param_id=' + paramId;
+        $('#chart-div').load(siteChartsUrl);
+    });
+
+});
+</script>

@@ -1,0 +1,78 @@
+{% block locationoverview %}
+
+<!-- Google Map -->
+<div class="col-lg-8">
+    <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-map-marker fa-fw"></i> {{ site_name }}/{{ location_name }}</div>
+        <div class="locations-map-container">
+            <div id="locations-map-canvas" class="locations-map-canvas"></div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-4">
+    <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-info fa-fw"></i></div>
+        <img class="img-responsive" src="/static/images/locations/{{ location_image }}" alt="{{ location_name }}">
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td><strong>Location name</strong></td>
+                        <td>{{ location_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Position (WGS84)</strong></td>
+                        <td>{{ location_position.lat }}, {{ location_position.lng }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-body"><p>{{ location_description }}</p></div>
+    </div>
+</div>
+
+{% endblock %}
+
+<script type="text/javascript">
+$(function () {
+
+    var siteId = '{{ site_id }}';
+    var siteName = '{{ site_name }}';
+    var locationId = '{{ location_id }}';
+    var locationName = '{{ location_name }}';
+    var locationPosition = {{ location_position }};
+
+    var map;
+    var markers = {};
+
+    function initMap() {
+        var mapOptions = {
+            center: locationPosition,
+            zoom: 12,
+        };
+
+        map = new google.maps.Map(document.getElementById('locations-map-canvas'), mapOptions);
+
+        google.maps.event.addDomListener(window, 'resize', function() {
+            map.setCenter(locationPosition);
+        });
+    }
+
+    function addMarker(name, position) {
+
+        var marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: name
+        });
+
+    }
+
+    initMap();
+    addMarker(locationName, locationPosition);
+
+    google.maps.event.addDomListener(window, 'load', initMap);
+
+});
+</script>

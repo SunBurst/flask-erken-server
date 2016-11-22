@@ -1,0 +1,45 @@
+{% block overview %}
+    <div class="row">
+        </div><table class="cl" data-sort="table">
+          <thead>
+            <tr>
+              <th class="header"><input type="checkbox" class="aqk" id="selectAll"></th>
+              <th class="header headerSortDown">Time</th>
+              <th class="header">Parameter</th>
+              <th class="header">Location</th>
+              <th class="header">QC Level</th>
+              <th class="header">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="aql"></td>
+              <td><a href="#">#10001</a></td>
+              <td>First Last</td>
+              <td>Admin theme, marketing theme</td>
+              <td>01/01/2015</td>
+              <td>$200.00</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+    
+    <script>
+    $(document).ready(function() {
+        var siteId = '{{ site_id }}';
+        var getSiteParamReadingsUrl = '/sites/get_site_parameter_readings/' + siteId + '/50/';
+        
+        function populateTable() {
+            return $.getJSON(getSiteParamReadingsUrl).done(function(result) {
+                $.each(result, function(index, data) {
+                    console.log(data);
+                });
+            });
+        }
+    });
+    </script>
+
+{% endblock %}

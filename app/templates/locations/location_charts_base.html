@@ -1,0 +1,45 @@
+{% block locationchartsbase %}
+    <div class="col-lg-2">
+        <div class="well well-sm">
+            <ul id="parameter-pills" class="nav nav-pills nav-stacked"></ul>
+        </div>
+    </div>
+    <div id="chart-div" class="col-lg-10">{% block locationcharts %}{% endblock %}</div>
+{% endblock %}
+
+<script type="text/javascript">
+$(function () {
+
+    var siteId = '{{ site_id }}';
+    var locationId = '{{ location_id }}';
+    var locationName = '{{ location_name }}';
+    var getParametersUrl = 'get_parameters?location_id=' + locationId;
+
+    Highcharts.setOptions({
+        global: {
+          useUTC: false
+        },
+        plotOptions: {
+            series: {
+                animation: false
+        }
+    }
+    });
+
+    $.getJSON(getParametersUrl, function(data) {
+        $.each(data, function (param, paramData) {
+            var paramId = paramData.parameter_id;
+            var paramName = paramData.parameter_name;
+            $('#parameter-pills').append('<li><a class="param-choice" href="#chart-div"' +
+                'param-id="' + paramId + '">' + paramName + '</a></li>');
+        });
+    });
+
+    $(document).on('click', '.param-choice', function() {
+        var paramId = $(this).attr('param-id');
+        var locationChartsUrl = 'location_charts?location_id=' + locationId + '&param_id=' + paramId;
+        $('#chart-div').load(locationChartsUrl);
+    });
+
+});
+</script>

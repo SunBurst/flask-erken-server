@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      Linux_Downloads – Oracle VM VirtualBox
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="search" href="/search" />
+        <link rel="help" href="/wiki/TracGuide" />
+        <link rel="alternate" href="/wiki/Linux_Downloads?format=txt" type="text/x-trac-wiki" title="Plain Text" />
+        <link rel="start" href="/wiki" />
+        <link rel="stylesheet" href="/chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="/chrome/common/css/wiki.css" type="text/css" />
+        <link rel="shortcut icon" href="/graphics/VirtualBox.ico" type="image/x-icon" />
+        <link rel="icon" href="/graphics/VirtualBox.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="/search/opensearch" title="Search Oracle VM VirtualBox" />
+    <script type="text/javascript" src="/chrome/common/js/jquery.js"></script><script type="text/javascript" src="/chrome/common/js/babel.js"></script><script type="text/javascript" src="/chrome/common/js/trac.js"></script><script type="text/javascript" src="/chrome/common/js/search.js"></script><script type="text/javascript" src="/chrome/common/js/folding.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#content").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $("#content").find(".wikianchor").each(function() {
+          $(this).addAnchor(babel.format(_("Link to #%(id)s"), {id: $(this).attr('id')}));
+        });
+        $(".foldable").enableFolding(true, true);
+      });
+    </script>
+  <link rel="stylesheet" type="text/css" href="/chrome/site/style.css" />
+</head>
+  <body>
+  <div id="vboxlogo">
+    <a id="innologo-f" href="https://www.virtualbox.org/"><img src="/graphics/vbox_logo2_gradient.png" alt="" /></a>
+  </div>
+  <div id="vboxstring">
+    <img src="/graphics/vboxlogodown.png" alt="VirtualBox" />
+  </div>
+  <div class="innoframe" id="innolinks">
+    <a href="/wiki/VirtualBox">About</a><br />
+    <a href="/wiki/Screenshots">Screenshots</a><br />
+    <a href="/wiki/Downloads">Downloads</a><br />
+    <a href="/wiki/Documentation">Documentation</a><br />
+        <a href="/wiki/End-user_documentation">End-user docs</a><br />
+        <a href="/wiki/Technical_documentation">Technical docs</a><br />
+    <a href="/wiki/Contributor_information">Contribute</a><br />
+    <a href="/wiki/Community">Community</a><br />
+    </div>
+    <div id="center">
+      <!-- <p style="text-align:right">
+      <a href="/">Home</a> |
+      <a href="/wiki/VirtualBox">About</a>
+      <img style="margin-left:5px; vertical-align:bottom" src="/graphics/vbox40px.png" alt="" /> 
+      </p> -->
+      <form style="text-align: right" action="/search" method="get">
+        <div>
+          <input id="innosearch" type="text" name="q" size="10" value="search..." onblur="if(this.value=='') this.value='search...';" onfocus="if(this.value=='search...') this.value='';" />
+          <input type="hidden" name="wiki" value="on" />
+          <input type="hidden" name="changeset" value="on" />
+          <input type="hidden" name="ticket" value="on" />
+        </div>
+      </form>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="https://www.virtualbox.org/"><img src="/graphics/vbox_logo2_gradient.png" alt="Oracle VM VirtualBox" /></a>
+      </div>
+      <form id="search" action="/search" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="/login">Login</a></li><li class="last"><a href="/prefs">Preferences</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="last first"><a href="/browser">Browse Source</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="pagepath" class="noprint">
+  <a class="pathentry first" title="View WikiStart" href="/wiki">wiki:</a><a class="pathentry" href="/wiki/Linux_Downloads" title="View Linux_Downloads">Linux_Downloads</a>
+</div>
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><a href="/wiki/WikiStart">Start Page</a></li><li><a href="/wiki/TitleIndex">Index</a></li><li class="last"><a href="/wiki/Linux_Downloads?action=history">History</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="wiki">
+      <div class="wikipage searchable">
+        
+          
+          <div class="trac-modifiedby"><a href="/wiki/Linux_Downloads?action=diff&amp;version=329" title="Version 329 by frank">Last modified</a> <a class="timeline" href="/timeline?from=2016-09-12T20%3A06%3A44Z&amp;precision=second" title="2016-09-12T20:06:44Z in Timeline">4 weeks</a> ago</div>
+          <div id="wikipage"><h1 id="DownloadVirtualBoxforLinuxHosts">Download VirtualBox for Linux Hosts</h1>
+<h3 id="VirtualBox5.1.6forLinux"><a class="wiki" href="/wiki/VirtualBox">VirtualBox</a> 5.1.6 for Linux</h3>
+<p>
+<strong>Note:</strong> The package architecture has to match the Linux kernel architecture, that is, if you are running a 64-bit kernel, install the appropriate AMD64 package (it does not matter if you have an Intel or an AMD CPU). Mixed installations (e.g. Debian/Lenny ships an AMD64 kernel with 32-bit packages) are not supported. To install VirtualBox anyway you need to setup a 64-bit chroot environment.
+</p>
+<p>
+Please choose the appropriate package for your Linux distribution:
+</p>
+<ul><li>Ubuntu 16.04 ("Xenial") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~xenial_i386.deb"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~xenial_amd64.deb"><span class="icon"> </span>AMD64</a>
+</li><li>Ubuntu 15.10 ("Wily") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~wily_i386.deb"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~wily_amd64.deb"><span class="icon"> </span>AMD64</a>
+</li><li>Ubuntu 14.04 ("Trusty") / 14.10 ("Utopic") / 15.04 ("Vivid") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~trusty_i386.deb"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~trusty_amd64.deb"><span class="icon"> </span>AMD64</a>
+</li><li>Ubuntu 12.04 LTS ("Precise") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~precise_i386.deb"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Ubuntu~precise_amd64.deb"><span class="icon"> </span>AMD64</a>
+</li><li>Debian 9 ("Stretch") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Debian~stretch_i386.deb"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Debian~stretch_amd64.deb"><span class="icon"> </span>AMD64</a>
+</li><li>Debian 8 ("Jessie") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Debian~jessie_i386.deb"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Debian~jessie_amd64.deb"><span class="icon"> </span>AMD64</a>
+</li><li>Debian 7 ("Wheezy") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Debian~wheezy_i386.deb"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/virtualbox-5.1_5.1.6-110634~Debian~wheezy_amd64.deb"><span class="icon"> </span>AMD64</a>
+</li><li>openSUSE 13.2 ("Harlequin") / Leap 42.1 ("Malachite") <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_openSUSE132-1.i586.rpm"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_openSUSE132-1.x86_64.rpm"><span class="icon"> </span>AMD64</a>
+</li><li>Fedora 24  <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_fedora24-1.i686.rpm"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_fedora24-1.x86_64.rpm"><span class="icon"> </span>AMD64</a>
+</li><li>Fedora 22 / 23 <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_fedora22-1.i686.rpm"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_fedora22-1.x86_64.rpm"><span class="icon"> </span>AMD64</a>
+</li><li>Oracle Linux 7 ("OL7") / Red Hat Enterprise Linux 7 ("RHEL7") / CentOS 7  <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_el7-1.x86_64.rpm"><span class="icon"> </span>AMD64</a>
+</li><li>Oracle Linux 6 ("OL6") / Red Hat Enterprise Linux 6 ("RHEL6") / CentOS 6 <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_el6-1.i686.rpm"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_el6-1.x86_64.rpm"><span class="icon"> </span>AMD64</a>
+</li><li>Oracle Linux 5 ("OL5") / Red Hat Enterprise Linux 5 ("RHEL5") / CentOS 5 <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_el5-1.i386.rpm"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1-5.1.6_110634_el5-1.x86_64.rpm"><span class="icon"> </span>AMD64</a>
+</li><li>All distributions (built on EL5 and therefore do not require recent system libraries) <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Linux_x86.run"><span class="icon"> </span>i386</a> | <a class="ext-link" href="http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Linux_amd64.run"><span class="icon"> </span>AMD64</a>
+</li></ul><p>
+You might want to compare the
+</p>
+<ul><li><a href="/download/hashes/5.1.6/SHA256SUMS">SHA256</a> checksum or the 
+</li><li><a href="/download/hashes/5.1.6/MD5SUMS">MD5</a> checksum
+</li></ul><p>
+to verify the integrity of downloaded packages.<br />
+<em>The SHA256 checksums should be favored as the MD5 algorithm must be treated as insecure! </em>
+</p>
+<h3 id="OracleLinux">Oracle Linux</h3>
+<p>
+Users of Oracle Linux 5, 6 and 7 can use the public yum <a class="ext-link" href="http://public-yum.oracle.com/"><span class="icon"> </span>repository</a> and enable the el5_addons (OEL5), the ol6_addons (OL6) or the ol7_addons (OL7). If a public-yum repo file <strong>already exists</strong> in /etc/yum.repos.d, do <strong>not</strong> overwrite it but just enable the addons! After that, do
+</p>
+<pre class="wiki">yum install VirtualBox-5.1
+</pre><p>
+to the latest maintenance release of VirtualBox 5.0.x.
+</p>
+<h3 id="Debian-basedLinuxdistributions">Debian-based Linux distributions</h3>
+<p>
+Add the following line to your <tt>/etc/apt/sources.list</tt>: 
+</p>
+<pre class="wiki">deb http://download.virtualbox.org/virtualbox/debian xenial contrib
+</pre><p>
+According to your distribution, replace 'xenial' by 'vivid', 'utopic', 'trusty', 'raring', 'quantal', 'precise', 'lucid', 'jessie', 'wheezy', or 'squeeze'.
+</p>
+<p>
+<em>(Up to version 3.2 the packages were located in the non-free section. Starting with version 4.0 they are located in the contrib section.)</em>
+</p>
+<p>
+The Oracle public key for apt-secure can be downloaded
+</p>
+<ul><li><a href="https://www.virtualbox.org/download/oracle_vbox_2016.asc">here</a> for <strong>Debian 8</strong> ("Jessie") / <strong>Ubuntu 16.04</strong> ("Xenial") and later
+</li><li><a href="https://www.virtualbox.org/download/oracle_vbox.asc">here</a> for older distributions.
+</li></ul><p>
+You can add these keys with
+</p>
+<pre class="wiki">sudo apt-key add oracle_vbox_2016.asc
+sudo apt-key add oracle_vbox.asc
+</pre><p>
+or combine downloading and registering:
+</p>
+<pre class="wiki">wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+</pre><p>
+The key fingerprint for oracle_vbox_2016.asc is
+</p>
+<pre class="wiki">B9F8 D658 297A F3EF C18D  5CDF A2F6 83C5 2980 AECF
+Oracle Corporation (VirtualBox archive signing key) &lt;info@virtualbox.org&gt;
+</pre><p>
+The key fingerprint for oracle_vbox.asc is
+</p>
+<pre class="wiki">7B0F AB3A 13B9 0743 5925  D9C9 5442 2A4B 98AB 5139
+Oracle Corporation (VirtualBox archive signing key) &lt;info@virtualbox.org&gt;
+</pre><p>
+<em>(As of VirtualBox 3.2, the signing key was changed. The old Sun public key for apt-secure can be downloaded <a class="ext-link" href="http://download.virtualbox.org/virtualbox/debian/sun_vbox.asc"><span class="icon"> </span>here</a>.)</em>
+</p>
+<p>
+To install VirtualBox, do
+</p>
+<pre class="wiki">sudo apt-get update
+sudo apt-get install virtualbox-5.1
+</pre><p>
+Replace <tt>virtualbox-5.1</tt> by <tt>virtualbox-4.3</tt> to install VirtualBox 4.3.36
+<strong>Note:</strong> Ubuntu/Debian users might want to install the <strong><tt>dkms</tt></strong> package to ensure that the VirtualBox host kernel modules (<em>vboxdrv</em>, <em>vboxnetflt</em> and <em>vboxnetadp</em>) are properly updated if the linux kernel version changes during the next <tt>apt-get upgrade</tt>. For Debian it is available in Lenny backports and in the normal repository for Squeeze and later. The dkms package can be installed through the Synaptic Package manager or through the following command:
+</p>
+<pre class="wiki">sudo apt-get install dkms
+</pre><p>
+What to do when experiencing <strong>The following signatures were invalid: BADSIG ...</strong> when refreshing the packages from the repository?
+</p>
+<pre class="wiki"># sudo -s -H
+# apt-get clean
+# rm /var/lib/apt/lists/*
+# rm /var/lib/apt/lists/partial/*
+# apt-get clean
+# apt-get update
+</pre><h3 id="RPM-basedLinuxdistributions">RPM-based Linux distributions</h3>
+<p>
+Starting with VirtualBox 3.0.12 we provide a yum-style repository for Oracle Linux/Fedora/RHEL/openSUSE. Note that <strong>3.0.x</strong> .rpm packages are named <em>VirtualBox-3.0.x</em> while <strong>3.1.x</strong> .rpm packages are named <em>VirtualBox-3.1-3.1.x</em>. This naming scheme allows to use the older 3.0.x packages without changing the repository.
+</p>
+<p>
+Furthemore, all .rpm packages are signed. The Oracle public key for rpm can be downloaded <a href="https://www.virtualbox.org/download/oracle_vbox.asc">here</a>. You can add this key <em>(not necessary for yum users, see below!)</em> with
+</p>
+<pre class="wiki">sudo rpm --import oracle_vbox.asc
+</pre><p>
+or combine downloading and registering:
+</p>
+<pre class="wiki">wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
+</pre><p>
+The key fingerprint is
+</p>
+<pre class="wiki">7B0F AB3A 13B9 0743 5925  D9C9 5442 2A4B 98AB 5139
+Oracle Corporation (VirtualBox archive signing key) &lt;info@virtualbox.org&gt;
+</pre><p>
+After importing the public key, the package signature can be checked with
+</p>
+<pre class="wiki">rpm --checksig PACKAGE_NAME
+</pre><p>
+<em>Note that importing the key is not necessary for yum users (Oracle Linux/Fedora/RHEL/CentOS) when using one of the virtualbox.repo files from below as yum downloads and imports the public key automatically! </em>
+</p>
+<p>
+The package signature is checked by yum/zypper as well:
+</p>
+<ul><li>Users of <strong>Oracle Linux</strong> / <strong>RHEL</strong> can add <a class="ext-link" href="http://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo"><span class="icon"> </span>the Oracle Linux repo file</a> to <em>/etc/yum.repos.d/</em>.
+</li><li>Users of <strong>Fedora</strong> can add <a class="ext-link" href="http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo"><span class="icon"> </span>the Fedora repo file</a> to <em>/etc/yum.repos.d/</em>.
+</li><li>Users of <strong>openSUSE</strong> can add the proper repo file for <a class="ext-link" href="http://download.virtualbox.org/virtualbox/rpm/opensuse/11.4/virtualbox.repo"><span class="icon"> </span>11.4/12.1/12.2</a>,<a class="ext-link" href="http://download.virtualbox.org/virtualbox/rpm/opensuse/12.3/virtualbox.repo"><span class="icon"> </span>12.3</a>,<a class="ext-link" href="http://download.virtualbox.org/virtualbox/rpm/opensuse/13.1/virtualbox.repo"><span class="icon"> </span>13.1</a> or <a class="ext-link" href="http://download.virtualbox.org/virtualbox/rpm/opensuse/13.2/virtualbox.repo"><span class="icon"> </span>13.2 / 42.1</a> to <em>/etc/zypp/repos.d/</em>.
+</li></ul><p>
+<strong>Note:</strong> Users of Fedora/Mandriva might want to install the <strong><tt>dkms</tt></strong> package (not available on openSUSE) to ensure that the VirtualBox host kernel modules (<em>vboxdrv</em>, <em>vboxnetflt</em> and <em>vboxnetadp</em>) are properly updated if the linux kernel version changes during the next kernel update.
+</p>
+</div>
+        
+        
+      </div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="last first">
+          <a rel="nofollow" href="/wiki/Linux_Downloads?format=txt">Plain Text</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    </div><!-- center -->
+    <div class="innoframe" id="innofoot">
+    <p style="text-align:center">
+      <a href="http://www.oracle.com"><img src="/graphics/logo_oracle_footer.gif" alt="www.oracle.com" /></a><br />
+      <a href="http://www.oracle.com/us/technologies/virtualization/061976.html">Contact</a> – <a href="http://www.oracle.com/html/privacy.html">Privacy policy</a> – <a href="http://www.oracle.com/html/terms.html">Terms of Use</a>
+    </p>
+  </div>
+</body>
+</html>@�5.>      W��/W��4<��       0    :https://www.virtualbox.org/wiki/Linux_Downloads necko:classified 1 security-info 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 request-method GET response-head HTTP/1.1 200 OK
+Date: Fri, 07 Oct 2016 18:53:36 GMT
+Server: Oracle-Application-Server-11g
+Cache-Control: must-revalidate
+Content-Length: 18916
+Content-Type: text/html;charset=utf-8
+Content-Language: en
+ charset UTF-8 uncompressed-len 0 predictor::resource-count 14 predictor::https://www.virtualbox.org/chrome/common/css/trac.css 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/css/wiki.css 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/js/jquery.js 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/js/babel.js 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/js/trac.js 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/js/search.js 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/js/folding.js 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/site/style.css 1,1,1475866415,0 predictor::https://www.virtualbox.org/graphics/vbox_logo2_gradient.png 1,1,1475866415,0 predictor::https://www.virtualbox.org/graphics/vboxlogodown.png 1,1,1475866415,0 predictor::https://www.virtualbox.org/graphics/logo_oracle_footer.gif 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/css/code.css 1,1,1475866415,0 predictor::https://www.virtualbox.org/graphics/vbox_gradient.png 1,1,1475866415,0 predictor::https://www.virtualbox.org/chrome/common/extlink.gif 1,1,1475866415,0   I�

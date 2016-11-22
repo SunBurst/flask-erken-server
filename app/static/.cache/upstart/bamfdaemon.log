@@ -1,0 +1,26 @@
+
+(bamfdaemon:2233): GVFS-WARNING **: can't init metadata tree /home/marcus/.local/share/gvfs-metadata/root: open: Permission denied
+
+(bamfdaemon:2233): GVFS-WARNING **: can't init metadata tree /home/marcus/.local/share/gvfs-metadata/root: open: Permission denied
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+(bamfdaemon:2233): GVFS-WARNING **: can't init metadata tree /home/marcus/.local/share/gvfs-metadata/root: open: Permission denied
+
+(bamfdaemon:2233): GLib-GObject-CRITICAL **: g_object_set_data: assertion 'G_IS_OBJECT (object)' failed
+
+(bamfdaemon:2233): GVFS-WARNING **: can't init metadata tree /home/marcus/.local/share/gvfs-metadata/root: open: Permission denied
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
+
+** (bamfdaemon:2233): CRITICAL **: bamf_matcher_set_starting_desktop_file: assertion 'desktop_file != NULL' failed
