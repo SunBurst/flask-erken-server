@@ -1,12 +1,22 @@
 {% block overview %}
-<div class="row">
+    <div class="row">
         <div class="col-lg-8">
             <div class="widget-container">
                 <div class="widget">
                     <div class="widget-header">
-                        <h4>Position</h4>
+                        <h4>Position
+                            <div class="pull-right">
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-widget dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                  <i class="fa fa-map-marker fa-fw"></i>Location
+                                  <span class="caret"></span>
+                                </button>
+                                <ul id="site-map-dropdown" class="dropdown-menu pull-right" role="menu"></ul>
+                              </div>
+                            </div>
+                        </h4>
                     </div>
-                    <div class="widget-content">
+                    <div class="widget-content no-padding">
                         <div class="google-map">
                             <div id="site-map"></div>
                         </div>
@@ -8834,6 +8844,7 @@
         var getLocationsUrl = 'sites/get_locations/' + siteId;
         var map;
         var markers = [];
+        var markersDict = {};
         var siteLatitude = {{ site_latitude }};
         var siteLongitude = {{ site_longitude }};
 
@@ -8860,6 +8871,7 @@
                     var locationLatLng = new google.maps.LatLng(locationLat, locationLng);
 
                     addMarker(locationId, locationName, locationLatLng, locationDescription, locationImage);
+                    addToMapDropdown(locationId, locationName);
                     //bounds.extend(siteLatLng);
                 });
             });
@@ -8869,7 +8881,11 @@
             var center = new google.maps.LatLng(lat, lng);
             map.panTo(center);
         }
-
+        
+        function addToMapDropdown(locationId, locationName) {
+            $('#site-map-dropdown').append('<li id="' + locationId + '"><a href="#">' + locationName + '</a></li>');
+        }
+        
         function addMarker(id, name, latlng, description, image) {
             var marker = new google.maps.Marker({
                 position: latlng,
@@ -8900,8 +8916,7 @@
             });
 
             markers.push(marker);
-            
-            $('#dropdown-locations').append('<li id="' + id + '"><a href="#">' + name + '</a></li>');
+            markersDict[id] = marker;
             
         }
         
@@ -8971,6 +8986,7 @@
         }(Highcharts));
         
         initMap();
+        
         loadAllLocations().done(function() {
             var options = {imagePath: '{{ url_for('static', filename='js/googlemaps-markerer-cluster/images/m') }}'};
             var markerCluster = new MarkerClusterer(map, markers, options);
@@ -9169,8 +9185,16 @@
         //    initHeatmapChart('Water Temperature', 'Subtitle', data);
         //});
         //getSiteCharts();
-        
+    
+        $('#site-map-dropdown').on('click', 'li', function() {
+            var locationId = $(this).attr('id');
+            var marker = markersDict[locationId];
+            var position = marker.getPosition();
+            map.setCenter(position);
+        });
+    
     });
+    
     </script>
 
 {% endblock %}

@@ -75,6 +75,10 @@ def site_overview_info(site_id):
 def site_overview_timeline(site_id):
     return render_template('sites/site_overview_timeline.html', site_id=site_id)
 
+@app.route('/sites/site/<uuid:site_id>/map/')
+def site_map(site_id):
+    return render_template('sites/site_map.html')
+
 @app.route('/sites/site/<uuid:site_id>/data/')
 def site_data(site_id):
     pass
@@ -118,31 +122,11 @@ def get_locations(site_id):
 
     return json.dumps(locations_data, cls=CustomEncoder)
     
-@app.route('/sites/get_site_parameter_readings/<uuid:site_id>/<int:limit>')
+@app.route('/sites/get_site_parameter_readings/<uuid:site_id>/<int:limit>/')
 def get_site_parameter_readings(site_id, limit):
     site_readings_query = "SELECT * FROM parameter_readings_by_site WHERE site_id=? limit ?"
-    prepared = cassandra_connection.session.prepare(readings_query)
+    prepared = cassandra_connection.session.prepare(site_readings_query)
     rows = cassandra_connection.session.execute_async(prepared, (site_id, limit, )).result()
     site_readings_data = [row for row in rows]
     
     return json.dumps(site_readings_data, cls=CustomEncoder)
-
-def perdelta(start, end, delta):
-    curr = start
-    while curr < end:
-        yield curr
-        curr += delta
-
-@app.route('/charts/heatmap')
-def heatmap():
-    import random
-    from datetime import date, datetime, timedelta
-    first = [[dt, 0.5, random.uniform(4.0, 7.0)] for dt in perdelta(datetime(2016, 11, 1), datetime(2016, 11, 8), timedelta(days=1))]
-    print(first)
-    second = [[dt, 3.0, random.uniform(4.0, 7.0)] for dt in perdelta(datetime(2016, 11, 1), datetime(2016, 11, 8), timedelta(days=1))]
-    print(second)
-    third = [[dt, 15.0, random.uniform(4.0, 7.0)] for dt in perdelta(datetime(2016, 11, 1), datetime(2016, 11, 8), timedelta(days=1))]
-    print(third)
-    data = [first, second, third]
-    
-    return json.dumps(data, cls=CustomEncoder)

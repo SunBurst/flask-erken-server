@@ -1,5 +1,5 @@
 * {
-    webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
@@ -7,11 +7,16 @@ html {
 }
 
 body {
+    background-color: #252830;
+    color: #cfd2da;
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0;
     line-height: 1.5;
-    color: #cfd2da;
-    background-color: #252830;
+    margin: 0;
+    min-width: 100%;
+    width: 1px;
 }
 
 #wrapper {
@@ -115,20 +120,33 @@ h1 {
 .widget {
     margin-bottom: 20px;
     padding-left: 0;
+    border: 1px solid #434857;
+    border-radius: 4px;
+}
+
+.widget-header {
+    border-bottom: 1px solid #434857;
+    padding: 10px 15px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
 }
 
 .widget-header h4 {
     display: block;
-    padding: 10px 15px;
-    margin-top: 0px;
-    margin-bottom: -1px;
     font-weight: 400;
     color: #ffffff;
     background-color: transparent;
-    border: 1px solid #434857;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
     font-size: 18px;
+    margin-top: 0px;
+    margin-bottom: -1px;
+}
+
+.widget-content {
+    padding: 15px;
+}
+
+.no-padding {
+    padding: 0;
 }
 
 .widget dl {
@@ -140,13 +158,87 @@ h1 {
     margin-top: 10px;
 }
 
+.aky {
+    margin-top: 20px !important;
+}
+
+.akt {
+    margin-bottom: 0 !important;
+}
+
+.nav {
+    padding-left: 0;
+    list-style: none;
+}
+
+ol, ul {
+    margin-top: 0;
+    margin-bottom: 10.5px;
+}
+
+.tr > li {
+    float: left;
+}
+
+.tr > li + li {
+    margin-left: 30px;
+}
+
+.tr > li > a {
+    display: inline-block;
+    padding: 10px 0;
+    border-bottom: 4px solid transparent;
+}
+
+.tr > li.active > a, .tr > li.active > a:hover, .tr > li.active > a:focus {
+    font-weight: 500;
+    color: #1ca8dd;
+    border-bottom-color: #1ca8dd;
+}
+
+.nav > li {
+    position: relative;
+    display: block;
+}
+
+.nav > li > a {
+    color: #cfd2da;
+    display: block;
+    padding: 7px 15px;
+}
+
+.alp {
+    margin-bottom: 30px !important;
+}
+.akr {
+    margin-top: 0 !important;
+}
+
+hr {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border: 0;
+    border-top: 1px solid #434857;
+}
+
+a {
+    color: #1ca8dd;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.btn {
+    background-color: #434857;
+}
+
+.btn-widget {
+    padding: 1px 5px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
 @media(min-width:768px) {
-    body {
-        font-size: 16px;
-        font-family: Roboto,sans-serif;
-        font-weight: 300;
-        line-height: 1.6;
-    }
     .sidebar {
         z-index: 1;
         position: absolute;
@@ -172,6 +264,51 @@ h1 {
         max-width: 75%;
     }
     
+}
+
+.cl {
+    width: 100%;
+    max-width: 100%;
+}
+
+.eg {
+    overflow-x: auto;
+    min-height: 0.01%;
+    border: 1px solid #434857;
+}
+
+table {
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.cl caption + thead tr:first-child th, .cl colgroup + thead tr:first-child th, .cl thead:first-child tr:first-child th, .cl caption + thead tr:first-child td, .cl colgroup + thead tr:first-child td, .cl thead:first-child tr:first-child td {
+    border-top: 0;
+}
+.cl thead tr th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #434857;
+}
+.cl thead tr th, .cl tbody tr th, .cl tfoot tr th, .cl thead tr td, .cl tbody tr td, .cl tfoot tr td {
+    padding: 8px;
+    line-height: 1.5;
+    vertical-align: top;
+    border-top: 1px solid #434857;
+}
+th {
+    text-align: left;
+}
+td, th {
+    padding: 0;
+}
+
+.headerSortUp, .headerSortDown {
+    white-space: nowrap;
+    cursor: pointer;
+    font-weight: 700 !important;
+    color: #1ca8dd !important;
+    border-bottom-color: #1ca8dd !important;
 }
 
 @media(max-width:767px) {
@@ -240,24 +377,24 @@ navbar-default sidebar {
     left: auto;
 }
 
-.nav li a {
+#side-menu li a {
     border-radius: 4px;
     color: #cfd2da;
 }
 
-.nav li a:focus {
+#side-menu li a:focus {
     background-color: #1ca8dd;
     color: #252830;
     font-weight: 500;
 }
 
-.nav li a.active:focus {
+#side-menu li a.active:focus {
     background-color: #1ca8dd;
     color: #252830;
     font-weight: 500;
 }
 
-.nav li a:hover {
+#side-menu li a:hover {
     background-color: #434857;
 }
 

@@ -1,230 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+    <head>
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-    <title>Erken Laboratory Monitoring</title>
+        <title>Erken Laboratory Monitoring</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
-        crossorigin="anonymous">
-    
-    <!-- Font-Awesome CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    <!-- metisMenu CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.css">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href={{ url_for('static', filename="css/views/style.css") }}>
-
-    {% block extracss %}
-    {% endblock %}
-
-</head>
-
-<body>
-
-    <!-- #wrapper -->
-    <div id="wrapper">
-
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-
-            <!-- .navbar-header -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Erken Laboratory Monitoring</a>
-            </div>
-            <!-- /.navbar-header -->
-
-            <!-- sidebar -->
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav in" id="side-menu">
-                        <li class="dropdown-header">Sites</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- /sidebar -->
-
-        </nav>
-        
-        <!-- #page-wrapper -->
-        <div id="page-wrapper">
-            {% block content %}{% endblock %}
-        </div>
-        <!--/#page-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
-
-    <!-- jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        <!-- Bootstrap Core CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
             crossorigin="anonymous">
-    </script>
-    
-    <!-- jQuery local fallback -->
-    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/jquery/jquery-3.1.1.min.js') }}"><\/script>')</script>
-    
-    <!-- Bootstrap Core JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
-        crossorigin="anonymous"></script>
         
-    <!-- Bootstrap Core JavaScript local fallback -->
-    <script>if(typeof($.fn.modal) === 'undefined') {document.write('<script src="{{ url_for('static', filename='css/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"><\/script>')}</script>
-    
-    <!-- metisMenu JavaScript -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.js"></script>
-    
-    <!-- metisMenu CSS/JavaScript local fallback -->
-    <script>
-    if (typeof metisMenu !== 'function') {
-        $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/metisMenu-master/dist/metisMenu.min.css') }}">');
-        document.write('<script src="{{ url_for('static', filename='css/metisMenu-master/dist/metisMenu.min.js') }}"><\/script>');
+        <!-- Font-Awesome CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        <!-- metisMenu CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.css">
+        
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href={{ url_for('static', filename="css/views/style.css") }}>
+
+        {% block extracss %}
+        {% endblock %}
+
+    </head>
+
+    <body>
+
+        <!-- #wrapper -->
+        <div id="wrapper">
+
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+                <!-- .navbar-header -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Erken Laboratory Monitoring</a>
+                </div>
+                <!-- /.navbar-header -->
+
+                <!-- sidebar -->
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav in" id="side-menu">
+                            <li class="dropdown-header">Sites</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /sidebar -->
+
+            </nav>
             
-    }
-    </script>
-    
-    <!-- Bootstrap CSS local fallback -->
-    <script>
-    $(document).ready(function() {
-        var bodyMargin = $('body').css('margin');
-        if (bodyMargin != '0px') {
-            $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-3.3.7-dist/css/bootstrap.min.css') }}">');}});
-    </script>
-    
-    <!-- Font Awesome CSS local fallback  -->
-    <script>
-    $(document).ready(function() {
-        var fontFamily = $('.fa').css('font-family');
-        if (fontFamily != 'FontAwesome') {
-            $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome-4.7.0/css/font-awesome.min.css') }}">');}});
-    </script>
+            <!-- #page-wrapper -->
+            <div id="page-wrapper">
+                {% block content %}{% endblock %}
+            </div>
+            <!--/#page-wrapper -->
 
-    <!-- Google Maps API JavaScript -->
-    <script src={{ url_for('static', filename="js/googlemaps-markerer-cluster/markerclusterer.js") }}></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN193fgB-M7MdBiaxqwi2h9i_-2_MAWsk"></script>
-    
-    <!-- HighCharts API JavaScript -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    
-    <script>
-    
-    function addLocationsToSideMenu(siteId, locations) {
-        var locationsListItems = '';
-        $.each(locations, function(index, location) {
-            locationId = location.location_id;
-            locationName = location.location_name;
-            locationItemId = 'location-' + locationId;
-            locationsListItems += '<li id="' + locationItemId + '">' + 
-                '<a href="/sites/site/' + siteId + '/locations/location/' + locationId + '">' + 
-                '<i class="fa fa-map-marker fa-fw"></i>' + ' ' + locationName + '</a></li>';
+        </div>
+        <!-- /#wrapper -->
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+                crossorigin="anonymous">
+        </script>
+        
+        <!-- jQuery local fallback -->
+        <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/jquery/jquery-3.1.1.min.js') }}"><\/script>')</script>
+        
+        <!-- Bootstrap Core JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+            crossorigin="anonymous"></script>
+            
+        <!-- Bootstrap Core JavaScript local fallback -->
+        <script>if(typeof($.fn.modal) === 'undefined') {document.write('<script src="{{ url_for('static', filename='css/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"><\/script>')}</script>
+        
+        <!-- metisMenu JavaScript -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.js"></script>
+        
+        <!-- metisMenu CSS/JavaScript local fallback -->
+        <script>
+        if (typeof metisMenu !== 'function') {
+            $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/metisMenu-master/dist/metisMenu.min.css') }}">');
+            document.write('<script src="{{ url_for('static', filename='css/metisMenu-master/dist/metisMenu.min.js') }}"><\/script>');
+                
+        }
+        </script>
+        
+        <!-- Bootstrap CSS local fallback -->
+        <script>
+        $(document).ready(function() {
+            var bodyMargin = $('body').css('margin');
+            if (bodyMargin != '0px') {
+                $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-3.3.7-dist/css/bootstrap.min.css') }}">');}});
+        </script>
+        
+        <!-- Font Awesome CSS local fallback  -->
+        <script>
+        $(document).ready(function() {
+            var fontFamily = $('.fa').css('font-family');
+            if (fontFamily != 'FontAwesome') {
+                $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome-4.7.0/css/font-awesome.min.css') }}">');}});
+        </script>
+
+        <!-- Google Maps API JavaScript -->
+        <script src={{ url_for('static', filename="js/googlemaps-markerer-cluster/markerclusterer.js") }}></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN193fgB-M7MdBiaxqwi2h9i_-2_MAWsk"></script>
+        
+        <!-- HighCharts API JavaScript -->
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/data.js"></script>
+        <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        
+        <script>
+        
+        function addLocationsToSideMenu(siteId, locations) {
+            var locationsListItems = '';
+            $.each(locations, function(index, location) {
+                locationId = location.location_id;
+                locationName = location.location_name;
+                locationItemId = 'location-' + locationId;
+                locationsListItems += '<li id="' + locationItemId + '">' + 
+                    '<a href="/sites/site/' + siteId + '/locations/location/' + locationId + '">' + 
+                    '<i class="fa fa-map-marker fa-fw"></i>' + ' ' + locationName + '</a></li>';
+            });
+
+            return locationsListItems;
+        
+        }
+        
+        function populateSideMenu() {
+            var sideMenu = $('#side-menu');
+            var getSitesAndLocationsUrl = '/sites/get_sites_and_locations';
+
+            return $.getJSON(getSitesAndLocationsUrl).done(function(result) {
+                $.each(result, function(index, site) {
+                    var siteId = site.site_id;
+                    var siteName = site.site_name;
+                    var siteItemId = 'site-' + siteId;
+                    var siteLocations = site.site_locations;
+                    var locationItems = addLocationsToSideMenu(siteId, siteLocations);
+                    
+                    siteListItem = '<li id="' + siteItemId + '">' + 
+                            '<a><i class="fa fa-globe fa-fw"></i>' + ' ' + siteName + '<span class="fa arrow"></span></a>' + 
+                            '<ul class="nav nav-second-level collapse">' + locationItems + '</ul>' +
+                        '</li>';
+                    
+                    sideMenu.append(siteListItem);
+                    
+                    $('#' + siteItemId + ' ul').prepend(
+                        '<li><a href="/sites/site/' + siteId + '/overview/"><i class="fa fa-tachometer fa-fw"></i> Overview</a></li>' + 
+                        '<li><a href="/sites/site/' + siteId + '/map/"><i class="fa fa-map fa-fw"></i> Map</a></li>' + 
+                        '<li><a href="/sites/site/' + siteId + '/data/"><i class="fa fa-database fa-fw"></i> Data</a></li>' + 
+                        '<li class="dropdown-header">Locations</li>'
+                    );
+                    
+                });
+            });
+        }
+        
+        populateSideMenu().done(function() {
+            $('#side-menu').metisMenu();
         });
+        
+        </script>
+        
+        <script>
 
-        return locationsListItems;
-    
-    }
-    
-    function populateSideMenu() {
-        var sideMenu = $('#side-menu');
-        var getSitesAndLocationsUrl = '/sites/get_sites_and_locations';
+        //Loads the correct sidebar on window load,
+        //collapses the sidebar on window resize.
+        // Sets the min-height of #page-wrapper to window size
+        $(function() {
+            $(window).bind("load resize", function() {
+                topOffset = 50;
+                width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
+                if (width < 768) {
+                    $('div.navbar-collapse').addClass('collapse');
+                    topOffset = 100; // 2-row-menu
+                } else {
+                    $('div.navbar-collapse').removeClass('collapse');
+                }
 
-        return $.getJSON(getSitesAndLocationsUrl).done(function(result) {
-            $.each(result, function(index, site) {
-                var siteId = site.site_id;
-                var siteName = site.site_name;
-                var siteItemId = 'site-' + siteId;
-                var siteLocations = site.site_locations;
-                var locationItems = addLocationsToSideMenu(siteId, siteLocations);
-                
-                siteListItem = '<li id="' + siteItemId + '">' + 
-                        '<a><i class="fa fa-globe fa-fw"></i>' + ' ' + siteName + '<span class="fa arrow"></span></a>' + 
-                        '<ul class="nav nav-second-level collapse">' + locationItems + '</ul>' +
-                    '</li>';
-                
-                sideMenu.append(siteListItem);
-                
-                $('#' + siteItemId + ' ul').prepend(
-                    '<li><a href="/sites/site/' + siteId + '/overview/"><i class="fa fa-tachometer fa-fw"></i> Overview</a></li>' + 
-                    '<li><a href="/sites/site/' + siteId + '/map/"><i class="fa fa-map fa-fw"></i> Map</a></li>' + 
-                    '<li><a href="/sites/site/' + siteId + '/data/"><i class="fa fa-database fa-fw"></i> Data</a></li>' + 
-                    '<li class="dropdown-header">Locations</li>'
-                );
-                
+                height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
+                height = height - topOffset;
+                if (height < 1) height = 1;
+                if (height > topOffset) {
+                    $("#page-wrapper").css("min-height", (height) + "px");
+                }
+            });
+
+            var url = window.location;
+            var element = $('ul.nav a').filter(function() {
+                return this.href == url || url.href.indexOf(this.href) == 0;
+            }).addClass('active').parent().parent().addClass('in').parent();
+            if (element.is('li')) {
+                element.addClass('active');
+            }
+        });
+        
+        $(function() {
+            
+            $('#side-menu li ul li a').on('click', function(event) {
+                event.preventDefault();
+                $('#page-wrapper').load($(this).attr('href'));
             });
         });
-    }
-    
-    populateSideMenu().done(function() {
-        $('#side-menu').metisMenu();
-    });
-    
-    </script>
-    
-    <script>
-
-    //Loads the correct sidebar on window load,
-    //collapses the sidebar on window resize.
-    // Sets the min-height of #page-wrapper to window size
-    $(function() {
-        $(window).bind("load resize", function() {
-            topOffset = 50;
-            width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
-            if (width < 768) {
-                $('div.navbar-collapse').addClass('collapse');
-                topOffset = 100; // 2-row-menu
-            } else {
-                $('div.navbar-collapse').removeClass('collapse');
-            }
-
-            height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
-            height = height - topOffset;
-            if (height < 1) height = 1;
-            if (height > topOffset) {
-                $("#page-wrapper").css("min-height", (height) + "px");
-            }
-        });
-
-        var url = window.location;
-        var element = $('ul.nav a').filter(function() {
-            return this.href == url || url.href.indexOf(this.href) == 0;
-        }).addClass('active').parent().parent().addClass('in').parent();
-        if (element.is('li')) {
-            element.addClass('active');
-        }
-    });
-    
-    $(function() {
+        </script>
         
-        $('#side-menu li ul li a').on('click', function(event) {
-            event.preventDefault();
-            $('#page-wrapper').load($(this).attr('href'));
-        });
-    });
-    </script>
-    
-    {% block extrajs %}
-    {% endblock %}
+        {% block extrajs %}
+        {% endblock %}
 
-</body>
+    </body>
 
 </html>
 

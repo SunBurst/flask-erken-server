@@ -1,5 +1,6 @@
 .google-map #site-map {
     height: 300px;
+    border-radius: 4px;
 }
 
 .locations-map-container {
