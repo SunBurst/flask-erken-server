@@ -176,21 +176,21 @@ ol, ul {
     margin-bottom: 10.5px;
 }
 
-.tr > li {
+.tr li {
     float: left;
 }
 
-.tr > li + li {
+.tr li + li {
     margin-left: 30px;
 }
 
-.tr > li > a {
+.tr li a {
     display: inline-block;
     padding: 10px 0;
     border-bottom: 4px solid transparent;
 }
 
-.tr > li.active > a, .tr > li.active > a:hover, .tr > li.active > a:focus {
+.tr li.active a, .tr li.active a:hover, .tr li.active a:focus {
     font-weight: 500;
     color: #1ca8dd;
     border-bottom-color: #1ca8dd;

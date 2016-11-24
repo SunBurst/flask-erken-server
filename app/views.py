@@ -77,7 +77,20 @@ def site_overview_timeline(site_id):
 
 @app.route('/sites/site/<uuid:site_id>/map/')
 def site_map(site_id):
-    return render_template('sites/site_map.html')
+    site_query = "SELECT * FROM site_info_by_site WHERE site_id=?"
+    prepared = cassandra_connection.session.prepare(site_query)
+    rows = cassandra_connection.session.execute_async(prepared, (site_id,)).result()
+
+    try:
+        site_data = rows[0]
+        site_position_cass = site_data.get('site_position')
+        site_data['site_latitude'] = site_position_cass.latitude
+        site_data['site_longitude'] = site_position_cass.longitude
+    except IndexError as e:
+        print(e)
+        site_data = None
+    finally:
+        return render_template('sites/site_map.html', **site_data)
 
 @app.route('/sites/site/<uuid:site_id>/data/')
 def site_data(site_id):
