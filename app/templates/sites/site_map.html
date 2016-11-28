@@ -13,50 +13,44 @@
     </h2>
   </div>
       
-  <!-- .col-lg-9 -->
-  <div class="col-lg-9">
-    <div class="widget-container">
-      <div class="widget">
-      <div class="widget-header">
-      <h4>Map</h4></div>
-      <div class="widget-content no-padding">
-        <div class="google-map">
-          <div id="site-map" class="map-full"></div>
-        </div>
-      </div>
-      </div>
-    </div>
-  </div>
-  <!-- /.col-lg-9 -->
-    
-  <div class="col-lg-3">
-    <div class="widget-container">
+  <div class="row">
+
+    <!-- .col-lg-9 -->
+    <div class="col-lg-9">
+      <div class="google-map">
+        <div id="site-map" class="map-full"></div>
+     </div> 
+   </div>
+   <!-- /.col-lg-9 -->
+
+    <div class="col-lg-3">
+      <div class="widget-container">
         <div class="widget">
-            <div class="widget-header">
-                <h4>Data</h4>
-            </div>
-            <div class="widget-content">
-              <ul id="map-data-menu" class="nav">
-                <li class="active"><a href="#" id="map-data-menu-parameters">Parameters</a>
-                  <ul>
-                    <li><a href="#getting-started" id="markdown-toc-getting-started">Getting started</a></li>
-                    <li><a href="#gulpfilejs" id="markdown-toc-gulpfilejs">Gulpfile.js</a></li>
-                    <li><a href="#theme-source-code" id="markdown-toc-theme-source-code">Theme source code</a></li>
-                  </ul>
-                </li>
-                <li class="active"><a href="#" id="map-data-menu-parameters">Profiles</a>
-                  <ul>
-                    <li><a href="#getting-started" id="markdown-toc-getting-started">Getting started</a></li>
-                    <li><a href="#gulpfilejs" id="markdown-toc-gulpfilejs">Gulpfile.js</a></li>
-                    <li><a href="#theme-source-code" id="markdown-toc-theme-source-code">Theme source code</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+          <div class="widget-content">
+            <ul id="map-data-menu" class="nav">
+              <li class="active"><a href="#" id="map-data-menu-parameters">Parameters</a>
+                <ul>
+                  <li><a href="#getting-started" id="markdown-toc-getting-started">Getting started</a></li>
+                  <li><a href="#gulpfilejs" id="markdown-toc-gulpfilejs">Gulpfile.js</a></li>
+                  <li><a href="#theme-source-code" id="markdown-toc-theme-source-code">Theme source code</a></li>
+                </ul>
+              </li>
+              <li class="active"><a href="#" id="map-data-menu-parameters">Profiles</a>
+                <ul>
+                  <li><a href="#getting-started" id="markdown-toc-getting-started">Getting started</a></li>
+                  <li><a href="#gulpfilejs" id="markdown-toc-gulpfilejs">Gulpfile.js</a></li>
+                  <li><a href="#theme-source-code" id="markdown-toc-theme-source-code">Theme source code</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
+    <!-- /.col-lg-3 -->
   </div>
-    
+  <!-- /.row -->
+
 {% endblock %}
 
 {% block extrajs %}
