@@ -387,28 +387,6 @@ a:hover {
         width: 250px;
         margin-top: 51px;
     }
-    #map-data-menu {
-        width: 220px;
-    }
-    #map-data-menu a {
-        padding-left: 20px;
-    }
-    #map-data-menu ul {
-        display: none;
-    }
-    #map-data-menu > .active > ul {
-        display: block;
-    }
-    #map-data-menu a:hover {
-        background-color: transparent;
-        color: #fff;
-    }
-    #map-data-menu .active > a {
-        padding-left: 18px;
-        color: #1ca8dd;
-        background-color: transparent;
-        border-left: 2px solid #1ca8dd;
-    }
     .bt {
         font-size: 24px;
     }
@@ -542,25 +520,50 @@ p {
     padding: 0;
 }
 
-#map-data-menu {
-    padding-left: 0;
-    font-size: 13px;
-    list-style: none;
-}
-
-#map-data-menu li {
+.nav-stacked .data-type-header {
+    padding-left: 15px;
+    padding-right: 15px;
     margin-bottom: 5px;
+    font-size: 85%;
+    font-weight: normal;
+    letter-spacing: 1px;
+    color: #51586a;
+    text-transform: uppercase;
 }
 
-#map-data-menu a {
-    color: #9198aa;
+.nav-stacked .nav-divider {
+    height: 1px;
+    margin: 9.5px 0;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-left: 34px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.nav-stacked > li + li {
+    margin-top: 0;
+}
+
+.nav-stacked > li {
+    float: none;
+    margin-left: 0;
+}
+
+.nav-stacked > li > a {
     display: block;
-    padding: 2px 10px 2px 10px;
+    padding: 5px 10px 5px 30px;
+    border-bottom: 0;
+    border-left: 4px solid transparent;
 }
 
-#map-data-menu ul {
-    list-style: none;
-    padding-left: 20px;
+.nav-stacked > li > a {
+    color: #cfd2da;
+}
+
+.nav-stacked > li > a:hover {
+    color: #fff;
+    background-color: transparent;
 }
 
 .no-padding {
