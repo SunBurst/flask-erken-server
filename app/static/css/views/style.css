@@ -291,7 +291,7 @@ h1 {
 }
 
 .aky {
-    margin-top: 20px !important;
+    margin-top: 0;
 }
 
 .akt {
@@ -313,7 +313,7 @@ ol, ul {
 }
 
 .tr li + li {
-    margin-left: 30px;
+    margin-left: 15px;
 }
 
 .tr li a {
@@ -520,50 +520,26 @@ p {
     padding: 0;
 }
 
-.nav-stacked .data-type-header {
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-bottom: 5px;
-    font-size: 85%;
-    font-weight: normal;
-    letter-spacing: 1px;
-    color: #51586a;
-    text-transform: uppercase;
+#legend {
+    padding: 0;
+    margin: 10px;
+    background-color: #fff;
+    opacity: 0.8;
+    /*font-size: 12px;*/
+    /*font-family: Arial, sans-serif;*/
 }
 
-.nav-stacked .nav-divider {
-    height: 1px;
-    margin: 9.5px 0;
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.2);
-    margin-left: 34px;
-    margin-top: 20px;
-    margin-bottom: 25px;
+#legend > h4 {
+    color: #000;
 }
 
-.nav-stacked > li + li {
-    margin-top: 0;
+.list-group {
+    margin-bottom: 0;
 }
 
-.nav-stacked > li {
-    float: none;
-    margin-left: 0;
-}
-
-.nav-stacked > li > a {
-    display: block;
-    padding: 5px 10px 5px 30px;
-    border-bottom: 0;
-    border-left: 4px solid transparent;
-}
-
-.nav-stacked > li > a {
-    color: #cfd2da;
-}
-
-.nav-stacked > li > a:hover {
-    color: #fff;
+.nav .tr .aky .akt li a:hover {
     background-color: transparent;
+    color: #fff;
 }
 
 .no-padding {
