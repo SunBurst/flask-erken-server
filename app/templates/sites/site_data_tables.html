@@ -1,0 +1,65 @@
+{% block overview %}
+<div class="eg">
+    <table class="cl" data-sort="table">
+        <thead>
+            <tr>
+                <th class="header headerSortDown">Time</th>
+                <th class="header">Location</th>
+                <th class="header">Parameter</th>
+                <th class="header">QC Level</th>
+                <th class="header">Value</th>
+            </tr>
+        </thead>
+        <tbody id="site-timeline-tbody"></tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+    
+    <script src={{ url_for('static', filename="js/jquery.tablesorter.js") }}></script> 
+    
+    <script>
+    $(document).ready(function() {
+        var siteId = '{{ site_id }}';
+        var getSiteParamReadingsUrl = '/sites/get_site_parameter_readings/' + siteId + '/50/';
+        
+        function timestampToDate(timestamp) {
+            return new Date(timestamp)
+        }
+        
+        function dateRepr(d) {
+            timeStr = d.getFullYear() + '-'
+            + ('0' + (d.getMonth()+1)).slice(-2) + '-'
+            + ('0' + d.getDate()).slice(-2) + ' '
+            + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+            
+            return timeStr;
+        }
+        
+        function populateTable() {
+            return $.getJSON(getSiteParamReadingsUrl).done(function(result) {
+                var siteTimelineTableBody = '';
+                $.each(result, function(index, data) {
+                    siteTimelineTableBody += '<tr>' +
+                        '<td>' + dateRepr(timestampToDate(data.time)) + '</td>' + 
+                        '<td>' + data.location_id + '</td>' + 
+                        '<td>' + data.parameter_id + '</td>' + 
+                        '<td>' + data.qc_level + '</td>' + 
+                        '<td>' + data.value + '</td>'
+                    '</tr>';
+                });
+                $('#site-timeline-tbody').append(siteTimelineTableBody);
+            });
+        }
+        
+        populateTable().done();
+        
+        $("[data-sort=table]").tablesorter({
+            sortList: [[0,0]],
+            dateFormat: 'pt'
+        });
+    });
+    </script>
+
+{% endblock %}
