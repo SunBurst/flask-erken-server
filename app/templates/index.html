@@ -1,19 +1,38 @@
 {% extends 'base.html' %}
 
+{% block collapsiblesection %}
+
+    <div class="collapsible-section" style="margin-top: 0px;">
+        <div class="header-background full-site-width">
+            <div class="product-id-row full-site-width" style="visibility: visible;">
+                <div class="product-description-row">
+                    <div class="product-description">
+                        Research at the Erken Laboratory focuses on the long-term monitoring of water quality, climate effects on aquatic systems, circulation of nutrients, population and community dynamics in lakes.
+                    </div>
+                </div>
+                <div class=".product-button-row">
+                    <a href="#" class="button button-text-blue medium gc-analytics-event" data-category="getStarted" data-action="buttonClick" data-label="hero">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
 {% block content %}
 
-    <div class="bt">
-        <div class="bw">
-          <h1>Erken Laboratory Monitoring</h1>
-          <p>Research at the Erken Laboratory focuses on the long-term monitoring of water quality, climate effects on aquatic systems, circulation of nutrients, population and community dynamics in lakes.</p>
+    <!-- <div class="bt"> -->
+        <!-- <div class="bw"> -->
+          <!-- <h1>Erken Laboratory Monitoring</h1> -->
+          <!-- <p>Research at the Erken Laboratory focuses on the long-term monitoring of water quality, climate effects on aquatic systems, circulation of nutrients, population and community dynamics in lakes.</p> -->
+        <!-- </div> -->
+    <!-- </div> -->
+    <div class="col-lg-12">
+        <div class="locations-map-container">
+            <div id="locations-map-canvas" class="locations-map-canvas"></div>
         </div>
     </div>
-    <div class="col-lg-10">
-        <div class="sites-map-container">
-            <div id="sites-map-canvas" class="sites-map-canvas"></div>
-        </div>
-    </div>
-    <div class="col-lg-2"></div>
 
 {% endblock %}
 
@@ -21,7 +40,8 @@
     
     <script>
     $(document).ready(function() {
-        var getSitesUrl = '/sites/get_sites';
+        var getLocationsUrl = '/locations/get_locations';
+        var getParametersUrl = '/locations/get_locations_parameters';
         var map;
         var markers = [];
         var bounds = new google.maps.LatLngBounds();
@@ -30,26 +50,50 @@
             var mapOptions = {
                 zoom: 2,
                 center: new google.maps.LatLng(0, 0),
-                mapTypeId: 'terrain'
+                mapTypeControl: true,
+                streetViewControl: false,
+                mapTypeControlOptions: {
+                    mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain', 'styled_map'],
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.TOP_CENTER
+                },
+                fullscreenControl: true
             };
-            map = new google.maps.Map(document.getElementById('sites-map-canvas'), 
+            map = new google.maps.Map(document.getElementById('locations-map-canvas'), 
                 mapOptions);
         }
 
-        function loadAllSites() {
-            return $.getJSON(getSitesUrl, function(data) {
-                $.each(data, function (site, siteData) {
-                    var siteId = siteData.site_id;
-                    var siteName = siteData.site_name;
-                    var siteDescription = siteData.site_description;
-                    var siteImage = siteData.site_image;
-                    var siteLat = siteData.site_position.latitude;
-                    var siteLng = siteData.site_position.longitude;
-                    var siteLatLng = new google.maps.LatLng(siteLat, siteLng);
+        function loadAllLocations() {
+            return $.getJSON(getLocationsUrl).done(function(data) {
+                $.each(data, function (location, locationData) {
+                    var locationId = locationData.id;
+                    var locationName = locationData.name;
+                    var locationDescription = locationData.description;
+                    var locationImages = locationData.images;
+                    var locationLat = locationData.position.latitude;
+                    var locationLng = locationData.position.longitude;
+                    var locationLatLng = new google.maps.LatLng(locationLat, locationLng);
 
-                    addMarker(siteId, siteName, siteLatLng, siteDescription, siteImage);
-                    bounds.extend(siteLatLng);
+                    addMarker(locationId, locationName, locationLatLng, locationDescription, locationImages);
+                    bounds.extend(locationLatLng);
                 });
+            });
+        }
+        
+        function loadAllParameters() {
+            return $.getJSON(getParametersUrl).done(function(data) {
+                var legend = document.createElement('div');
+                legend.id = 'legend';
+                var content = ['<div class="panel-body no-padding"><div id="map-parameters-menu" class="list-group">'];
+                $.each(data, function (index, parameterData) {
+                    content.push('<a href="#" class="list-group-item">' + parameterData.parameter_name + '</a>');
+                });
+                
+                content.push('</div></div>');
+                legend.innerHTML = content.join('');
+                legend.index = 1;
+                map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+                
             });
         }
         
@@ -58,7 +102,7 @@
             map.panTo(center);
         }
 
-        function addMarker(id, name, latlng, description, image) {
+        function addMarker(id, name, latlng, description, images) {
             var marker = new google.maps.Marker({
                 position: latlng,
                 map: map,
@@ -73,8 +117,9 @@
                     '</a>' +
                     '<div id="info-window-' + id + '-bodyContent">' +
                         '<p>' + 'WGS84: ' + latlng.lat() + ', ' + latlng.lng() + '</p>' +
-                        '<img class="img-responsive" src="/static/images/sites/' + image +
-                            '" alt="' + name + '" height="300" width="300"></img>' +
+                        
+                        //'<img class="img-responsive" src="/static/images/sites/' + image +
+                        //    '" alt="' + name + '" height="300" width="300"></img>' +
                         '<p>' + description  + '</p>' +
                     '</div>' +
                 '</div>';
@@ -91,15 +136,16 @@
         }
         
         initMap();
-        loadAllSites().done(function() {
-            var options = {imagePath: '{{ url_for('static', filename='js/googlemaps-markerer-cluster/images/m') }}'};
-            var markerCluster = new MarkerClusterer(map, markers, options);
-            
-            if (bounds.isEmpty()) {}
-            else {
-                map.fitBounds(bounds);
-            }
-        });
+        //loadAllLocations().done(function() {
+        //    var options = {imagePath: '{{ url_for('static', filename='js/googlemaps-markerer-cluster/images/m') }}'};
+        //    var markerCluster = new MarkerClusterer(map, markers, options);
+           
+        //    if (bounds.isEmpty()) {}
+        //    else {
+        //        map.fitBounds(bounds);
+        //    }
+        //});
+        //loadAllParameters();
         
     });
     </script>

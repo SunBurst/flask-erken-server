@@ -34,33 +34,319 @@
 
   <body>
 
-    <!-- #wrapper -->
-    <div id="wrapper">
-
+    <!-- .wrapper -->
+    <div class="wrapper">
+      
       <!-- Navigation -->
-      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 
-        <!-- .navbar-static-top -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Erken Laboratory Monitoring</a>
-        </div>
-        <!-- /.navbar-header -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="">Erken Laboratory Monitoring</a>
+            </div>
+            <!-- /.navbar-header -->
+            
+            <div class="navbar-wrapper">
+            
+            <!-- <ul class="nav navbar-nav"><li><a href="#"><i class="fa fa-map fa-fw"></i> Map</a></li></ul> -->
+            
+            <ul class="nav navbar-top-links navbar-right">
 
+                <div class="btn-group">
+                <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-globe fa-fw"></i> All Locations <span class="caret"></span>
+                </button>
+                <ul id="locations-dropdown" class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a href="#"><i class="fa fa-globe fa-fw"></i> All Locations</a></li>
+                    <li class="divider"></li>
+                </ul>
+            </div>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 1</strong>
+                                        <span class="pull-right text-muted">40% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 2</strong>
+                                        <span class="pull-right text-muted">20% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                            <span class="sr-only">20% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 3</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 4</strong>
+                                        <span class="pull-right text-muted">80% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            <span class="sr-only">80% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-tasks -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+            
+            </div>
+
+        </nav>
+        
+        <div class="collapsible-section" style="margin-top: 0px;"><div class="header-background full-site-width">
+            <div class="product-id-row full-site-width" style="visibility: visible;">
+                <div class="product-description-row">
+                    <ul class="breadcrumb-list">
+                        <li class="breadcrumb-item">
+                            <a href="https://developers.google.com/maps/web/" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Lower Header" data-value="1">Web</a>
+                        </li>
+                        <li class="devsite-breadcrumb-item">
+                            <div class="devsite-breadcrumb-guillemet material-icons"></div>
+                            <a href="https://developers.google.com/maps/documentation/javascript/" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Lower Header" data-value="2">
+    
+    
+      Maps JavaScript API
+    
+    
+    </a></li></ul></div><div class="devsite-product-button-row
+            "><a class="devsite-api-getstarted-widget button gc-analytics-event devsite-dialog-button" data-category="getKey" data-action="buttonClick" data-label="hero" data-api-id="maps_backend" data-henhouse-platforms-list="WEB_BROWSER" data-henhouse-link-docs="/maps/documentation/javascript/tutorial" data-henhouse-link-support="/maps/documentation/javascript/support" data-henhouse-extra-api-ids="geocoding_backend,directions_backend,distance_matrix_backend,elevation_backend,places_backend" data-modal-dialog-id="devsite-dialog-onload-henhouse-0">
+    Get a Key
+  </a><a href="https://developers.google.com/maps/pricing-and-plans/" class="button button-text-blue" data-category="viewPlans" data-action="buttonClick" data-label="hero">
+    View Pricing and Plans
+  </a></div></div><div class="devsite-doc-set-nav-row devsite-full-site-width"><nav class="devsite-doc-set-nav devsite-nav devsite-overflow-tabs-scroll-wrapper"><ul class="devsite-doc-set-nav-tab-list devsite-overflow-tabs-scroll" style="min-width: 681px; left: 0px;"><li class="devsite-doc-set-nav-tab-container"><a href="https://developers.google.com/maps/documentation/javascript/" class="
+                devsite-doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Overview">
+        Overview
+      </a></li><li class="devsite-doc-set-nav-tab-container"><a href="https://developers.google.com/maps/documentation/javascript/tutorial" class="devsite-doc-set-nav-active
+                devsite-doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Guides">
+        Guides
+      </a></li><li class="devsite-doc-set-nav-tab-container"><a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference" class="
+                devsite-doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Reference">
+        Reference
+      </a></li><li class="devsite-doc-set-nav-tab-container"><a href="https://developers.google.com/maps/documentation/javascript/examples/" class="
+                devsite-doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Samples">
+        Samples
+      </a></li><li class="devsite-doc-set-nav-tab-container"><a href="https://developers.google.com/maps/documentation/javascript/support" class="
+                devsite-doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Support">
+        Support
+      </a></li><button type="button" id="devsite-feedback-project" class="devsite-feedback-button devsite-top-button gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Send Feedback Button" track-type="feedback" track-name="sendFeedbackLink" track-metadata-position="header">
+  
+  Send feedback
+  </button></ul><button type="button" class="devsite-overflow-tabs-scroll-button devsite-top-button material-icons devsite-scroll-forward devsite-hidden"></button><button type="button" class="devsite-overflow-tabs-scroll-button devsite-top-button material-icons devsite-scroll-back devsite-hidden"></button></nav></div></div></div>
+        
         <!-- sidebar -->
         <div class="navbar-default sidebar" role="navigation">
           <div class="sidebar-nav navbar-collapse">
-            <ul class="nav in" id="side-menu">
-              <li class="dropdown-header">Sites</li>
+            
+            
+
+            <ul class="nav qo nav-stacked">
+              <li>
+                <a href="#"><i class="fa fa-map fa-fw"></i> Map</a>
+              </li>
+              <li class="qm">
+                <a class="qk active" href="index.html">Monitoring Programme</a>
+              </li>
+              <li class="qm">
+                <a class="qk " href="fluid/index.html">Fluid layout</a>
+              </li>
+              <li class="qm">
+                <a class="qk " href="icon-nav/index.html">Icon nav</a>
+              </li>
             </ul>
+            <!-- <ul class="nav in" id="side-menu"> -->
+              <!-- <li class="dropdown-header">Sites</li> -->
+            <!-- </ul> -->
           </div>
         </div>
         <!-- /sidebar -->
+        
+        <!-- {% block collapsiblesection %}{% endblock %} -->
 
       </nav>
         
@@ -130,48 +416,37 @@
     
     <script>
     
-    function addLocationsToSideMenu(siteId, locations) {
-        var locationsListItems = '';
-        $.each(locations, function(index, location) {
-            locationId = location.location_id;
-            locationName = location.location_name;
-            locationItemId = 'location-' + locationId;
-            locationsListItems += '<li id="' + locationItemId + '">' + 
-                '<a href="/sites/site/' + siteId + '/locations/location/' + locationId + '">' + 
-                '<i class="fa fa-map-marker fa-fw"></i>' + ' ' + locationName + '</a></li>';
+    function getStationsSideMenuContent(locationId, stations) {
+        var stationsListItems = '';
+        $.each(stations, function(index, station) {
+            stationId = station.station_id;
+            stationName = station.station_name;
+            stationItemId = 'station-' + stationId;
+            stationsListItems += '<li><a href="/sites/site/' + locationId + '/locations/location/' + stationId + '"><i class="fa fa-map-marker fa-fw"></i>' + ' ' + stationName + '</a></li>';
         });
 
-        return locationsListItems;
+        return stationsListItems;
     
     }
     
     function populateSideMenu() {
-        var sideMenu = $('#side-menu');
-        var getSitesAndLocationsUrl = '/sites/get_sites_and_locations';
+        var locationsDropdown = $('#locations-dropdown');
+        var getLocationsAndStationsUrl = '/locations/get_locations_and_stations';
+        return $.getJSON(getLocationsAndStationsUrl).done(function(result) {
+            $.each(result, function(index, location) {
+                var locationId = location.id;
+                var locationName = location.name;
+                var locationItemId = 'location-' + locationId;
+                var locationStations = location.location_stations;
+                var stationItems = getStationsSideMenuContent(locationId, locationStations);
+                
+                locationDropdownItem = '<li id="' + locationItemId + '" class="dropdown-submenu">' + 
+                        '<a tabindex="-1" href="#"><i class="fa fa-globe fa-fw"></i>' + ' ' + locationName + '</a>' + 
+                        '<ul class="dropdown-menu"><li><a tabindex="-1" href="/sites/site/' + locationId + '/overview/"><i class="fa fa-globe fa-fw"></i> ' + locationName + '</a></li>' +
+                        '<li class="divider"></li>' + stationItems + '</ul></li>';
+                
+                locationsDropdown.append(locationDropdownItem);
 
-        return $.getJSON(getSitesAndLocationsUrl).done(function(result) {
-            $.each(result, function(index, site) {
-                var siteId = site.site_id;
-                var siteName = site.site_name;
-                var siteItemId = 'site-' + siteId;
-                var siteLocations = site.site_locations;
-                var locationItems = addLocationsToSideMenu(siteId, siteLocations);
-                
-                siteListItem = '<li id="' + siteItemId + '">' + 
-                        '<a><i class="fa fa-globe fa-fw"></i>' + ' ' + siteName + '<span class="fa arrow"></span></a>' + 
-                        '<ul class="nav nav-second-level collapse">' + locationItems + '</ul>' +
-                    '</li>';
-                
-                sideMenu.append(siteListItem);
-                
-                $('#' + siteItemId + ' ul').prepend(
-                    '<li><a href="/sites/site/' + siteId + '/dashboard/"><i class="fa fa-tachometer fa-fw"></i> Dashboard</a></li>' + 
-                    '<li><a href="/sites/site/' + siteId + '/overview/"><i class="fa fa-info-circle fa-fw"></i> Info</a></li>' + 
-                    '<li><a href="/sites/site/' + siteId + '/map/"><i class="fa fa-map fa-fw"></i> Map</a></li>' + 
-                    '<li><a href="/sites/site/' + siteId + '/data/"><i class="fa fa-database fa-fw"></i> Data</a></li>' + 
-                    '<li class="dropdown-header">Locations</li>'
-                );
-                
             });
         });
     }
@@ -221,6 +496,14 @@
             event.preventDefault();
             $('#page-wrapper').load($(this).attr('href'));
         });
+    });
+    </script>
+    
+    <script>
+    $(function() {
+        $('.dropdown-menu a').on('click', function() {    
+            $('.dropdown-toggle').html($(this).html() + '<span class="caret"></span>');    
+        })
     });
     </script>
     

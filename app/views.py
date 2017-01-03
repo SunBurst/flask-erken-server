@@ -6,34 +6,43 @@ from flask import render_template
 from app import app, cassandra_connection
 from utils import CustomEncoder
 
-@app.route('/sites/get_sites')
-def get_sites():
-    all_sites_query = "SELECT * FROM sites where bucket=0"
-    prepared = cassandra_connection.session.prepare(all_sites_query)
-    rows = cassandra_connection.session.execute_async(prepared).result()
-    sites_data = [row for row in rows]
+@app.route('/locations/get_locations')
+def get_locations():
+    all_locations_query = "SELECT * FROM locations where bucket=0"
+    prepared_all_locations_query = cassandra_connection.session.prepare(all_locations_query)
+    locations_rows = cassandra_connection.session.execute_async(prepared_all_locations_query).result()
+    locations_data = [row for row in locations_rows]
 
-    return json.dumps(sites_data, cls=CustomEncoder)
+    return json.dumps(locations_data, cls=CustomEncoder)
 
-@app.route('/sites/get_sites_and_locations')
-def get_sites_and_locations():
-    all_sites_query = "SELECT * FROM sites WHERE bucket=0"
-    prepared_all_sites_query = cassandra_connection.session.prepare(all_sites_query)
-    sites_rows = cassandra_connection.session.execute_async(prepared_all_sites_query).result()
-    site_locations_query = "SELECT * FROM locations_by_site WHERE site_id=?"
-    prepared_site_locations_query = cassandra_connection.session.prepare(site_locations_query)
-    sites_locations_data = []
+@app.route('/locations/get_locations_and_stations')
+def get_locations_and_stations():
+    all_locations_query = "SELECT * FROM locations WHERE bucket=0"
+    prepared_all_locations_query = cassandra_connection.session.prepare(all_locations_query)
+    locations_rows = cassandra_connection.session.execute_async(prepared_all_locations_query).result()
+    locations_stations_query = "SELECT * FROM stations_by_location WHERE location_id=?"
+    prepared_location_stations_query = cassandra_connection.session.prepare(locations_stations_query)
+    locations_stations_data = []
     
-    for site_row in sites_rows:
-        site_id = site_row.get('site_id')
-        locations_rows = cassandra_connection.session.execute_async(
-            prepared_site_locations_query, (site_id,)).result()
-        site_locations_data = [location_row for location_row in locations_rows]
-        site_row['site_locations'] = site_locations_data
+    for location_row in locations_rows:
+        location_id = location_row.get('id')
+        stations_rows = cassandra_connection.session.execute_async(
+            prepared_location_stations_query, (location_id,)).result()
+        location_stations_data = [station_row for station_row in stations_rows]
+        location_row['location_stations'] = location_stations_data
         
-        sites_locations_data.append(site_row)
+        locations_stations_data.append(location_row)
         
-    return json.dumps(sites_locations_data, cls=CustomEncoder)
+    return json.dumps(locations_stations_data, cls=CustomEncoder)
+    
+@app.route('/locations/get_locations_parameters')
+def get_locations_parameters():
+    all_parameters_query = "SELECT * FROM locations_parameters WHERE bucket=0"
+    prepared_all_parameters_query = cassandra_connection.session.prepare(all_parameters_query)
+    locations_parameters_rows = cassandra_connection.session.execute_async(prepared_all_parameters_query).result()
+    locations_parameters_data = [row for row in locations_parameters_rows]
+
+    return json.dumps(locations_parameters_data, cls=CustomEncoder)
 
 @app.route('/')
 @app.route('/sites/')
@@ -125,6 +134,14 @@ def site_dashboard(site_id):
         site_data = None
     finally:
         return render_template('sites/site_dashboard.html', **site_data)
+        
+@app.route('/sites/site/<uuid:site_id>/dashboard/status/')
+def site_dashboard_status(site_id):
+    #site_query = "SELECT * FROM status_parameter_measurements_by_location WHERE location_id=?"
+    #prepared = cassandra_connection.session.prepare(site_query)
+    #rows = cassandra_connection.session.execute_async(prepared, (site_id,)).result()
+
+    return render_template('sites/site_dashboard_status.html', site_id=site_id)
 
 @app.route('/sites/site/<uuid:site_id>/locations/location/<uuid:location_id>')
 def location(site_id, location_id):
@@ -155,15 +172,6 @@ def location(site_id, location_id):
     finally:
         return render_template(
             'locations/location.html', site_id=site_id, site_name=site_name, **location_data)
-
-@app.route('/sites/get_locations/<uuid:site_id>')
-def get_locations(site_id):
-    all_locations_query = "SELECT * FROM locations_by_site WHERE site_id=?"
-    prepared = cassandra_connection.session.prepare(all_locations_query)
-    rows = cassandra_connection.session.execute_async(prepared, (site_id,)).result()
-    locations_data = [row for row in rows]
-
-    return json.dumps(locations_data, cls=CustomEncoder)
     
 @app.route('/sites/get_site_parameter_readings/<uuid:site_id>/<int:limit>/')
 def get_site_parameter_readings(site_id, limit):
@@ -173,3 +181,12 @@ def get_site_parameter_readings(site_id, limit):
     site_readings_data = [row for row in rows]
     
     return json.dumps(site_readings_data, cls=CustomEncoder)
+    
+@app.route('/sites/get_location_status_parameter_measurements/<uuid:site_id>/')
+def get_location_status_parameter_measurements(site_id):
+    status_measurements_query = "SELECT * FROM status_parameter_measurements_by_location WHERE location_id=? AND parameter='battery' AND qc_level=0"
+    prepared = cassandra_connection.session.prepare(status_measurements_query)
+    rows = cassandra_connection.session.execute_async(prepared, (site_id, )).result()
+    status_measurements_data = [row for row in rows]
+    
+    return json.dumps(status_measurements_data, cls=CustomEncoder)
