@@ -26,7 +26,7 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
-        """CREATE TYPE IF NOT EXISTS erken.live_webcam (
+        """CREATE TYPE IF NOT EXISTS erken.livewebcam (
             url text,
             ip_address inet,
         )"""
@@ -43,13 +43,6 @@ def sync_cassandra():
         """CREATE TYPE IF NOT EXISTS erken.position (
             latitude double,
             longitude double
-        )"""
-    )
-    
-    cassandra_connection.session.execute(
-        """CREATE TYPE IF NOT EXISTS erken.parameter_info (
-            description text,
-            unit text
         )"""
     )
     
@@ -130,7 +123,8 @@ def sync_cassandra():
             station_id text,
             parameter_id text,
             sensor_id text,
-            parameter_info frozen <parameter_info>,
+            parameter_description frozen <description>,
+            parameter_unit text,
             measurement_type text,
             PRIMARY KEY ((location_id), parameter_name, station_name, sensor_name, station_id, parameter_id, sensor_id)
         ) WITH CLUSTERING ORDER BY (parameter_name ASC, station_name ASC, sensor_name ASC, station_id ASC, parameter_id ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
@@ -226,7 +220,7 @@ def sync_cassandra():
             sensor_name text,
             sensor_id text,
             sensor_description frozen <description>,
-            PRIMARY KEY ((station_id))
+            PRIMARY KEY ((station_id), sensor_name, sensor_id)
         ) """.format(keyspace=KEYSPACE)
     )
     
@@ -237,7 +231,8 @@ def sync_cassandra():
             sensor_name text,
             parameter_id text,
             sensor_id text,
-            parameter_info frozen <parameter_info>,
+            parameter_description frozen <description>,
+            parameter_unit text,
             measurement_type text,
             PRIMARY KEY ((station_id), parameter_name, sensor_name, parameter_id, sensor_id)
         ) WITH CLUSTERING ORDER BY (parameter_name ASC, sensor_name ASC, parameter_id ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
@@ -316,7 +311,8 @@ def sync_cassandra():
             sensor_id text,
             parameter_name text,
             parameter_id text,
-            parameter_info frozen <parameter_info>,
+            parameter_description frozen <description>,
+            parameter_unit text,
             measurement_type text,
             PRIMARY KEY ((sensor_id), parameter_name, parameter_id)
         ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
@@ -484,11 +480,12 @@ def sync_cassandra():
             qc_level int,
             year int,
             date_hour timestamp,
+            sensor_name text,
             sensor_id text,
             avg_value float,
             unit text static,
-            PRIMARY KEY ((station_id, parameter_id, qc_level, year), date_hour, sensor_id)
-        ) WITH CLUSTERING ORDER BY (date_hour DESC, sensor_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((station_id, parameter_id, qc_level, year), date_hour, sensor_name, sensor_id)
+        ) WITH CLUSTERING ORDER BY (date_hour DESC, sensor_name ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
@@ -498,11 +495,12 @@ def sync_cassandra():
             qc_level int,
             year int,
             date timestamp,
+            sensor_name text,
             sensor_id text,
             avg_value float,
             unit text static,
-            PRIMARY KEY ((station_id, parameter_id, qc_level, year), date, sensor_id)
-        ) WITH CLUSTERING ORDER BY (date DESC, sensor_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((station_id, parameter_id, qc_level, year), date, sensor_name, sensor_id)
+        ) WITH CLUSTERING ORDER BY (date DESC, sensor_name ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
@@ -720,7 +718,8 @@ def sync_cassandra():
             bucket int,
             parameter_name text,
             parameter_id text,
-            parameter_info frozen <parameter_info>,
+            parameter_description frozen <description>,
+            parameter_unit text,
             measurement_type text,
             PRIMARY KEY ((bucket), parameter_name, parameter_id)
         ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC) """.format(keyspace=KEYSPACE)
@@ -733,6 +732,7 @@ def sync_cassandra():
             location_id text,
             station_id text,
             sensor_id text,
+            station_position frozen <position>,
             avg_value float,
             unit text static,
             PRIMARY KEY ((parameter_id), date_hour, location_id, station_id, sensor_id)
@@ -856,13 +856,13 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.locations_live_webcams (
+        """CREATE TABLE IF NOT EXISTS {keyspace}.locations_livewebcams (
             bucket int,
             location_name text,
             station_name text,
             location_id text,
             station_id text,
-            live_webcam frozen <live_webcam>,
+            livewebcam frozen <livewebcam>,
             PRIMARY KEY ((bucket), location_name, station_name, location_id, station_id)
         ) WITH CLUSTERING ORDER BY (location_name ASC, station_name ASC, location_id ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
@@ -892,9 +892,9 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.live_webcam_by_station (
+        """CREATE TABLE IF NOT EXISTS {keyspace}.livewebcam_by_station (
             station_id text,
-            live_webcam frozen <live_webcam>,
+            livewebcam frozen <livewebcam>,
             PRIMARY KEY ((station_id))
         ) """.format(keyspace=KEYSPACE)
     )
@@ -916,6 +916,23 @@ def sync_cassandra():
             max_value float,
             PRIMARY KEY ((sensor_id, parameter_id))
         ) """.format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.stations_by_parameter (
+            parameter_id text,
+            location_name text,
+            station_name text,
+            location_id text,
+            station_id text,
+            parameter_name text static,
+            parameter_description frozen <description>,
+            parameter_unit text,
+            measurement_type text,
+            location_position frozen <position>,
+            station_position frozen <position>,
+            PRIMARY KEY ((parameter_id), location_name, station_name, location_id, station_id)
+        ) WITH CLUSTERING ORDER BY (location_name ASC, station_name ASC, location_id ASC, station_id ASC) """.format(keyspace=KEYSPACE)
     )
     
     log.info('All done!')

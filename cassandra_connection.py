@@ -8,7 +8,7 @@ class Description(object):
         self.long_description = long_description
 
 
-class LiveWebcam(object):
+class Livewebcam(object):
     def __init__(self, url, ip_address):
         self.url = url
         self.ip_address = ip_address
@@ -18,13 +18,6 @@ class Name(object):
     def __init__(self, first_name, last_name):
         self.first_name = first_name
         self.last_name = last_name
-
-
-class ParameterInfo(object):
-    def __init__(self, parameter_name, parameter_description, parameter_unit):
-        self.parameter_name = parameter_name
-        self.parameter_description = parameter_description
-        self.parameter_unit = parameter_unit
 
 
 class Position(object):
@@ -43,20 +36,20 @@ class CassandraConnection(object):
             WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1' }
             """ % keyspace)
         
-        if register_udts:
-            self.register_udts()
-        
         self.session.set_keyspace(keyspace)
+        
+        if register_udts:
+            self.register_udts(keyspace)
 
     
     def disconnect(self):
         self.cluster.shutdown()
         
 
-    def register_udts(self):
-        self.cluster.register_user_type(keyspace, 'description', Position)
+    def register_udts(self, keyspace):
+        self.cluster.register_user_type(keyspace, 'description', Description)
+        self.cluster.register_user_type(keyspace, 'livewebcam', Livewebcam)
         self.cluster.register_user_type(keyspace, 'name', Name)
-        self.cluster.register_user_type(keyspace, 'parameter_info', ParameterInfo)
         self.cluster.register_user_type(keyspace, 'position', Position)
         
         

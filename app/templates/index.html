@@ -43,13 +43,91 @@
         var getLocationsUrl = '/locations/get_locations';
         var getParametersUrl = '/locations/get_locations_parameters';
         var map;
+        var markerCluster;
         var markers = [];
-        var bounds = new google.maps.LatLngBounds();
+        var markerListeners = [];
+        //var bounds = new google.maps.LatLngBounds();
+        var options = {imagePath: '{{ url_for('static', filename='js/googlemaps-markerer-cluster/images/m') }}'};
         
-        function initMap() {
+        var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h3 id="firstHeading" class="firstHeading"></h3>'+
+            '<div id="bodyContent">'+
+            '<div id="chart-container"></div>' + 
+            '</div>'+
+            '</div>';
+        
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+        
+        function initChart(stationId, paramId, parameterName, unit, data) {
+
+            options = {
+
+                chart: {
+                    renderTo: 'chart-container',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'Hourly Measurements',
+                    x: -20 //center
+                },
+                subtitle: {
+                    text: 'Subtitle',
+                    x: -20
+                },
+                xAxis: {
+                    title: {
+                        text: null
+                    },
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: parameterName + ' (' + unit + ')',
+                    },
+                    labels: {
+                        formatter: function() {
+                            return this.value;
+                        }
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                legend: {
+                    title: {
+                        text: 'Sensor<br/><span style="font-size: 9px; color: #666; font-weight: normal">(Click to hide)</span>',
+                        style: {
+                            fontStyle: 'italic'
+                        }
+                    },
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 1
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                    }]
+                },
+                series: data,
+            }
+
+            new Highcharts.Chart(options);
+        }
+        
+        function initMap(data) {
             var mapOptions = {
-                zoom: 2,
-                center: new google.maps.LatLng(0, 0),
+                zoom: 6,
+                center: new google.maps.LatLng(63, 16),
                 mapTypeControl: true,
                 streetViewControl: false,
                 mapTypeControlOptions: {
@@ -61,6 +139,18 @@
             };
             map = new google.maps.Map(document.getElementById('locations-map-canvas'), 
                 mapOptions);
+            
+            var legend = document.createElement('div');
+            legend.id = 'legend';
+            var content = ['<div class="panel-body no-padding"><div id="map-parameters-menu" class="list-group">'];
+            $.each(data, function (index, parameterData) {
+                content.push('<a href="#" data=' + parameterData.parameter_id + ' class="list-group-item">' + parameterData.parameter_name + '</a>');
+            });
+            
+            content.push('</div></div>');
+            legend.innerHTML = content.join('');
+            legend.index = 1;
+            map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
         }
 
         function loadAllLocations() {
@@ -75,25 +165,14 @@
                     var locationLatLng = new google.maps.LatLng(locationLat, locationLng);
 
                     addMarker(locationId, locationName, locationLatLng, locationDescription, locationImages);
-                    bounds.extend(locationLatLng);
+                    //bounds.extend(locationLatLng);
                 });
             });
         }
         
         function loadAllParameters() {
             return $.getJSON(getParametersUrl).done(function(data) {
-                var legend = document.createElement('div');
-                legend.id = 'legend';
-                var content = ['<div class="panel-body no-padding"><div id="map-parameters-menu" class="list-group">'];
-                $.each(data, function (index, parameterData) {
-                    content.push('<a href="#" class="list-group-item">' + parameterData.parameter_name + '</a>');
-                });
-                
-                content.push('</div></div>');
-                legend.innerHTML = content.join('');
-                legend.index = 1;
-                map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
-                
+                return data;
             });
         }
         
@@ -101,7 +180,72 @@
             var center = new google.maps.LatLng(lat, lng);
             map.panTo(center);
         }
-
+        
+        function addParameterMarker(paramId) {
+            var getParameterStationsUrl = '/locations/get_parameter_stations/' + paramId;
+            var getStationHourlyMeasurementsParamBaseUrl = '/stations/get_station_hourly/';
+            return $.getJSON(getParameterStationsUrl).done(function(data) {
+                $.each(data, function (index, station) {
+                    var timeout = index * 200;
+                    var stationLat = station.station_position.latitude;
+                    var stationLng = station.station_position.longitude;
+                    var stationLatLng = new google.maps.LatLng(stationLat, stationLng);                    
+                    var marker = new google.maps.Marker({
+                        position: stationLatLng,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            fillColor: 'red',
+                            fillOpacity: .4,
+                            scale: 5,
+                            strokeColor: 'white',
+                            strokeWeight: .5
+                        },
+                        map: map,
+                        title: station.station_name,
+                        animation: google.maps.Animation.DROP
+                    });
+                    window.setTimeout(function() {
+                        markers.push(marker);
+                        var markerListener = marker.addListener('click', function() {
+                          infowindow.open(map, marker);
+                          getStationHourlyMeasurementsParamUrl = getStationHourlyMeasurementsParamBaseUrl + station.station_id + '/' + paramId + '/' + 0 + '/2016/';
+                          console.log(station);
+                          $('#firstHeading').html('<i class="fa fa-globe fa-fw"></i> ' 
+                              + station.location_name 
+                              + ' / <i class="fa fa-map-marker fa-fw"></i> ' 
+                              + station.station_name);
+                          
+                          $.getJSON(getStationHourlyMeasurementsParamUrl).done(function(result) {
+                              var seriesData = [];
+                              var foundSensors = {};
+                              $.each(result, function(i, reading) {
+                                  sensorId = reading.sensor_id;
+                                  sensorName = reading.sensor_name;
+                                  //sensorNameId = sensorName + ' (' + sensorId + ') ';
+                                  if (sensorId in foundSensors) {}
+                                  else {
+                                      foundSensors[sensorId] = {'name': sensorName, 'data': []};
+                                  }
+                                  foundSensors[sensorId]['data'].push([reading.date_hour, reading.avg_value]);
+                              });
+                              
+                              $.each(foundSensors, function(key, sensorData) {
+                                  seriesData.push({'name': sensorData.name, 'data': sensorData.data});
+                              });
+                              
+                              initChart(station.station_id, paramId, station.parameter_name, station.parameter_unit, seriesData);
+                              
+                          });
+                            
+                          //initChart();
+                        markerListeners.push(markerListener);
+                        //bounds.extend(locationLatLng);
+                        });
+                    }, timeout);
+                });
+            });
+        }
+        
         function addMarker(id, name, latlng, description, images) {
             var marker = new google.maps.Marker({
                 position: latlng,
@@ -135,7 +279,9 @@
             markers.push(marker);
         }
         
-        initMap();
+        loadAllParameters().done(function(result) {
+            initMap(result);
+        });
         //loadAllLocations().done(function() {
         //    var options = {imagePath: '{{ url_for('static', filename='js/googlemaps-markerer-cluster/images/m') }}'};
         //    var markerCluster = new MarkerClusterer(map, markers, options);
@@ -147,7 +293,36 @@
         //});
         //loadAllParameters();
         
+        $('#locations-map-canvas').on('click', '.list-group a', function(event) {
+            event.preventDefault();
+            var paramId = $(this).attr('data');
+            
+            // Unset all markers
+            var i = 0, l = markers.length;
+            for (i; i<l; i++) {
+                markers[i].setMap(null)
+                google.maps.event.removeListener(markerListeners[i]);
+            }
+            markers = [];
+            markerListeners = [];
+
+            // Clears all clusters and markers from the clusterer.
+
+            if (typeof markerCluster != 'undefined') {
+                markerCluster.clearMarkers();   
+            }
+
+            addParameterMarker(paramId);
+            markerCluster = new MarkerClusterer(map, markers, options);
+            
+            //if (bounds.isEmpty()) {}
+            //else {
+            //    map.fitBounds(bounds);
+            //}
+        });
+        
     });
+    
     </script>
 
 {% endblock %}

@@ -6,7 +6,7 @@ from flask import render_template
 from app import app, cassandra_connection
 from utils import CustomEncoder
 
-@app.route('/locations/get_locations')
+@app.route('/locations/get_locations/')
 def get_locations():
     all_locations_query = "SELECT * FROM locations where bucket=0"
     prepared_all_locations_query = cassandra_connection.session.prepare(all_locations_query)
@@ -15,7 +15,7 @@ def get_locations():
 
     return json.dumps(locations_data, cls=CustomEncoder)
 
-@app.route('/locations/get_locations_and_stations')
+@app.route('/locations/get_locations_and_stations/')
 def get_locations_and_stations():
     all_locations_query = "SELECT * FROM locations WHERE bucket=0"
     prepared_all_locations_query = cassandra_connection.session.prepare(all_locations_query)
@@ -35,7 +35,7 @@ def get_locations_and_stations():
         
     return json.dumps(locations_stations_data, cls=CustomEncoder)
     
-@app.route('/locations/get_locations_parameters')
+@app.route('/locations/get_locations_parameters/')
 def get_locations_parameters():
     all_parameters_query = "SELECT * FROM locations_parameters WHERE bucket=0"
     prepared_all_parameters_query = cassandra_connection.session.prepare(all_parameters_query)
@@ -44,41 +44,59 @@ def get_locations_parameters():
 
     return json.dumps(locations_parameters_data, cls=CustomEncoder)
 
+@app.route('/locations/get_parameter_stations/<string:param_id>/')
+def get_parameter_stations(param_id):
+    query = "SELECT * FROM stations_by_parameter WHERE parameter_id=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (param_id,)).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/stations/get_station_hourly/<string:station_id>/<string:param_id>/<int:qc_level>/<int:year>/')
+def get_station_hourly_measurements(station_id, param_id, qc_level, year):
+    query = "SELECT date_hour, sensor_name, sensor_id, avg_value, unit FROM hourly_parameter_measurements_by_station WHERE station_id=? AND parameter_id=? AND qc_level=? AND year=? ORDER BY date_hour ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (station_id, param_id, qc_level, year,)).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/')
 @app.route('/sites/')
 def index():
     return render_template('index.html')
 
-@app.route('/sites/site/<uuid:site_id>/overview/')
-def site_overview(site_id):
-    site_query = "SELECT * FROM site_info_by_site WHERE site_id=?"
-    prepared = cassandra_connection.session.prepare(site_query)
-    rows = cassandra_connection.session.execute_async(prepared, (site_id,)).result()
+@app.route('/locations/<string:location_id>/overview/')
+def location_overview(location_id):
+    location_query = "SELECT * FROM location_info_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(location_query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
 
     try:
-        site_data = rows[0]
+        location_data = rows[0]
     except IndexError as e:
         print(e)
-        site_data = None
+        location_data = None
     finally:
-        return render_template('sites/site_overview.html', **site_data)
+        return render_template('locations/location_overview.html', **location_data)
         
-@app.route('/sites/site/<uuid:site_id>/overview/info/')
-def site_overview_info(site_id):
-    site_query = "SELECT * FROM site_info_by_site WHERE site_id=?"
-    prepared = cassandra_connection.session.prepare(site_query)
-    rows = cassandra_connection.session.execute_async(prepared, (site_id,)).result()
+@app.route('/locations/<string:location_id>/overview/info/')
+def location_overview_info(location_id):
+    location_query = "SELECT * FROM location_info_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(location_query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
 
     try:
-        site_data = rows[0]
-        site_position_cass = site_data.get('site_position')
-        site_data['site_latitude'] = site_position_cass.latitude
-        site_data['site_longitude'] = site_position_cass.longitude
+        location_data = rows[0]
+        location_position_cass = location_data.get('location_position')
+        location_data['location_latitude'] = location_position_cass.latitude
+        location_data['location_longitude'] = location_position_cass.longitude
     except IndexError as e:
         print(e)
-        site_data = None
+        location_data = None
     finally:
-        return render_template('sites/site_overview_info.html', **site_data)
+        return render_template('location/location_overview_info.html', **location_data)
         
 @app.route('/sites/site/<uuid:site_id>/overview/timeline/')
 def site_overview_timeline(site_id):

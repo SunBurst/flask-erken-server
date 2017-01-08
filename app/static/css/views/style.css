@@ -174,6 +174,13 @@ ul {
 .nav ul {
     list-style-type: none;
     padding: 0;
+    background-color: #434857;
+}
+
+#chart-container {
+	height: 300px;
+	min-width: 310px;
+	max-width: 800px;
 }
 
 .overflow-tabs-scroll {
@@ -723,7 +730,7 @@ a:hover {
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin: 0 0 0 250px;
+        /* margin: 0 0 0 250px; */
         padding: 0 30px;
     }
     .sidebar {
@@ -889,8 +896,4 @@ p {
 
 .no-padding {
     padding: 0;
-}
-
-.header-background {
-    position: relative;
 }
