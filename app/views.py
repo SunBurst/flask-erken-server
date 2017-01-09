@@ -62,8 +62,26 @@ def get_station_hourly_measurements(station_id, param_id, qc_level, year):
 
     return json.dumps(data, cls=CustomEncoder)
 
+@app.route('/mapview/location/')
+@app.route('/mapview/location/<string:location_id>')
+def location_mapview(location_id=None):
+    print(location_id)
+
+@app.route('/mapview/location/<string:location_id>/station/<string:station_id>')
+def station_mapview(location_id, station_id):
+    pass
+
+@app.route('/dataview/location/')
+@app.route('/dataview/location/<string:location_id>')
+def location_dataview(location_id=None):
+    print(location_id)
+
+@app.route('/dataview/location/<string:location_id>/station/<string:station_id>')
+def station_dataview(location_id, station_id):
+    pass
+
+
 @app.route('/')
-@app.route('/sites/')
 def index():
     return render_template('index.html')
 

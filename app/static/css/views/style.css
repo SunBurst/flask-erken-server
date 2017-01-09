@@ -904,3 +904,17 @@ p {
 .no-padding {
     padding: 0;
 }
+
+.btn-outline {
+    border-color: #1ca8dd;
+}
+
+.btn-default.btn-on.active{
+    background-color: #1ca8dd;
+    color: #fff;
+}
+
+.btn-default.btn-off.active{
+    background-color: #1ca8dd;
+    color: #fff;
+}
