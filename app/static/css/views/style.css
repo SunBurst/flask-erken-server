@@ -177,6 +177,12 @@ ul {
     background-color: #fff;
 }
 
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+}
+
 #chart-container {
 	height: 300px;
 	min-width: 310px;
@@ -364,6 +370,7 @@ ul {
 
 .navbar-default .navbar-collapse {
     border: 0;
+    text-align: center;
 }
 
 .navbar-top-links {
