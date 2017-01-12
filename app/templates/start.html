@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block extracss %}
+{% endblock %}
+
+{% block collapsiblesection %}
+    <div class="collapsible-section-tabs" style="margin-top: 0px;">
+        <div class="header-background full-site-width">
+            <!-- <div class="header-map-view-toggle-container full-site-width"> -->
+                <!-- <div class="header-map-view-nav"> -->
+                <!-- </div> -->
+            <!-- </div> -->
+            <div class="header-tabs-container full-site-width">
+                <nav class="header-tabs-nav overflow-tabs-scroll-wrapper">
+                    <ul class="nav-tab-list overflow-tabs-scroll" style="min-width: 681px; left: 0px;">
+                        <li class="nav-tab-container">
+                            <a href="#" class="nav-tab">Overview</a>
+                        </li>
+                        <li class="nav-tab-container">
+                            <a href="#" class="nav-tab active">Data</a>
+                        </li>
+                        <li class="nav-tab-container">
+                            <a href="#" class="nav-tab">Cams & Photos</a>
+                        </li>
+                        <ul class="nav tab-container-map-toggle navbar-right">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Map View
+                                    <div class="material-switch pull-right">
+                                        <input id="someSwitchOptionPrimary" name="someSwitchOption001" type="checkbox"/>
+                                        <label for="someSwitchOptionPrimary" class="label-primary"></label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="collapsible-section-info" style="margin-top: 0px;">
+        <div class="header-background full-site-width">
+            <div class="header-info-container full-site-width">
+                <div class="header-info-description-row">
+                    <div class="header-info-description">
+                        Research at the Erken Laboratory focuses on the long-term monitoring of water quality, climate effects on aquatic systems, circulation of nutrients, population and community dynamics in lakes.
+                    </div>
+                </div>
+                <div class="header-info-button-row">
+                    <a href="#" class="button button-text-white" data-category="getStarted" data-action="buttonClick" data-label="hero">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+     
+     <nav class="page-wrapper-nav nav">
+        <ul class="nav-list">
+            <li class="nav-item nav-item-heading">
+                <span class="nav-title nav-title-no-path" track-type="leftNav" track-name="expandNavSectionNoLink" track-metadata-position="0">
+                    <span>Locations</span>
+                </span>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-title" track-type="leftNav" track-name="titleLink" track-metadata-position="0" data-category="Site-Wide Custom Events" data-label="Left nav" data-action="click">
+                    <span><i class="fa fa-globe fa-fw"></i> All Locations</span>
+                </a>
+            </li>
+            <li id="locations-parameters-heading" class="nav-item nav-item-heading">
+                <span class="nav-title nav-title-no-path" track-type="leftNav" track-name="expandNavSectionNoLink" track-metadata-position="0">
+                    <span>Parameters</span>
+                </span>
+            </li>
+            <li id="locations-webcams-heading" class="nav-item nav-item-heading">
+                <span class="nav-title nav-title-no-path" track-type="leftNav" track-name="expandNavSectionNoLink" track-metadata-position="0">
+                    <span>Webcams & Photos</span>
+                </span>
+            </li>
+        </ul>
+     </nav>
+     
+     <div class="page-content">
+        <div class="row">
+            <div class="col-md-9">
+                <h3>All Locations</h3>
+            </div>
+            <div class="col-md-3">
+                <!-- Controls -->
+                <div class="controls pull-right hidden-xs">
+                    <a class="left fa fa-chevron-left btn btn-primary" href="#carousel-example-generic"
+                        data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-primary" href="#carousel-example-generic"
+                            data-slide="next"></a>
+                </div>
+            </div>
+        </div>
+        <div id="carousel-example-generic" class="carousel slide hidden-xs" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div id="locations-carousel" class="row"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script>
+$(document).ready(function() {
+    
+    var getParametersUrl = '/locations/get_locations_parameters';
+    var getLiveWebcamsUrl = '/locations/get_locations_live_webcams';
+    
+    function loadAllParameters() {
+        return $.getJSON(getParametersUrl).done(function(data) {
+            return data;
+        });
+    }
+    
+    function loadAllLiveWebcams() {
+        return $.getJSON(getLiveWebcamsUrl).done(function(data) {
+            return data;
+        });
+    }
+    
+    function initParametersMenu(data) {
+        var locationsParametersHeading = $('#locations-parameters-heading');
+        var dynamicContent =  [];
+        $.each(data, function(index, parameter) {
+            var content = '<li class="nav-item">';
+            content += '<a href="#" class="nav-title" track-type="leftNav" track-name="titleLink" track-metadata-position="0" data-category="Site-Wide Custom Events" data-label="Left nav" data-action="click">';
+            content += '<span><i class="fa fa-area-chart fa-fw"></i> ' + parameter.parameter_name + '</span>';
+            content += '</a>';
+            content += '</li>';
+            dynamicContent.push(content);
+        });
+        locationsParametersHeading.after(dynamicContent);
+    }
+    
+    function initWebcamsMenu(data) {
+        var locationsWebcamsHeading = $('#locations-webcams-heading');
+        var dynamicContent =  [];
+        $.each(data, function(index, webcam) {
+            var liveWebcam;
+            if (webcam.livewebcam.url) {
+                liveWebcam = webcam.livewebcam.url;
+            }
+            else {
+                liveWebcam = webcam.livewebcam.ip_address;
+            }
+            var content = '<li class="nav-item">';
+            content += '<a href="#" class="nav-title" track-type="leftNav" track-name="titleLink" track-metadata-position="0" data-category="Site-Wide Custom Events" data-label="Left nav" data-action="click">';
+            content += '<span><i class="fa fa-video-camera fa-fw"></i> ' + liveWebcam + '</span>';
+            content += '</a>';
+            content += '</li>';
+            dynamicContent.push(content);
+        });
+        locationsWebcamsHeading.after(dynamicContent);
+    }
+    
+    function populateLocationsCarousel() {
+        var locationsCarousel = $('#locations-carousel');
+        var getLocationsUrl = '/locations/get_locations';
+        return $.getJSON(getLocationsUrl).done(function(result) {
+            var dynamicContent =  [];
+            $.each(result, function(index, location) {
+                var content = '';
+                var locationId = location.id;
+                var locationName = location.name;
+                var locationPosition = location.position;
+                var locationLatitude = locationPosition.latitude;
+                var locationLongitude = locationPosition.longitude;
+                var locationDescription = location.description;
+                var locationShortDescription = locationDescription.short_description;
+                var locationItemId = 'location-' + locationId + '-carousel';
+                
+                content += '<div class="col-sm-6">';
+                content += '<div class="col-item">';
+                content += '<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">';
+                content += '<ol class="carousel-indicators">';
+                content += '<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>';
+                content += '<li data-target="#carousel-example-generic" data-slide-to="1"></li>';
+                content += '<li data-target="#carousel-example-generic" data-slide-to="2"></li>';
+                content += '</ol>';
+                content += '<div class="carousel-inner">';
+                content += '<div class="item active">';
+                content += '<img src={{ url_for('static', filename='images/sites/malaren.jpg') }} alt="...">';
+                content += '<div class="carousel-caption">';
+                content += '<h2>' + locationName + '</h2>';
+                content += '</div>';
+                content += '</div>';
+                content += '<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">';
+                content += '<span class="glyphicon glyphicon-chevron-left"></span></a>';
+                content += '<a class="right carousel-control" href="#carousel-example-generic" data-slide="next">';
+                content += '<span class="glyphicon glyphicon-chevron-right"></span></a>';
+                content += '</div>';
+                content += '<div class="info">'
+                content += '<div class="tab-container">';
+                content += '<ul class="nav nav-pills">';
+                content += '<li class="nav-item active">';
+                content += '<a class="nav-link" data-toggle="pill" href="#' + locationId + '-tab-info' + '">';
+                content += '<span class="icon icon-chat"></span>Info</a>';
+                content += '</li>';
+                content += '<li class="nav-item">';
+                content += '<a class="nav-link" data-toggle="pill" href="#' + locationId + '-menu1">';
+                content += '<span class="icon icon-bell"></span>Notifications</a>';
+                content += '</li>';
+                content += '<li class="nav-item">';
+                content += '<a class="nav-link" data-toggle="pill" href="#' + locationId + '-menu2">';
+                content += '<span class="icon icon-users"></span>Members</a>';
+                content += '</li>';
+                content += '</ul>';
+                content += '<div class="tab-content"><div id="' + locationId + '-tab-info" class="tab-pane fade in active"><h4>' + locationName + '</h4>';
+                content += '<p>' + locationShortDescription + '</p></div>';
+                content += '<div id="' + locationId + '-menu1" class="tab-pane fade">';
+                content += '<h3>Menu 1</h3><p>Some content in menu 1.</p></div>';
+                content += '<div id="' + locationId + '-menu2" class="tab-pane fade"><h3>Menu 2</h3><p>Some content in menu 2.</p></div></div>';
+                
+                //content += '<ul class="nav nav-tabs"><li class="active"><a href="#">Info</a></li><li><a href="#">Menu 1</a></li><li><a href="#">Menu 2</a></li><li><a href="#">Menu 3</a></li></ul>';
+                content += '</div>';
+                content += '</div>';
+                content += '</div>';
+                content += '</div>';
+                
+                dynamicContent.push(content);
+
+            });
+            locationsCarousel.append(dynamicContent);
+        });
+    }
+    
+    populateLocationsCarousel().done(function() {
+    
+        $('[id^=detail-]').hide();
+        $('.toggle').click(function() {
+            $input = $( this );
+            $target = $('#'+$input.attr('data-toggle'));
+            $target.slideToggle();
+        });
+    });
+    
+    loadAllParameters().done(function(result) {
+        initParametersMenu(result);
+    });
+    
+    loadAllLiveWebcams().done(function(result) {
+        initWebcamsMenu(result);
+    });
+});
+</script>
+{% endblock %}

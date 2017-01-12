@@ -1,7 +1,7 @@
 import json
 import uuid
 
-from flask import render_template
+from flask import redirect, render_template, url_for
 
 from app import app, cassandra_connection
 from utils import CustomEncoder
@@ -44,6 +44,15 @@ def get_locations_parameters():
 
     return json.dumps(locations_parameters_data, cls=CustomEncoder)
 
+@app.route('/locations/get_locations_live_webcams/')
+def get_locations_live_webcams():
+    query = "SELECT * FROM locations_livewebcams WHERE bucket=0"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/locations/get_parameter_stations/<string:param_id>/')
 def get_parameter_stations(param_id):
     query = "SELECT * FROM stations_by_parameter WHERE parameter_id=?"
@@ -83,8 +92,13 @@ def station_dataview(location_id, station_id):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-
+    return redirect('/start/')
+    #return render_template('index.html')
+    
+@app.route('/start/')
+def index_all_locations():
+    return render_template('start.html')
+    
 @app.route('/locations/<string:location_id>/overview/')
 def location_overview(location_id):
     location_query = "SELECT * FROM location_info_by_location WHERE location_id=?"

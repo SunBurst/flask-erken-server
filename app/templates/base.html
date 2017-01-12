@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     
     <!-- metisMenu CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.css"> -->
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href={{ url_for('static', filename="css/views/style.css") }}>
@@ -40,7 +40,7 @@
       <!-- Navigation -->
 
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="container-fluid">
+            <!-- <div class="container-fluid"> -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
@@ -48,27 +48,26 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="">Erken Laboratory Monitoring</a>
+                    <div class="brand-name-wrapper">
+                    <a class="brand-name-link" href="">
+                        <div class="brand-logo-container">
+                            <img class="brand-logo" alt="UU-logo" src={{ url_for('static', filename="uulogo_white.gif") }}>
+                        </div>
+                        <span class="brand-name">Erken Laboratory Monitoring</span>
+                    </a>
+                    </div>
                 </div>
                 <!-- /.navbar-header -->
             
             <!-- <ul class="nav navbar-nav"><li><a href="#"><i class="fa fa-map fa-fw"></i> Map</a></li></ul> -->
             
             <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <div class="btn-group" id="status" data-toggle="buttons">
-                  <label class="btn btn-default btn-outline btn-on active">
-                  <input type="radio" value="1" name="multifeatured_module[module_id][status]" checked="checked">Map View</label>
-                  <label class="btn btn-default btn-outline btn-off">
-                  <input type="radio" value="0" name="multifeatured_module[module_id][status]">Data View</label>
-                </div>
-            </ul>
             
             <ul class="nav navbar-top-links navbar-right">
 
                 <div class="btn-group">
                 <button type="button" id="id-btn-select-location" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-globe fa-fw"></i> Choose Location <span class="caret"></span>
+                    <i class="fa fa-globe fa-fw"></i> All Locations <span class="caret"></span>
                 </button>
                 <ul id="locations-dropdown" class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                     <li><a href="#"><i class="fa fa-globe fa-fw"></i> All Locations</a></li>
@@ -284,13 +283,12 @@
             </ul>
             <!-- /.navbar-top-links -->
             </div>
-            </div>
+            <!-- </div> -->
         </nav>
+        
         
         {% block collapsiblesection %}
         {% endblock %}
-
-      </nav>
         
       <!-- #page-wrapper -->
       <div id="page-wrapper">
