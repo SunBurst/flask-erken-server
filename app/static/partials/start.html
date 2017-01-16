@@ -71,9 +71,8 @@
                             </div>
                         </div>
                         <div class="col-md-6 no-pad">
-                            <div ng-repeat="location_image in location.images class="user-image">
-                                {[ location_image ]}
-                                <!-- <img data-ng-src="data:image/png;base64, {[ location_image ]}" class="img-responsive thumbnail"> -->
+                            <div ng-repeat="location_image in location.images" class="user-image">
+                                <img data-ng-src="data:image/png;base64, {[ location_image ]}" class="img-responsive thumbnail">
                             </div>
                         </div>
                     </div>
@@ -100,7 +99,7 @@
                 <div class="col-md-12 user-menu user-pad">
                     <div class="user-menu-content active">
                         <div class="google-map">
-                            <div id="'{[ location.id ]}-map " class="map-overview"></div>
+                            <div ng-controller="StartLocationController" id="{[ location.id ]}-map" class="map-overview"></div>
                         </div>
                         <h3>Location Information</h3>
                         <p>{[ location.description.short_description ]}</p>
@@ -153,9 +152,5 @@
             </div>
         </div>
     </div>
-
-<!-- {% endblock %} -->
-
-<!-- {% block extrajs %} -->
 
 <!-- {% endblock %} -->

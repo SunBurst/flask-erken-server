@@ -1,345 +1,387 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en" data-ng-app="app">
 
-{% block collapsiblesection %}
+  <head>
 
-    <div class="collapsible-section-tabs" style="margin-top: 0px;">
-        <div class="header-background full-site-width">
-            <div class="doc-set-nav-row">
-                <nav class="doc-set-nav nav overflow-tabs-scroll-wrapper">
-                    <ul class="doc-set-nav-tab-list overflow-tabs-scroll" style="min-width: 681px; left: 0px;">
-                        <li class="doc-set-nav-tab-container">
-                            <a href="https://developers.google.com/maps/documentation/javascript/" class="doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Overview">Overview</a>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <!-- AngularJS CDN -->
+    <script src="https://code.angularjs.org/1.6.1/angular.js"></script>
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/controllers.js"></script>
+    <script src="/static/js/services.js"></script>
+    <script src="https://unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="https://code.angularjs.org/1.6.1/angular-resource.js"></script>
+    
+    <title>Erken Laboratory Monitoring</title>
+    
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> -->
+    
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+        crossorigin="anonymous">
+    
+    <!-- Font-Awesome CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- metisMenu CSS -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.css"> -->
+    
+    <!-- Custom CSS -->
+    <!-- <link rel="stylesheet" href={{ url_for('static', filename="css/views/style.css") }}> -->
+    <link rel="stylesheet" href="/static/css/views/style.css") }}>
+
+  </head>
+    
+  <body ng-controller="LocationsListController">
+
+    <!-- .wrapper -->
+    <div class="wrapper">
+      
+      <!-- Navigation -->
+
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <!-- <div class="container-fluid"> -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="brand-name-wrapper">
+                    <a class="brand-name-link" ui-sref="locations">
+                        <div class="brand-logo-container">
+                            <img class="brand-logo" alt="UU-logo" src="/static/uulogo_white.gif") }}>
+                        </div>
+                        <span class="brand-name">Erken Laboratory Monitoring</span>
+                    </a>
+                    </div>
+                </div>
+                <!-- /.navbar-header -->
+            
+            <!-- <ul class="nav navbar-nav"><li><a href="#"><i class="fa fa-map fa-fw"></i> Map</a></li></ul> -->
+            
+            <div class="collapse navbar-collapse">
+            
+            <ul class="nav navbar-top-links navbar-right">
+
+                <div class="btn-group">
+                <button type="button" id="id-btn-select-location" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-globe fa-fw"></i> All Locations <span class="caret"></span>
+                </button>
+                <ul id="locations-dropdown" class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a href="#"><i class="fa fa-globe fa-fw"></i> All Locations</a></li>
+                    <li class="divider"></li>
+                    <li ng-repeat="location in locations" id="{[ location.id ]}" class="dropdown-submenu">
+                        <a tabindex="-1" href="#"><i class="fa fa-globe fa-fw"></i> {[ location.name ]} </a> 
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="/locations/{[ location.id ]}/overview/"><i class="fa fa-globe fa-fw"></i> {[ location.name ]}</a>
+                            </li>
+                            <li class="divider"></li>
+                        <li ng-repeat="station in location.location_stations">
+                            <a href="/locations/{[ location.location_id ]}/stations/{[ station.station_id ]}"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name]}</a>
                         </li>
-                        <li class="doc-set-nav-tab-container">
-                            <a href="https://developers.google.com/maps/documentation/javascript/tutorial" class="doc-set-nav-activedoc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Guides">Guides</a>
-                        </li>
-                        <li class="doc-set-nav-tab-container">
-                            <a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference" class="doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Reference">Reference</a>
-                        </li>
-                        <li class="doc-set-nav-tab-container">
-                            <a href="https://developers.google.com/maps/documentation/javascript/examples/" class="doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Samples">Samples</a>
-                        </li>
-                        <li class="doc-set-nav-tab-container">
-                            <a href="https://developers.google.com/maps/documentation/javascript/support" class="doc-set-nav-tab gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: Support">Support</a>
-                        </li>
-                        <button type="button" id="feedback-project" class="feedback-button top-button gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Send Feedback Button" track-type="feedback" track-name="sendFeedbackLink" track-metadata-position="header">Send feedback</button>
-                    </ul>
-                    <button type="button" class="overflow-tabs-scroll-button top-button material-icons scroll-forward hidden"></button><button type="button" class="overflow-tabs-scroll-button top-button material-icons scroll-back hidden"></button>
-                </nav>
+                        </ul>
+                    </li>
+                </ul>
+                
             </div>
-        </div>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 1</strong>
+                                        <span class="pull-right text-muted">40% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 2</strong>
+                                        <span class="pull-right text-muted">20% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                            <span class="sr-only">20% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 3</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 4</strong>
+                                        <span class="pull-right text-muted">80% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            <span class="sr-only">80% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-tasks -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+            </div>
+            <!-- </div> -->
+        </nav>
+        
+      <!-- #page-wrapper -->
+      <div id="page-wrapper" ui-view>
+        <!-- {% block content %}{% endblock %} -->
+      </div>
+      <!--/#page-wrapper -->
+
     </div>
+    <!-- /#wrapper -->   
+    
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous">
+    </script>
+    
+    <!-- jQuery local fallback -->
+    <!--  <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/jquery/jquery-3.1.1.min.js') }}"><\/script>')</script> -->
+   
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+        crossorigin="anonymous"></script>
+        
+    <!-- Bootstrap Core JavaScript local fallback -->
+    <!-- <script>if(typeof($.fn.modal) === 'undefined') {document.write('<script src="{{ url_for('static', filename='css/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"><\/script>')}</script> -->
+    
+    <!-- metisMenu JavaScript -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.js"></script> -->
+    
+    <!-- metisMenu CSS/JavaScript local fallback -->
+    <!-- <script>
+    if (typeof metisMenu !== 'function') {
+        $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/metisMenu-master/dist/metisMenu.min.css') }}">');
+        document.write('<script src="{{ url_for('static', filename='css/metisMenu-master/dist/metisMenu.min.js') }}"><\/script>');
+            
+    }
+    </script> -->
+    
+    <!-- Bootstrap CSS local fallback -->
+    <!-- <script>
+    $(document).ready(function() {
+        var bodyMargin = $('body').css('margin');
+        if (bodyMargin != '0px') {
+            $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-3.3.7-dist/css/bootstrap.min.css') }}">');}});
+    </script> -->
+    
+    <!-- Font Awesome CSS local fallback  -->
+    <!-- <script>
+    $(document).ready(function() {
+        var fontFamily = $('.fa').css('font-family');
+        if (fontFamily != 'FontAwesome') {
+            $("head").prepend('<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome-4.7.0/css/font-awesome.min.css') }}">');}});
+    </script> -->
 
-{% endblock %}
-
-
-{% block content %}
-
-    <!-- <div class="bt"> -->
-        <!-- <div class="bw"> -->
-          <!-- <h1>Erken Laboratory Monitoring</h1> -->
-          <!-- <p>Research at the Erken Laboratory focuses on the long-term monitoring of water quality, climate effects on aquatic systems, circulation of nutrients, population and community dynamics in lakes.</p> -->
-        <!-- </div> -->
-    <!-- </div> -->
-    <div class="col-lg-12">
-        <div class="locations-map-container">
-            <div id="locations-map-canvas" class="locations-map-canvas"></div>
-        </div>
-    </div>
-
-{% endblock %}
-
-{% block extrajs %}
+    <!-- Google Maps API JavaScript -->
+    <!-- <script src={{ url_for('static', filename="js/googlemaps-markerer-cluster/markerclusterer.js") }}></script> -->
+    <script src="/static/js/googlemaps-markerer-cluster/markerclusterer.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN193fgB-M7MdBiaxqwi2h9i_-2_MAWsk"></script>
+    
+    <!-- HighCharts API JavaScript -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     
     <script>
-    $(document).ready(function() {
-        var getLocationsUrl = '/locations/get_locations';
-        var getParametersUrl = '/locations/get_locations_parameters';
-        var map;
-        var markerCluster;
-        var markers = [];
-        var markerListeners = [];
-        //var bounds = new google.maps.LatLngBounds();
-        var options = {imagePath: '{{ url_for('static', filename='js/googlemaps-markerer-cluster/images/m') }}'};
-        
-        var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h3 id="firstHeading" class="firstHeading"></h3>'+
-            '<div id="bodyContent">'+
-            '<div id="chart-container"></div>' + 
-            '</div>'+
-            '</div>';
-        
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-        
-        function initChart(stationId, paramId, parameterName, unit, data) {
-
-            options = {
-
-                chart: {
-                    renderTo: 'chart-container',
-                    zoomType: 'x'
-                },
-                title: {
-                    text: 'Hourly Measurements',
-                    x: -20 //center
-                },
-                subtitle: {
-                    text: 'Subtitle',
-                    x: -20
-                },
-                xAxis: {
-                    title: {
-                        text: null
-                    },
-                    type: 'datetime'
-                },
-                yAxis: {
-                    title: {
-                        text: parameterName + ' (' + unit + ')',
-                    },
-                    labels: {
-                        formatter: function() {
-                            return this.value;
-                        }
-                    },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }]
-                },
-                legend: {
-                    title: {
-                        text: 'Sensor<br/><span style="font-size: 9px; color: #666; font-weight: normal">(Click to hide)</span>',
-                        style: {
-                            fontStyle: 'italic'
-                        }
-                    },
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle',
-                    borderWidth: 1
-                },
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                    }]
-                },
-                series: data,
-            }
-
-            new Highcharts.Chart(options);
-        }
-        
-        function initMap(data) {
-            var mapOptions = {
-                zoom: 6,
-                center: new google.maps.LatLng(63, 16),
-                mapTypeControl: true,
-                streetViewControl: false,
-                mapTypeControlOptions: {
-                    mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain', 'styled_map'],
-                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                    position: google.maps.ControlPosition.TOP_CENTER
-                },
-                fullscreenControl: true
-            };
-            map = new google.maps.Map(document.getElementById('locations-map-canvas'), 
-                mapOptions);
-            
-            var legend = document.createElement('div');
-            legend.id = 'legend';
-            var content = ['<div class="panel-body no-padding"><div id="map-parameters-menu" class="list-group">'];
-            $.each(data, function (index, parameterData) {
-                content.push('<a href="#" data=' + parameterData.parameter_id + ' class="list-group-item">' + parameterData.parameter_name + '</a>');
-            });
-            
-            content.push('</div></div>');
-            legend.innerHTML = content.join('');
-            legend.index = 1;
-            map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
-        }
-
-        function loadAllLocations() {
-            return $.getJSON(getLocationsUrl).done(function(data) {
-                $.each(data, function (location, locationData) {
-                    var locationId = locationData.id;
-                    var locationName = locationData.name;
-                    var locationDescription = locationData.description;
-                    var locationImages = locationData.images;
-                    var locationLat = locationData.position.latitude;
-                    var locationLng = locationData.position.longitude;
-                    var locationLatLng = new google.maps.LatLng(locationLat, locationLng);
-
-                    addMarker(locationId, locationName, locationLatLng, locationDescription, locationImages);
-                    //bounds.extend(locationLatLng);
-                });
-            });
-        }
-        
-        function loadAllParameters() {
-            return $.getJSON(getParametersUrl).done(function(data) {
-                return data;
-            });
-        }
-        
-        function moveCenter(lat, lng){
-            var center = new google.maps.LatLng(lat, lng);
-            map.panTo(center);
-        }
-        
-        function addParameterMarker(paramId) {
-            var getParameterStationsUrl = '/locations/get_parameter_stations/' + paramId;
-            var getStationHourlyMeasurementsParamBaseUrl = '/stations/get_station_hourly/';
-            return $.getJSON(getParameterStationsUrl).done(function(data) {
-                $.each(data, function (index, station) {
-                    var timeout = index * 200;
-                    var stationLat = station.station_position.latitude;
-                    var stationLng = station.station_position.longitude;
-                    var stationLatLng = new google.maps.LatLng(stationLat, stationLng);                    
-                    var marker = new google.maps.Marker({
-                        position: stationLatLng,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            fillColor: 'red',
-                            fillOpacity: .4,
-                            scale: 5,
-                            strokeColor: 'white',
-                            strokeWeight: .5
-                        },
-                        map: map,
-                        title: station.station_name,
-                        animation: google.maps.Animation.DROP
-                    });
-                    window.setTimeout(function() {
-                        markers.push(marker);
-                        var markerListener = marker.addListener('click', function() {
-                          infowindow.open(map, marker);
-                          getStationHourlyMeasurementsParamUrl = getStationHourlyMeasurementsParamBaseUrl + station.station_id + '/' + paramId + '/' + 0 + '/2016/';
-                          console.log(station);
-                          $('#firstHeading').html('<i class="fa fa-globe fa-fw"></i> ' 
-                              + station.location_name 
-                              + ' / <i class="fa fa-map-marker fa-fw"></i> ' 
-                              + station.station_name);
-                          
-                          $.getJSON(getStationHourlyMeasurementsParamUrl).done(function(result) {
-                              var seriesData = [];
-                              var foundSensors = {};
-                              $.each(result, function(i, reading) {
-                                  sensorId = reading.sensor_id;
-                                  sensorName = reading.sensor_name;
-                                  //sensorNameId = sensorName + ' (' + sensorId + ') ';
-                                  if (sensorId in foundSensors) {}
-                                  else {
-                                      foundSensors[sensorId] = {'name': sensorName, 'data': []};
-                                  }
-                                  foundSensors[sensorId]['data'].push([reading.date_hour, reading.avg_value]);
-                              });
-                              
-                              $.each(foundSensors, function(key, sensorData) {
-                                  seriesData.push({'name': sensorData.name, 'data': sensorData.data});
-                              });
-                              
-                              initChart(station.station_id, paramId, station.parameter_name, station.parameter_unit, seriesData);
-                              
-                          });
-                            
-                          //initChart();
-                        markerListeners.push(markerListener);
-                        //bounds.extend(locationLatLng);
-                        });
-                    }, timeout);
-                });
-            });
-        }
-        
-        function addMarker(id, name, latlng, description, images) {
-            var marker = new google.maps.Marker({
-                position: latlng,
-                map: map,
-                title: name
-            });
-
-            var infoWindowContent =
-                '<div id="info-window-' + id + '">' +
-                    '<div id="info-window' + id + '-notice"></div>' +
-                    '<a href="/sites/site?site_id=' + id + '">' +
-                        '<h3 id="info-window-' + id + '-heading" class="infoContentHeading">' + name + '</h3>' +
-                    '</a>' +
-                    '<div id="info-window-' + id + '-bodyContent">' +
-                        '<p>' + 'WGS84: ' + latlng.lat() + ', ' + latlng.lng() + '</p>' +
-                        
-                        //'<img class="img-responsive" src="/static/images/sites/' + image +
-                        //    '" alt="' + name + '" height="300" width="300"></img>' +
-                        '<p>' + description  + '</p>' +
-                    '</div>' +
-                '</div>';
-
-            var infoWindow = new google.maps.InfoWindow({
-                content: infoWindowContent
-            });
-
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-            });
-
-            markers.push(marker);
-        }
-        
-        loadAllParameters().done(function(result) {
-            $('#status label:first-child').removeClass("btn-off");
-            $('#status label:first-child').addClass("btn-on active");
-            $('#status label:last-child').removeClass("btn-on active");
-            $('#status label:last-child').addClass("btn-off");
-            initMap(result);
-        });
-        //loadAllLocations().done(function() {
-        //    var options = {imagePath: '{{ url_for('static', filename='js/googlemaps-markerer-cluster/images/m') }}'};
-        //    var markerCluster = new MarkerClusterer(map, markers, options);
-           
-        //    if (bounds.isEmpty()) {}
-        //    else {
-        //        map.fitBounds(bounds);
-        //    }
-        //});
-        //loadAllParameters();
-        
-        $('#locations-map-canvas').on('click', '.list-group a', function(event) {
+    $(function() {
+        $('#locations-dropdown a').on('click', function(event) {    
             event.preventDefault();
-            var paramId = $(this).attr('data');
-            
-            // Unset all markers
-            var i = 0, l = markers.length;
-            for (i; i<l; i++) {
-                markers[i].setMap(null)
-                google.maps.event.removeListener(markerListeners[i]);
-            }
-            markers = [];
-            markerListeners = [];
-
-            // Clears all clusters and markers from the clusterer.
-
-            if (typeof markerCluster != 'undefined') {
-                markerCluster.clearMarkers();   
-            }
-
-            addParameterMarker(paramId);
-            markerCluster = new MarkerClusterer(map, markers, options);
-            
-            //if (bounds.isEmpty()) {}
-            //else {
-            //    map.fitBounds(bounds);
-            //}
-        });
-        
+            $('#id-btn-select-location').html($(this).html() + ' <span class="caret"></span>');    
+        })
     });
-    
     </script>
 
-{% endblock %}
+  </body>
+
+</html>
+
+

@@ -71,9 +71,8 @@
                             </div>
                         </div>
                         <div class="col-md-6 no-pad">
-                            <div ng-repeat="location_image in location.images class="user-image">
-                                {[ location_image ]}
-                                <!-- <img data-ng-src="data:image/png;base64, {[ location_image ]}" class="img-responsive thumbnail"> -->
+                            <div class="user-image">
+                                <img src={{ url_for('static', filename='images/sites/erken.JPG') }} class="img-responsive thumbnail">
                             </div>
                         </div>
                     </div>

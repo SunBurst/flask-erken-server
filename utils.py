@@ -2,6 +2,7 @@ import json
 import time
 import uuid
 
+from base64 import b64encode
 from datetime import datetime
 
 from cassandra.util import OrderedMapSerializedKey
@@ -23,3 +24,7 @@ class CustomEncoder(json.JSONEncoder):
             return {'latitude': obj.latitude, 'longitude': obj.longitude}
         elif isinstance(obj, datetime):
             return time.mktime(obj.timetuple()) * 1e3
+        elif isinstance(obj, bytes):
+            base64_bytes = b64encode(obj)
+            base64_string = base64_bytes.decode('utf-8')
+            return base64_string
