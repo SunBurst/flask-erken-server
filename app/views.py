@@ -30,3 +30,12 @@ def get_locations_and_stations(location_id=None):
         locations_stations_data.append(location_row)
 
     return json.dumps(locations_stations_data, cls=CustomEncoder)
+    
+@app.route('/api/parameters/')
+def get_all_parameters():
+    query = "SELECT * FROM locations_parameters WHERE bucket=0"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
