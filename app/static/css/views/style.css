@@ -1,5 +1,5 @@
 body {
-    background-color: #fff;
+    background-color: #0796D4;
 }
 
 a {
@@ -15,7 +15,7 @@ a {
 }
 
 .navbar-default {
-    background-color: #51a3b8;
+    background-color: #292929;
     border: none;
 }
 
@@ -97,31 +97,32 @@ a {
     color: #fff;
 }
 
-.side-menu {
-    background-color: #2d5b7c;
-    border-right: 1px solid #e7e7e7;
-}
-
 @media(min-width: 768px) {
-    .side-menu {
-        position: fixed;
-        height: 100%;
+    .sidebar {
+        z-index: 1;
+        position: absolute;
         width: 280px;
         margin-top: 50px;
     }
 }
 
-.side-menu .navbar-default {
-    background-color: inherit;
-}
+/*.navbar-default .sidebar {
+    background-color: #0796D4;
+}*/
 
 .sidebar-nav {
+    /*background-color: inherit;*/
     position: absolute;
     top: 0;
     width: 280px;
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+.sidebar .sidebar-nav.navbar-collapse {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .sidebar-nav li {
@@ -180,11 +181,78 @@ a {
     background-color: transparent;
 }
 
+#page-wrapper {
+    background-color: #fff;
+}
+
 @media (min-width: 768px) {
     #page-wrapper {
         position: inherit;
         margin: 0 0 0 280px;
-        padding: 0 30px;
-        border-left: 1px solid #e7e7e7;
+        /*padding: 0 30px;*/
+        /*border-left: 1px solid #e7e7e7;*/
     }
+}
+
+
+
+
+
+card {
+  display: block;
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    transition: box-shadow .25s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.card-header {
+    padding: 20px 25px;
+}
+.card-header h3 {
+    text-decoration: none !important;
+    padding:10px;
+    font-weight:600;
+    text-transform: uppercase
+}
+
+.card-header h4 {
+    text-decoration: none !important;
+    padding:10px;
+}
+
+.card-description {
+    padding:15px;
+    text-align:left;
+}
+
+.google-map {
+    width:49%;
+    /*display:inline;
+    float:left;*/
+    height:300px;
+    /* margin-bottom:20px;*/
+}
+
+#map {
+    width: 100%;
+    height: 380px;
+    position: relative;
+    overflow: hidden;
+}
+
+#map .angular-google-map-container {
+    width: 100%;
+    height: 380px;
+}
+
+.carousel .google-map .angular-google-map-container { 
+    height: 300px; 
+    width: 500px;
 }

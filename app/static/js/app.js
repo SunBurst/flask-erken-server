@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'ngResource', 'ngMap', 'app.controllers', 'app.services']);
+angular.module('app', ['ui.router', 'ngResource', 'uiGmapgoogle-maps', 'app.controllers', 'app.services']);
 
 angular.module('app').config(function($qProvider, $interpolateProvider, $locationProvider, $stateProvider, $httpProvider) {
     

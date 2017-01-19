@@ -10,7 +10,7 @@
     <meta name="author" content="">
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN193fgB-M7MdBiaxqwi2h9i_-2_MAWsk"></script>
-    <script src="/static/js/googlemaps-markerer-cluster/markerclusterer.js"></script>
+    <!-- <script src="/static/js/googlemaps-markerer-cluster/markerclusterer.js"></script> -->
     
     <!-- AngularJS CDN -->
     <script src="https://code.angularjs.org/1.6.1/angular.js"></script>
@@ -19,8 +19,18 @@
     <script src="/static/js/services.js"></script>
     <script src="https://unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="https://code.angularjs.org/1.6.1/angular-resource.js"></script>
-    <script src="/static/js/ng-map.min.js"></script>
-
+    
+    <!-- Angular-Google-Maps -->
+    <script src="/static/js/lodash/dist/lodash.js"></script>
+    <script src="/static/js/angular-simple-logger/dist/angular-simple-logger.js"></script>
+    <script src="/static/js/angular-google-maps/dist/angular-google-maps.js"></script>
+    <script src="/static/js/googlemaps-markerer-cluster/markerclusterer.js "></script>
+    <script src="/static/js/google-maps-utility-library-v3-infobox/dist/infobox.js"></script>
+    <script src="/static/js/google-maps-utility-library-v3-keydragzoom/dist/keydragzoom.js"></script>
+    <script src="/static/js/google-maps-utility-library-v3-markerwithlabel/dist/markerwithlabel.js"></script>
+    <script src="/static/js/js-rich-marker/src/richmarker.js"></script>    
+    <script src="/static/js/markerclustererplus/dist/markerclusterer.min.js"></script>
+    
     <title>Erken Laboratory Monitoring</title>
     
     <link rel="shortcut icon" href="/static/images/favicon.ico">
@@ -273,40 +283,48 @@
                 </ul>
                 <!-- /.navbar-top-links -->
             
-                <div class="side-menu">
+                <!-- <div class="side-menu">  -->
     
-                    <nav class="navbar navbar-default" role="navigation">
+                    <div class="navbar-default sidebar" role="navigation">
 
-                        <ul class="nav sidebar-nav">
+                        <div class="sidebar-nav navbar-collapse">
+                        
+                            <ul class="nav in" id="side-menu">
 
-                            <li class="dropdown-header">Locations</li>
-                                <li class="dropdown" ng-repeat="location in locations">
+                                <li class="dropdown-header">Locations</li>
+                                    <li class="dropdown" ng-repeat="location in locations">
+                                        <a data-toggle="dropdown" href="#">
+                                            <i class="fa fa-globe fa-fw"></i> {[ location.name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li class="dropdown-header-second-level">Location</li>
+                                            <li><a href="#"><i class="fa fa-globe fa-fw"></i> {[ location.name ]}</a></li>
+                                            <li class="dropdown-header-second-level">Stations</li>
+                                            <li ng-repeat="station in location.location_stations">
+                                                <a href="#"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                
+                                <li class="dropdown-header">Parameters</li>
+                                <li class="dropdown" ng-repeat="parameter in parameters">
                                     <a data-toggle="dropdown" href="#">
-                                        <i class="fa fa-globe fa-fw"></i> {[ location.name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
+                                        <i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li class="dropdown-header-second-level">Location</li>
-                                        <li><a href="#"><i class="fa fa-globe fa-fw"></i> {[ location.name ]}</a></li>
-                                        <li class="dropdown-header-second-level">Stations</li>
-                                        <li ng-repeat="station in location.location_stations">
-                                            <a href="#"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a>
-                                        </li>
+                                        <li><a href="#"><i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]}</a></li>
                                     </ul>
+
                                 </li>
+
+                              </ul>
                             
-                            <li class="dropdown-header">Parameters</li>
-                            <li class="dropdown" ng-repeat="parameter in parameters">
-                                <a data-toggle="dropdown" href="#">
-                                    <i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#"><i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]}</a></li>
-                                </ul>
-
-                            </li>
-
-                        </ul>
-                    
+                            </div>
+                        
+                        </div>
+                
+                    <!-- </div> -->
+                
                 </nav>
             
             <div id="page-wrapper" ui-view></div>
