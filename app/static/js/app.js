@@ -13,7 +13,7 @@ angular.module('app').config(function($qProvider, $interpolateProvider, $locatio
     $stateProvider.state('locations', {
         url:'/locations',
         templateUrl:'static/partials/locations.html'
-        //, controller:'LocationsListController'
+        //controller:'LocationsListController'
     }).state('viewLocation', {
        url:'/location/:id',
        templateUrl:'static/partials/location.html',

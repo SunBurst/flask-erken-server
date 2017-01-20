@@ -6,6 +6,23 @@ angular.module('app.controllers', []).controller('LocationsListController', func
 }).controller('LocationViewController', function($scope, $stateParams, Location) {
     $scope.location = Location.get({ id: $stateParams.id });
 }).controller('MapController', function($scope) {
+    
+    $scope.locationChosen = false;
+    $scope.activeLocation = "";
+    $scope.activeLocationPosition = {latitude: null, longitude: null};
+    
+    $scope.markerEvents = {
+        click: function(marker, event) {
+            $('#map').css('width', "33.33333333%");
+            $('#map').css('float', "right");
+            $scope.locationChosen = true;
+            $('#data-view').css('width', "66.66666667%");
+            $scope.activeLocation = marker.getTitle();
+            $scope.activeLocationPosition.latitude = marker.getPosition().lat();
+            $scope.activeLocationPosition.longitude = marker.getPosition().lng();
+        }
+    };
+    
     $scope.mapOptions = {
         scrollwheel: false, 
         mapTypeControl: true, 

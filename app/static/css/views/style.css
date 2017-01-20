@@ -35,7 +35,7 @@ a {
     display: inline-block;
     flex: 0 0 auto;
     height: 36px;
-    margin: 6px 0;
+    margin: 7px 0;
 }
 
 .brand-link {
@@ -194,44 +194,6 @@ a {
     }
 }
 
-
-
-
-
-card {
-  display: block;
-    margin-bottom: 20px;
-    line-height: 1.42857143;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-    transition: box-shadow .25s;
-}
-
-.card:hover {
-  box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-}
-
-.card-header {
-    padding: 20px 25px;
-}
-.card-header h3 {
-    text-decoration: none !important;
-    padding:10px;
-    font-weight:600;
-    text-transform: uppercase
-}
-
-.card-header h4 {
-    text-decoration: none !important;
-    padding:10px;
-}
-
-.card-description {
-    padding:15px;
-    text-align:left;
-}
-
 .google-map {
     width:49%;
     /*display:inline;
@@ -255,4 +217,56 @@ card {
 .carousel .google-map .angular-google-map-container { 
     height: 300px; 
     width: 500px;
+}
+
+.card {
+    background:#FFF;
+    display: block;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    border:1px solid #AAA;
+    border-bottom:3px solid #BBB;
+    padding:0px;
+    /*margin-top:5em;*/
+    overflow:hidden;
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'Roboto', sans-serif;
+    -webkit-transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-body{ 
+ margin:1em;   
+}
+
+.card-header {
+    width:100%;
+	color:#2196F3;
+    border-bottom:3px solid #BBB;
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'Roboto', sans-serif;
+    padding:0px;
+    margin-top:0px;
+    overflow:hidden;
+    -webkit-transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+}
+.card-header-blue {
+    background-color:#2196F3;
+    color: #fff;
+    border-bottom:3px solid #BBB;
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'Roboto', sans-serif;
+    padding: 20px 25px;;
+    margin-top:0px;
+    overflow:hidden;
+    -webkit-transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-header h4 {
+    font-weight: 300;
 }
