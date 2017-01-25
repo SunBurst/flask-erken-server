@@ -14,10 +14,10 @@ angular.module('app').config(function($qProvider, $interpolateProvider, $locatio
         url:'/locations',
         templateUrl:'static/partials/locations.html'
         //controller:'LocationsListController'
-    }).state('viewLocation', {
-       url:'/location/:id',
-       templateUrl:'static/partials/location.html',
-       controller:'LocationViewController'
+    }).state('location', {
+       url:'/location/:location_id/',
+       templateUrl:'static/partials/location_info.html'
+       //controller:'LocationViewController'
     });
 }).run(function($state){
    $state.go('locations');

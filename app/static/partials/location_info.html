@@ -1,0 +1,102 @@
+<div ng-controller="LocationViewController">
+    <div class="blue">
+        <div class="test">
+            <div class="row">
+                <h3 class="white" ng-model="location.location_name">{[ location.location_name ]}</h3>
+                <h4 class="white" ng-model="location.location_position"><i class="fa fa-location-arrow fa-fw"></i> {[ location.location_position.latitude ]}, {[ location.location_position.longitude ]}</h4>
+                <h4 class="white" ng-model="location.location_environment_category"><i class="fa fa-leaf fa-fw"></i> {[ location.location_environment_category ]} </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="tabs-wrapper">
+                <ul class="nav nav-tabs tabs-4 blue-4">
+                  <li class="nav-item" role="presentation" class="active"><a href="#"><i class="fa fa-info fa-fw"></i> Overview</a></li>
+                  <li class="nav-item" role="presentation"><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Data</a></li>
+                  <li class="nav-item" role="presentation"><a href="#"><i class="fa fa-video-camera fa-fw"></i> Cams & Photos</a></li>
+                  <li class="nav-item" role="presentation"><a href="#"> <i class="fa fa-bolt fa-fw"></i> Status</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="blue">
+        <div class="row">
+            <div class="tabs-wrapper">
+                <ul class="nav nav-tabs tabs-4 blue">
+                  <li class="nav-item" role="presentation" class="active"><a href="#"><i class="fa fa-info fa-fw"></i> Overview</a></li>
+                  <li class="nav-item" role="presentation"><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Data</a></li>
+                  <li class="nav-item" role="presentation"><a href="#"><i class="fa fa-video-camera fa-fw"></i> Cams & Photos</a></li>
+                  <li class="nav-item" role="presentation"><a href="#"> <i class="fa fa-bolt fa-fw"></i> Status</a></li>
+                </ul>
+            </div>
+        </div>
+    </div> -->
+    <div class="row row-eq-height">
+        <div id="data-view" class="col-lg-5">
+            <div ng-repeat="location_image in location.location_images" class="user-image">
+                <img data-ng-src="data:image/png;base64, {[ location_image ]}" class="img-responsive thumbnail">
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="google-map">
+                <div id="location-info-map"></div>
+                <!-- <ui-gmap-google-map control='mapControl' center='map.center' zoom='map.zoom' options='map.options'> -->
+                    <!-- <ui-gmap-marker ng-repeat="location in locations" coords="location.position" idkey="location.id-marker" customInfo="'test'" events="markerEvents" options='{title: location.name}'></ui-gmap-marker> -->
+                <!-- </ui-gmap-google-map> -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="test">
+        <div class="row">
+            <span ng-model="location.location_description">{[ location.location_description.long_description ]}</span>
+        </div>
+        <div class="row">
+            <h2 class="section-header">Stations</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-3" ng-repeat="station in location_stations">
+                <div class="panel blue">
+                <div class="panel-heading">
+                    <h4 class="white"><a href="#!/location/{[ location.location_id ]}/station/{[station.station_id]}/"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a></h4>
+                </div>
+                <div class="panel-body">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/320x200" alt="ALT NAME" class="img-responsive" />
+                        <!-- <img ng-repeat="station_image in location_stations.station_images" data-ng-src="data:image/png;base64, {[ station_image ]}" alt="{[ station_name ]}" class="img-responsive"/> -->
+                    </div>
+                    <h5 class="white"><i class="fa fa-location-arrow fa-fw"></i> {[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</h5>
+                    <h5 class="white"><i class="fa fa-leaf fa-fw"></i> {[ station.station_environment_category ]} </h5>
+                    <span class="white">{[ station.station_description.short_description ]}</span>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2 class="section-header" ng-model="location.location_name">Parameters collected at {[ location.location_name ]}</h2>
+            <div class="table-responsive" ui-if="activeLocationModel.parametersLoadingIsDone">
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>Station</th>
+                        <th>Sensor</th>
+                        <th>Measurement Type</th>
+                        <th>Description</th>
+                        <th>Unit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="parameter in location_parameters">
+                        <td>{[ parameter.parameter_name ]}</td>
+                        <td>{[ parameter.station_name ]}</td>
+                        <td>{[ parameter.sensor_name ]}</td>
+                        <td>{[ parameter.measurement_type ]}</td>
+                        <td>{[ parameter.parameter_description.short_description ]}</td>
+                        <td>{[ parameter.parameter_unit ]}</td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

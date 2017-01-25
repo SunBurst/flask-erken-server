@@ -11,7 +11,7 @@ from utils import CustomEncoder
 def index():
     return make_response(open('app/templates/index.html').read())
     
-@app.route('/api/locations/<string:location_id>')
+@app.route('/api/locations/')
 def get_locations_and_stations(location_id=None):
     all_locations_query = "SELECT * FROM locations WHERE bucket=0"
     prepared_all_locations_query = cassandra_connection.session.prepare(all_locations_query)
@@ -31,6 +31,36 @@ def get_locations_and_stations(location_id=None):
 
     return json.dumps(locations_stations_data, cls=CustomEncoder)
     
+@app.route('/api/location/<string:location_id>/')
+def get_location(location_id):
+    query = "SELECT * FROM location_info_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
+    try:
+        data = rows[0]
+    except IndexError:
+        data = {}
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/stations_by_location/<string:location_id>/')
+def get_stations_by_location(location_id):
+    query = "SELECT * FROM stations_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/parameters_by_location/<string:location_id>/')
+def get_parameters_by_location(location_id):
+    query = "SELECT * FROM parameters_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/parameters/')
 def get_all_parameters():
     query = "SELECT * FROM locations_parameters WHERE bucket=0"
