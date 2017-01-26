@@ -18,22 +18,11 @@
             </div>
         </div>
     </div>
-    <!-- <div class="blue">
-        <div class="row">
-            <div class="tabs-wrapper">
-                <ul class="nav nav-tabs tabs-4 blue">
-                  <li class="nav-item" role="presentation" class="active"><a href="#"><i class="fa fa-info fa-fw"></i> Overview</a></li>
-                  <li class="nav-item" role="presentation"><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Data</a></li>
-                  <li class="nav-item" role="presentation"><a href="#"><i class="fa fa-video-camera fa-fw"></i> Cams & Photos</a></li>
-                  <li class="nav-item" role="presentation"><a href="#"> <i class="fa fa-bolt fa-fw"></i> Status</a></li>
-                </ul>
-            </div>
-        </div>
-    </div> -->
+
     <div class="row row-eq-height">
         <div id="data-view" class="col-lg-5">
             
-            <div id="location-images-carousel" class="carousel slide" data-ride="carousel">
+            <div id="location-images-carousel" interval="myInterval" class="carousel slide" data-ride="carousel">
 
                 <ol class="carousel-indicators">
                     <li data-target="#location-images-carousel" data-slide-to="0" class="active"></li>
@@ -61,14 +50,13 @@
                             <img class="img-responsive" data-ng-src="{[ station.livewebcam.url ]}">
                             <div class="carousel-caption">
                               <h4 class="white"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
-                              <h5 class="white"><i class="fa fa-video-camera fa-fw"></i> Live</h5>
-                              <!-- <h5 class="white"><i class="fa fa-clock-o fa-fw"></i> {[ location_last_webcam_photo.timestamp | date:'yyyy-MM-dd HH:mm:ss Z']}</h5> -->
+                              <h5 class="white"><i class="fa fa-circle fa-fw red"></i> Live</h5>
                             </div>
                         </div>
                     </div>
                 </div>
-                <a class="left carousel-control" href="#location-images-carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                <a class="right carousel-control" href="#location-images-carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a class="left carousel-control" ng-click="slideCarouselLeft()" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                <a class="right carousel-control" ng-click="slideCarouselRight()" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
                 
             </div> 
             

@@ -183,6 +183,17 @@ angular.module('app.controllers', []).controller('LocationsListController', func
         
     };
     
+    $scope.myInterval = 5000;
+    $("#location-images-carousel").carousel();
+    
+    $scope.slideCarouselLeft = function() {
+        $('#location-images-carousel').carousel('prev');
+    };
+    
+    $scope.slideCarouselRight = function() {
+        $('#location-images-carousel').carousel('next');
+    };
+    
     $scope.$watchGroup(['activeLocationModel.locationLoadingIsDone', 'activeLocationModel.stationsLoadingIsDone'], function(dataLoaded) {
         if (dataLoaded[0]) {
             $scope.location_info_map.setCenter(new google.maps.LatLng($scope.location.location_position.latitude, $scope.location.location_position.longitude));
