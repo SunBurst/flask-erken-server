@@ -52,6 +52,30 @@ def get_stations_by_location(location_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
+@app.route('/api/livewebcams_by_location/<string:location_id>/')
+def get_livewebcams_by_location(location_id):
+    query = "SELECT * FROM livewebcams_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/webcam_photos_by_location/<string:location_id>/')
+@app.route('/api/webcam_photos_by_location/<string:location_id>/<int:limit>/')
+def get_webcam_photos_by_location(location_id, limit=None):
+    query = "SELECT * FROM webcam_photos_by_location WHERE location_id=?"
+    if limit:
+        query += " LIMIT ?"
+    prepared = cassandra_connection.session.prepare(query)
+    if limit: 
+        rows = cassandra_connection.session.execute_async(prepared, (location_id, limit,)).result()
+    else:
+        rows = cassandra_connection.session.execute_async(prepared, (location_id, )).result()
+    data =  [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/parameters_by_location/<string:location_id>/')
 def get_parameters_by_location(location_id):
     query = "SELECT * FROM parameters_by_location WHERE location_id=?"

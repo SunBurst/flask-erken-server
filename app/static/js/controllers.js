@@ -13,11 +13,13 @@ angular.module('app.controllers', []).controller('LocationsListController', func
     //Parameter.get(function(data) {
     //    $scope.parameters = data;
     //});
-}).controller('LocationViewController', function($scope, $stateParams, Locations, Parameters) {
+}).controller('LocationViewController', function($scope, $stateParams, Locations, Parameters, Webcams) {
     $scope.activeLocationModel = {
         locationLoadingIsDone: false,
         stationsLoadingIsDone: false,
         parametersLoadingIsDone: false,
+        liveWebcamsLoadingIsDone: false,
+        lastWebcamPhotoLoadingIsDone: false,
     };
     
     Locations.location.query({ location_id: $stateParams.location_id }, function(data) {
@@ -33,6 +35,16 @@ angular.module('app.controllers', []).controller('LocationsListController', func
     Parameters.parameters_by_location.query({ location_id: $stateParams.location_id }, function(data) {
         $scope.location_parameters = data;
         $scope.activeLocationModel.parametersLoadingIsDone = true;
+    });
+    
+    Webcams.livewebcams_by_location.query({ location_id: $stateParams.location_id }, function(data) {
+        $scope.location_live_webcams = data;
+        $scope.activeLocationModel.liveWebcamsLoadingIsDone = true;
+    });
+    
+    Webcams.webcam_photos_by_location.query({ location_id: $stateParams.location_id, limit: 1}, function(data) {
+        $scope.location_last_webcam_photo = data[0];
+        $scope.activeLocationModel.lastWebcamPhotoLoadingIsDone = true;
     });
     
     var mapOptions = {
@@ -170,7 +182,6 @@ angular.module('app.controllers', []).controller('LocationsListController', func
         $scope.bounds.extend(new google.maps.LatLng($scope.location.location_position.latitude, $scope.location.location_position.longitude));
         
     };
-    
     
     $scope.$watchGroup(['activeLocationModel.locationLoadingIsDone', 'activeLocationModel.stationsLoadingIsDone'], function(dataLoaded) {
         if (dataLoaded[0]) {

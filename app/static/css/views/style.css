@@ -301,3 +301,35 @@ a:focus, a:hover {
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Roboto', sans-serif;
 }
+
+.row-eq-height div {
+    padding: 0;
+}
+
+#location-images-carousel {
+  position: relative;
+  overflow: hidden;
+}
+#location-images-carousel .slides .slide-1, 
+#location-images-carousel .slides .slide-2,
+#location-images-carousel .slides .slide-3 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+    #location-images-carousel,
+    #location-images-carousel .slides,
+    #location-images-carousel .slides .slide-1, 
+    #location-images-carousel .slides .slide-2,
+    #location-images-carousel .slides .slide-3 {
+      height: 380px;
+    }
+
+#location-images-carousel .carousel-inner .item .carousel-caption {
+  top: 5%;
+  bottom: inherit;
+}
+#location-images-carousel .carousel-inner .item .img-responsive {
+    height: 380px;
+    width: 100%;
+}

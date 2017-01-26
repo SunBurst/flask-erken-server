@@ -6,10 +6,10 @@ angular.module('app.services', [])
         locations: $resource('/api/locations/', {}, {
         query: { method: 'GET', isArray: true }
     }),
-        location: $resource('api/location/:location_id/', {}, {
+        location: $resource('/api/location/:location_id/', {}, {
         query: { method: 'GET', params: {location_id: '@location_id'}, isArray: false }
     }),
-        stations_by_location: $resource('api/stations_by_location/:location_id/', {}, {
+        stations_by_location: $resource('/api/stations_by_location/:location_id/', {}, {
         query: { method: 'GET', params: {location_id: '@location_id'}, isArray: true }
     })
 };
@@ -18,6 +18,19 @@ angular.module('app.services', [])
     return {
         parameters_by_location: $resource('/api/parameters_by_location/:location_id/', {}, {
         query: { method: 'GET', params: {location_id: '@location_id'}, isArray: true }
+    })
+};
+})
+.factory('Webcams', function($resource) {
+    return {
+        livewebcams_by_location: $resource('/api/livewebcams_by_location/:location_id/', {}, {
+        query: { method: 'GET', params: {location_id: '@location_id'}, isArray: true }
+    }),
+        webcam_photos_by_location: $resource('/api/webcam_photos_by_location/:location_id/:limit/', {}, {
+        query: { method: 'GET', params: {location_id: '@location_id'}, isArray: true }
+    }),
+        last_webcam_photo_by_location: $resource('/api/webcam_photos_by_location/:location_id/:limit/', {}, {
+        query: { method: 'GET', params: {location_id: '@location_id', limit: '@limit'}, isArray: true }
     })
 };
 });

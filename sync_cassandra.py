@@ -54,7 +54,7 @@ def sync_cassandra():
             description frozen <description>,
             position frozen <position>,
             environment_category text,
-            images list<blob>,
+            image blob,
             PRIMARY KEY ((bucket), name, id)
         ) WITH CLUSTERING ORDER BY (name ASC, id ASC) """.format(keyspace=KEYSPACE)
     )
@@ -69,11 +69,11 @@ def sync_cassandra():
             location_description frozen <description>,
             location_position frozen <position>,
             location_environment_category text,
-            location_images list<blob>,
+            location_image blob,
             station_description frozen <description>,
             station_position frozen <position>,
             station_environment_category text,
-            station_images list<blob>,
+            station_image blob,
             PRIMARY KEY ((bucket), location_name, station_name, location_id, station_id)
         ) WITH CLUSTERING ORDER BY (location_name ASC, station_name ASC, location_id ASC, station_id ASC) """.format(keyspace=KEYSPACE)
     )
@@ -97,7 +97,7 @@ def sync_cassandra():
             station_description frozen <description>,
             station_position frozen <position>,
             station_environment_category text,
-            station_images list<blob>,
+            station_image blob,
             PRIMARY KEY ((location_id), station_name, station_id)
         ) WITH CLUSTERING ORDER BY (station_name ASC, station_id ASC) """.format(keyspace=KEYSPACE)
     )
@@ -109,7 +109,7 @@ def sync_cassandra():
             location_description frozen <description>,
             location_position frozen <position>,
             location_environment_category text,
-            location_images list<blob>,
+            location_image blob,
             PRIMARY KEY ((location_id))
         ) """.format(keyspace=KEYSPACE)
     )
@@ -209,7 +209,7 @@ def sync_cassandra():
             station_description frozen <description>,
             station_position frozen <position>,
             station_environment_category text,
-            station_images list<blob>,
+            station_image blob,
             PRIMARY KEY ((station_id))
         ) """.format(keyspace=KEYSPACE)
     )
@@ -887,8 +887,18 @@ def sync_cassandra():
             timestamp timestamp,
             station_id text,
             photo blob,
-            PRIMARY KEY ((location_id), station_name, timestamp, station_id)
-        ) WITH CLUSTERING ORDER BY (station_name ASC, timestamp DESC, station_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((location_id), timestamp, station_id)
+        ) WITH CLUSTERING ORDER BY (timestamp DESC, station_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.livewebcams_by_location (
+            location_id text,
+            station_name text,
+            station_id text,
+            livewebcam frozen <livewebcam>,
+            PRIMARY KEY ((location_id), station_name, station_id)
+        ) """.format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
