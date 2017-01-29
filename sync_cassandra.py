@@ -133,15 +133,15 @@ def sync_cassandra():
     cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.parameter_measurements_by_location (
             location_id text,
-            parameter text,
+            parameter_id text,
             qc_level int,
             timestamp timestamp,
+            station_name text,
             station_id text,
-            sensor_id text,
             value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter, qc_level), timestamp, station_id, sensor_id)
-        ) WITH CLUSTERING ORDER BY (timestamp DESC, station_id ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((location_id, parameter, qc_level), timestamp, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (timestamp DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
@@ -450,12 +450,12 @@ def sync_cassandra():
             qc_level int,
             year int,
             date_hour timestamp,
+            station_name text,
             station_id text,
-            sensor_id text,
             avg_value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date_hour, station_id, sensor_id)
-        ) WITH CLUSTERING ORDER BY (date_hour DESC, station_id ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date_hour, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (date_hour DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
@@ -465,12 +465,12 @@ def sync_cassandra():
             qc_level int,
             year int,
             date timestamp,
+            station_name text,
             station_id text,
-            sensor_id text,
             avg_value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date, station_id, sensor_id)
-        ) WITH CLUSTERING ORDER BY (date DESC, station_id ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (date DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
@@ -501,21 +501,6 @@ def sync_cassandra():
             unit text static,
             PRIMARY KEY ((station_id, parameter_id, qc_level, year), date, sensor_name, sensor_id)
         ) WITH CLUSTERING ORDER BY (date DESC, sensor_name ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
-    )
-    
-    cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.edited_parameter_measurements_by_location (
-            location_id text,
-            parameter text,
-            qc_level int,
-            timestamp timestamp,
-            station_id text,
-            sensor_id text,
-            edit_timestamp timestamp,
-            value float,
-            unit text static,
-            PRIMARY KEY ((location_id, parameter, qc_level), timestamp, station_id, sensor_id, edit_timestamp)
-        ) WITH CLUSTERING ORDER BY (timestamp DESC, station_id ASC, sensor_id ASC, edit_timestamp DESC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(

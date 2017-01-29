@@ -1,1 +1,113 @@
+<div ng-controller="LocationOverviewCtrl">
+    <div class="row row-eq-height">
+        <div id="data-view" class="col-lg-5">
+            
+            <div id="location-images-carousel" interval="myInterval" class="carousel slide" data-ride="carousel">
 
+                <ol class="carousel-indicators">
+                    <li data-target="#location-images-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#location-images-carousel" data-slide-to="1"></li>
+                    <li data-target="#location-images-carousel" ng-repeat="station in location_live_webcams" data-slide-to="{[ $index + 2 ]}"></li>
+                </ol>
+
+                <div class="carousel-inner">
+                    <div class="item slides active">
+                        <div class="slide-1">
+                            <img class="img-responsive" data-ng-src="data:image/png;base64, {[ location.location_image ]}">
+                        </div>
+                    </div>
+                    <div class="item slides">
+                        <div class="slide-2">
+                            <img class="img-responsive" data-ng-src="data:image/png;base64, {[ location_last_webcam_photo.photo ]}">
+                            <div class="carousel-caption">
+                              <h4 class="white"><i class="fa fa-map-marker fa-fw"></i> {[ location_last_webcam_photo.station_name ]}</h4>
+                              <h5 class="white"><i class="fa fa-camera fa-fw"></i> {[ location_last_webcam_photo.timestamp | date:'yyyy-MM-dd HH:mm:ss Z']}</h5>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="item slides" ng-repeat="station in location_live_webcams">
+                        <div class="slide-{[ $index + 3 ]}">
+                            <img class="img-responsive" data-ng-src="{[ station.livewebcam.url ]}">
+                            <div class="carousel-caption">
+                              <h4 class="white"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
+                              <h5 class="white"><i class="fa fa-circle fa-fw red"></i> Live</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="left carousel-control" ng-click="slideCarouselLeft()" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                <a class="right carousel-control" ng-click="slideCarouselRight()" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                
+            </div> 
+            
+            <!-- <img data-ng-src="data:image/png;base64, {[ location.location_image ]}" class="img-responsive thumbnail"> -->
+        </div>
+        <div class="col-lg-7">
+            <div class="google-map">
+                <div id="location-info-map"></div>
+                <!-- <ui-gmap-google-map control='mapControl' center='map.center' zoom='map.zoom' options='map.options'> -->
+                    <!-- <ui-gmap-marker ng-repeat="location in locations" coords="location.position" idkey="location.id-marker" customInfo="'test'" events="markerEvents" options='{title: location.name}'></ui-gmap-marker> -->
+                <!-- </ui-gmap-google-map> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="test">
+        <div class="row">
+            <h2 class="section-header">Description</h2>
+        </div>
+        <div class="row">
+            <span ng-model="location.location_description">{[ location.location_description.long_description ]}</span>
+        </div>
+        <div class="row">
+            <h2 class="section-header">Stations</h2>
+        </div>
+        <div class="row" ui-if="activeLocationModel.stationsLoadingIsDone">
+            <div class="col-lg-3" ng-repeat="station in location_stations">
+                <div class="panel blue">
+                    <div class="panel-heading">
+                        <h4 class="white"><a href="#!/location/{[ location.location_id ]}/station/{[station.station_id]}/"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="thumbnail">
+                            <img data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="img-responsive thumbnail">
+                            <!-- <img ng-repeat="station_image in location_stations.station_images" data-ng-src="data:image/png;base64, {[ station_image ]}" alt="{[ station_name ]}" class="img-responsive"/> -->
+                        </div>
+                        <h5 class="white"><i class="fa fa-location-arrow fa-fw"></i> {[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</h5>
+                        <h5 class="white"><i class="fa fa-leaf fa-fw"></i> {[ station.station_environment_category ]}</h5>
+                        <span class="white">{[ station.station_description.short_description ]}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2 class="section-header" ng-model="location.location_name">Parameters collected at {[ location.location_name ]}</h2>
+        </div>
+        <div class="row">
+            <div class="table-responsive" ui-if="activeLocationModel.parametersLoadingIsDone">
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>Station</th>
+                        <th>Sensor</th>
+                        <th>Measurement Type</th>
+                        <th>Description</th>
+                        <th>Unit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="parameter in location_parameters">
+                        <td>{[ parameter.parameter_name ]}</td>
+                        <td>{[ parameter.station_name ]}</td>
+                        <td>{[ parameter.sensor_name ]}</td>
+                        <td>{[ parameter.measurement_type ]}</td>
+                        <td>{[ parameter.parameter_description.short_description ]}</td>
+                        <td>{[ parameter.parameter_unit ]}</td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

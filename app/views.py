@@ -85,6 +85,15 @@ def get_parameters_by_location(location_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
+@app.route('/api/parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/')
+def get_parameter_measurements_by_location(location_id, parameter_id):
+    query = "SELECT * FROM parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=0"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, )).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/parameters/')
 def get_all_parameters():
     query = "SELECT * FROM locations_parameters WHERE bucket=0"

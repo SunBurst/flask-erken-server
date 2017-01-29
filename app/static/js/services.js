@@ -14,6 +14,16 @@ angular.module('app.services', [])
     })
 };
 })
+.factory('Measurements', function($resource) {
+    return {
+        daily_parameter_measurements_by_location: $resource('/api/daily_parameter_measurements_by_location/:location_id/:parameter_id/', {}, {
+        query: { method: 'GET', params: {location_id: '@location_id', parameter_id: '@parameter_id'}, isArray: true }
+    }),
+        hourly_parameter_measurements_by_location: $resource('/api/hourly_parameter_measurements_by_location/:location_id/:parameter_id/', {}, {
+        query: { method: 'GET', params: {location_id: '@location_id', parameter_id: '@parameter_id'}, isArray: true }
+    })
+};
+})
 .factory('Parameters', function($resource) {
     return {
         parameters_by_location: $resource('/api/parameters_by_location/:location_id/', {}, {

@@ -15,12 +15,27 @@
     <script src="https://code.angularjs.org/1.6.1/angular.js"></script>
     <script src="/static/js/app.js"></script>
     <script src="/static/js/controllers.js"></script>
+    <script src="/static/js/directives.js"></script>
     <script src="/static/js/services.js"></script>
     <script src="https://unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="https://code.angularjs.org/1.6.1/angular-resource.js"></script>
 
     <script src="/static/js/googlemaps-markerer-cluster/markerclusterer.js "></script>
 
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+   
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        
+    <!-- HighCharts API JavaScript -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="/static/js/highcharts-ng/dist/highcharts-ng.js"></script>
+
+    
     
     <title>Erken Laboratory Monitoring</title>
     
@@ -39,7 +54,7 @@
 
     </head>
     
-    <body ng-controller="LocationsListController">
+    <body ng-controller="RootCtrl">
 
         <div class="wrapper">
             
@@ -321,18 +336,6 @@
             <div id="page-wrapper" ui-view></div>
 
         </div>
-    
-    <!-- jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-   
-    <!-- Bootstrap Core JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        
-    <!-- HighCharts API JavaScript -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     
   </body>
 

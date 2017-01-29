@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'ngResource', 'app.controllers', 'app.services']);
+angular.module('app', ['ui.router', 'ngResource', 'highcharts-ng', 'app.controllers', 'app.directives', 'app.services']);
 
 angular.module('app').config(function($qProvider, $interpolateProvider, $locationProvider, $stateProvider, $httpProvider) {
     
@@ -13,11 +13,9 @@ angular.module('app').config(function($qProvider, $interpolateProvider, $locatio
     $stateProvider.state('locations', {
         url:'/locations',
         templateUrl:'static/partials/locations.html'
-        //controller:'LocationsListController'
     }).state('location', {
        url:'/location/:location_id/',
-       templateUrl:'static/partials/location_info.html'
-       //controller:'LocationViewController'
+       templateUrl:'static/partials/location.html'
     });
 }).run(function($state){
    $state.go('locations');
