@@ -37,63 +37,68 @@ angular.module('app.controllers', [])
     });
     
     Parameters.parameters_by_location.query({ location_id: $stateParams.location_id }, function(data) {
-        //$scope.location_parameters_list = data;
-        $scope.location_parameters_list = [];
+        $scope.location_parameters_list = data;
         $scope.location_parameters = {};
-        $scope.location_parameter_sensors = {};
-        
-        var foundParameters = {};
-        var foundParameterSensors = {};
-        // {'air_temp': {sensorList: [], sensors: {'id': 'name'}}}
+
         for (var i = 0; i < data.length; i++) {
-            if (data[i].parameter_id in foundParameters) {
-                if (data[i].sensor_id in foundParameterSensors[data[i].parameter_id].sensors) {}
-                else {
-                    foundParameterSensors[data[i].parameter_id].sensors[data[i].sensor_id] = data[i].sensor_name;
-                    var sensor_info = {
-                        sensor_id: data[i].sensor_id, 
-                        sensor_name: data[i].sensor_name
-                    };
-                    foundParameterSensors[data[i].parameter_id].sensorList.push(sensor_info);
-                    $scope.location_parameter_sensors[data[i].parameter_id].sensors[data[i].sensor_id] = data[i].sensor_name;
-                    $scope.location_parameter_sensors[data[i].parameter_id].sensorList.push(sensor_info);
-                }
-
-            }
-            
-            else {
-                var parameter_info = {
-                    parameter_id: data[i].parameter_id,
-                    parameter_name: data[i].parameter_name,
-                    parameter_unit: data[i].parameter_unit,
-                    parameter_description: data[i].parameter_description,
-                    measurement_type: data[i].measurement_type,
-                };
-                
-                var sensor_info = {
-                    sensor_id: data[i].sensor_id, 
-                    sensor_name: data[i].sensor_name
-                };
-                
-                foundParameters[data[i].parameter_id] = parameter_info;
-
-                $scope.location_parameters_list.push(parameter_info);
-                
-                
-                var sensorId = data[i].sensor_id;
-                var sensorName = data[i].sensor_id;
-                var sensorKeyVal = {};
-                sensorKeyVal[sensorId] = sensorName;
-                
-                foundParameterSensors[data[i].parameter_id] = {sensorList: [sensor_info], sensors: sensorKeyVal};
-                $scope.location_parameter_sensors[data[i].parameter_id] = {sensorList: [sensor_info], sensors: sensorKeyVal};
-
-            }
+            $scope.location_parameters[data[i].parameter_id] = data[i].parameter_name;
         }
+        
+        
+        //$scope.location_parameter_sensors = {};
+        
+        //var foundParameters = {};
+        //var foundParameterSensors = {};
+        
+        //for (var i = 0; i < data.length; i++) {
+        //    if (data[i].parameter_id in foundParameters) {
+        //        if (data[i].sensor_id in foundParameterSensors[data[i].parameter_id].sensors) {}
+        //        else {
+        //            foundParameterSensors[data[i].parameter_id].sensors[data[i].sensor_id] = data[i].sensor_name;
+        //           var sensor_info = {
+        //                sensor_id: data[i].sensor_id, 
+        //                sensor_name: data[i].sensor_name
+        //            };
+        //            foundParameterSensors[data[i].parameter_id].sensorList.push(sensor_info);
+        //            $scope.location_parameter_sensors[data[i].parameter_id].sensors[data[i].sensor_id] = data[i].sensor_name;
+        //            $scope.location_parameter_sensors[data[i].parameter_id].sensorList.push(sensor_info);
+        //        }
+
+        //    }
+            
+        //    else {
+        //        var parameter_info = {
+        //            parameter_id: data[i].parameter_id,
+        //            parameter_name: data[i].parameter_name,
+        //           parameter_unit: data[i].parameter_unit,
+        //            parameter_description: data[i].parameter_description,
+        //            measurement_type: data[i].measurement_type,
+        //        };
+                
+        //        var sensor_info = {
+        //            sensor_id: data[i].sensor_id, 
+        //            sensor_name: data[i].sensor_name
+        //        };
+                
+        //        foundParameters[data[i].parameter_id] = parameter_info;
+
+        //        $scope.location_parameters_list.push(parameter_info);
+                
+                
+        //        var sensorId = data[i].sensor_id;
+        //        var sensorName = data[i].sensor_id;
+        //        var sensorKeyVal = {};
+        //        sensorKeyVal[sensorId] = sensorName;
+                
+        //        foundParameterSensors[data[i].parameter_id] = {sensorList: [sensor_info], sensors: sensorKeyVal};
+        //        $scope.location_parameter_sensors[data[i].parameter_id] = {sensorList: [sensor_info], sensors: sensorKeyVal};
+
+        //    }
+       // }
         //console.log($scope.location_parameters_list);
         //console.log($scope.location_parameters);
         //console.log($scope.location_parameter_sensors);
-        $scope.activeLocationModel.parametersLoadingIsDone = true;
+        //$scope.activeLocationModel.parametersLoadingIsDone = true;
     });
     
     Webcams.livewebcams_by_location.query({ location_id: $stateParams.location_id }, function(data) {
@@ -289,24 +294,57 @@ angular.module('app.controllers', [])
     });
 
 }).controller('LocationDataCtrl', function($scope, Measurements) {
-    
-    $scope.activeParameterModel = {
-        locationLoadingDataIsDone: false
-    };
-    
-    var loadParameterData = function(parameterId) {
-        Measurements.daily_parameter_measurements_by_location.query({ location_id: $scope.location.location_id, parameter_id: parameterId }, function(data) {
-            $scope.location_parameter_data = data;
-            console.log(data);
-            
-            $scope.activeLocationModel.locationLoadingDataIsDone = true;
-        });
-    };
-    
 
     $scope.activeParameter = false;
     $scope.activeParameterId;
+    $scope.activeParameterName;
     $scope.activeParameterMeasurementType;
+    $scope.activeParameterDescription;
+    
+    $scope.showParameterData = function(parameterId, parameterName, parameterUnit, measurementType, parameterDescription) {
+        $scope.activeParameter = true;
+        $scope.activeParameterId = parameterId;
+        $scope.activeParameterName = parameterName;
+        $scope.activeParameterUnit = parameterUnit;
+        $scope.activeParameterMeasurementType = measurementType;
+        $scope.activeParameterDescription = parameterDescription;
+        
+        //loadDailyParameterData(parameterId, 0, 2016);
+
+    };
+}).controller('LocationDataContentCtrl', function($scope, Measurements) {
+    
+    $scope.locationLoadingDailyChartDataIsDone = false;
+    $scope.locationLoadingDailyDataIsDone = false;
+    $scope.locationLoadingHourlyDataIsDone = false;
+    
+    var loadDailyParameterData = function(parameterId, qc_level, year) {
+        Measurements.daily_parameter_measurements_by_location.query({ 
+                location_id: $scope.location.location_id, 
+                parameter_id: parameterId,
+                qc_level: 0,
+                year: 2016
+            }, function(data) {
+            $scope.location_daily_parameter_data = data;
+            
+            $scope.activeLocationModel.locationLoadingDailyDataIsDone = true;
+        });
+    };
+    
+    var loadHourlyParameterData = function(parameterId, qc_level, year) {
+        Measurements.hourly_parameter_measurements_by_location.query({ 
+                location_id: $scope.location.location_id, 
+                parameter_id: parameterId,
+                qc_level: 0,
+                year: 2016
+            }, function(data) {
+            $scope.location_hourly_parameter_data = data;
+            
+            $scope.activeLocationModel.locationLoadingHourlyDataIsDone = true;
+        });
+    };
+    
+    
     
     var initChartOptions = function(parameterName, parameterUnit) {
         var chartOptions = {
@@ -326,13 +364,28 @@ angular.module('app.controllers', [])
                 title: {
                     text: parameterName + '('+ parameterUnit +')'
                 },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
             },
             plotOptions: {
                 spline: {
                     marker: {
                         enabled: true
-                    }
+                    },
                 }
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + parameterUnit + '</b><br/>',
+                shared: true
             },
             series: [],
         };
@@ -340,26 +393,33 @@ angular.module('app.controllers', [])
         return chartOptions;
     };
     
-    $scope.chartConfig;
-    
-    $scope.showParameterData = function(parameterId, parameterName, parameterUnit, measurementType) {
-        $scope.activeParameter = true;
-        $scope.activeParameterId = parameterId;
-        $scope.activeParameterMeasurementType = measurementType;
-        console.log(parameterId, parameterName, parameterUnit, measurementType);
-        loadParameterData(parameterId);
-        $scope.chartConfig = initChartOptions(parameterName, parameterUnit);
-        $scope.$watch('activeLocationModel.locationLoadingDataIsDone', function(dataLoaded) {
-            if (dataLoaded) {
-                data =  [];
-                for (var i = 0; i < $scope.location_parameter_data.length; i++) {
+    var loadDailyChartParameterData = function(parameterId, qc_level, year) {
+        Measurements.daily_parameter_measurements_by_location_chart.query({ 
+                location_id: $scope.location.location_id, 
+                parameter_id: parameterId,
+                qc_level: 0,
+                year: 2016
+            }, function(data) {
+            $scope.location_daily_parameter_data = data;
+            $scope.locationLoadingDailyChartDataIsDone = true;
 
-                }
-            }
         });
-        
     };
+    
+    loadDailyChartParameterData($scope.activeParameterId, 0, 2016);
+    loadDailyParameterData($scope.activeParameterId, 0, 2016);
+    $scope.chartConfig;
+    $scope.chartConfig = initChartOptions($scope.activeParameterName, $scope.activeParameterUnit);
 
+    $scope.$watch('locationLoadingDailyChartDataIsDone', function(dataLoaded) {
+        if (dataLoaded) {
+            for (var i = 0; i < $scope.location_daily_parameter_data.length; i++) {
+                console.log($scope.location_daily_parameter_data[i]);
+                $scope.chartConfig.series[i] = $scope.location_daily_parameter_data[i];
+            }
+        }
+    });
+    
 }).controller('MapController', function($scope) {
     $scope.locationIsChosen = {active: false};
     $scope.activeLocation = {

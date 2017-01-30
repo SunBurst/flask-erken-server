@@ -1,6 +1,8 @@
 import json
 import uuid
 
+from collections import defaultdict, OrderedDict
+
 from flask import make_response
 
 from app import app, cassandra_connection
@@ -81,6 +83,44 @@ def get_parameters_by_location(location_id):
     query = "SELECT * FROM parameters_by_location WHERE location_id=?"
     prepared = cassandra_connection.session.prepare(query)
     rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/daily_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:year>/')
+def get_daily_parameter_measurements_by_location(location_id, parameter_id, qc_level, year):
+    query = "SELECT * FROM daily_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, )).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/daily_parameter_measurements_by_location_chart/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:year>/')
+def get_daily_parameter_measurements_by_location_chart(location_id, parameter_id, qc_level, year):
+    query = "SELECT * FROM daily_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? ORDER BY date ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, )).result()
+    
+    stations = OrderedDict()
+    
+    for row in rows:
+        station_id = row.get('station_id')
+        
+        if station_id not in stations:
+            stations[station_id] = {'name': row.get('station_name'), 'data': []}
+        
+        stations[station_id]['data'].append([row.get('date'), row.get('avg_value')])
+        
+    series = [station_name_data for station_id, station_name_data in stations.items()]
+    
+    return json.dumps(series, cls=CustomEncoder)
+
+@app.route('/api/hourly_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:year>/')
+def get_hourly_parameter_measurements_by_location(location_id, parameter_id, qc_level, year):
+    query = "SELECT * FROM hourly_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=0 AND year=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, )).result()
     data =  [row for row in rows]
     
     return json.dumps(data, cls=CustomEncoder)

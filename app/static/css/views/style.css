@@ -264,6 +264,13 @@ a[ng-click]{
     border-color: transparent;
 }
 
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #fff;
+    background-color: #75C5E7;
+    border: 0;
+    cursor: default;
+}
+
 .blue {
     background-color: #26A1D6;
 }
@@ -355,3 +362,22 @@ h1, h2, h3, h4, h5, h6 {
       .panel-collapse div.list-group div.list-group{margin: 0;}
       .panel-collapse div.list-group .list-group a.list-group-item {border-top: 1px solid #ddd !important;border-bottom: 0;padding-left: 30px;}
       .panel-collapse .list-group-item li.list-group-item {border-top: 1px solid #DDD !important;}
+
+.main-content {
+    margin-top: 40px;
+}
+
+.data-section-nav {
+    background-color: #f7f7f7;
+    padding: 16px 12px 16px 16px;
+}
+
+.data-section-nav li {
+    background-color: inherit;
+    border: 0;
+}
+
+.data-section-nav li a {
+    color: #222;
+    font-family: 'Roboto', sans-serif;
+}
