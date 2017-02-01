@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'ngResource', 'highcharts-ng', 'app.controllers', 'app.directives', 'app.filters', 'app.services']);
+angular.module('app', ['ui.router', 'ngResource', 'highcharts-ng', 'daterangepicker', 'app.controllers', 'app.directives', 'app.filters', 'app.services']);
 
 angular.module('app').config(function($qProvider, $interpolateProvider, $locationProvider, $stateProvider, $httpProvider) {
     

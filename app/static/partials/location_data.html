@@ -1,14 +1,17 @@
 <div ng-controller="LocationDataCtrl">
     <div class="main-content">
         <div class="row">
-            <div class="col-sm-3 col-md-3">
-                <nav class="data-section-nav">
-                    <ul class="nav in">
-                        <li ng-repeat="parameter in location_parameters_list">
-                            <a href="#" ng-click="showParameterData(parameter.parameter_id, parameter.parameter_name, parameter.parameter_unit, parameter.measurement_type, parameter.parameter_description)">{[ parameter.parameter_name ]}</a>
-                        </li>
-                    </ul>
-                </nav>
+            <div class="col-sm-3">
+                <!-- <nav class="data-section-nav"> -->
+                    <div class="page-content-nav">
+                        <ul>
+                            <li class="dropdown-header">Parameters</li>
+                            <li ng-repeat="parameter in location_parameters_list">
+                                <a href="#" ng-click="showParameterData(parameter.parameter_id, parameter.parameter_name, parameter.parameter_unit, parameter.measurement_type, parameter.parameter_description)"><i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]}</a>
+                            </li>
+                        </ul>
+                    </div>
+                <!-- </nav> -->
             </div>
         
             <div class="col-sm-9 col-md-9">

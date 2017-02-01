@@ -486,6 +486,19 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.daily_avg_parameter_measurements_by_location (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            year int,
+            date timestamp,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date)
+        ) WITH CLUSTERING ORDER BY (date DESC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.hourly_parameter_measurements_by_station (
             station_id text,
             parameter_id text,

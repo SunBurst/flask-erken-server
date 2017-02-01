@@ -1,61 +1,56 @@
 <div ng-controller="LocationDataContentCtrl">
     <div class="row">
-        <h2 class="section-header" ng-model="activeParameterId">{[ activeParameterName ]}</h2>
-    </div>
-    <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel panel-heading">
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                Actions
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right" role="menu">
-                                <li><a href="#">Action</a>
-                                </li>
-                                <li><a href="#">Another action</a>
-                                </li>
-                                <li><a href="#">Something else here</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-body">
-                    <div ng-show="activeParameterMeasurementType === 'parameter'" id="chart-container">
-                        <highchart id="parameter-chart" config="chartConfig" class="span10"></highchart>
-                    </div>
-                </div>
+            <div class="col-lg-12">
+                <select class="form-control" ng-model="selectedDataSource" ng-options="x for x in dataSources" ng-change="changedValue()" ng-init="selectedDataSource = dataSources[0]"></select>
+                <input date-range-picker ng-model="datePicker.date" class="form-control date-picker" type="text" options="datePickerOptions"/>
+            </div>
+            <div ng-show="activeParameterMeasurementType === 'parameter'" id="chart-container">
+                <highchart id="parameter-chart" config="chartConfig"></highchart>
             </div>
             <div ng-show="activeParameterMeasurementType === 'profile'" id="heatmap-chart-container"></div>
+            <div class="table-responsive" ui-if="parametersLoadingIsDone && activeLocationModel.locationLoadingDataIsDone">          
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Station</th>
+                            <th>{[ activeParameterName ]} ({[ activeParameterUnit ]})</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="measurement in location_parameter_data">
+                            <td>{[ measurement.date | date:'yyyy-MM-dd HH:mm:ss Z' ]}</td>
+                            <td>{[ measurement.station_name ]}</td>
+                            <td>{[ measurement.avg_value | setDecimal:2 ]}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
-            <div class="table-responsive table-bordered" ui-if="parametersLoadingIsDone">          
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Station</th>
-                    <th ng-model="activeParameterId">{[ activeParameterName ]}</th>
-                    <th>Unit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="measurement in location_daily_parameter_data">
-                    <td>{[ measurement.date | date:'yyyy-MM-dd HH:mm:ss Z' ]}</td>
-                    <td>{[ measurement.station_name ]}</td>
-                    <td>{[ measurement.avg_value | setDecimal:2 ]}</td>
-                    <td>{[ measurement.unit ]}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div ng-show="activeParameterMeasurementType === 'parameter'" id="location-chart-container">
+                <highchart id="location-parameter-chart" config="locationChartConfig"></highchart>
+            </div>
+            <div class="table-responsive" ui-if="parametersLoadingIsDone && activeLocationModel.locationLoadingDataIsDone">          
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Station</th>
+                            <th>{[ activeParameterName ]} ({[ activeParameterUnit ]})</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="measurement in location_parameter_data">
+                            <td>{[ measurement.date | date:'yyyy-MM-dd HH:mm:ss Z' ]}</td>
+                            <td>{[ measurement.station_name ]}</td>
+                            <td>{[ measurement.avg_value | setDecimal:2 ]}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
