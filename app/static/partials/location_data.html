@@ -1,24 +1,83 @@
 <div ng-controller="LocationDataCtrl">
     <div class="main-content">
         <div class="row">
+            
             <div class="col-sm-3">
-                <!-- <nav class="data-section-nav"> -->
-                    <div class="page-content-nav">
-                        <ul>
-                            <li class="dropdown-header">Parameters</li>
-                            <li ng-repeat="parameter in location_parameters_list">
-                                <a href="#" ng-click="showParameterData(parameter.parameter_id, parameter.parameter_name, parameter.parameter_unit, parameter.measurement_type, parameter.parameter_description)"><i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]}</a>
-                            </li>
-                        </ul>
-                    </div>
-                <!-- </nav> -->
+                <div class="page-content-nav">
+                    <ul>
+                        <li class="dropdown-header">Parameters</li>
+                        <li ng-repeat="parameter in location_parameters_selection">
+                            <!-- <a href="#" ng-click="showParameterData(parameter.parameter_id, parameter.parameter_name, parameter.parameter_unit, parameter.measurement_type, parameter.parameter_description)"><i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]}</a> -->
+                            <input type="checkbox" name="selectedParameters[]" value="{[ parameter.parameter_name ]}" ng-model="parameter.selected"> {[ parameter.parameter_name ]}</input>
+                        </li>
+                    </ul>
+                </div>
             </div>
         
             <div class="col-sm-9 col-md-9">
-                <div ng-show="activeParameter">
-                    <div ng-if="activeParameter" ng-include src="'/static/partials/location_data_content.html'"></div>
+                <div ng-show="selection.length > 0">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <select class="form-control" ng-model="selectedDataSource" ng-options="source for source in dataSources" ng-change="changedDataSource()" ng-init="selectedDataSource = dataSources[0]"></select>
+                        </div>
+                        <div class="col-lg-8">
+                            <input date-range-picker ng-model="datePicker.date" class="form-control date-picker" type="text" options="datePickerOptions"/>
+                        </div>
+                    </div>
+                    <div ng-repeat="selectedParameter in selection" ng-controller="LocationParameterCtrl" ng-init="parameterId = selectedParameter">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel panel-heading blue">test</div>
+                            </div>
+                            <div class="row">
+                                <highchart id="location-{[ selectedParameter ]}-chart" config="locationChartOptions" ui-if="locationChartOptions"></highchart>
+                            </div>
+                            <div class="row">
+                                <div class="table-responsive">          
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>{[ parameterName ]} ({[ parameterUnit ]})</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="measurement in locationDailyAvgParameterData">
+                                                <td>{[ measurement.date | date:'yyyy-MM-dd HH:mm:ss Z' ]}</td>
+                                                <td>{[ measurement.avg_value | setDecimal:2 ]}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <highchart id="stations-{[ selectedParameter ]}-chart" config="stationsChartOptions" ui-if="stationsChartOptions"></highchart>
+                            </div>
+                            <div class="row">
+                                <div class="table-responsive">          
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Station</th>
+                                                <th>{[ parameterName ]} ({[ parameterUnit ]})</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="measurement in locationDailyStationsAvgParameterData">
+                                                <td>{[ measurement.date | date:'yyyy-MM-dd HH:mm:ss Z' ]}</td>
+                                                <td>{[ measurement.station_name ]}</td>
+                                                <td>{[ measurement.avg_value | setDecimal:2 ]}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
