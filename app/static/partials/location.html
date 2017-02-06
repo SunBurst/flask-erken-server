@@ -9,29 +9,31 @@
             </div>
         </div>
         <div class="row">
-            <div class="tabs-wrapper">
-                <ul class="nav nav-tabs tabs-4 blue-4">
-                  <li class="nav-item" ng-class="{ active: isSet('location-overview') }">
-                      <a ng-click="changeTabContent('location-overview')">
-                          <i class="fa fa-info fa-fw"></i> Overview
-                      </a>
-                  </li>
-                  <li class="nav-item" ng-class="{ active: isSet('location-data') }">
-                      <a ng-click="changeTabContent('location-data')">
-                          <i class="fa fa-bar-chart-o fa-fw"></i> Data
-                      </a>
-                  </li>
-                  <li class="nav-item" ng-class="{ active: isSet('location-cams-and-photos') }">
-                      <a ng-click="changeTabContent('location-cams-and-photos')">
-                          <i class="fa fa-video-camera fa-fw"></i> Cams & Photos
-                      </a>
-                  </li>
-                  <li class="nav-item" ng-class="{ active: isSet('location-status') }">
-                      <a ng-click="changeTabContent('location-status')">
-                          <i class="fa fa-bolt fa-fw"></i> Status
-                      </a>
-                  </li>
-                </ul>
+            <div class="location-nav">
+                <div class="tabs-wrapper">
+                    <ul class="nav nav-tabs tabs-4 blue-4">
+                      <li class="nav-item" ng-class="{ active: isSet('location-overview') }">
+                          <a ng-click="changeTabContent('location-overview')">
+                              <i class="fa fa-info fa-fw"></i> Overview
+                          </a>
+                      </li>
+                      <li class="nav-item" ng-class="{ active: isSet('location-data') }">
+                          <a ng-click="changeTabContent('location-data')">
+                              <i class="fa fa-bar-chart-o fa-fw"></i> Data
+                          </a>
+                      </li>
+                      <li class="nav-item" ng-class="{ active: isSet('location-cams-and-photos') }">
+                          <a ng-click="changeTabContent('location-cams-and-photos')">
+                              <i class="fa fa-video-camera fa-fw"></i> Cams & Photos
+                          </a>
+                      </li>
+                      <li class="nav-item" ng-class="{ active: isSet('location-status') }">
+                          <a ng-click="changeTabContent('location-status')">
+                              <i class="fa fa-bolt fa-fw"></i> Status
+                          </a>
+                      </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -471,12 +471,7 @@ angular.module('app.controllers', [])
             $scope.$broadcast('datePickerChange');
         }
     });
-    
-    $scope.$watch('selection', function(newValue, oldValue) {
-        //console.log(newValue, oldValue);
-        
-        //$scope.updateLocationData();
-    }, true);
+
 }).controller('LocationParameterCtrl', function($scope, Measurements) {
     
     $scope.parameterName;
@@ -594,6 +589,7 @@ angular.module('app.controllers', [])
             $scope.updateLocationDailyAvgData();
             $scope.updateStationsDailyAvgData();
         }
+
     };
     
     $scope.$on('dataSourceChange', function() {

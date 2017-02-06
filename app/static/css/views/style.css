@@ -231,7 +231,7 @@ a[ng-click]{
     display: flex;
 }
 
-.tabs-wrapper .nav {
+.location-nav .nav {
     text-align: center;
     border: 0;
     padding: .7rem;
@@ -251,20 +251,20 @@ a[ng-click]{
     width: 25%;
 }
 
-.tabs-wrapper .nav .nav-item {
+.location-nav .nav .nav-item {
     float: left;
     margin-bottom: -1px;
 }
 
-.nav-item a {
+.location-nav .nav-item a {
     font-family: 'Roboto', sans-serif;
 }
 
-.nav-tabs>li>a:focus, .nav-tabs>li>a:hover {
+.location-nav .nav-tabs>li>a:focus, .location-nav .nav-tabs>li>a:hover {
     border-color: transparent;
 }
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+.location-nav .nav-tabs>li.active>a, .location-nav .nav-tabs>li.active>a:focus, .location-nav .nav-tabs>li.active>a:hover {
     color: #fff;
     background-color: #75C5E7;
     border: 0;
@@ -296,13 +296,13 @@ a[ng-click]{
     font-family: Roboto-Regular,HelveticaNeue,Arial,sans-serif;
 }
 
-.panel {
+/*.panel {
     border-radius: 0;
-}
+}*/
 
-.panel span {
+/*.panel span {
     font-family: Roboto-Regular,HelveticaNeue,Arial,sans-serif;
-}
+}*/
 
 .section-header {
     border-bottom: 1px solid #ebebeb;
@@ -364,7 +364,20 @@ h1, h2, h3, h4, h5, h6 {
       .panel-collapse .list-group-item li.list-group-item {border-top: 1px solid #DDD !important;}
 
 .main-content {
-    margin-top: 40px;
+    margin-top: 25px;
+}
+
+.panel {
+    overflow: auto;
+    border-radius: 0;
+}
+
+.panel .panel-heading {
+    padding: 5px 5px 0 5px;
+}
+
+.panel .nav-tabs {
+    border-bottom: none;
 }
 
 /* .data-section-nav {
@@ -412,4 +425,9 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
     line-height: 16px;
     white-space: normal;
+}
+
+highchart {
+    width: 100% !important;
+    display: block;
 }
