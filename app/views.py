@@ -142,7 +142,8 @@ def get_daily_average_parameter_measurements_by_location_chart(location_id, para
             series_data.append([row.get('date'), row.get('avg_value')])
 
     series = {'id': "{}-series".format(location_id), 'data': series_data}
-    
+    print(series)
+    print(json.dumps(series, cls=CustomEncoder))
     return json.dumps(series, cls=CustomEncoder)
 
 @app.route('/api/daily_stations_average_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>/')

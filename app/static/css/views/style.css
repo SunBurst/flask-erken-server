@@ -1,5 +1,6 @@
 body {
     background-color: #0796D4;
+    font: 400 16px/24px Roboto,sans-serif;
 }
 
 a {
@@ -191,7 +192,7 @@ a[ng-click]{
 }
 
 #page-wrapper {
-    background-color: #fff;
+    background-color: #f7f7f7;
 }
 
 @media (min-width: 768px) {
@@ -364,6 +365,7 @@ h1, h2, h3, h4, h5, h6 {
       .panel-collapse .list-group-item li.list-group-item {border-top: 1px solid #DDD !important;}
 
 .main-content {
+    background-color: #f7f7f7;
     margin-top: 25px;
 }
 
@@ -396,10 +398,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 */
 
-.page-content-nav {
+/*.page-content-nav {
     background-color: #f7f7f7;
     padding: 16px 12px 16px 16px;
-}
+}*/
 
 .page-content-nav ul {
     padding: 0;
@@ -430,4 +432,125 @@ h1, h2, h3, h4, h5, h6 {
 highchart {
     width: 100% !important;
     display: block;
+}
+
+.highcharts-title {
+    font-family: 'Roboto', sans-serif;
+}
+
+.page-content-top-nav {
+    overflow: auto;
+}
+
+.navbar-data {
+    background-color: inherit;
+}
+
+.navbar-inner {
+    overflow: auto;
+    padding: 8px;
+    text-align:center;
+}
+
+.navbar-center {
+    display: inline-block;
+    left: 0;
+    right: 0;
+    margin:0;
+    float:none;
+}
+
+.data-view-selector .btn {
+    color: #222;
+    border: 1px solid #ccc;
+}
+
+.data-view-selector .btn.active {
+    background-color: #75C5E7;
+    color: #fff;
+}
+
+.card {
+    -webkit-box-shadow: 0 1px 1px 0 rgba(55,63,78,.12);
+    display: block;
+    position: relative;
+    margin-bottom: 1.875rem;
+    box-shadow: 0 1px 1px 0 rgba(55,63,78,.12);
+    border: 0 solid rgba(55,63,78,.12);
+    background-color: #fff;
+}
+
+.card-header {
+    display: block;
+    position: relative;
+    background-color: #fff;
+    overflow: auto;
+}
+
+.card-title {
+    margin-bottom: 0;
+    background-color: #fff;
+    padding: 1rem;
+    color: #373f4e;
+    line-height: 1;
+}
+
+.card-header .card-title {
+    float: left;
+    background-color: transparent;
+    /* font-size: 1rem; */
+}
+
+.card-divider {
+    border-top: 1px solid rgba(55,63,78,.12);
+}
+
+.card:not(.card-block)>.card-divider {
+    margin: 0 1rem;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.page-content-nav label {
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #D1D3D4;
+    font-weight: normal;
+}
+
+.page-content-nav input[type="checkbox"]:empty ~ label {
+    position: relative;
+    line-height: 2.5em;
+    text-indent: 3.25em;
+    margin-top: 0.5em;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.page-content-nav input[type="checkbox"]:empty {
+    display: none;
+}
+
+.page-content-nav input[type="checkbox"]:empty ~ label:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 2.5em;
+    background: #D1D3D4;
+    border-radius: 3px 0 0 3px;
+}
+
+.page-content-nav input[type="checkbox"]:checked ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #fff;
+    background-color: #75C5E7;
 }

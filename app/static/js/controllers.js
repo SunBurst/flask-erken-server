@@ -7,6 +7,12 @@ angular.module('app.controllers', [])
         loadingIsDone: false,
     };
     
+    Highcharts.setOptions({
+        global: {
+          useUTC: false
+        }
+    });
+    
     Locations.locations.query({}, function(data) {
         $scope.locations = data;
         $scope.Model.loadingIsDone = true;
@@ -305,6 +311,10 @@ angular.module('app.controllers', [])
     $scope.dailyAvgLocationChartData = {};
     $scope.charts = {};
     
+    $scope.dataViewModel = {
+        activeDataView: 'charts'
+    };
+    
     $scope.datePicker = {date: null};
     var startTime = moment().subtract(29, 'days');
     var endTime = moment();
@@ -460,6 +470,14 @@ angular.module('app.controllers', [])
         $scope.$broadcast('dataSourceChange');
     }
     
+    $scope.changeDataViewContent = function(buttonId) {
+        $scope.dataViewModel.activeDataView = buttonId;
+    };
+    
+    $scope.isDataViewSet = function(buttonId){
+      return $scope.dataViewModel.activeDataView === buttonId;
+    };
+    
     $scope.$watch('location_parameters_selection|filter:{selected:true}', function (newValue) {
         $scope.selection = newValue.map(function (parameter) {
             return parameter.parameter_id;
@@ -481,6 +499,9 @@ angular.module('app.controllers', [])
     var initGenericChart = function() {
         var chartOptions = {
             title: {
+                text: ''
+            },
+            subtitle: {
                 text: ''
             },
             chart: {
@@ -545,7 +566,8 @@ angular.module('app.controllers', [])
                 from_date: $scope.datePicker.date.startDate.valueOf(),
                 to_date: $scope.datePicker.date.endDate.valueOf(),
             }, function(response) {
-                $scope.locationChartOptions.title.text = 'Daily Average ' + $scope.location_parameters[$scope.parameterId].parameter_name + ' Data For ' + $scope.location.location_name;
+                $scope.locationChartOptions.title.text = 'Daily Average ' + $scope.location_parameters[$scope.parameterId].parameter_name + ' at ' + $scope.location.location_name;
+                $scope.locationChartOptions.subtitle.text = $scope.datePicker.date.startDate.format('YYYY-MM-DD HH:mm:ss')  + ' - ' + $scope.datePicker.date.endDate.format('YYYY-MM-DD HH:mm:ss');
                 $scope.locationChartOptions.yAxis.title.text = $scope.location_parameters[$scope.parameterId].parameter_name + ' (' + $scope.location_parameters[$scope.parameterId].parameter_unit + ')'
                 var chartSeries = response.data;
                 chartSeries.name = $scope.location.location_name;
@@ -573,7 +595,7 @@ angular.module('app.controllers', [])
                 from_date: $scope.datePicker.date.startDate.valueOf(),
                 to_date: $scope.datePicker.date.endDate.valueOf(),
             }, function(response) {
-                $scope.stationsChartOptions.title.text = 'Daily Station Average ' + $scope.location_parameters[$scope.parameterId].parameter_name + ' Data For ' + $scope.location.location_name;
+                $scope.stationsChartOptions.title.text = 'Daily Station Average ' + $scope.location_parameters[$scope.parameterId].parameter_name + ' at ' + $scope.location.location_name;
                 $scope.stationsChartOptions.yAxis.title.text = $scope.location_parameters[$scope.parameterId].parameter_name + ' (' + $scope.location_parameters[$scope.parameterId].parameter_unit + ')'
                 var stationsChartSeries = response.data;
                 for (var i = 0; i < stationsChartSeries.length; i++) {
@@ -619,16 +641,16 @@ angular.module('app.controllers', [])
     $scope.chartConfig;
     
     $scope.datePickerOptions = {
-      applyClass: 'btn-success',
-      locale: {
-        applyLabel: "Apply",
-        fromLabel: "From",
-        format: "YYYY-MM-DD HH:mm:ss",
-        toLabel: "To",
-        cancelLabel: 'Cancel',
-        customRangeLabel: 'Custom Range'
-      },
-      ranges: {
+        applyClass: 'btn-success',
+        locale: {
+            applyLabel: "Apply",
+            fromLabel: "From",
+            format: "YYYY-MM-DD HH:mm:ss",
+            toLabel: "To",
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom Range'
+        },
+        ranges: {
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
             'Last 7 Days': [moment().subtract(6, 'days'), moment()],
