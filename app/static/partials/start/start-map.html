@@ -1,0 +1,18 @@
+<div data-ng-controller="StartMap as vm">
+    <div class="col-xs-12">
+        <div>
+            <ui-gmap-google-map center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom'>
+                <ui-gmap-markers
+                  models="vm.locationMarkers"
+                  coords="'coords'"
+                  idkey="'key'"
+                  fit="true"></ui-gmap-markers>
+            </ui-gmap-google-map>
+        </div>
+    </div>
+    <!-- <div class="google-map" class="col-lg-12"></div> -->
+        
+        <!-- <ui-gmap-google-map control='mapControl' center='map.center' zoom='map.zoom' options='map.options'>
+            <ui-gmap-marker ng-repeat="location in locations" coords="location.position" idkey="location.id-marker" customInfo="'test'" events="markerEvents" options='{title: location.name}'></ui-gmap-marker>
+        </ui-gmap-google-map> -->
+</div>

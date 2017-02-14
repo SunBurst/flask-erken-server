@@ -490,11 +490,14 @@ angular.module('app.controllers', [])
         }
     });
 
-}).controller('LocationParameterCtrl', function($scope, Measurements) {
+}).controller('LocationParameterCtrl', function($scope, $q, DTOptionsBuilder, DTColumnBuilder, Measurements) {
     
     $scope.parameterName;
     $scope.parameterUnit;
     $scope.locationDailyAvgParameterData;
+    
+    $scope.dtOptions = null;
+    $scope.dtColumns = null;
     
     var initGenericChart = function() {
         var chartOptions = {
@@ -550,15 +553,26 @@ angular.module('app.controllers', [])
     
     $scope.updateLocationDailyAvgData = function() {
         if ($scope.location_parameters[$scope.parameterId].measurement_type === 'parameter') {
-            Measurements.daily_average_parameter_measurements_by_location.query({
-                location_id: $scope.location.location_id, 
-                parameter_id: $scope.parameterId,
-                qc_level: 0,
-                from_date: $scope.datePicker.date.startDate.valueOf(),
-                to_date: $scope.datePicker.date.endDate.valueOf(),
-            }, function(response) {
-                $scope.locationDailyAvgParameterData = response.data;
-            });
+            $scope.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+                var defer = $q.defer();
+                Measurements.daily_average_parameter_measurements_by_location.query({
+                    location_id: $scope.location.location_id, 
+                    parameter_id: $scope.parameterId,
+                    qc_level: 0,
+                    from_date: $scope.datePicker.date.startDate.valueOf(),
+                    to_date: $scope.datePicker.date.endDate.valueOf(),
+                }, function(response) {
+                    $scope.locationDailyAvgParameterData = response.data;
+                    defer.resolve(response.data);
+                });
+                return defer.promise;
+            }).withPaginationType('full_numbers');
+            
+            $scope.dtColumns = [
+                DTColumnBuilder.newColumn('date').withTitle('Date'),
+                DTColumnBuilder.newColumn('avg_value').withTitle($scope.location_parameters[$scope.parameterId].parameter_name)
+            ];
+            
             Measurements.daily_average_parameter_measurements_by_location_chart.query({
                 location_id: $scope.location.location_id, 
                 parameter_id: $scope.parameterId,
@@ -627,287 +641,7 @@ angular.module('app.controllers', [])
         $scope.parameterUnit = $scope.location_parameters[$scope.parameterId].parameter_unit;
         $scope.updateData();
     });
-    
-}).controller('LocationDataContentCtrl', function($scope, Measurements) {
-    
-    $scope.locationChartModel = {
-        locationChartDataIsDone: false
-    };
-    $scope.dataSources = ['Daily', 'Hourly', 'High Frequency'];
-    $scope.datePicker = {date: null};
-    var startTime = moment().subtract(29, 'days');
-    var endTime = moment();
-    $scope.datePicker.date = {startDate: startTime, endDate: endTime};
-    $scope.chartConfig;
-    
-    $scope.datePickerOptions = {
-        applyClass: 'btn-success',
-        locale: {
-            applyLabel: "Apply",
-            fromLabel: "From",
-            format: "YYYY-MM-DD HH:mm:ss",
-            toLabel: "To",
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom Range'
-        },
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-            'Last 365 Days': [moment().subtract(364, 'days'), moment()]
-        }
-    }
 
-    var initChartOptions = function(parameterName, parameterUnit) {
-        var chartOptions = {
-            title: {
-                text: parameterName
-            },
-            chart: {
-                type: 'spline'
-            },
-            xAxis: {
-                type: 'datetime',
-                title: {
-                    text: 'Time'
-                }
-            },
-            yAxis: {
-                title: {
-                    text: parameterName + ' ('+ parameterUnit +')'
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle',
-                borderWidth: 0
-            },
-            plotOptions: {
-                spline: {
-                    marker: {
-                        enabled: true
-                    },
-                }
-            },
-            tooltip: {
-                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + parameterUnit + '</b><br/>',
-                shared: true
-            },
-            series: [],
-        };
-        
-        return chartOptions;
-    };
-    
-    $scope.chartConfig = initChartOptions($scope.activeParameterName, $scope.activeParameterUnit);
-    $scope.locationChartConfig = initChartOptions($scope.activeParameterName, $scope.activeParameterUnit);
-    
-    $scope.updateChart = function() {
-        $scope.chartConfig.series = $scope.location_parameter_chart_data;
-        //$scope.locationChartConfig.series[0] = $scope.location_avg_parameter_chart_data;
-        //console.log($scope.location_avg_parameter_chart_data);
-        //$scope.locationChartConfig.series[0] = $scope.location_avg_parameter_chart_data;
-        //console.log($scope.locationChartConfig.series);
-    };
-    
-    var prepareSeriesData = function(preparedData, data) {
-        var seriesData = preparedData;
-        for (var i = 0; i < data.length; i++) {
-            var nameAlreadyInSeries = false;
-            
-            for (var j = 0; j < seriesData.length; j++) {
-                if (seriesData[j].name === data[i].name) {
-                    nameAlreadyInSeries = true;
-                    for (var k = 0; k < data[i].data.length; k++) {
-                        seriesData[j].data.push(data[i].data[k]);
-                    }
-                }
-            }
-            
-            if (nameAlreadyInSeries === false) {
-                seriesData.push(data[i]);
-            }
-        }
-        return seriesData;
-    };
-    
-    var prepareAvgSeriesData = function(preparedData, data) {
-        var seriesData = preparedData;
-        
-        for (var i = 0; i < data.data.length; i++) {
-            seriesData.push(data.data[i]);
-        }
-
-        return seriesData;
-    };
-    
-    var getDailyParameterData = function() {
-        var startYear = $scope.datePicker.date.startDate.year();
-        var endYear = $scope.datePicker.date.endDate.year();
-        var dailyParameterData = [];
-        for (var partitionYear = startYear; partitionYear <= endYear; partitionYear++) {
-            
-            Measurements.daily_parameter_measurements_by_location.query({
-                location_id: $scope.location.location_id, 
-                parameter_id: $scope.activeParameterId,
-                qc_level: 0,
-                year: partitionYear,
-                from_date: $scope.datePicker.date.startDate.valueOf(),
-                to_date: $scope.datePicker.date.endDate.valueOf(),
-            }, function(data) {
-                for (var i = 0; i < data.length; i++) {
-                    dailyParameterData.push(data[i]);
-                }
-            });
-        }
-        return dailyParameterData;
-
-    };
-    
-    var getDailyLocationParameterData = function() {
-            
-        Measurements.daily_average_parameter_measurements_by_location.query({
-            location_id: $scope.location.location_id, 
-            parameter_id: $scope.activeParameterId,
-            qc_level: 0,
-            from_date: $scope.datePicker.date.startDate.valueOf(),
-            to_date: $scope.datePicker.date.endDate.valueOf(),
-        }, function(response) {
-            $scope.location_avg_parameter_data = response.data;
-        });
-
-    };
-    
-    var getDailyParameterChartData = function() {
-        var startYear = $scope.datePicker.date.startDate.year();
-        var endYear = $scope.datePicker.date.endDate.year();
-        var dailyParameterChartData = [];
-        for (var partitionYear = startYear; partitionYear <= endYear; partitionYear++) {
-
-            Measurements.daily_parameter_measurements_by_location_chart.query({
-                location_id: $scope.location.location_id, 
-                parameter_id: $scope.activeParameterId,
-                qc_level: 0,
-                year: partitionYear,
-                from_date: $scope.datePicker.date.startDate.valueOf(),
-                to_date: $scope.datePicker.date.endDate.valueOf(),
-            }, function(data) {
-                dailyParameterChartData = prepareSeriesData(dailyParameterChartData, data);
-            });
-        }
-
-        return dailyParameterChartData;
-
-    };
-    
-    var getDailyLocationParameterChartData = function() {
-        
-        Measurements.daily_average_parameter_measurements_by_location_chart.query({
-            location_id: $scope.location.location_id, 
-            parameter_id: $scope.activeParameterId,
-            qc_level: 0,
-            from_date: $scope.datePicker.date.startDate.valueOf(),
-            to_date: $scope.datePicker.date.endDate.valueOf(),
-        }, function(response) {
-            $scope.location_avg_parameter_chart_data = response.data;
-            $scope.locationChartConfig.series[0] = $scope.location_avg_parameter_chart_data;
-            $scope.locationChartConfig.series[0].name = $scope.location.location_name;
-        });
-        
-    };
-    
-    var getHourlyParameterData = function() {
-        var startYear = $scope.datePicker.date.startDate.year();
-        var endYear = $scope.datePicker.date.endDate.year();
-        var hourlyParameterData = [];
-        for (var partitionYear = startYear; partitionYear <= endYear; partitionYear++) {
-
-            Measurements.hourly_parameter_measurements_by_location.query({
-                location_id: $scope.location.location_id, 
-                parameter_id: $scope.activeParameterId,
-                qc_level: 0,
-                year: partitionYear,
-                from_date_hour: $scope.datePicker.date.startDate.valueOf(),
-                to_date_hour: $scope.datePicker.date.endDate.valueOf(),
-            }, function(data) {
-                for (var i = 0; i < data.length; i++) {
-                    hourlyParameterData.push(data[i]);
-                }
-            });
-        }
-        return hourlyParameterData;
-        
-    };
-
-    var getHourlyParameterChartData = function() {
-        var startYear = $scope.datePicker.date.startDate.year();
-        var endYear = $scope.datePicker.date.endDate.year();
-        var hourlyParameterChartData = [];
-        for (var partitionYear = startYear; partitionYear <= endYear; partitionYear++) {
-
-            Measurements.hourly_parameter_measurements_by_location_chart.query({
-                location_id: $scope.location.location_id, 
-                parameter_id: $scope.activeParameterId,
-                qc_level: 0,
-                year: partitionYear,
-                from_date_hour: $scope.datePicker.date.startDate.valueOf(),
-                to_date_hour: $scope.datePicker.date.endDate.valueOf(),
-            }, function(data) {
-                hourlyParameterChartData = prepareSeriesData(hourlyParameterChartData, data);
-            });
-        }
-
-        return hourlyParameterChartData;
-
-    };
-
-    var getHighFrequencyParameterData = function() {};
-    
-    $scope.getData = function() {
-        var data;
-        var location_data;
-        var chartData;
-        var locationChartData;
-        if ($scope.selectedDataSource === 'Daily') {
-            data = getDailyParameterData();
-            getDailyLocationParameterData();
-            chartData = getDailyParameterChartData();
-            getDailyLocationParameterChartData();
-        }
-        else if ($scope.selectedDataSource === 'Hourly') {
-            data = getHourlyParameterData();
-            chartData = getHourlyParameterChartData();
-        }
-        else if ($scope.selectedDataSource === 'High Frequency') {
-            data = [];
-            //data = getHighFrequencyParameterData();
-        }
-        $scope.location_parameter_data = data;
-        $scope.location_avg_parameter_data = location_data;
-        $scope.location_parameter_chart_data = chartData;
-        //$scope.location_avg_parameter_chart_data = locationChartData;
-        $scope.updateChart();
-    };
-    
-    $scope.changedValue = function() {
-        $scope.getData();
-    }
-    
-    $scope.$watch('datePicker.date', function(newDate) {
-        if (newDate) {
-            $scope.getData();
-        }
-    });
-    
 }).controller('MapController', function($scope) {
     $scope.locationIsChosen = {active: false};
     $scope.activeLocation = {

@@ -1,0 +1,39 @@
+<div data-ng-controller="Sidebar as vm">
+    <div class="navbar-default sidebar" role="navigation">
+
+        <div class="sidebar-nav navbar-collapse">
+
+            <ul class="nav in" id="side-menu">
+
+                <li class="dropdown-header">Locations</li>
+                    <li class="dropdown" ng-repeat="location in vm.locations">
+                        <a data-toggle="dropdown" href="#">
+                            <i class="fa fa-globe fa-fw"></i> {[ location.name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header-second-level">Location</li>
+                            <li><a href="#!/location/{[ location.id ]}/"><i class="fa fa-globe fa-fw"></i> {[ location.name ]}</a></li>
+                            <li class="dropdown-header-second-level">Stations</li>
+                            <li ng-repeat="station in location.location_stations">
+                                <a href="#"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a>
+                            </li>
+                        </ul>
+                    </li>
+                
+                <li class="dropdown-header">Parameters</li>
+                <li class="dropdown" ng-repeat="parameter in vm.parameters">
+                    <a data-toggle="dropdown" href="#">
+                        <i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#"><i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]}</a></li>
+                    </ul>
+
+                </li>
+
+              </ul>
+        
+        </div>
+
+    </div>
+</div>

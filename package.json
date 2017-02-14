@@ -1,0 +1,31 @@
+{
+  "name": "flask-erken-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SunBurst/flask-erken-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SunBurst/flask-erken-server/issues"
+  },
+  "homepage": "https://github.com/SunBurst/flask-erken-server#readme",
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-rev": "^7.1.2",
+    "gulp-uglify": "^2.0.1",
+    "gulp-usemin": "^0.3.28"
+  },
+  "dependencies": {
+    "angular-ui-router": "^0.4.2"
+  }
+}
