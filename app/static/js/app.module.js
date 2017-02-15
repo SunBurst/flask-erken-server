@@ -6,7 +6,7 @@
         .module('app', [
             'app.core',
             'app.layout',
-            //'app.locations',
+            'app.location',
             'app.services',
             'app.start',
             'ui.router',

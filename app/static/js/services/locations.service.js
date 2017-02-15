@@ -8,14 +8,43 @@
     
     LocationsFactory.$inject = ['$resource'];
     
-    
     function LocationsFactory($resource) {
         
         var cachedLocationsPromise;
+        var customInterceptor = {
+            response: function(response) {
+                return response;
+            }
+        };
         
         return {
+            getLocation: getLocation,
             getLocations: getLocations
         };
+        
+        function getLocation(locationId) {
+            var resource = $resource('api/location/:location_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId, 
+                    },
+                    isArray: false,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({location_id: locationId}).$promise
+                .then(getLocationComplete)
+                .catch(getLocationFailed);
+                
+            function getLocationComplete(response) {
+                return response;
+            }
+            
+            function getLocationFailed(error) {
+                console.log(error);
+            }
+        }
         
         function getLocations() {
             var promise = cachedLocationsPromise;
@@ -23,11 +52,7 @@
                 query: {
                     method: 'GET', params: {},
                     isArray: true,
-                    interceptor: {
-                        response: function(response) {
-                            return response;
-                        } 
-                    }
+                    interceptor: customInterceptor
                 }
             });
             

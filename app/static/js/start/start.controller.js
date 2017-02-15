@@ -6,7 +6,6 @@
         .module('app.start')
         .controller('Start', Start);
         
-    /* @ngInject */
     function Start() {
 
     }

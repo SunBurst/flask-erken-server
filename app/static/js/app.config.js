@@ -15,19 +15,28 @@
         
         $locationProvider.html5Mode(false);
         $locationProvider.hashPrefix('!');
-        
+
         $stateProvider
             .state('start', {
                 url:'/start',
                 templateUrl:'static/partials/start/start.html',
-                controller: 'Start',
-                controllerAs: 'vm'
+                controller: 'Start as vm'
             })
             .state('location', {
                 url:'/location/:location_id/',
                 templateUrl:'static/partials/location/location.html',
-           //controller: 'Location',
-           //controllerAs: 'vm'
+                controller: 'Location as vm',
+                resolve: {
+                    location: function ($stateParams, LocationsFactory) {
+                        var locationId = $stateParams.location_id;
+                        return LocationsFactory.getLocation(locationId)
+                            .then(function(response) {
+                                var data = response.data;
+                                return data;
+                            });
+                        
+                    }
+                }
         });
         
         $urlRouterProvider.otherwise('/start');
