@@ -5,11 +5,24 @@
         .module('app.location')
         .controller('Location', Location);
     
-    Location.$inject = ['location'];
+    Location.$inject = ['activeLocation'];
     
-    function Location(location) {
+    function Location(activeLocation) {
         var vm = this;
-        vm.location = location;
+
+        vm.activeTab = 'location-overview';
+        vm.changeTabContent = changeTabContent;
+        vm.isSet = isSet;
+        vm.location = activeLocation.getActiveLocation();
+        
+        function changeTabContent(tabId) {
+            vm.activeTab = tabId;
+        };
+        
+        function isSet(tabId) {
+            return vm.activeTab === tabId;
+        };
+
     }
     
 })();

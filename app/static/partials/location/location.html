@@ -2,38 +2,52 @@
     <div class="blue">
         <div class="test">
             <div class="row">
-                <h3 class="white" ng-model="location.location_name">{[ location.location_name ]}</h3>
-                <h4 class="white" ng-model="location.location_position"><i class="fa fa-location-arrow fa-fw"></i> {[ location.location_position.latitude ]}, {[ location.location_position.longitude ]}</h4>
-                <h4 class="white" ng-model="location.location_environment_category"><i class="fa fa-leaf fa-fw"></i> {[ location.location_environment_category ]} </h4>
+                <h3 class="white" ng-model="vm.location.location_name">{[ vm.location.location_name ]}</h3>
+                <h4 class="white" ng-model="vm.location.location_position"><i class="fa fa-location-arrow fa-fw"></i> {[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}</h4>
+                <h4 class="white" ng-model="vm.location.location_environment_category"><i class="fa fa-leaf fa-fw"></i> {[ vm.location.location_environment_category ]} </h4>
             </div>
         </div>
         <div class="row">
             <div class="location-nav">
                 <div class="tabs-wrapper">
                     <ul class="nav nav-tabs tabs-4 blue-4">
-                      <li class="nav-item" ng-class="{ active: isSet('location-overview') }">
-                          <a ng-click="changeTabContent('location-overview')">
+                      <li class="nav-item" ng-class="{ active: vm.isSet('location-overview') }">
+                          <a ng-click="vm.changeTabContent('location-overview')">
                               <i class="fa fa-info fa-fw"></i> Overview
                           </a>
                       </li>
-                      <li class="nav-item" ng-class="{ active: isSet('location-data') }">
-                          <a ng-click="changeTabContent('location-data')">
+                      <li class="nav-item" ng-class="{ active: vm.isSet('location-data') }">
+                          <a ng-click="vm.changeTabContent('location-data')">
                               <i class="fa fa-bar-chart-o fa-fw"></i> Data
                           </a>
                       </li>
-                      <li class="nav-item" ng-class="{ active: isSet('location-cams-and-photos') }">
-                          <a ng-click="changeTabContent('location-cams-and-photos')">
+                      <li class="nav-item" ng-class="{ active: vm.isSet('location-cams-and-photos') }">
+                          <a ng-click="vm.changeTabContent('location-cams-and-photos')">
                               <i class="fa fa-video-camera fa-fw"></i> Cams & Photos
                           </a>
                       </li>
-                      <li class="nav-item" ng-class="{ active: isSet('location-status') }">
-                          <a ng-click="changeTabContent('location-status')">
+                      <li class="nav-item" ng-class="{ active: vm.isSet('location-status') }">
+                          <a ng-click="vm.changeTabContent('location-status')">
                               <i class="fa fa-bolt fa-fw"></i> Status
                           </a>
                       </li>
                     </ul>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="location-tab-content" class="tab-content">
+        <div ng-show="vm.isSet('location-overview')">
+            <div ng-if="vm.activeTab === 'location-overview'" ng-include src="'/static/partials/location/location_overview.html'"></div>
+        </div>
+        <div ng-show="vm.isSet('location-data')">
+             <div ng-if="vm.activeTab === 'location-data'" ng-include src="'/static/partials/location/location_data.html'"></div>                
+        </div>
+        <div ng-show="vm.isSet('location-cams-and-photos')">
+            <div ng-if="vm.activeTab === 'location-cams-and-photos'" ng-include src="'/static/partials/location/location_cams_and_photos.html'"></div>
+        </div>
+        <div ng-show="vm.isSet('location-status')">
+            <div ng-if="vm.activeTab === 'location-status'" ng-include src="'/static/partials/location/location_status.html'"></div>
         </div>
     </div>
 </div>

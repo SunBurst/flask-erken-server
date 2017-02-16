@@ -14,7 +14,7 @@
         
         function activate() {
             return getLocations().then(function() {
-                console.log("Sidebar ready.");
+                
             });
         }
         

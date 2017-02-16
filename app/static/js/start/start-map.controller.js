@@ -5,7 +5,7 @@
         .module('app.start')
         .controller('StartMap', StartMap);
     
-    function StartMap(LocationsFactory, GoogleMapDefaultOptions) {
+    function StartMap(LocationsFactory, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons) {
         var vm = this;
         
         vm.addLocationMarkers = addLocationMarkers;
@@ -14,15 +14,9 @@
         vm.locations = [];
         vm.map = { center: { latitude: 63, longitude: 16}, zoom: 12 };
         vm.mapOptions = GoogleMapDefaultOptions;
-        vm.icons = {
-            blueicon: '/static/images/google-maps/icons/blue-dot.png',
-            greenicon: '/static/images/google-maps/icons/green-dot.png',
-            redicon: '/static/images/google-maps/icons/red-dot.png'
-        };
+        vm.mapIcons = GoogleMapIcons;
         
-        vm.clusterOptions = {
-            imagePath: '/static/images/google-maps/cluster/m'
-        };
+        vm.clusterOptions = GoogleMapClusterOptions;
         
         activate();
 
@@ -32,7 +26,7 @@
                 markers.push({
                     latitude: locations[i].position.latitude,
                     longitude: locations[i].position.longitude,
-                    icon: vm.icons.redicon,
+                    icon: vm.mapIcons.redicon,
                     key: 'marker-id-' + locations[i].id,
                     options: {
                         title: locations[i].name,
@@ -51,7 +45,7 @@
                 markers.push({
                     latitude: stations[i].station_position.latitude,
                     longitude: stations[i].station_position.longitude,
-                    icon: vm.icons.blueicon,
+                    icon: vm.mapIcons.blueicon,
                     key: 'marker-id-' + stations[i].station_id,
                     options: {
                         title: stations[i].station_name,

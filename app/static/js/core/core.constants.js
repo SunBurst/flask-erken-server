@@ -1,17 +1,26 @@
 (function() {
-    
     'use strict';
     
     angular
         .module('app.core')
-        .constant('GoogleMapDefaultOptions', mapOptions);
+        .constant('GoogleMapClusterOptions', getGoogleMapClusterOptions())
+        .constant('GoogleMapDefaultOptions', getDefaultMapOptions())
+        .constant('GoogleMapIcons', getGoogleMapIcons());
+        
 
-    function mapOptions() {
+    function getGoogleMapClusterOptions() {
+        return {
+            imagePath: '/static/images/google-maps/cluster/m'
+        };
+    }
+    
+    function getDefaultMapOptions() {
         return {
             scrollwheel: false, 
             mapTypeControl: true, 
             streetViewControl: false, 
-            mapTypeControlOptions: {mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain', 'styled_map'],
+            mapTypeControlOptions: {
+                mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain', 'styled_map'],
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
                 position: google.maps.ControlPosition.TOP_CENTER
             },
@@ -95,6 +104,14 @@
                     ]
                 }
             ]
+        };
+    }
+    
+    function getGoogleMapIcons() {
+        return {
+            blueicon: '/static/images/google-maps/icons/blue-dot.png',
+            greenicon: '/static/images/google-maps/icons/green-dot.png',
+            redicon: '/static/images/google-maps/icons/red-dot.png'
         };
     }
 
