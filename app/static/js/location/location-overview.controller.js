@@ -5,15 +5,16 @@
         .module('app.location')
         .controller('LocationOverview', LocationOverview);
     
-    LocationOverview.$inject = ['activeLocation', 'GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons'];
+    LocationOverview.$inject = ['$timeout', 'uiGmapGoogleMapApi', 'activeLocation', 'GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons'];
     
-    function LocationOverview(activeLocation, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons) {
+    function LocationOverview($timeout, uiGmapGoogleMapApi, activeLocation, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons) {
         var vm = this;
         vm.addLocationMarker = addLocationMarker;
         vm.addStationMarkers = addStationMarkers;
         vm.clusterOptions = GoogleMapClusterOptions;
         vm.location = activeLocation.getActiveLocation();
         vm.stations = activeLocation.getActiveLocationStations();
+        vm.stationsLookup = activeLocation.getActiveLocationStationsLookup();
         vm.liveWebcams = activeLocation.getActiveLocationLiveWebcams();
         vm.lastWebcamPhoto = activeLocation.getActiveLocationLastWebcamPhoto();
         vm.webcamPhotos = activeLocation.getActiveLocationWebcamPhotos();
@@ -24,7 +25,8 @@
             center: { 
                 latitude: vm.location.location_position.latitude, 
                 longitude: vm.location.location_position.longitude
-            }, 
+            },
+            showMap: true,
             zoom: 12 
         };
         vm.mapOptions = GoogleMapDefaultOptions;
@@ -62,7 +64,7 @@
                     options: {
                         title: stations[i].station_name,
                     }
-                });
+                });                
             }
             
             return markers;

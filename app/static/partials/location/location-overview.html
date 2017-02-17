@@ -43,7 +43,7 @@
         
         <div class="col-lg-7">
             <div class="google-map">
-                <ui-gmap-google-map center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom'>
+                <ui-gmap-google-map ng-if="vm.map.showMap" center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom' idKey="location-google-map">
                     <ui-gmap-markers
                         models="vm.markers"
                         type="'cluster'"
@@ -69,15 +69,23 @@
         <div class="row">
             <h2 class="section-header">Stations</h2>
         </div>
-        <div class="row">
-            <div class="col-lg-3" ng-repeat="station in vm.stations">
+
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="station in vm.stations">
                 <div class="panel blue">
                     <div class="panel-heading">
-                        <h4 class="white"><a href="#!/location/{[ vm.location.location_id ]}/station/{[ station.station_id ]}/"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a></h4>
+                        <h4 class="white">
+                            <a href="#!/location/{[ vm.location.location_id ]}/station/{[ station.station_id ]}/">
+                                <i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}
+                            </a>
+                        </h4>
                     </div>
                     <div class="panel-body">
                         <div class="thumbnail">
-                            <img data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="img-responsive thumbnail">
+                            <img ng-if="station.station_image" data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="img-responsive thumbnail">
+                            <div ng-if="!station.station_image">
+                                <img ng-if="!station.station_image" data-ng-src="http://placehold.it/350x150" class="img-responsive thumbnail">
+                            </div>
+                            <!--  -->
                             <!-- <img ng-repeat="station_image in location_stations.station_images" data-ng-src="data:image/png;base64, {[ station_image ]}" alt="{[ station_name ]}" class="img-responsive"/> -->
                         </div>
                         <h5 class="white"><i class="fa fa-location-arrow fa-fw"></i> {[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</h5>
@@ -86,7 +94,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+
     </div>
     
 </div>

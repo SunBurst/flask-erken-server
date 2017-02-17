@@ -1,0 +1,28 @@
+<div ng-controller="LocationData as vm">
+     <div class="main-content">
+        <div class="row">
+        
+            <div class="col-sm-9 col-md-9">
+                {[ vm.selection ]}
+                <div ng-show="vm.selection.length > 0">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="page-content-nav">
+                            <ul>
+                                <li class="dropdown-header">Parameters</li>
+                                <li ng-repeat="parameter in vm.parameterSelection">
+                                    <input id="checkbox-{[ parameter.parameter_id ]}" type="checkbox" value="{[ parameter.parameter_name ]}" ng-model="parameter.selected" ng-change="vm.parameterChange(parameter.parameter_id, parameter.selected)"></input>
+                                    <label for="checkbox-{[ parameter.parameter_id ]}">{[ parameter.parameter_name ]}</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

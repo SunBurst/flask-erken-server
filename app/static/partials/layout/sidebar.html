@@ -7,15 +7,15 @@
 
                 <li class="dropdown-header">Locations</li>
                     <li class="dropdown" ng-repeat="location in vm.locations">
-                        <a data-toggle="dropdown" href="#">
+                        <a data-toggle="dropdown">
                             <i class="fa fa-globe fa-fw"></i> {[ location.name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li class="dropdown-header-second-level">Location</li>
-                            <li><a href="#!/location/{[ location.id ]}/"><i class="fa fa-globe fa-fw"></i> {[ location.name ]}</a></li>
+                            <li><a ui-sref="location({ location_id: location.id })"><i class="fa fa-globe fa-fw"></i> {[ location.name ]}</a></li>
                             <li class="dropdown-header-second-level">Stations</li>
                             <li ng-repeat="station in location.location_stations">
-                                <a href="#"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a>
+                                <a ui-sref="station({ location_id: location.id, station_id: station.station_id })"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</a>
                             </li>
                         </ul>
                     </li>

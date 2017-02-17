@@ -1,7 +1,7 @@
 (function() {
     
     'use strict';
-
+    
     angular
         .module('app.services')
         .factory('LocationsFactory', LocationsFactory);
@@ -21,6 +21,7 @@
             getLiveWebcams: getLiveWebcams,
             getLocation: getLocation,
             getLocations: getLocations,
+            getParameters: getParameters,
             getStations: getStations,
             getWebcamPhotos: getWebcamPhotos
         };
@@ -98,6 +99,31 @@
             }
             
             return promise;
+
+        }
+        
+        function getParameters(locationId) {
+            var resource = $resource('/api/parameters_by_location/:location_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId, 
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({location_id: locationId}).$promise
+                .then(getParametersComplete)
+                .catch(getParametersFailed);
+                
+            function getParametersComplete(response) {
+                return response;
+            }
+            
+            function getParametersFailed(error) {
+                console.log(error);
+            }
 
         }
         
