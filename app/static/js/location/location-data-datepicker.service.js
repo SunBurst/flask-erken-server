@@ -9,7 +9,7 @@
      
     function activeLocationDataDatePickerFactory(DatePickerOptions) {
         
-        var data = {
+        return {
             datePicker: {
                 date: {
                     startDate: moment().subtract(29, 'days'),
@@ -19,18 +19,18 @@
             datePickerOptions: DatePickerOptions
         };
         
-        return {
-            getDatePicker: function() {
-                return data.datePicker;
-            },
-            getDatePickerOptions: function() {
-                return data.datePickerOptions;
-            },
-            setDatePickerDate: function(startDate, endDate) {
-                data.datePicker.date.startDate = startDate;
-                data.datePicker.date.endDate = endDate;
-            }
-        };
+        //return {
+        //    getDatePicker: function() {
+        //        return data.datePicker;
+        //    },
+        //    getDatePickerOptions: function() {
+        //        return data.datePickerOptions;
+        //    },
+        //    setDatePickerDate: function(startDate, endDate) {
+        //        data.datePicker.date.startDate = startDate;
+        //        data.datePicker.date.endDate = endDate;
+        //    }
+        //};
     }
     
 })();

@@ -3,7 +3,6 @@
         <div class="row">
         
             <div class="col-sm-9 col-md-9">
-                <div ng-model="vm.parameters">{[ vm.parameters ]}</div>
                 <div class="row">
                     <div class="col-lg-12">
                         <nav class="navbar navbar-data">
@@ -11,12 +10,12 @@
                             <!-- <div class="page-content-top-nav"> -->
                                 <ul class="nav nav-tabs pull-left">
                                     <li>
-                                        <select class="form-control" ng-model="vm.selectedDataSource" ng-options="source for source in vm.dataSources" ng-change="vm.changeGlobalDataSource()"></select>
+                                        <select class="form-control" ng-model="vm.dataSourcesModel.selectedDataSource" ng-options="source for source in vm.dataSourcesModel.dataSources"></select>
                                     </li>
                                 </ul>
                                 <ul class="nav nav-tabs navbar-center">
                                     <li>
-                                        <input date-range-picker ng-model="vm.datePicker.date" class="form-control date-picker" type="text" options="vm.datePickerOptions"/>
+                                        <input date-range-picker ng-model="vm.datePickerModel.datePicker.date" class="form-control date-picker" type="text" options="vm.datePickerModel.datePickerOptions"/>
                                     </li>
                                 </ul>
                                 <ul class="nav nav-tabs pull-right">
@@ -52,7 +51,7 @@
                                 </li> -->
                                 <li ng-repeat="parameter in vm.parameters">
                                     <label>
-                                        <input type="checkbox" value="{[ parameter.parameter_id ]}" ng-model="parameter.selected" ng-change="vm.changeGlobalParameterSelection(vm.parameters)"></input>
+                                        <input type="checkbox" value="{[ parameter.parameter_id ]}" ng-model="parameter.selected"></input>
                                             {[ parameter.parameter_name ]}
                                     </label>
                                 </li>

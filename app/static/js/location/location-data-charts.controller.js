@@ -5,13 +5,16 @@
         .module('app.location')
         .controller('LocationDataCharts', LocationDataCharts);
         
-    LocationDataCharts.$inject = ['$scope' ,'activeLocationDataFactory'];
+    LocationDataCharts.$inject = ['activeLocationDataFactory', 'activeLocationDataSourceFactory'];
         
-    function LocationDataCharts($scope, activeLocationDataFactory) {
+    function LocationDataCharts(activeLocationDataFactory, activeLocationDataSourceFactory) {
         var vm = this;
-        vm.parameters = activeLocationDataFactory.activeLocationParametersSelection;
-        //console.log(vm.parameters);
+        vm.dataSourcesModel = {
+            selectedDataSource: activeLocationDataSourceFactory.selectedDataSource
+        };
         
+        vm.parameters = activeLocationDataFactory.activeLocationParametersSelection;
+
     }
     
 })();

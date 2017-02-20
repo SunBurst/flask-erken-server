@@ -7,22 +7,22 @@
      
     function activeLocationDataSourceFactory() {
         
-        var data = {
+        return {
             dataSources: ['Daily', 'Hourly', 'High Frequency'],
             selectedDataSource: 'Daily'
         };
         
-        return {
-            getDataSources: function() {
-                return data.dataSources;
-            },
-            getSelectedDataSource: function() {
-                return data.selectedDataSource;
-            },
-            setSelectedDataSource: function(newValue) {
-                data.selectedDataSource = newValue;
-            }
-        };
+        //return {
+        //    getDataSources: function() {
+        //        return data.dataSources;
+        //    },
+        //    getSelectedDataSource: function() {
+        //        return data.selectedDataSource;
+        //    },
+        //    setSelectedDataSource: function(newValue) {
+        //        data.selectedDataSource = newValue;
+        //    }
+        //};
     }
     
 })();

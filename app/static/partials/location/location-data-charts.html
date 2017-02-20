@@ -1,11 +1,20 @@
-{[ vm.parameters ]}
 <div ng-repeat="parameter in vm.parameters">
     <div ng-if="parameter.selected">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">
-                    <i class="fa fa-thermometer-half fa-fw"></i> Daily Average {[ parameter.parameter_name ]}
+                    <i class="fa fa-thermometer-half fa-fw"></i> {[ vm.dataSourcesModel.selectedDataSource ]} {[ parameter.parameter_name ]}
                 </h5>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-body">
+                <div ng-if="parameter.measurement_type === 'parameter'">
+                    <div ng-controller="LocationDataChartsParameter as parameterVm">
+                        <div ng-init="parameterVm.initChartOptions(parameter.parameter_name, parameter.parameter_unit, 'Erken')">
+                            <highchart id="location-{[ parameter ]}-chart" config="parameterVm.locationChartOptions" ng-if="parameterVm.locationChartOptions"></highchart>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

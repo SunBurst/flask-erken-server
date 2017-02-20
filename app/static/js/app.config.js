@@ -97,7 +97,7 @@
                         .then(function(response) {
                             var data = response.data;
                             activeLocation.setActiveLocationParameters(data);
-                            activeLocationDataFactory.setActiveLocationParametersSelection(data);
+                            activeLocationDataFactory.activeLocationParametersSelection = data;
                             return data;
                         });
                 },
@@ -109,7 +109,7 @@
             url: '/charts',
             templateUrl: '/static/partials/location/location-data-charts.html',
             controller: 'LocationDataCharts',
-            controllerAs: 'vm'
+            controllerAs: 'chartsVm'
         })
         .state('location.data.tables', {
             url: '/tables',

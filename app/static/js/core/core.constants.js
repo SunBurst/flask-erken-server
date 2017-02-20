@@ -6,8 +6,8 @@
         .constant('DatePickerOptions', getDatePickerOptions())
         .constant('GoogleMapClusterOptions', getGoogleMapClusterOptions())
         .constant('GoogleMapDefaultOptions', getDefaultMapOptions())
-        .constant('GoogleMapIcons', getGoogleMapIcons());
-        
+        .constant('GoogleMapIcons', getGoogleMapIcons())
+        .constant('HighChartOptions', getHighChartOptions());
 
     function getDatePickerOptions() {
         return {
@@ -136,6 +136,54 @@
             blueicon: '/static/images/google-maps/icons/blue-dot.png',
             greenicon: '/static/images/google-maps/icons/green-dot.png',
             redicon: '/static/images/google-maps/icons/red-dot.png'
+        };
+    }
+    
+    function getHighChartOptions() {
+        return {
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            chart: {
+                type: 'spline'
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Time'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            plotOptions: {
+                spline: {
+                    marker: {
+                        enabled: true
+                    },
+                }
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + '' + '</b><br/>',
+                shared: true
+            },
+            series: [],
         };
     }
 

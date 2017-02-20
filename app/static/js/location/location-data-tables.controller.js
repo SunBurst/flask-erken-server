@@ -5,8 +5,11 @@
         .module('app.location')
         .controller('LocationDataTables', LocationDataTables);
         
-    function LocationDataTables() {
+    LocationDataTables.$inject = ['activeLocationDataFactory'];
         
+    function LocationDataTables(activeLocationDataFactory) {
+        var vm = this;
+        vm.parameters = activeLocationDataFactory.activeLocationParametersSelection;
     }
         
 })();
