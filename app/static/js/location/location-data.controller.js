@@ -5,28 +5,46 @@
         .module('app.location')
         .controller('LocationData', LocationData);
         
-    LocationData.$inject = ['activeLocation', 'activeLocationDataFactory'];
+    LocationData.$inject = [
+        'activeLocation', 
+        'activeLocationDataFactory', 
+        'activeLocationDataDatePickerFactory', 
+        'activeLocationDataSourceFactory', 
+        'DatePickerOptions'
+    ];
         
-    function LocationData(activeLocation, activeLocationDataFactory) {
+    function LocationData(activeLocation, activeLocationDataFactory, activeLocationDataDatePickerFactory, activeLocationDataSourceFactory, DatePickerOptions) {
         var vm = this;
-        vm.parameters = activeLocation.getActiveLocationParameters();
-        vm.parameterSelection = activeLocationDataFactory.getActiveLocationParametersSelection();
-        vm.selection = [];
-        vm.parameterChange = parameterChange;
         
-        function parameterChange(parameter, isSelected) {
-            if (isSelected) {
-                vm.selection.push(parameter);
-            }
-            else {
-                for (var i = 0; i < vm.selection.length; i++) {
-                    if(vm.selection[i] === parameter) {
-                        vm.selection.splice(vm.selection[i], 1);
-                    }
-                }
-            }
-
+        vm.changeGlobalDataSource = changeGlobalDataSource;
+        vm.changeGlobalDatePicker = changeGlobalDatePicker;
+        vm.changeGlobalParameterSelection = changeGlobalParameterSelection;
+        vm.dataSources = activeLocationDataSourceFactory.getDataSources();
+        vm.datePicker = activeLocationDataDatePickerFactory.getDatePicker();
+        vm.datePickerOptions = DatePickerOptions;
+        vm.datePickerOptions.eventHandlers = {
+            'apply.daterangepicker': vm.changeGlobalDatePicker
+        };
+        //vm.parameters = activeLocationDataFactory.getActiveLocationParametersSelection();
+        vm.parameters = activeLocationDataFactory.activeLocationParametersSelection;
+        console.log(activeLocationDataFactory);
+        vm.selectedDataSource = activeLocationDataSourceFactory.getSelectedDataSource();
+        
+        function changeGlobalDataSource() {
+            activeLocationDataSourceFactory.setSelectedDataSource(vm.selectedDataSource);
+            vm.selectedDataSource = activeLocationDataSourceFactory.getSelectedDataSource();
         }
+        
+        function changeGlobalDatePicker() {
+            activeLocationDataDatePickerFactory.setDatePickerDate(vm.datePicker.date.startDate, vm.datePicker.date.endDate);
+            vm.datePicker = activeLocationDataDatePickerFactory.getDatePicker();
+        }
+        
+        function changeGlobalParameterSelection() {
+            activeLocationDataFactory.setActiveLocationParametersSelection(vm.parameters);
+            //vm.parameters = activeLocationDataFactory.getActiveLocationParametersSelection();
+        }
+        
     }
         
 })();

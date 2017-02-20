@@ -105,6 +105,18 @@
             }
             
         })
+        .state('location.data.charts', {
+            url: '/charts',
+            templateUrl: '/static/partials/location/location-data-charts.html',
+            controller: 'LocationDataCharts',
+            controllerAs: 'vm'
+        })
+        .state('location.data.tables', {
+            url: '/tables',
+            templateUrl: '/static/partials/location/location-data-tables.html',
+            controller: 'LocationDataTables',
+            controllerAs: 'vm'
+        })
         .state('location.cams-and-photos', {
             url: '/cams-and-photos',
             templateUrl: '/static/partials/location/location-cams-and-photos.html',

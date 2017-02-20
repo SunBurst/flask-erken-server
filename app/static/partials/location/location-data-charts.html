@@ -1,0 +1,12 @@
+{[ vm.parameters ]}
+<div ng-repeat="parameter in vm.parameters">
+    <div ng-if="parameter.selected">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="fa fa-thermometer-half fa-fw"></i> Daily Average {[ parameter.parameter_name ]}
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>

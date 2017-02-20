@@ -6,17 +6,28 @@
         .factory('activeLocationDataFactory', activeLocationDataFactory);
 
     function activeLocationDataFactory() {
+
+        var messages = {};
+
+        messages.list = [];
+
+        messages.add = function(message){
+        messages.list.push({id: messages.list.length, text: message});
+        };
+
+        return messages;
         
-        var activeLocationParametersSelection = [];
         
         return {
+            activeLocationParametersSelection: [],
             getActiveLocationParametersSelection: getActiveLocationParametersSelection,
-            setActiveLocationParametersSelection: setActiveLocationParametersSelection
+            setActiveLocationParametersSelection: setActiveLocationParametersSelection         
         };
         
         function getActiveLocationParametersSelection() {
             return activeLocationParametersSelection;
         }
+
         
         function setActiveLocationParametersSelection(newParameters) {
             activeLocationParametersSelection = [];
@@ -27,6 +38,7 @@
             }
             
         }
+
     }
     
 })();
