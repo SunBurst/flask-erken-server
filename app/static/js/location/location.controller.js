@@ -1,19 +1,20 @@
 (function() {
+    
     'use strict';
     
     angular
         .module('app.location')
         .controller('Location', Location);
     
-    Location.$inject = ['activeLocation'];
+    Location.$inject = ['locationStorage'];
     
-    function Location(activeLocation) {
+    function Location(locationStorage) {
         var vm = this;
 
         vm.activeTab = 'location-overview';
         vm.changeTabContent = changeTabContent;
         vm.isSet = isSet;
-        vm.location = activeLocation.getActiveLocation();
+        vm.location = locationStorage.getLocation();
         
         function changeTabContent(tabId) {
             vm.activeTab = tabId;

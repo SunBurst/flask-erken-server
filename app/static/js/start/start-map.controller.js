@@ -5,18 +5,19 @@
         .module('app.start')
         .controller('StartMap', StartMap);
     
-    function StartMap(LocationsFactory, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons) {
+    StartMap.$inject = ['GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons', 'startStorage'];
+    
+    function StartMap(GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons, startStorage) {
         var vm = this;
         
         vm.addLocationMarkers = addLocationMarkers;
         vm.addStationMarkers = addStationMarkers;
-        vm.markers = [];
-        vm.locations = [];
+        vm.clusterOptions = GoogleMapClusterOptions;
+        vm.locationList = startStorage.getLocationList();
         vm.map = { center: { latitude: 63, longitude: 16}, zoom: 12 };
         vm.mapOptions = GoogleMapDefaultOptions;
         vm.mapIcons = GoogleMapIcons;
-        
-        vm.clusterOptions = GoogleMapClusterOptions;
+        vm.markers = [];
         
         activate();
 
@@ -54,21 +55,10 @@
             }
             
             return markers;
-            
         }
         
         function activate() {
-            return getLocations().then(function() {
-                vm.markers = addLocationMarkers(vm.locations);
-            });
-        }
-        
-        function getLocations() {
-            return LocationsFactory.getLocations()
-                .then(function(response) {
-                    vm.locations = response.data;
-                    return vm.locations;
-                });
+            vm.markers = addLocationMarkers(vm.locationList);
         }
         
     }

@@ -8,13 +8,7 @@
             </div>
             <div class="card-divider"></div>
             <div class="card-body">
-                <div ng-if="parameter.measurement_type === 'parameter'">
-                    <div ng-controller="LocationDataChartsParameter as parameterVm">
-                        <div ng-init="parameterVm.initChartOptions(parameter.parameter_name, parameter.parameter_unit, 'Erken')">
-                            <highchart id="location-{[ parameter ]}-chart" config="parameterVm.locationChartOptions" ng-if="parameterVm.locationChartOptions"></highchart>
-                        </div>
-                    </div>
-                </div>
+                <div ng-if="vm.isParameterType(parameter.measurement_type, 'parameter')" ng-include="'/static/partials/location/location-data-charts-parameter.html'"></div>
             </div>
         </div>
     </div>

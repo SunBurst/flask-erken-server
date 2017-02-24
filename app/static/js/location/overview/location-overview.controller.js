@@ -1,26 +1,26 @@
 (function() {
+    
     'use strict';
     
     angular
         .module('app.location')
         .controller('LocationOverview', LocationOverview);
     
-    LocationOverview.$inject = ['$timeout', 'uiGmapGoogleMapApi', 'activeLocation', 'GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons'];
+    LocationOverview.$inject = ['$timeout', 'GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons', 'locationStorage', 'uiGmapGoogleMapApi'];
     
-    function LocationOverview($timeout, uiGmapGoogleMapApi, activeLocation, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons) {
+    function LocationOverview($timeout, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons, locationStorage, uiGmapGoogleMapApi) {
         var vm = this;
+
         vm.addLocationMarker = addLocationMarker;
         vm.addStationMarkers = addStationMarkers;
         vm.clusterOptions = GoogleMapClusterOptions;
-        vm.location = activeLocation.getActiveLocation();
-        vm.stations = activeLocation.getActiveLocationStations();
-        vm.stationsLookup = activeLocation.getActiveLocationStationsLookup();
-        vm.liveWebcams = activeLocation.getActiveLocationLiveWebcams();
-        vm.lastWebcamPhoto = activeLocation.getActiveLocationLastWebcamPhoto();
-        vm.webcamPhotos = activeLocation.getActiveLocationWebcamPhotos();
-        vm.locationCarouselInterval = 5000;
+        vm.lastWebcamPhoto = locationStorage.getLastWebcamPhoto();
+        vm.liveWebcams = locationStorage.getLiveWebcamList();
+        vm.location = locationStorage.getLocation();
+        vm.stationList = locationStorage.getStationList();
+        vm.stations = locationStorage.getStations();
         vm.locationCarousel = $('#location-images-carousel');
-        vm.locationCarousel.carousel();
+        vm.locationCarouselInterval = 5000;
         vm.map = { 
             center: { 
                 latitude: vm.location.location_position.latitude, 
@@ -36,7 +36,10 @@
         vm.slideCarouselRight = slideCarouselRight;
         
         vm.markers = addLocationMarker(vm.location, vm.markers);
-        vm.markers = addStationMarkers(vm.stations, vm.markers);
+        
+        vm.webcamPhotos = locationStorage.getWebcamPhotoList();
+        
+        vm.locationCarousel.carousel();
         
         function addLocationMarker(location, markers) {
             var markers = markers;
@@ -49,6 +52,8 @@
                     title: location.location_name,
                 }
             });
+            
+            markers = addStationMarkers(vm.stationList, markers);
             
             return markers;
         }
@@ -66,9 +71,8 @@
                     }
                 });                
             }
-            
             return markers;
-            
+
         }
         
         function slideCarouselLeft() {
@@ -78,6 +82,7 @@
         function slideCarouselRight() {
             vm.locationCarousel.carousel('next');
         };
+
     }
     
 })();

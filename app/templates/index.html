@@ -42,13 +42,19 @@
     <script src="/static/bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
     <script src="/static/bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
     
-    <script src="/static/js/app.module.js"></script>
-    <script src="/static/js/app.config.js"></script>
+    <script src="/static/js/app.js"></script>
+    <!-- <script src="/static/js/config.js"></script> -->
     
     <script src="/static/js/services/services.module.js"></script>
     <script src="/static/js/services/locations.service.js"></script>
+    <script src="/static/js/services/location/location.service.js"></script>
+    <script src="/static/js/services/location/location-measurements.service.js"></script>
+    <script src="/static/js/services/location/location-parameters.service.js"></script>
+    <script src="/static/js/services/location/location-stations.service.js"></script>
+    <script src="/static/js/services/location/location-webcams.service.js"></script>
     
     <script src="/static/js/core/core.module.js"></script>
+    <script src="/static/js/core/core.config.js"></script>
     <script src="/static/js/core/core.constants.js"></script>
     
     <script src="/static/js/layout/layout.module.js"></script>
@@ -56,20 +62,25 @@
     <script src="/static/js/layout/sidebar.controller.js"></script>
     
     <script src="/static/js/location/location.module.js"></script>
+    <script src="/static/js/location/location.config.route.js"></script>
     <script src="/static/js/location/location.controller.js"></script>
-    <script src="/static/js/location/location-data.controller.js"></script>
-    <script src="/static/js/location/location-data.service.js"></script>
-    <script src="/static/js/location/location-data-datasource.service.js"></script>
-    <script src="/static/js/location/location-data-datepicker.service.js"></script>
-    <script src="/static/js/location/location-data-charts.controller.js"></script>
+    <script src="/static/js/location/location-storage.service.js"></script>
+    <script src="/static/js/location/data/location-data.controller.js"></script>
+    <script src="/static/js/location/data/location-data-storage.service.js"></script>
+    <script src="/static/js/location/data/location-data-datasource.service.js"></script>
+    <script src="/static/js/location/data/location-data-datepicker.service.js"></script>
+    <!-- <script src="/static/js/location/location-data-charts.controller.js"></script>
+    <script src="/static/js/location/location-data-charts.service.js"></script>
     <script src="/static/js/location/location-data-charts-parameter.controller.js"></script>
-    <script src="/static/js/location/location-data-tables.controller.js"></script>
-    <script src="/static/js/location/location-overview.controller.js"></script>
-    <script src="/static/js/location/location.service.js"></script>
+    <script src="/static/js/location/location-data-tables.controller.js"></script> -->
+    <script src="/static/js/location/overview/location-overview.controller.js"></script>
+    <!-- <script src="/static/js/location/location.service.js"></script> -->
     
     <script src="/static/js/start/start.module.js"></script>
+    <script src="/static/js/start/start.config.route.js"></script>
     <script src="/static/js/start/start.controller.js"></script>
     <script src="/static/js/start/start-map.controller.js"></script>
+    <script src="/static/js/start/start-storage.service.js"></script>
 
 </body>
 
