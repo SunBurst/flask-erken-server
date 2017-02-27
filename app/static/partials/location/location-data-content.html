@@ -3,7 +3,6 @@
         <div class="col-lg-12">
             <nav class="navbar navbar-data">
                 <div class="navbar-inner">
-                <!-- <div class="page-content-top-nav"> -->
                     <ul class="nav nav-tabs pull-left">
                         <li>
                             <select class="form-control" ng-model="locationDataVm.dataSourcesModel.selectedDataSource" ng-options="source for source in locationDataVm.dataSourcesModel.dataSources" ng-change="locationDataVm.changeDataSource()"></select>
@@ -11,22 +10,17 @@
                     </ul>
                     <ul class="nav nav-tabs navbar-center">
                         <li>
-                            <input date-range-picker ng-model="locationDataVm.datePickerModel.datePicker.date" class="form-control date-picker" type="text" options="locationDataVm.datePickerModel.datePickerOptions"/>
+                            <input date-range-picker ng-model="locationDataVm.datePickerMasterModel.datePicker.date" class="form-control date-picker" type="text" options="locationDataVm.datePickerMasterModel.datePickerOptions"/>
                         </li>
                     </ul>
                     <ul class="nav nav-tabs pull-right">
                         <li>
                             <div class="btn-group data-view-selector">
-                                <!-- <a ng-click="changeDataViewContent('charts')" ng-class="{ 'active' : isDataViewSet('charts') }" class="btn"> -->
-                                    <a ui-sref=".charts" class="btn"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>
-                                <!-- </a> -->
-                                <!-- <a ng-click="changeDataViewContent('tables')" ng-class="{ 'active' : isDataViewSet('tables') }" class="btn"> -->
-                                    <a ui-sref=".tables" class="btn"><i class="fa fa-table fa-fw"></i> Tables</a>
-                                <!-- </a> -->
+                                <a ui-sref=".charts" class="btn" ng-class="{ active: $state.includes('location.data.charts') }"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>
+                                <a ui-sref=".tables" class="btn" ng-class="{ active: $state.includes('location.data.tables') }"><i class="fa fa-table fa-fw"></i> Tables</a>
                             </div>
                         </li>
                     </ul>
-                <!-- </div> -->
                 </div>
             </nav>
         </div>

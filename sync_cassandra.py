@@ -143,16 +143,32 @@ def sync_cassandra():
     )
 
     cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.parameter_avg_measurements_by_location (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            year int,
+            month_first_day timestamp,
+            timestamp timestamp,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year, month_first_day), timestamp)
+        ) WITH CLUSTERING ORDER BY (timestamp DESC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.parameter_measurements_by_location (
             location_id text,
             parameter_id text,
             qc_level int,
+            year int,
+            month_first_day timestamp,
             timestamp timestamp,
             station_name text,
             station_id text,
             value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter, qc_level), timestamp, station_name, station_id)
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year, month_first_day), timestamp, station_name, station_id)
         ) WITH CLUSTERING ORDER BY (timestamp DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
@@ -496,6 +512,19 @@ def sync_cassandra():
             unit text static,
             PRIMARY KEY ((location_id, parameter_id, qc_level, year), date)
         ) WITH CLUSTERING ORDER BY (date DESC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.hourly_avg_parameter_measurements_by_location (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            year int,
+            date_hour timestamp,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date_hour)
+        ) WITH CLUSTERING ORDER BY (date_hour DESC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(

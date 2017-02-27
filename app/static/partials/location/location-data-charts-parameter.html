@@ -1,12 +1,5 @@
-<!-- <div ng-controller="LocationDataChartsParameter as parameterVm" ng-init="parameterVm.initParameter(parameter)">
-    <div ng-if="parameterVm.parameter">
-        <highchart id="location-{[ parameter.parameter_id ]}-chart" config="parameterVm.chartOptionsModel.locationChartOptions"></highchart>
-    </div>
-</div> -->
-
-<div ng-controller="LocationDataChartsParameter" ng-init="initParameter(parameter)">
-    <div ng-if="chartParameter" ng-init="initChart()">
-        {[ chartParameter.charts.locationAvgChart ]}
-        <!-- highchart id="location-{[ chartParameter.parameter_id ]}-chart" config="chartParameter.charts.locationAvgChart" ng-if="chartParameter.charts.locationAvgChart"></highchart> -->
+<div ng-controller="LocationDataChartsParameter as parameterVm" ng-init="parameterVm.initChartParameter(locationDataVm.parameters[parameter])">
+    <div ng-repeat="(chart, chartOptions) in parameterVm.chartParameter.charts" ng-init="parameterVm.initChart(chart)">
+        <highchart id="{[ chart ]}-{[ parameter ]}" config="parameterVm.chartParameter.charts[chart]"></highchart>
     </div>
 </div>

@@ -4,17 +4,10 @@
             <div class="page-content-nav">
                 <ul>
                     <li class="dropdown-header">Parameters</li>
-                    {[ locationDataVm.parameterSelection ]}
                     <li ng-repeat="(parameter, enabled) in locationDataVm.parameterSelection">
-                        <label>
-                            <input type="checkbox" ng-model="locationDataVm.parameterSelection[parameter]"> {[ locationDataVm.parameters[parameter].parameter_name ]} 
-                        </label>
+                        <input id="{[ parameter ]}-checkbox" type="checkbox" ng-model="locationDataVm.parameterSelection[parameter]" ng-change="locationDataVm.changeSelection(parameter, locationDataVm.parameterSelection[parameter])"></input>
+                        <label for="{[ parameter ]}-checkbox">{[ locationDataVm.parameters[parameter].parameter_name ]}</label>
                     </li>
-                    <!-- <li ng-repeat="(parameter, selected) in locationDataVm.parameterSelection">
-                        {[ parameter ]}, {[ selected ]}
-                        <input type="checkbox" ng-model="locationDataVm.parameterSelection[parameter]"></input>
-                        <label>{[ locationDataVm.parameters[parameter].parameter_name ]}</label>
-                    </li> -->
                 </ul>
             </div>
         </div>

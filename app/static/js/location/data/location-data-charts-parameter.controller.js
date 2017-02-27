@@ -7,85 +7,206 @@
     
     LocationDataChartsParameter.$inject = [
         '$scope',
-        'activeLocation', 
-        'activeLocationDataSourceFactory', 
-        'activeLocationDataDatePickerFactory', 
-        'LocationsFactory', 
+        'locationMeasurements',
+        'locationStorage',
+        'locationDataSource', 
+        'locationDatePicker', 
         'HighChartOptions'
     ];
     
-    function LocationDataChartsParameter($scope, activeLocation, activeLocationDataSourceFactory, activeLocationDataDatePickerFactory, LocationsFactory, HighChartOptions) {
-        $scope.chartParameter;
-        $scope.location = activeLocation.getActiveLocation();
+    function LocationDataChartsParameter($scope, locationMeasurements, locationStorage, locationDataSource, locationDatePicker, HighChartOptions) {
+        var vm = this;
         
-        $scope.dataSourcesModel = {
-            dataSources: activeLocationDataSourceFactory.getDataSources(),
-            selectedDataSource: activeLocationDataSourceFactory.getSelectedDataSource()
+        vm.chartParameter = {};
+        vm.getDailyLocationAverageChartData = getDailyLocationAverageChartData;
+        vm.getDailyStationsAverageChartData = getDailyStationsAverageChartData;
+        vm.getHighFrequencyLocationAverageChartData = getHighFrequencyLocationAverageChartData;
+        vm.getHourlyLocationAverageChartData = getHourlyLocationAverageChartData;
+        vm.getHourlyStationsAverageChartData = getHourlyStationsAverageChartData;
+        vm.initChart = initChart;
+        vm.initChartParameter = initChartParameter;
+        vm.location = locationStorage.getLocation();
+        vm.setChartSubtitle = setChartSubtitle;
+        vm.setChartTitle = setChartTitle;
+        vm.updateChartData = updateChartData;
+        vm.updateDailyLocationAverageChartData = updateDailyLocationAverageChartData;
+        vm.updateDailyStationsAverageChartData = updateDailyStationsAverageChartData;
+        vm.updateHighFrequencyLocationAverageChartData = updateHighFrequencyLocationAverageChartData;
+        vm.updateHourlyLocationAverageChartData = updateHourlyLocationAverageChartData;
+        vm.updateHourlyStationsAverageChartData = updateHourlyStationsAverageChartData;
+        
+        
+        vm.dataSourcesModel = {
+            dataSources: locationDataSource.getDataSources(),
+            selectedDataSource: locationDataSource.getSelectedDataSource()
         };
         
-        $scope.datePickerModel = {
-            datePicker: activeLocationDataDatePickerFactory.datePicker,
-            datePickerOptions: activeLocationDataDatePickerFactory.datePickerOptions
+        vm.datePickerModel = {
+            datePicker: {
+                date: locationDatePicker.getDatePickerDate()
+            },
+            datePickerOptions: locationDatePicker.getDatePickerOptions()
         };
         
-        $scope.initParameter = function(parameter) {
-            $scope.chartParameter = parameter;
+        function getDailyLocationAverageChartData() {
+            var locationId = vm.location.location_id;
+            var parameterId = vm.chartParameter.parameter.parameter_id
+            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
+            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            return locationMeasurements.getDailyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+                .then(function(response) {
+                    return response.data;
+                });
         }
         
-        $scope.initChart = function() {
-            $scope.chartParameter.charts.locationAvgChart.title.text = $scope.dataSourcesModel.selectedDataSource + ' Average ' + $scope.chartParameter.parameter_name + ' at ' + $scope.location.location_name;
-            $scope.chartParameter.charts.locationAvgChart.yAxis.title.text = $scope.chartParameter.parameter_name + ' (' + $scope.chartParameter.parameter_unit + ')';
+        function getDailyStationsAverageChartData() {
+            var locationId = vm.location.location_id;
+            var parameterId = vm.chartParameter.parameter.parameter_id
+            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
+            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            return locationMeasurements.getDailyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+                .then(function(response) {
+                    return response.data;
+                });
         }
         
-        //var vm = this;
-        //vm.location = activeLocation.getActiveLocation();
-        //vm.parameter;
-        //vm.initChart = initChart;
-        //vm.initParameter = initParameter;
-        //vm.applyDataSourceChange = applyDataSourceChange;
-        //vm.applyDatePickerChange = applyDatePickerChange;
-        //vm.chartOptionsModel = {
-        //    locationChartOptions: HighChartOptions,
-        //    stationsChartOptions: HighChartOptions
-        //};
+        function getHighFrequencyLocationAverageChartData() {
+            var locationId = vm.location.location_id;
+            var parameterId = vm.chartParameter.parameter.parameter_id
+            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
+            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            return locationMeasurements.getHighFrequencyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
         
-        //vm.dataSourcesModel = {
-        //    dataSources: activeLocationDataSourceFactory.getDataSources(),
-        //    selectedDataSource: activeLocationDataSourceFactory.getSelectedDataSource()
-        //};
+        function getHourlyLocationAverageChartData() {
+            var locationId = vm.location.location_id;
+            var parameterId = vm.chartParameter.parameter.parameter_id
+            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
+            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            return locationMeasurements.getHourlyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
         
-        //vm.datePickerModel = {
-        //    datePicker: activeLocationDataDatePickerFactory.datePicker,
-        //    datePickerOptions: activeLocationDataDatePickerFactory.datePickerOptions
-        //};
+        function getHourlyStationsAverageChartData() {
+            var locationId = vm.location.location_id;
+            var parameterId = vm.chartParameter.parameter.parameter_id
+            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
+            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            return locationMeasurements.getHourlyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
         
-        //function applyDataSourceChange() {
-        //    vm.dataSourcesModel.selectedDataSource = activeLocationDataSourceFactory.getSelectedDataSource()
-        //    vm.initChart();
-        //}
+        function initChartParameter(parameter) {
+            vm.chartParameter.parameter = parameter;
+            vm.chartParameter.charts = {
+                locationAverageChart: angular.copy(HighChartOptions),
+                stationsAverageChart: angular.copy(HighChartOptions)
+            };
+        }
         
-        //function applyDatePickerChange() {
-        //    vm.chartOptionsModel.locationChartOptions.subtitle.text = vm.datePickerModel.datePicker.date.startDate.format('YYYY-MM-DD HH:mm:ss')  + ' - ' + vm.datePickerModel.datePicker.date.endDate.format('YYYY-MM-DD HH:mm:ss');
-        //}
+        function initChart(chart) {
+            vm.setChartSubtitle(chart);
+            vm.setChartTitle(chart);
+            vm.chartParameter.charts[chart].yAxis.title.text = vm.chartParameter.parameter.parameter_name + ' (' + vm.chartParameter.parameter.parameter_unit + ')';
+            vm.updateChartData();
+        }
         
-        //function initChart() {
-        //    console.log("initializing chart with parameter ", vm.parameter.parameter_name);
-        //    vm.chartOptionsModel.locationChartOptions.title.text = vm.dataSourcesModel.selectedDataSource + ' Average ' + vm.parameter.parameter_name + ' at ' + vm.location.location_name;
-        //    vm.chartOptionsModel.locationChartOptions.yAxis.title.text = vm.parameter.parameter_name + ' (' + vm.parameter.parameter_unit + ')';
-        //}
+        function setChartTitle(chart) {
+            var selectedDataSource = vm.dataSourcesModel.selectedDataSource;
+            var parameterName = vm.chartParameter.parameter.parameter_name;
+            var locationName = vm.location.location_name;
+            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' Average ' + parameterName + ' at ' + locationName;
+        }
         
-        //function initParameter(parameter) {
-        //  vm.parameter = parameter;
-        //    vm.initChart();
-        //}
+        function setChartSubtitle(chart) {
+            var fromDate = vm.datePickerModel.datePicker.date.startDate.format('YYYY-MM-DD HH:mm:ss');
+            var toDate = vm.datePickerModel.datePicker.date.endDate.format('YYYY-MM-DD HH:mm:ss');
+            vm.chartParameter.charts[chart].subtitle.text = fromDate + ' - ' + toDate;
+        }
         
-        //$scope.$on('dataSourceChange', function() {
-        //    vm.applyDataSourceChange();
-        //});
+        function updateDailyLocationAverageChartData() {
+            vm.chartParameter.charts.locationAverageChart.series = [];
+            vm.setChartTitle('locationAverageChart');
+            vm.setChartSubtitle('locationAverageChart');
+            vm.getDailyLocationAverageChartData().then(function(data) {
+                var series = data;
+                series.name = vm.location.location_name;
+                vm.chartParameter.charts.locationAverageChart.series.push(series);
+            });
+        }
         
-        //$scope.$on('datePickerChange', function() {
-        //    vm.applyDatePickerChange();
-        //});
+        function updateDailyStationsAverageChartData() {
+            vm.chartParameter.charts.stationsAverageChart.series = [];
+            vm.setChartTitle('stationsAverageChart');
+            vm.setChartSubtitle('stationsAverageChart');
+            vm.getDailyStationsAverageChartData().then(function(data) {
+                vm.chartParameter.charts.stationsAverageChart.series = data;
+            });
+        }
+        
+        function updateHighFrequencyLocationAverageChartData() {
+            vm.chartParameter.charts.locationAverageChart.series = [];
+            vm.setChartTitle('locationAverageChart');
+            vm.setChartSubtitle('locationAverageChart');
+            vm.getHighFrequencyLocationAverageChartData().then(function(data) {
+                var series = data;
+                series.name = vm.location.location_name;
+                vm.chartParameter.charts.locationAverageChart.series.push(series);
+            });
+        }
+        
+        function updateHourlyLocationAverageChartData() {
+            vm.chartParameter.charts.locationAverageChart.series = [];
+            vm.setChartTitle('locationAverageChart');
+            vm.setChartSubtitle('locationAverageChart');
+            vm.getHourlyLocationAverageChartData().then(function(data) {
+                var series = data;
+                series.name = vm.location.location_name;
+                vm.chartParameter.charts.locationAverageChart.series.push(data);
+            });
+        }
+        
+        function updateHourlyStationsAverageChartData() {
+            vm.chartParameter.charts.stationsAverageChart.series = [];
+            vm.setChartTitle('stationsAverageChart');
+            vm.setChartSubtitle('stationsAverageChart');
+            vm.getHourlyStationsAverageChartData().then(function(data) {
+                vm.chartParameter.charts.stationsAverageChart.series = data;
+            });
+        }
+        
+        function updateChartData() {
+            if (vm.dataSourcesModel.selectedDataSource === 'Daily') {
+                vm.updateDailyLocationAverageChartData();
+                vm.updateDailyStationsAverageChartData();
+                
+            }
+            else if (vm.dataSourcesModel.selectedDataSource === 'Hourly') {
+                vm.updateHourlyLocationAverageChartData();
+                vm.updateHourlyStationsAverageChartData();
+            }
+            else if (vm.dataSourcesModel.selectedDataSource === 'High Frequency') {
+                vm.updateHighFrequencyLocationAverageChartData();
+            }
+
+        }
+        
+        $scope.$on('dataSourceChange', function() {
+            vm.dataSourcesModel.selectedDataSource = locationDataSource.getSelectedDataSource();
+            vm.updateChartData();
+        });
+        
+        $scope.$on('datePickerChange', function() {
+            vm.datePickerModel.datePicker.date = locationDatePicker.getDatePickerDate();
+            vm.updateChartData();
+        });
         
     }
     

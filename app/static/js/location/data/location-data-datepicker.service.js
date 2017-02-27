@@ -1,4 +1,5 @@
 (function() {
+    
     'use-strict';
     
     angular
@@ -19,13 +20,13 @@
         var datePickerOptions = DatePickerOptions;
         
         return {
-            getDatePicker: getDatePicker,
+            getDatePickerDate: getDatePickerDate,
             getDatePickerOptions: getDatePickerOptions,
             setDatePickerDate: setDatePickerDate
         };
         
-        function getDatePicker() {
-            return datePicker;
+        function getDatePickerDate() {
+            return datePicker.date;
         }
         
         function getDatePickerOptions() {

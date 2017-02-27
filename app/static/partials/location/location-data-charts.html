@@ -1,14 +1,16 @@
-<div ng-repeat="parameter in vm.parameters">
-    <div ng-if="parameter.selected">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">
-                    <i class="fa fa-thermometer-half fa-fw"></i> {[ vm.dataSourcesModel.selectedDataSource ]} {[ parameter.parameter_name ]}
-                </h5>
-            </div>
-            <div class="card-divider"></div>
-            <div class="card-body">
-                <div ng-if="vm.isParameterType(parameter.measurement_type, 'parameter')" ng-include="'/static/partials/location/location-data-charts-parameter.html'"></div>
+<div ng-controller="LocationDataCharts as locationDataChartsVm">
+    <div ng-repeat="(parameter, isSelected) in locationDataChartsVm.parameterSelection">
+        <div ng-if="isSelected">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        <i class="fa fa-thermometer-half fa-fw"></i> {[ locationDataVm.dataSourcesModel.selectedDataSource ]} {[ locationDataVm.parameters[parameter].parameter_name ]} 
+                    </h5>
+                </div>
+                <div class="card-divider"></div>
+                <div class="card-body">
+                    <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'parameter')" ng-include="'/static/partials/location/location-data-charts-parameter.html'"></div>
+                </div>
             </div>
         </div>
     </div>

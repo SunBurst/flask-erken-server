@@ -101,11 +101,6 @@
                 templateUrl: '/static/partials/location/location-data-charts.html',
                 controller: 'LocationDataCharts',
                 controllerAs: 'chartsVm',
-                //resolve: {
-                //    parameterChartsByLocation: function(parametersByLocation, activeLocationDataChartsFactory) {
-                //        activeLocationDataChartsFactory.setActiveLocationParametersChartsLookup(parametersByLocation);
-                //    }
-                //}
             })
             .state('location.data.tables', {
                 url: '/tables',
