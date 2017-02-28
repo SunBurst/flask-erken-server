@@ -6,23 +6,18 @@
         .module('app.location')
         .controller('Location', Location);
     
-    Location.$inject = ['locationStorage'];
+    Location.$inject = ['$state', '$timeout', 'locationStorage'];
     
-    function Location(locationStorage) {
+    function Location($state, $timeout, locationStorage) {
         var vm = this;
 
-        vm.activeTab = 'location-overview';
-        vm.changeTabContent = changeTabContent;
-        vm.isSet = isSet;
         vm.location = locationStorage.getLocation();
         
-        function changeTabContent(tabId) {
-            vm.activeTab = tabId;
-        };
-        
-        function isSet(tabId) {
-            return vm.activeTab === tabId;
-        };
+        $timeout(function() {
+            if ($state.current.name === 'location') {
+                $state.go('location.overview');
+            }
+        }, 100);
 
     }
     

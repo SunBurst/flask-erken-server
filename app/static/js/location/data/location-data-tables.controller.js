@@ -5,12 +5,17 @@
         .module('app.location')
         .controller('LocationDataTables', LocationDataTables);
         
-    LocationDataTables.$inject = ['activeLocationDataFactory'];
-        
-    function LocationDataTables(activeLocationDataFactory) {
+    LocationDataTables.$inject = ['$scope', 'locationDataStorage'];
+    
+    function LocationDataTables($scope, locationDataStorage) {
         var vm = this;
-        vm.parameters = activeLocationDataFactory.activeLocationParametersSelection;
-    }
         
+        vm.parameterSelection = locationDataStorage.getParameterSelection();
+        
+        $scope.$on('parameterSelectionChange', function() {
+            vm.parameterSelection = locationDataStorage.getParameterSelection();
+        });
+        
+    }
+    
 })();
-

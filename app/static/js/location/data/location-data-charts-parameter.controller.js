@@ -21,6 +21,7 @@
         vm.getDailyLocationAverageChartData = getDailyLocationAverageChartData;
         vm.getDailyStationsAverageChartData = getDailyStationsAverageChartData;
         vm.getHighFrequencyLocationAverageChartData = getHighFrequencyLocationAverageChartData;
+        vm.getHighFrequencyStationsAverageChartData = getHighFrequencyStationsAverageChartData;
         vm.getHourlyLocationAverageChartData = getHourlyLocationAverageChartData;
         vm.getHourlyStationsAverageChartData = getHourlyStationsAverageChartData;
         vm.initChart = initChart;
@@ -32,6 +33,7 @@
         vm.updateDailyLocationAverageChartData = updateDailyLocationAverageChartData;
         vm.updateDailyStationsAverageChartData = updateDailyStationsAverageChartData;
         vm.updateHighFrequencyLocationAverageChartData = updateHighFrequencyLocationAverageChartData;
+        vm.updateHighFrequencyStationsAverageChartData = updateHighFrequencyStationsAverageChartData;
         vm.updateHourlyLocationAverageChartData = updateHourlyLocationAverageChartData;
         vm.updateHourlyStationsAverageChartData = updateHourlyStationsAverageChartData;
         
@@ -76,6 +78,17 @@
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
             return locationMeasurements.getHighFrequencyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getHighFrequencyStationsAverageChartData() {
+            var locationId = vm.location.location_id;
+            var parameterId = vm.chartParameter.parameter.parameter_id
+            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
+            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            return locationMeasurements.getHighFrequencyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -162,6 +175,15 @@
             });
         }
         
+        function updateHighFrequencyStationsAverageChartData() {
+            vm.chartParameter.charts.stationsAverageChart.series = [];
+            vm.setChartTitle('stationsAverageChart');
+            vm.setChartSubtitle('stationsAverageChart');
+            vm.getHighFrequencyStationsAverageChartData().then(function(data) {
+                vm.chartParameter.charts.stationsAverageChart.series = data;
+            });
+        }
+        
         function updateHourlyLocationAverageChartData() {
             vm.chartParameter.charts.locationAverageChart.series = [];
             vm.setChartTitle('locationAverageChart');
@@ -186,7 +208,6 @@
             if (vm.dataSourcesModel.selectedDataSource === 'Daily') {
                 vm.updateDailyLocationAverageChartData();
                 vm.updateDailyStationsAverageChartData();
-                
             }
             else if (vm.dataSourcesModel.selectedDataSource === 'Hourly') {
                 vm.updateHourlyLocationAverageChartData();
@@ -194,6 +215,7 @@
             }
             else if (vm.dataSourcesModel.selectedDataSource === 'High Frequency') {
                 vm.updateHighFrequencyLocationAverageChartData();
+                vm.updateHighFrequencyStationsAverageChartData();
             }
 
         }

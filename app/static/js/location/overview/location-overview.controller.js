@@ -13,7 +13,7 @@
 
         vm.addLocationMarker = addLocationMarker;
         vm.addStationMarkers = addStationMarkers;
-        vm.clusterOptions = GoogleMapClusterOptions;
+        vm.clusterOptions = angular.copy(GoogleMapClusterOptions);
         vm.lastWebcamPhoto = locationStorage.getLastWebcamPhoto();
         vm.liveWebcams = locationStorage.getLiveWebcamList();
         vm.location = locationStorage.getLocation();
@@ -29,8 +29,8 @@
             showMap: true,
             zoom: 12 
         };
-        vm.mapOptions = GoogleMapDefaultOptions;
-        vm.mapIcons = GoogleMapIcons;
+        vm.mapOptions = angular.copy(GoogleMapDefaultOptions);
+        vm.mapIcons = angular.copy(GoogleMapIcons);
         vm.markers = [];
         vm.slideCarouselLeft = slideCarouselLeft;
         vm.slideCarouselRight = slideCarouselRight;

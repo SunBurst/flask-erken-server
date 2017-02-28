@@ -143,16 +143,15 @@ def sync_cassandra():
     )
 
     cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.parameter_avg_measurements_by_location (
+        """CREATE TABLE IF NOT EXISTS {keyspace}.avg_parameter_measurements_by_location (
             location_id text,
             parameter_id text,
             qc_level int,
-            year int,
-            month_first_day timestamp,
+            month_first_day date,
             timestamp timestamp,
             avg_value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter_id, qc_level, year, month_first_day), timestamp)
+            PRIMARY KEY ((location_id, parameter_id, qc_level, month_first_day), timestamp)
         ) WITH CLUSTERING ORDER BY (timestamp DESC)""".format(keyspace=KEYSPACE)
     )
     
@@ -161,14 +160,13 @@ def sync_cassandra():
             location_id text,
             parameter_id text,
             qc_level int,
-            year int,
-            month_first_day timestamp,
+            month_first_day date,
             timestamp timestamp,
             station_name text,
             station_id text,
             value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter_id, qc_level, year, month_first_day), timestamp, station_name, station_id)
+            PRIMARY KEY ((location_id, parameter_id, qc_level, month_first_day), timestamp, station_name, station_id)
         ) WITH CLUSTERING ORDER BY (timestamp DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     

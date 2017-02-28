@@ -106,7 +106,7 @@
                 url: '/tables',
                 templateUrl: '/static/partials/location/location-data-tables.html',
                 controller: 'LocationDataTables',
-                controllerAs: 'vm'
+                controllerAs: 'locationDataTablesVm'
             })
             .state('location.cams-and-photos', {
                 url: '/cams-and-photos',

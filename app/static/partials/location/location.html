@@ -11,17 +11,17 @@
             <div class="location-nav">
                 <div class="tabs-wrapper">
                     <ul class="nav nav-tabs tabs-4 blue-4">
-                      <li class="nav-item" ng-class="{ active: vm.isSet('location-overview') }">
-                          <a ui-sref=".overview" ng-click="vm.changeTabContent('location-overview')"><i class="fa fa-info fa-fw"></i> Overview</a>
+                      <li class="nav-item" ng-class="{ active: $state.includes('location.overview') }">
+                          <a ui-sref=".overview"><i class="fa fa-info fa-fw"></i> Overview</a>
                       </li>
-                      <li class="nav-item" ng-class="{ active: vm.isSet('location-data') }">
-                          <a ui-sref=".data" ng-click="vm.changeTabContent('location-data')"><i class="fa fa-bar-chart-o fa-fw"></i> Data</a>
+                      <li class="nav-item" ng-class="{ active: $state.includes('location.data') }">
+                          <a ui-sref=".data"><i class="fa fa-bar-chart-o fa-fw"></i> Data</a>
                       </li>
-                      <li class="nav-item" ng-class="{ active: vm.isSet('location-cams-and-photos') }">
-                          <a ui-sref=".cams-and-photos" ng-click="vm.changeTabContent('location-cams-and-photos')"><i class="fa fa-video-camera fa-fw"></i> Cams & Photos</a>
+                      <li class="nav-item" ng-class="{ active: $state.includes('location.cams-and-photos') }">
+                          <a ui-sref=".cams-and-photos"><i class="fa fa-video-camera fa-fw"></i> Cams & Photos</a>
                       </li>
-                      <li class="nav-item" ng-class="{ active: vm.isSet('location-status') }">
-                          <a ui-sref=".status" ng-click="vm.changeTabContent('location-status')"><i class="fa fa-bolt fa-fw"></i> Status</a>
+                      <li class="nav-item" ng-class="{ active: $state.includes('location.status') }">
+                          <a ui-sref=".status"><i class="fa fa-bolt fa-fw"></i> Status</a>
                       </li>
                     </ul>
                 </div>

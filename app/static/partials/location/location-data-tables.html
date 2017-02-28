@@ -1,1 +1,20 @@
-<div>Table test</div>
+<div ng-repeat="(parameter, isSelected) in locationDataTablesVm.parameterSelection">
+    <div ng-if="isSelected">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="fa fa-thermometer-half fa-fw"></i> {[ locationDataVm.dataSourcesModel.selectedDataSource ]} {[ locationDataVm.parameters[parameter].parameter_name ]} 
+                </h5>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-body">
+                <div ng-controller="LocationDataTablesParameter as parameterVm" ng-init="parameterVm.initTableParameter(locationDataVm.parameters[parameter])">
+                    <div ng-repeat="(table, tableOptions) in parameterVm.tableParameter.tables" ng-init="parameterVm.initTable(table)">
+                        {[ table ]} {[ tableOptions ]}
+                        <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
