@@ -173,33 +173,35 @@ def sync_cassandra():
     cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.profile_measurements_by_location_depth (
             location_id text,
-            parameter text,
+            parameter_id text,
             qc_level int,
             depth float,
+            month_first_day date,
             timestamp timestamp,
+            station_name text,
             station_id text,
-            sensor_id text,
             depth_timestamp timestamp,
             value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter, qc_level), depth, timestamp, station_id, sensor_id)
-        ) WITH CLUSTERING ORDER BY (depth ASC, timestamp DESC, station_id ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((location_id, parameter_id, qc_level, month_first_day), depth, timestamp, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (depth ASC, timestamp DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.profile_measurements_by_location_time (
             location_id text,
-            parameter text,
+            parameter_id text,
             qc_level int,
+            month_first_day date,
             timestamp timestamp,
             depth float,
+            station_name text,
             station_id text,
-            sensor_id text,
             depth_timestamp timestamp,
             value float,
             unit text static,
-            PRIMARY KEY ((location_id, parameter, qc_level), timestamp, depth, station_id, sensor_id)
-        ) WITH CLUSTERING ORDER BY (timestamp DESC, depth ASC, station_id ASC, sensor_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((location_id, parameter_id, qc_level, month_first_day), timestamp, depth, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (timestamp DESC, depth ASC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(

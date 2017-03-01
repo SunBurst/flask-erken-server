@@ -10,8 +10,7 @@
             <div class="card-body">
                 <div ng-controller="LocationDataTablesParameter as parameterVm" ng-init="parameterVm.initTableParameter(locationDataVm.parameters[parameter])">
                     <div ng-repeat="(table, tableOptions) in parameterVm.tableParameter.tables" ng-init="parameterVm.initTable(table)">
-                        {[ table ]} {[ tableOptions ]}
-                        <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
+                        <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" dt-instance="tableOptions.dtInstance" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
                     </div>
                 </div>
             </div>

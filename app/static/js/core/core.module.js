@@ -8,7 +8,8 @@
         'highcharts-ng',
         'datatables', 
         'daterangepicker',
-        'uiGmapgoogle-maps'
+        'uiGmapgoogle-maps',
+        'ui-rangeSlider'
     ]);
     
 })();

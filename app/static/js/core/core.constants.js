@@ -7,6 +7,7 @@
         .constant('GoogleMapClusterOptions', getGoogleMapClusterOptions())
         .constant('GoogleMapDefaultOptions', getDefaultMapOptions())
         .constant('GoogleMapIcons', getGoogleMapIcons())
+        .constant('HeatMapOptions', getHeatMapOptions())
         .constant('HighChartOptions', getHighChartOptions());
 
     function getDatePickerOptions() {
@@ -136,6 +137,52 @@
             blueicon: '/static/images/google-maps/icons/blue-dot.png',
             greenicon: '/static/images/google-maps/icons/green-dot.png',
             redicon: '/static/images/google-maps/icons/red-dot.png'
+        };
+    }
+    
+    function getHeatMapOptions() {
+        return {
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            chart: {
+                type: 'heatmap'
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Time'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                reversed: true,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            colorAxis: {
+                stops: [
+                    [0, '#3060cf'],
+                    [0.5, '#fffbbc'],
+                    [0.9, '#c4463a'],
+                    [1, '#c4463a']
+                ],
+            },
+            series: [],
         };
     }
     
