@@ -1,1 +1,28 @@
-<div class="row">test</div>
+<div class="test">
+    <div class="row">
+        <h2 class="page-header">Live Webcams</h2>
+        <div class="col-xs-12 col-md-6" ng-repeat="station in locationCamsAndPhotosVm.liveWebcams">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
+                </div>
+                <div class="card-body">
+                    <img class="img-responsive" data-ng-src="{[ station.livewebcam.url ]}" fallback-src="http://google.com/favicon.ico">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h2 class="page-header">Webcam Photos</h2>
+         <div class="col-xs-12 col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"><i class="fa fa-map-marker fa-fw"></i> </h4>
+                </div>
+                <div class="card-body">
+                    <img class="img-responsive">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

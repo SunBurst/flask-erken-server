@@ -171,6 +171,20 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.avg_profile_measurements_by_location_time (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            depth float,
+            month_first_day date,
+            timestamp timestamp,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, month_first_day), timestamp, depth)
+        ) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.profile_measurements_by_location_depth (
             location_id text,
             parameter_id text,
@@ -487,6 +501,36 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.hourly_profile_measurements_by_location_time (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            year int,
+            date_hour timestamp,
+            depth float,
+            station_name text,
+            station_id text,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date_hour, depth, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (date_hour DESC, depth DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.hourly_avg_profile_measurements_by_location_time (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            year int,
+            date_hour timestamp,
+            depth float,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date_hour, depth)
+        ) WITH CLUSTERING ORDER BY (date_hour DESC, depth DESC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.daily_parameter_measurements_by_location (
             location_id text,
             parameter_id text,
@@ -512,6 +556,36 @@ def sync_cassandra():
             unit text static,
             PRIMARY KEY ((location_id, parameter_id, qc_level, year), date)
         ) WITH CLUSTERING ORDER BY (date DESC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.daily_avg_profile_measurements_by_location_time (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            year int,
+            date timestamp,
+            depth float,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date, depth)
+        ) WITH CLUSTERING ORDER BY (date DESC, depth DESC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.daily_profile_measurements_by_location_time (
+            location_id text,
+            parameter_id text,
+            qc_level int,
+            year int,
+            date timestamp,
+            depth float,
+            station_name text,
+            station_id text,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, parameter_id, qc_level, year), date, depth, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (date DESC, depth DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(

@@ -100,7 +100,7 @@
                 url: '/charts',
                 templateUrl: '/static/partials/location/location-data-charts.html',
                 controller: 'LocationDataCharts',
-                controllerAs: 'chartsVm',
+                controllerAs: 'locationDataChartsVm',
             })
             .state('location.data.tables', {
                 url: '/tables',
@@ -112,7 +112,18 @@
                 url: '/cams-and-photos',
                 templateUrl: '/static/partials/location/location-cams-and-photos.html',
                 controller: 'LocationCamsAndPhotos',
-                controllerAs: 'vm',
+                controllerAs: 'locationCamsAndPhotosVm',
+                resolve: {
+                    resolvedLiveWebcams: function($stateParams, locationWebcams, locationStorage) {
+                        var locationId = $stateParams.location_id;
+                        return locationWebcams.getLiveWebcams(locationId)
+                            .then(function(response) {
+                                var data = response.data;
+                                locationStorage.setLiveWebcamList(data);
+                                return data;
+                            });
+                    }
+                }
                 
             })
             .state('location.status', {

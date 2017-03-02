@@ -8,9 +8,18 @@
             </div>
             <div class="card-divider"></div>
             <div class="card-body">
-                <div ng-controller="LocationDataTablesParameter as parameterVm" ng-init="parameterVm.initTableParameter(locationDataVm.parameters[parameter])">
-                    <div ng-repeat="(table, tableOptions) in parameterVm.tableParameter.tables" ng-init="parameterVm.initTable(table)">
-                        <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" dt-instance="tableOptions.dtInstance" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
+                <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'parameter')">
+                    <div ng-controller="LocationDataTablesParameter as parameterVm" ng-init="parameterVm.initTableParameter(locationDataVm.parameters[parameter])">
+                        <div ng-repeat="(table, tableOptions) in parameterVm.tableParameter.tables" ng-init="parameterVm.initTable(table)">
+                            <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" dt-instance="tableOptions.dtInstance" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'profile')">
+                    <div ng-controller="LocationDataTablesProfile as profileVm" ng-init="profileVm.initTableParameter(locationDataVm.parameters[parameter])">
+                        <div ng-repeat="(table, tableOptions) in profileVm.tableParameter.tables" ng-init="profileVm.initTable(table)">
+                            <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" dt-instance="tableOptions.dtInstance" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
-<div ng-controller="LocationDataChartsParameter as parameterVm" ng-init="parameterVm.initChartParameter(locationDataVm.parameters[parameter])">
-    <div ng-repeat="(chart, chartOptions) in parameterVm.chartParameter.charts" ng-init="parameterVm.initChart(chart)">
-        <highchart id="{[ chart ]}-{[ parameter ]}" config="parameterVm.chartParameter.charts[chart]"></highchart>
+<div ng-controller="LocationDataChartsParameter as chartParameterVm" ng-init="chartParameterVm.initChartParameter(locationDataVm.parameters[parameter])">
+    <div ng-repeat="(chart, chartOptions) in chartParameterVm.chartParameter.charts" ng-init="chartParameterVm.initChart(chart)">
+        <highchart id="{[ chart ]}-{[ parameter ]}" config="chartParameterVm.chartParameter.charts[chart]"></highchart>
     </div>
 </div>
