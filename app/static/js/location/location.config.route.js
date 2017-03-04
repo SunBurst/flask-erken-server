@@ -44,7 +44,8 @@
                     },
                     resolvedLastWebcamPhoto: function($stateParams, locationWebcams, locationStorage) {
                         var locationId = $stateParams.location_id;
-                        return locationWebcams.getWebcamPhotos(locationId, 1)
+                        var date = moment().startOf('day').valueOf();
+                        return locationWebcams.getWebcamPhotosByLimit(locationId, date, 1)
                             .then(function(response) {
                                 var data = {};
                                 if (response.data[0]) {
@@ -65,7 +66,8 @@
                     },
                     resolvedWebcamPhotos: function($stateParams, locationWebcams, locationStorage) {
                         var locationId = $stateParams.location_id;
-                        return locationWebcams.getWebcamPhotos(locationId, 7)
+                        var date = moment().startOf('day').valueOf();
+                        return locationWebcams.getWebcamPhotosByLimit(locationId, date, 7)
                             .then(function(response) {
                                 var data = response.data;
                                 locationStorage.setWebcamPhotosList(data);

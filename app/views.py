@@ -82,17 +82,41 @@ def get_livewebcams_by_location(location_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/webcam_photos_by_location/<string:location_id>/')
-@app.route('/api/webcam_photos_by_location/<string:location_id>/<int:limit>/')
-def get_webcam_photos_by_location(location_id, limit=None):
-    query = "SELECT * FROM webcam_photos_by_location WHERE location_id=?"
+@app.route('/api/webcam_photos_by_location/<string:location_id>/<int:from_timestamp>/<int:to_timestamp>')
+def get_webcam_photos_by_location(location_id, from_timestamp, to_timestamp):
+    query = "SELECT * FROM webcam_photos_by_location WHERE location_id=? AND date=? AND timestamp >=? AND timestamp <=?"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+
+    current_date = datetime(from_dt.year, from_dt.month, from_dt.day)
+    print(current_date)
+    while (current_date <= to_dt):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, current_date, from_timestamp, to_timestamp,)))
+        current_date += relativedelta(days=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/webcam_photos_by_location_by_limit/<string:location_id>/<int:date>')
+@app.route('/api/webcam_photos_by_location_by_limit/<string:location_id>/<int:date>/<int:limit>/')
+def get_webcam_photos_by_location_by_limit(location_id, date, limit=None):
+    query = "SELECT * FROM webcam_photos_by_location WHERE location_id=? AND date=?"
     if limit:
         query += " LIMIT ?"
     prepared = cassandra_connection.session.prepare(query)
     if limit: 
-        rows = cassandra_connection.session.execute_async(prepared, (location_id, limit,)).result()
+        rows = cassandra_connection.session.execute_async(prepared, (location_id, date, limit,)).result()
     else:
-        rows = cassandra_connection.session.execute_async(prepared, (location_id, )).result()
+        rows = cassandra_connection.session.execute_async(prepared, (location_id, date, )).result()
     data =  [row for row in rows]
 
     return json.dumps(data, cls=CustomEncoder)

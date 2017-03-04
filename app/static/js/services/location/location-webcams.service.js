@@ -18,7 +18,8 @@
         
         return {
             getLiveWebcams: getLiveWebcams,
-            getWebcamPhotos: getWebcamPhotos
+            getWebcamPhotos: getWebcamPhotos,
+            getWebcamPhotosByLimit: getWebcamPhotosByLimit
         };
         
         function getLiveWebcams(locationId) {
@@ -45,8 +46,39 @@
             }
         }
         
-        function getWebcamPhotos(locationId, limit) {
-            var resource = $resource('/api/webcam_photos_by_location/:location_id/:limit/', {}, {
+        function getWebcamPhotos(locationId, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/webcam_photos_by_location/:location_id/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                        
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                    location_id: locationId, 
+                    from_timestamp: fromTimestamp, 
+                    to_timestamp: toTimestamp
+                }).$promise
+                .then(getWebcamPhotosComplete)
+                .catch(getWebcamPhotosFailed);
+                
+            function getWebcamPhotosComplete(response) {
+                return response;
+            }
+            
+            function getWebcamPhotosFailed(error) {
+                console.log(error);
+            }
+        }
+        
+        function getWebcamPhotosByLimit(locationId, limit) {
+            var resource = $resource('/api/webcam_photos_by_location_by_limit/:location_id/:limit/', {}, {
                 query: {
                     method: 'GET', params: {
                         location_id: locationId,
@@ -58,14 +90,14 @@
             });
             
             return resource.query({location_id: locationId, limit: limit}).$promise
-                .then(getWebcamPhotosComplete)
-                .catch(getWebcamPhotosFailed);
+                .then(getWebcamPhotosByLimitComplete)
+                .catch(getWebcamPhotosByLimitFailed);
                 
-            function getWebcamPhotosComplete(response) {
+            function getWebcamPhotosByLimitComplete(response) {
                 return response;
             }
             
-            function getWebcamPhotosFailed(error) {
+            function getWebcamPhotosByLimitFailed(error) {
                 console.log(error);
             }
         }

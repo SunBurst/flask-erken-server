@@ -15,7 +15,9 @@
     "angular-daterangepicker": "^0.2.2",
     "highcharts-ng": "^1.0.0",
     "angular-route": "^1.6.2",
-    "angular-google-maps": "^2.4.1"
+    "angular-google-maps": "^2.4.1",
+    "angular-bootstrap-lightbox": "^0.12.0",
+    "angular-animate": "^1.6.2"
   },
   "homepage": "https://github.com/SunBurst/flask-erken-server",
   "authors": [

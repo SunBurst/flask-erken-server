@@ -996,12 +996,13 @@ def sync_cassandra():
     cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.webcam_photos_by_location (
             location_id text,
-            station_name text,
+            date timestamp,
             timestamp timestamp,
+            station_name text,
             station_id text,
             photo blob,
-            PRIMARY KEY ((location_id), timestamp, station_id)
-        ) WITH CLUSTERING ORDER BY (timestamp DESC, station_id ASC)""".format(keyspace=KEYSPACE)
+            PRIMARY KEY ((location_id, date), timestamp, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (timestamp DESC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(

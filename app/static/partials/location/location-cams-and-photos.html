@@ -14,15 +14,19 @@
     </div>
     <div class="row">
         <h2 class="page-header">Webcam Photos</h2>
-         <div class="col-xs-12 col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title"><i class="fa fa-map-marker fa-fw"></i> </h4>
-                </div>
-                <div class="card-body">
-                    <img class="img-responsive">
-                </div>
-            </div>
+         <div class="form-group">
+            <input date-range-picker name="singledate" id="singledate" class="form-control date-picker" type="text"
+               ng-model="locationCamsAndPhotosVm.datePickerModel.datePicker.date" options="locationCamsAndPhotosVm.datePickerModel.datePickerOptions">
+           </input>
+        </div>
+        <div>
+            <ul class="gallery gallery5">
+                <li ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.images">
+                    <a ng-click="locationCamsAndPhotosVm.openLightboxModal($index)">
+                        <img data-ng-src="{[ stationWebcamPhoto.thumbUrl ]}" class="img-thumbnail">
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

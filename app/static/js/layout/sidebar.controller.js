@@ -6,6 +6,8 @@
         .module('app.layout')
         .controller('Sidebar', Sidebar);
 
+    Sidebar.$inject = ['locations'];
+    
     function Sidebar(locations) {
         var vm = this;
         vm.locations = [];
