@@ -3,11 +3,12 @@
         <h2 class="page-header">Live Webcams</h2>
         <div class="col-xs-12 col-md-6" ng-repeat="station in locationCamsAndPhotosVm.liveWebcams">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
+                <div class="card-content">
+                    <h4><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-image">
                     <img class="img-responsive" data-ng-src="{[ station.livewebcam.url ]}" fallback-src="http://google.com/favicon.ico">
+                    <span class="card-title"><i class="fa fa-circle fa-fw red"></i> Live</span>
                 </div>
             </div>
         </div>
@@ -20,13 +21,19 @@
            </input>
         </div>
         <div>
-            <ul class="gallery gallery5">
-                <li ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.images">
-                    <a ng-click="locationCamsAndPhotosVm.openLightboxModal($index)">
-                        <img data-ng-src="{[ stationWebcamPhoto.thumbUrl ]}" class="img-thumbnail">
-                    </a>
-                </li>
-            </ul>
+            <div class="col-md-3" ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.webcamPhotos">
+                <a ng-click="locationCamsAndPhotosVm.openLightboxModal($index)">
+                    <div class="card">
+                        <div class="card-image">
+                            <img class="img-responsive" data-ng-src="{[ stationWebcamPhoto.thumbUrl ]}">
+                        </div>
+                        <div class="card-content">
+                            <p><i class="fa fa-clock-o fa-fw"></i> {[ stationWebcamPhoto.timestamp | date:'yyyy-MM-dd HH:mm:ss' ]}</p>
+                            <p><i class="fa fa-map-marker fa-fw"></i> {[ stationWebcamPhoto.stationName ]}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>

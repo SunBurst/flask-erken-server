@@ -15,6 +15,8 @@
         var parameters = {};
         var stationList = [];
         var stations = {};
+        var statusParameters = {};
+        var statusParmeterlist = [];
         var webcamPhotoList = [];
         
         return {
@@ -25,6 +27,8 @@
             getParameters: getParameters,
             getStationList: getStationList,
             getStations: getStations,
+            getStatusParameterList: getStatusParameterList,
+            getStatusParameters: getStatusParameters,
             getWebcamPhotoList: getWebcamPhotoList,
             setLocation: setLocation,
             setLastWebcamPhoto: setLastWebcamPhoto,
@@ -32,6 +36,8 @@
             setParameterList: setParameterList,
             setParameters: setParameters,
             setStationList: setStationList,
+            setStatusParameterList: setStatusParameterList,
+            setStatusParameters: setStatusParameters,
             setStations: setStations,
             setWebcamPhotosList: setWebcamPhotosList
         };
@@ -62,6 +68,14 @@
         
         function getStations() {
             return stations;
+        }
+        
+        function getStatusParameterList() {
+            return statusParameterList;
+        }
+        
+        function getStatusParameters() {
+            return statusParameters;
         }
         
         function getWebcamPhotoList() {
@@ -108,6 +122,21 @@
                 tempStations[data[i].station_id] = data[i];
             }
             stations = tempStations; 
+        }
+        
+        function setStatusParameterList(data, initObjects) {
+            statusParameterList = data;
+            if (initObjects) {
+                setStatusParameters(data);
+            }
+        }
+        
+        function setStatusParameters(data) {
+            var tempParameters = {};
+            for (var i = 0; i < data.length; i++) {
+                tempParameters[data[i].parameter_id] = data[i];
+            }
+            statusParameters = tempParameters;
         }
         
         function setWebcamPhotosList(data) {

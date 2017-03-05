@@ -132,8 +132,22 @@
                 url: '/status',
                 templateUrl: '/static/partials/location/location-status.html',
                 controller: 'LocationStatus',
-                controllerAs: 'vm',
-                
+                controllerAs: 'locationStatusVm',
+                resolve: {
+                    resolvedStatusParameters: function($stateParams, locationStatusParameters, locationStorage) {
+                        var locationId = $stateParams.location_id;
+                        return locationStatusParameters.getStatusParameters(locationId)
+                            .then(function(response) {
+                                var data = response.data;
+                                var initObjects = true;
+                                locationStorage.setStatusParameterList(data, initObjects);
+                                return data;
+                            });
+                    },
+                    resolvedStatusParameterSelection: ['resolvedStatusParameters', 'locationStatusStorage', function(resolvedStatusParameters, locationStatusStorage) {
+                        return locationStatusStorage.setStatusParameterSelection(resolvedStatusParameters);
+                    }]
+                }
             });
     
     }

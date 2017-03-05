@@ -479,46 +479,69 @@ highchart {
 }
 
 .card {
-    -webkit-box-shadow: 0 1px 1px 0 rgba(55,63,78,.12);
-    display: block;
-    position: relative;
-    margin-bottom: 1.875rem;
-    box-shadow: 0 1px 1px 0 rgba(55,63,78,.12);
-    border: 0 solid rgba(55,63,78,.12);
-    background-color: #fff;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
-.card-header {
-    display: block;
-    position: relative;
-    background-color: #fff;
-    overflow: auto;
+.card {
+    margin-top: 10px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    background-clip: padding-box;
 }
 
-.card-title {
-    margin-bottom: 0;
-    background-color: #fff;
-    padding: 1rem;
-    color: #373f4e;
-    line-height: 1;
+.card span.card-title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 300;
+    text-transform: uppercase;
 }
 
-.card-header .card-title {
-    float: left;
-    background-color: transparent;
-    /* font-size: 1rem; */
+.card .card-image {
+      position: relative;
+      overflow: hidden;
+}
+.card .card-image img {
+      border-radius: 2px 2px 0 0;
+      background-clip: padding-box;
+      position: relative;
+      /*z-index: -1;*/
+}
+.card .card-image span.card-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 16px;
+}
+.card .card-content {
+      padding: 16px;
+      border-radius: 0 0 2px 2px;
+      background-clip: padding-box;
+      box-sizing: border-box;
+}
+.card .card-content p {
+    margin: 0;
+    color: #333;
+}
+.card .card-content span.card-title {
+    line-height: 48px;
+}
+.card .card-action {
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    padding: 16px;
+}
+.card .card-action a {
+      color: #ffab40;
+      margin-right: 16px;
+      transition: color 0.3s ease;
+      text-transform: uppercase;
+}
+.card .card-action a:hover {
+    color: #ffd8a6;
+    text-decoration: none;
 }
 
 .card-divider {
     border-top: 1px solid rgba(55,63,78,.12);
-}
-
-.card:not(.card-block)>.card-divider {
-    margin: 0 1rem;
-}
-
-.card-body {
-    padding: 1rem;
 }
 
 .page-content-nav label {

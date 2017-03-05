@@ -1,0 +1,15 @@
+<div class="col-sm-3">
+    <div class="card">
+        <div class="card-content">
+            <div class="page-content-nav">
+                <ul>
+                    <li class="dropdown-header">Status Parameters</li>
+                    <li ng-repeat="(parameter, enabled) in locationStatusVm.statusParameterSelection">
+                        <input id="{[ parameter ]}-checkbox" type="checkbox" ng-model="locationStatusVm.statusParameterSelection[parameter]" ng-change="locationStatusVm.changeSelection(parameter, locationStatusVm.statusParameterSelection[parameter])"></input>
+                        <label for="{[ parameter ]}-checkbox">{[ locationStatusVm.statusParameters[parameter].parameter_name ]}</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -130,6 +130,25 @@ def get_parameters_by_location(location_id):
     
     return json.dumps(data, cls=CustomEncoder)
     
+@app.route('/api/status_parameters_by_location/<string:location_id>')
+def get_status_parameters_by_location(location_id):
+    query = "SELECT * FROM status_parameters_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/sensor_status_by_location/<string:location_id>')
+def get_sensor_status_by_location(location_id):
+    query = "SELECT * FROM sensor_status_by_location WHERE location_id=?"
+    prepared = cassandra_connection.session.prepare(query)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+
 ########### Daily API ############
 
 @app.route('/api/daily_average_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>/')

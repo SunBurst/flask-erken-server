@@ -10,6 +10,7 @@
     runBlock.$inject = ['rootScopeBinder'];
     
     function config(LightboxProvider) {
+        LightboxProvider.fullScreenMode = true;
         LightboxProvider.templateUrl = '/static/partials/location/location-lightbox.html';
     }
     

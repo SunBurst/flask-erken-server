@@ -127,6 +127,17 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.status_parameters_by_location (
+            location_id text,
+            parameter_name text,
+            parameter_id text,
+            parameter_description frozen <description>,
+            parameter_unit text,
+            PRIMARY KEY ((location_id), parameter_name, parameter_id)
+        ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.parameter_details_by_location (
             location_id text,
             parameter_name text,
@@ -219,7 +230,7 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.location_status_by_location (
+        """CREATE TABLE IF NOT EXISTS {keyspace}.sensor_status_by_location (
             location_id text,
             station_name text,
             sensor_name text,
