@@ -307,6 +307,96 @@ def get_daily_stations_average_profile_measurements_by_location(location_id, par
     return json.dumps(data, cls=CustomEncoder)
 
 
+@app.route('/api/daily_average_status_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>')
+def get_daily_average_status_parameter_measurements_by_location(location_id, parameter_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_avg_status_param_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date>=? AND date<=?"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date, to_date, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/daily_average_status_parameter_measurements_by_location_chart/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>/')
+def get_daily_average_status_parameter_measurements_by_location_chart(location_id, parameter_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_avg_status_param_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date, to_date, )))
+    
+    series_data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            series_data.append([row.get('date'), row.get('avg_value')])
+
+    series = {'id': "{}-series".format(location_id), 'data': series_data}
+
+    return json.dumps(series, cls=CustomEncoder)
+
+@app.route('/api/daily_stations_average_status_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>/')
+def get_daily_stations_average_status_parameter_measurements_by_location(location_id, parameter_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date>=? AND date<=?"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date, to_date, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/daily_stations_average_status_parameter_measurements_by_location_chart/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>/')
+def get_daily_stations_average_status_parameter_measurements_by_location_chart(location_id, parameter_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date, to_date, )))
+    
+    stations = OrderedDict()
+
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            station_id = row.get('station_id')
+            
+            if station_id not in stations:
+                stations[station_id] = {'id': station_id, 'name': row.get('station_name'), 'data': []}
+                
+            stations[station_id]['data'].append([row.get('date'), row.get('avg_value')])
+
+    series = [station_name_data for station_id, station_name_data in stations.items()]
+    
+    return json.dumps(series, cls=CustomEncoder)
+
 ########## Hourly API #############
 
 @app.route('/api/hourly_average_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
@@ -463,6 +553,96 @@ def get_hourly_stations_average_profile_measurements_by_location(location_id, pa
             data.append(row)
 
     return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/hourly_average_status_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_average_status_parameter_measurements_by_location(location_id, parameter_id, qc_level, from_date_hour, to_date_hour):
+    query = "SELECT * FROM hourly_avg_status_param_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date_hour/1000.0)
+    to_dt = datetime.fromtimestamp(to_date_hour/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date_hour, to_date_hour, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/hourly_average_status_parameter_measurements_by_location_chart/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_average_status_parameter_measurements_by_location_chart(location_id, parameter_id, qc_level, from_date_hour, to_date_hour):
+    query = "SELECT * FROM hourly_avg_status_param_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=? ORDER BY date_hour ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date_hour/1000.0)
+    to_dt = datetime.fromtimestamp(to_date_hour/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date_hour, to_date_hour, )))
+    
+    series_data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            series_data.append([row.get('date_hour'), row.get('avg_value')])
+
+    series = {'id': "{}-series".format(location_id), 'data': series_data}
+    
+    return json.dumps(series, cls=CustomEncoder)
+
+@app.route('/api/hourly_stations_average_status_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_stations_average_status_parameter_measurements_by_location(location_id, parameter_id, qc_level, from_date_hour, to_date_hour):
+    query = "SELECT * FROM hourly_status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date_hour/1000.0)
+    to_dt = datetime.fromtimestamp(to_date_hour/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date_hour, to_date_hour, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/hourly_stations_average_status_parameter_measurements_by_location_chart/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_stations_average_status_parameter_measurements_by_location_chart(location_id, parameter_id, qc_level, from_date_hour, to_date_hour):
+    query = "SELECT * FROM hourly_status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=? ORDER BY date_hour ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date_hour/1000.0)
+    to_dt = datetime.fromtimestamp(to_date_hour/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, year, from_date_hour, to_date_hour, )))
+    
+    stations = OrderedDict()
+
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            station_id = row.get('station_id')
+            
+            if station_id not in stations:
+                stations[station_id] = {'id': "{}-series".format(station_id), 'name': row.get('station_name'), 'data': []}
+                
+            stations[station_id]['data'].append([row.get('date_hour'), row.get('avg_value')])
+
+    series = [station_name_data for station_id, station_name_data in stations.items()]
+    
+    return json.dumps(series, cls=CustomEncoder)
 
 ########## High Frequency API #############
 
@@ -642,6 +822,109 @@ def get_profile_measurements_by_location(location_id, parameter_id, qc_level, fr
             data.append(row)
     
     return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/average_status_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_average_status_parameter_measurements_by_location(location_id, parameter_id, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM avg_status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/average_status_parameter_measurements_by_location_chart/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_average_status_parameter_measurements_by_location_chart(location_id, parameter_id, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM avg_status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+        
+    
+    series_data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            series_data.append([row.get('timestamp'), row.get('avg_value')])
+
+    series = {'id': "{}-series".format(location_id), 'data': series_data}
+    
+    return json.dumps(series, cls=CustomEncoder)
+
+@app.route('/api/status_parameter_measurements_by_location/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_status_parameter_measurements_by_location(location_id, parameter_id, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/status_parameter_measurements_by_location_chart/<string:location_id>/<string:parameter_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_status_parameter_measurements_by_location_chart(location_id, parameter_id, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM status_parameter_measurements_by_location WHERE location_id=? AND parameter_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, parameter_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    stations = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            station_id = row.get('station_id')
+            
+            if station_id not in stations:
+                stations[station_id] = {'id': "{}-series".format(station_id), 'name': row.get('station_name'), 'data': []}
+                
+            stations[station_id]['data'].append([row.get('timestamp'), row.get('value')])
+
+    series = [station_name_data for station_id, station_name_data in stations.items()]
+    
+    return json.dumps(series, cls=CustomEncoder)
 
 @app.route('/api/parameters/')
 def get_all_parameters():

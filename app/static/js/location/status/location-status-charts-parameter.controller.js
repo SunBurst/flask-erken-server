@@ -3,18 +3,18 @@
     
     angular
         .module('app.location')
-        .controller('LocationDataChartsParameter', LocationDataChartsParameter);
+        .controller('LocationStatusChartsParameter', LocationStatusChartsParameter);
     
-    LocationDataChartsParameter.$inject = [
+    LocationStatusChartsParameter.$inject = [
         '$scope',
-        'locationMeasurements',
+        'locationStatusMeasurements',
         'locationStorage',
         'locationDataSource', 
         'locationDatePicker', 
         'HighChartOptions'
     ];
     
-    function LocationDataChartsParameter($scope, locationMeasurements, locationStorage, locationDataSource, locationDatePicker, HighChartOptions) {
+    function LocationStatusChartsParameter($scope, locationStatusMeasurements, locationStorage, locationDataSource, locationDatePicker, HighChartOptions) {
         var vm = this;
         
         vm.chartParameter = {};
@@ -55,7 +55,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getDailyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationStatusMeasurements.getDailyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -66,7 +66,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getDailyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationStatusMeasurements.getDailyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -77,7 +77,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHighFrequencyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationStatusMeasurements.getHighFrequencyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -88,7 +88,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHighFrequencyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationStatusMeasurements.getHighFrequencyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -99,7 +99,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHourlyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationStatusMeasurements.getHourlyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -110,7 +110,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHourlyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationStatusMeasurements.getHourlyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -188,7 +188,7 @@
                 var series = data;
                 series.name = vm.location.location_name;
                 series.tooltip = {
-                    'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d %H:%M:%S}</span><br/>',
+                    'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d}</span><br/>',
                     'pointFormat': parameterName + ': <b>{point.y:.2f} ' + parameterUnit + '</br>'
                 };
                 vm.chartParameter.charts.locationAverageChart.series.push(series);
@@ -204,7 +204,7 @@
                 for (var i = 0; i < data.length; i++) {
                     var series = data[i];
                     series.tooltip = {
-                        'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d %H:%M:%S}</span><br/>',
+                        'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d}</span><br/>',
                         'pointFormat': '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + parameterUnit + '</b><br/>'
                     };
                     vm.chartParameter.charts.stationsAverageChart.series.push(series);
@@ -222,7 +222,7 @@
                 var series = data;
                 series.name = vm.location.location_name;
                 series.tooltip = {
-                    'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d %H:%M:%S}</span><br/>',
+                    'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d}</span><br/>',
                     'pointFormat': parameterName + ': <b>{point.y:.2f} ' + parameterUnit + '</br>'
                 };
                 vm.chartParameter.charts.locationAverageChart.series.push(series);
@@ -238,7 +238,7 @@
                 for (var i = 0; i < data.length; i++) {
                     var series = data[i];
                     series.tooltip = {
-                        'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d %H:%M:%S}</span><br/>',
+                        'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d}</span><br/>',
                         'pointFormat': '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + parameterUnit + '</b><br/>'
                     };
                     vm.chartParameter.charts.stationsAverageChart.series.push(series);

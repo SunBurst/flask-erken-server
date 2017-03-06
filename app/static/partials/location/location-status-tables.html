@@ -1,0 +1,14 @@
+<div ng-repeat="(parameter, isSelected) in locationStatusTablesVm.statusParameterSelection">
+    <div ng-if="isSelected">
+        <div ng-controller="LocationStatusTablesParameter as statusParameterVm" ng-init="statusParameterVm.initTableParameter(locationStatusVm.statusParameters[parameter])">
+            <div ng-repeat="(table, tableOptions) in statusParameterVm.tableParameter.tables" ng-init="statusParameterVm.initTable(table)">
+                <div class="card">
+                    <div class="card-content">
+                        <h4><i class="fa fa-thermometer-half fa-fw"></i> {[ locationStatusVm.dataSourcesModel.selectedDataSource ]} {[ locationStatusVm.statusParameters[parameter].parameter_name ]} Table {[ $index + 1 ]}</h4>
+                        <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" dt-instance="tableOptions.dtInstance" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

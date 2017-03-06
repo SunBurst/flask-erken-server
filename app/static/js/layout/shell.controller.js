@@ -6,6 +6,6 @@
         .module('app.layout')
         .controller('Shell', Shell);
     
-    function Shell(LocationsFactory) {}
-    
+    function Shell() {}
+        
 })();

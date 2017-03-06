@@ -42,19 +42,6 @@
                                 return data;
                             });
                     },
-                    resolvedLastWebcamPhoto: function($stateParams, locationWebcams, locationStorage) {
-                        var locationId = $stateParams.location_id;
-                        var date = moment().startOf('day').valueOf();
-                        return locationWebcams.getWebcamPhotosByLimit(locationId, date, 1)
-                            .then(function(response) {
-                                var data = {};
-                                if (response.data[0]) {
-                                    data = response.data[0]
-                                }
-                                locationStorage.setLastWebcamPhoto(data);
-                                return data;
-                            });
-                    },
                     resolvedLiveWebcams: function($stateParams, locationWebcams, locationStorage) {
                         var locationId = $stateParams.location_id;
                         return locationWebcams.getLiveWebcams(locationId)
@@ -148,6 +135,18 @@
                         return locationStatusStorage.setStatusParameterSelection(resolvedStatusParameters);
                     }]
                 }
+            })
+            .state('location.status.charts', {
+                url: '/charts',
+                templateUrl: '/static/partials/location/location-status-charts.html',
+                controller: 'LocationStatusCharts',
+                controllerAs: 'locationStatusChartsVm',
+            })
+            .state('location.status.tables', {
+                url: '/tables',
+                templateUrl: '/static/partials/location/location-status-tables.html',
+                controller: 'LocationStatusTables',
+                controllerAs: 'locationStatusTablesVm'
             });
     
     }

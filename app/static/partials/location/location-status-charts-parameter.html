@@ -1,0 +1,13 @@
+<div ng-controller="LocationStatusChartsParameter as chartStatusParameterVm" ng-init="chartStatusParameterVm.initChartParameter(locationStatusVm.statusParameters[parameter])">
+    <div ng-repeat="(chart, chartOptions) in chartStatusParameterVm.chartParameter.charts" ng-init="chartStatusParameterVm.initChart(chart)">
+        <div class="card">
+            <div class="card-content">
+                <h4><i class="fa fa-thermometer-half fa-fw"></i> {[ locationStatusVm.dataSourcesModel.selectedDataSource ]} {[ locationStatusVm.statusParameters[parameter].parameter_name ]} Chart {[ $index + 1 ]}</h4>
+            </div>
+            <div class="card-image">
+                <highchart id="{[ chart ]}-{[ parameter ]}" config="chartStatusParameterVm.chartParameter.charts[chart]"></highchart>
+            </div>
+        </div>
+    </div>
+</div>
+            

@@ -6,8 +6,7 @@
 
                 <ol class="carousel-indicators">
                     <li data-target="#location-images-carousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#location-images-carousel" data-slide-to="1"></li>
-                    <li data-target="#location-images-carousel" ng-repeat="station in vm.liveWebcams" data-slide-to="{[ $index + 2 ]}"></li>
+                    <li data-target="#location-images-carousel" ng-repeat="station in vm.liveWebcams" data-slide-to="{[ $index + 1 ]}"></li>
                 </ol>
 
                 <div class="carousel-inner">
@@ -16,17 +15,8 @@
                             <img class="img-responsive" data-ng-src="data:image/png;base64, {[ vm.location.location_image ]}">
                         </div>
                     </div>
-                    <div class="item slides">
-                        <div class="slide-2">
-                            <img class="img-responsive" data-ng-src="data:image/png;base64, {[ vm.lastWebcamPhoto.photo ]}">
-                            <div class="carousel-caption">
-                              <h4 class="white"><i class="fa fa-map-marker fa-fw"></i> {[ vm.lastWebcamPhoto.station_name ]}</h4>
-                              <h5 class="white"><i class="fa fa-camera fa-fw"></i> {[ vm.lastWebcamPhoto.timestamp | date:'yyyy-MM-dd HH:mm:ss Z']}</h5>
-                            </div>
-                        </div>
-                    </div> 
                     <div class="item slides" ng-repeat="station in vm.liveWebcams">
-                        <div class="slide-{[ $index + 3 ]}">
+                        <div class="slide-{[ $index + 2 ]}">
                             <img class="img-responsive" data-ng-src="{[ station.livewebcam.url ]}">
                             <div class="carousel-caption">
                               <h4 class="white"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
@@ -71,26 +61,16 @@
         </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="station in vm.stations">
-                <div class="panel blue">
-                    <div class="panel-heading">
-                        <h4 class="white">
-                            <a href="#!/location/{[ vm.location.location_id ]}/station/{[ station.station_id ]}/">
-                                <i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}
-                            </a>
-                        </h4>
+                <div class="card">
+                    <div class="card-image">
+                        <img ng-if="station.station_image" data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="img-responsive">
+                        <img ng-if="!station.station_image" data-ng-src="http://placehold.it/350x150" class="img-responsive thumbnail">
                     </div>
-                    <div class="panel-body">
-                        <div class="thumbnail">
-                            <img ng-if="station.station_image" data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="img-responsive thumbnail">
-                            <div ng-if="!station.station_image">
-                                <img ng-if="!station.station_image" data-ng-src="http://placehold.it/350x150" class="img-responsive thumbnail">
-                            </div>
-                            <!--  -->
-                            <!-- <img ng-repeat="station_image in location_stations.station_images" data-ng-src="data:image/png;base64, {[ station_image ]}" alt="{[ station_name ]}" class="img-responsive"/> -->
-                        </div>
-                        <h5 class="white"><i class="fa fa-location-arrow fa-fw"></i> {[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</h5>
-                        <h5 class="white"><i class="fa fa-leaf fa-fw"></i> {[ station.station_environment_category ]}</h5>
-                        <span class="white">{[ station.station_description.short_description ]}</span>
+                    <div class="card-content">
+                        <h4><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
+                        <p><i class="fa fa-location-arrow fa-fw"></i> {[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</p>
+                        <p><i class="fa fa-leaf fa-fw"></i> {[ station.station_environment_category ]}</p>
+                        <p>{[ station.station_description.short_description ]}</p>
                     </div>
                 </div>
             </div>

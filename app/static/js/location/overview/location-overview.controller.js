@@ -14,7 +14,6 @@
         vm.addLocationMarker = addLocationMarker;
         vm.addStationMarkers = addStationMarkers;
         vm.clusterOptions = angular.copy(GoogleMapClusterOptions);
-        vm.lastWebcamPhoto = locationStorage.getLastWebcamPhoto();
         vm.liveWebcams = locationStorage.getLiveWebcamList();
         vm.location = locationStorage.getLocation();
         vm.stationList = locationStorage.getStationList();

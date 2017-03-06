@@ -162,6 +162,9 @@
                     text: ''
                 },
                 reversed: true,
+                labels: {
+                    format: '{value:.2f}'
+                },
                 plotLines: [{
                     value: 0,
                     width: 1,
@@ -206,6 +209,9 @@
             yAxis: {
                 title: {
                     text: ''
+                },
+                labels: {
+                    format: '{value:.2f}'
                 },
                 plotLines: [{
                     value: 0,

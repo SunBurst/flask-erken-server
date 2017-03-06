@@ -1,5 +1,12 @@
 <div ng-controller="LocationDataChartsParameter as chartParameterVm" ng-init="chartParameterVm.initChartParameter(locationDataVm.parameters[parameter])">
     <div ng-repeat="(chart, chartOptions) in chartParameterVm.chartParameter.charts" ng-init="chartParameterVm.initChart(chart)">
-        <highchart id="{[ chart ]}-{[ parameter ]}" config="chartParameterVm.chartParameter.charts[chart]"></highchart>
+        <div class="card">
+            <div class="card-content">
+                <h4><i class="fa fa-thermometer-half fa-fw"></i> {[ locationDataVm.dataSourcesModel.selectedDataSource ]} {[ locationDataVm.parameters[parameter].parameter_name ]} Chart {[ $index + 1 ]}</h4>
+            </div>
+            <div class="card-image">
+                <highchart id="{[ chart ]}-{[ parameter ]}" config="chartParameterVm.chartParameter.charts[chart]"></highchart>
+            </div>
+        </div>
     </div>
 </div>

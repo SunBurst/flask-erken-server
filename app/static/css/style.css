@@ -597,12 +597,6 @@ highchart {
   text-align: center;
 }
 
-@media (max-width: 767px) {
-  .gallery li {
-    margin: 0;
-  }
-}
-
-.gallery5 img {
-  width: 120px;
+.no-padding {
+    padding: 0;
 }
