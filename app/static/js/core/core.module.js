@@ -9,7 +9,7 @@
         'datatables', 
         'daterangepicker',
         'uiGmapgoogle-maps',
-        'ui-rangeSlider',
+        //'ui-rangeSlider',
         'bootstrapLightbox'
     ]);
     
