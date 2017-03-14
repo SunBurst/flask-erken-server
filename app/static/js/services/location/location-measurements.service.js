@@ -18,10 +18,6 @@
         
         return {
             //Daily
-            getDailyAverageParameterMeasurements: getDailyAverageParameterMeasurements,
-            getDailyAverageProfileMeasurements: getDailyAverageProfileMeasurements,
-            getDailyChartAverageParameterMeasurements: getDailyChartAverageParameterMeasurements,
-            getDailyChartAverageProfileMeasurements: getDailyChartAverageProfileMeasurements,
             getDailyStationsAverageParameterMeasurements: getDailyStationsAverageParameterMeasurements,
             getDailyStationsAverageProfileMeasurements: getDailyStationsAverageProfileMeasurements,
             getDailyStationsChartAverageParameterMeasurements: getDailyStationsChartAverageParameterMeasurements,
@@ -34,154 +30,10 @@
             getHighFrequencyStationsAverageProfileMeasurements: getHighFrequencyStationsAverageProfileMeasurements,
             getHighFrequencyStationsChartAverageParameterMeasurements: getHighFrequencyStationsChartAverageParameterMeasurements,
             //Hourly
-            getHourlyAverageParameterMeasurements: getHourlyAverageParameterMeasurements,
-            getHourlyAverageProfileMeasurements: getHourlyAverageProfileMeasurements,
-            getHourlyChartAverageParameterMeasurements: getHourlyChartAverageParameterMeasurements,
-            getHourlyChartAverageProfileMeasurements: getHourlyChartAverageProfileMeasurements,
             getHourlyStationsAverageParameterMeasurements: getHourlyStationsAverageParameterMeasurements,
             getHourlyStationsAverageProfileMeasurements: getHourlyStationsAverageProfileMeasurements,
             getHourlyStationsChartAverageParameterMeasurements: getHourlyStationsChartAverageParameterMeasurements
         };
-        
-        function getDailyAverageParameterMeasurements(locationId, parameterId, qcLevel, fromDate, toDate) {
-            var resource = $resource('/api/daily_average_parameter_measurements_by_location/:location_id/:parameter_id/:qc_level/:from_date/:to_date', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date: fromDate,
-                        to_date: toDate
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date: fromDate, 
-                to_date: toDate
-            }).$promise
-                .then(getDailyAverageParameterMeasurementsComplete)
-                .catch(getDailyAverageParameterMeasurementsFailed);
-                
-            function getDailyAverageParameterMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getDailyAverageParameterMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
-        function getDailyAverageProfileMeasurements(locationId, parameterId, qcLevel, fromDate, toDate) {
-            var resource = $resource('/api/daily_average_profile_measurements_by_location/:location_id/:parameter_id/:qc_level/:from_date/:to_date', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date: fromDate,
-                        to_date: toDate
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date: fromDate, 
-                to_date: toDate
-            }).$promise
-                .then(getDailyAverageProfileMeasurementsComplete)
-                .catch(getDailyAverageProfileMeasurementsFailed);
-                
-            function getDailyAverageProfileMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getDailyAverageProfileMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
-        function getDailyChartAverageParameterMeasurements(locationId, parameterId, qcLevel, fromDate, toDate) {
-            var resource = $resource('/api/daily_average_parameter_measurements_by_location_chart/:location_id/:parameter_id/:qc_level/:from_date/:to_date', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date: fromDate,
-                        to_date: toDate
-                    },
-                    isArray: false,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date: fromDate, 
-                to_date: toDate
-            }).$promise
-                .then(getDailyChartAverageParameterMeasurementsComplete)
-                .catch(getDailyChartAverageParameterMeasurementsFailed);
-                
-            function getDailyChartAverageParameterMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getDailyChartAverageParameterMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
-        function getDailyChartAverageProfileMeasurements(locationId, parameterId, qcLevel, fromDate, toDate) {
-            var resource = $resource('/api/daily_average_profile_measurements_by_location_chart/:location_id/:parameter_id/:qc_level/:from_date/:to_date', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date: fromDate,
-                        to_date: toDate
-                    },
-                    isArray: false,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date: fromDate, 
-                to_date: toDate
-            }).$promise
-                .then(getDailyChartAverageProfileMeasurementsComplete)
-                .catch(getDailyChartAverageProfileMeasurementsFailed);
-                
-            function getDailyChartAverageProfileMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getDailyChartAverageProfileMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
         
         function getDailyStationsAverageParameterMeasurements(locationId, parameterId, qcLevel, fromDate, toDate) {
             var resource = $resource('/api/daily_stations_average_parameter_measurements_by_location/:location_id/:parameter_id/:qc_level/:from_date/:to_date', {}, {
@@ -533,76 +385,6 @@
 
         }
         
-        function getHourlyAverageParameterMeasurements(locationId, parameterId, qcLevel, fromDateHour, toDateHour) {
-            var resource = $resource('/api/hourly_average_parameter_measurements_by_location/:location_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date_hour: fromDateHour,
-                        to_date_hour: toDateHour
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date_hour: fromDateHour, 
-                to_date_hour: toDateHour
-            }).$promise
-                .then(getHourlyAverageParameterMeasurementsComplete)
-                .catch(getHourlyAverageParameterMeasurementsFailed);
-                
-            function getHourlyAverageParameterMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHourlyAverageParameterMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
-        function getHourlyAverageProfileMeasurements(locationId, parameterId, qcLevel, fromDateHour, toDateHour) {
-            var resource = $resource('/api/hourly_average_profile_measurements_by_location/:location_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date_hour: fromDateHour,
-                        to_date_hour: toDateHour
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date_hour: fromDateHour, 
-                to_date_hour: toDateHour
-            }).$promise
-                .then(getHourlyAverageProfileMeasurementsComplete)
-                .catch(getHourlyAverageProfileMeasurementsFailed);
-                
-            function getHourlyAverageProfileMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHourlyAverageProfileMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
         function getHourlyStationsAverageParameterMeasurements(locationId, parameterId, qcLevel, fromDateHour, toDateHour) {
             var resource = $resource('/api/hourly_stations_average_parameter_measurements_by_location/:location_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
                 query: {
@@ -633,41 +415,6 @@
             }
             
             function getHourlyStationsAverageParameterMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
-        function getHourlyChartAverageParameterMeasurements(locationId, parameterId, qcLevel, fromDateHour, toDateHour) {
-            var resource = $resource('/api/hourly_average_parameter_measurements_by_location_chart/:location_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date_hour: fromDateHour,
-                        to_date_hour: toDateHour
-                    },
-                    isArray: false,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date_hour: fromDateHour, 
-                to_date_hour: toDateHour
-            }).$promise
-                .then(getHourlyChartAverageParameterMeasurementsComplete)
-                .catch(getHourlyChartAverageParameterMeasurementsFailed);
-                
-            function getHourlyChartAverageParameterMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHourlyChartAverageParameterMeasurementsFailed(error) {
                 console.log(error);
             }
 
@@ -741,41 +488,6 @@
                 console.log(error);
             }
         
-        }
-        
-        function getHourlyChartAverageProfileMeasurements(locationId, parameterId, qcLevel, fromDateHour, toDateHour) {
-            var resource = $resource('/api/hourly_average_profile_measurements_by_location_chart/:location_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
-                query: {
-                    method: 'GET', params: {
-                        location_id: locationId,
-                        parameter_id: parameterId,
-                        qc_level: qcLevel,
-                        from_date_hour: fromDateHour,
-                        to_date_hour: toDateHour
-                    },
-                    isArray: false,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                location_id: locationId, 
-                parameter_id: parameterId, 
-                qc_level: qcLevel, 
-                from_date_hour: fromDateHour, 
-                to_date_hour: toDateHour
-            }).$promise
-                .then(getHourlyChartAverageProfileMeasurementsComplete)
-                .catch(getHourlyChartAverageProfileMeasurementsFailed);
-                
-            function getHourlyChartAverageProfileMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHourlyChartAverageProfileMeasurementsFailed(error) {
-                console.log(error);
-            }
-
         }
         
     }

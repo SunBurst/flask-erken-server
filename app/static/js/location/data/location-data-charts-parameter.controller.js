@@ -18,11 +18,8 @@
         var vm = this;
         
         vm.chartParameter = {};
-        vm.getDailyLocationAverageChartData = getDailyLocationAverageChartData;
         vm.getDailyStationsAverageChartData = getDailyStationsAverageChartData;
-        vm.getHighFrequencyLocationAverageChartData = getHighFrequencyLocationAverageChartData;
         vm.getHighFrequencyStationsAverageChartData = getHighFrequencyStationsAverageChartData;
-        vm.getHourlyLocationAverageChartData = getHourlyLocationAverageChartData;
         vm.getHourlyStationsAverageChartData = getHourlyStationsAverageChartData;
         vm.initChart = initChart;
         vm.initChartParameter = initChartParameter;
@@ -30,11 +27,8 @@
         vm.setChartSubtitle = setChartSubtitle;
         vm.setChartTitle = setChartTitle;
         vm.updateChartData = updateChartData;
-        vm.updateDailyLocationAverageChartData = updateDailyLocationAverageChartData;
         vm.updateDailyStationsAverageChartData = updateDailyStationsAverageChartData;
-        vm.updateHighFrequencyLocationAverageChartData = updateHighFrequencyLocationAverageChartData;
         vm.updateHighFrequencyStationsAverageChartData = updateHighFrequencyStationsAverageChartData;
-        vm.updateHourlyLocationAverageChartData = updateHourlyLocationAverageChartData;
         vm.updateHourlyStationsAverageChartData = updateHourlyStationsAverageChartData;
         
         
@@ -50,17 +44,6 @@
             datePickerOptions: locationDatePicker.getDatePickerOptions()
         };
         
-        function getDailyLocationAverageChartData() {
-            var locationId = vm.location.location_id;
-            var parameterId = vm.chartParameter.parameter.parameter_id
-            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
-            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getDailyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
         function getDailyStationsAverageChartData() {
             var locationId = vm.location.location_id;
             var parameterId = vm.chartParameter.parameter.parameter_id
@@ -71,35 +54,13 @@
                     return response.data;
                 });
         }
-        
-        function getHighFrequencyLocationAverageChartData() {
-            var locationId = vm.location.location_id;
-            var parameterId = vm.chartParameter.parameter.parameter_id
-            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
-            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHighFrequencyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
+
         function getHighFrequencyStationsAverageChartData() {
             var locationId = vm.location.location_id;
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
             return locationMeasurements.getHighFrequencyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getHourlyLocationAverageChartData() {
-            var locationId = vm.location.location_id;
-            var parameterId = vm.chartParameter.parameter.parameter_id
-            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
-            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHourlyChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -119,7 +80,6 @@
         function initChartParameter(parameter) {
             vm.chartParameter.parameter = parameter;
             vm.chartParameter.charts = {
-                locationAverageChart: angular.copy(HighChartOptions),
                 stationsAverageChart: angular.copy(HighChartOptions)
             };
         }
@@ -127,6 +87,7 @@
         function initChart(chart) {
             vm.setChartSubtitle(chart);
             vm.setChartTitle(chart);
+            vm.chartParameter.charts[chart].chart.zoomType = 'x';
             vm.chartParameter.charts[chart].yAxis.title.text = vm.chartParameter.parameter.parameter_name + ' (' + vm.chartParameter.parameter.parameter_unit + ')';
             vm.updateChartData();
         }
@@ -142,23 +103,6 @@
             var fromDate = vm.datePickerModel.datePicker.date.startDate.format('YYYY-MM-DD HH:mm:ss');
             var toDate = vm.datePickerModel.datePicker.date.endDate.format('YYYY-MM-DD HH:mm:ss');
             vm.chartParameter.charts[chart].subtitle.text = fromDate + ' - ' + toDate;
-        }
-        
-        function updateDailyLocationAverageChartData() {
-            var parameterName = vm.chartParameter.parameter.parameter_name;
-            var parameterUnit = vm.chartParameter.parameter.parameter_unit;
-            vm.chartParameter.charts.locationAverageChart.series = [];
-            vm.setChartTitle('locationAverageChart');
-            vm.setChartSubtitle('locationAverageChart');
-            vm.getDailyLocationAverageChartData().then(function(data) {
-                var series = data;
-                series.name = vm.location.location_name;
-                series.tooltip = {
-                    'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d}</span><br/>',
-                    'pointFormat': parameterName + ': <b>{point.y:.2f} ' + parameterUnit + '</br>'
-                };
-                vm.chartParameter.charts.locationAverageChart.series.push(series);
-            });
         }
         
         function updateDailyStationsAverageChartData() {
@@ -178,23 +122,6 @@
             });
         }
         
-        function updateHighFrequencyLocationAverageChartData() {
-            var parameterName = vm.chartParameter.parameter.parameter_name;
-            var parameterUnit = vm.chartParameter.parameter.parameter_unit;
-            vm.chartParameter.charts.locationAverageChart.series = [];
-            vm.setChartTitle('locationAverageChart');
-            vm.setChartSubtitle('locationAverageChart');
-            vm.getHighFrequencyLocationAverageChartData().then(function(data) {
-                var series = data;
-                series.name = vm.location.location_name;
-                series.tooltip = {
-                    'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d %H:%M:%S}</span><br/>',
-                    'pointFormat': parameterName + ': <b>{point.y:.2f} ' + parameterUnit + '</br>'
-                };
-                vm.chartParameter.charts.locationAverageChart.series.push(series);
-            });
-        }
-        
         function updateHighFrequencyStationsAverageChartData() {
             var parameterUnit = vm.chartParameter.parameter.parameter_unit;
             vm.chartParameter.charts.stationsAverageChart.series = [];
@@ -209,23 +136,6 @@
                     };
                     vm.chartParameter.charts.stationsAverageChart.series.push(series);
                 }
-            });
-        }
-        
-        function updateHourlyLocationAverageChartData() {
-            var parameterName = vm.chartParameter.parameter.parameter_name;
-            var parameterUnit = vm.chartParameter.parameter.parameter_unit;
-            vm.chartParameter.charts.locationAverageChart.series = [];
-            vm.setChartTitle('locationAverageChart');
-            vm.setChartSubtitle('locationAverageChart');
-            vm.getHourlyLocationAverageChartData().then(function(data) {
-                var series = data;
-                series.name = vm.location.location_name;
-                series.tooltip = {
-                    'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d %H:%M:%S}</span><br/>',
-                    'pointFormat': parameterName + ': <b>{point.y:.2f} ' + parameterUnit + '</br>'
-                };
-                vm.chartParameter.charts.locationAverageChart.series.push(series);
             });
         }
         
@@ -248,15 +158,12 @@
         
         function updateChartData() {
             if (vm.dataSourcesModel.selectedDataSource === 'Daily') {
-                vm.updateDailyLocationAverageChartData();
                 vm.updateDailyStationsAverageChartData();
             }
             else if (vm.dataSourcesModel.selectedDataSource === 'Hourly') {
-                vm.updateHourlyLocationAverageChartData();
                 vm.updateHourlyStationsAverageChartData();
             }
             else if (vm.dataSourcesModel.selectedDataSource === 'High Frequency') {
-                vm.updateHighFrequencyLocationAverageChartData();
                 vm.updateHighFrequencyStationsAverageChartData();
             }
 
