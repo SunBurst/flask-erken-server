@@ -53,7 +53,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getDailyChartAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getDailyStationsAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -64,7 +64,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHourlyChartAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getHourlyStationsChartAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -75,7 +75,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
             var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
-            return locationMeasurements.getHighFrequencyChartAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getHighFrequencyStationsAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -133,8 +133,10 @@
             vm.setChartTitle('locationAverageChart');
             vm.setChartSubtitle('locationAverageChart');
             vm.getHourlyLocationAverageChartData().then(function(data) {
-                var series = data;
+                vm.chartParameter.charts.locationAverageChart.series = [];
+                var series = data[0];
                 series.colsize = 1 * 36e5;
+                series.turboThreshold = 100000;
                 series.name = vm.location.location_name;
                 series.tooltip = {
                     'headerFormat': '',

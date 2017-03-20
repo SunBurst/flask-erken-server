@@ -19,28 +19,28 @@ def sync_cassandra():
     cassandra_connection = CassandraConnection(hosts=HOSTS, keyspace=KEYSPACE)
 
     cassandra_connection.session.execute(
-        """CREATE TYPE IF NOT EXISTS erken.description (
+        """CREATE TYPE IF NOT EXISTS hydroview.description (
             short_description text,
             long_description text
         )"""
     )
     
     cassandra_connection.session.execute(
-        """CREATE TYPE IF NOT EXISTS erken.livewebcam (
+        """CREATE TYPE IF NOT EXISTS hydroview.livewebcam (
             url text,
             ip_address inet,
         )"""
     )
     
     cassandra_connection.session.execute(
-        """CREATE TYPE IF NOT EXISTS erken.name (
+        """CREATE TYPE IF NOT EXISTS hydroview.name (
             first_name text,
             last_name text
         )"""
     )
     
     cassandra_connection.session.execute(
-        """CREATE TYPE IF NOT EXISTS erken.position (
+        """CREATE TYPE IF NOT EXISTS hydroview.position (
             latitude double,
             longitude double
         )"""
