@@ -3,6 +3,8 @@ CREATE KEYSPACE hydroview WITH replication = {
     'replication_factor': '3'
 };
 
+USE hydroview;
+
 CREATE TYPE hydroview.description (
     short_description text,
     long_description text
