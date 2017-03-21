@@ -3,4 +3,5 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 KEYSPACE = "hydroview"
-HOSTS = ['127.0.0.1']
+HOSTS = ['85.24.137.186', '85.24.137.188']
+PORT = 9042

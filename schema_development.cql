@@ -1,4 +1,7 @@
-CREATE KEYSPACE hydroview WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+CREATE KEYSPACE hydroview WITH replication = {
+    'class': 'SimpleStrategy', 
+    'replication_factor': '1'
+};
 
 CREATE TYPE hydroview.description (
     short_description text,

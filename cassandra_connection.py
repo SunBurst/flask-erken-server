@@ -27,14 +27,14 @@ class Position(object):
 
 
 class CassandraConnection(object):
-    def __init__(self, hosts, keyspace, register_udts=False):
-        self.cluster = Cluster(hosts)
+    def __init__(self, hosts, port, keyspace, register_udts=False):
+        self.cluster = Cluster(hosts, port)
         self.session = self.cluster.connect()
         self.session.row_factory = dict_factory
-        self.session.execute("""
-            CREATE KEYSPACE IF NOT EXISTS %s
-            WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1' }
-            """ % keyspace)
+        #self.session.execute("""
+        #    CREATE KEYSPACE IF NOT EXISTS %s
+        #    WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1' }
+        #    """ % keyspace)
         
         self.session.set_keyspace(keyspace)
         

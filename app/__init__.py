@@ -14,7 +14,7 @@ log.addHandler(handler)
 
 app = Flask(__name__)
 app.config.from_object('config')
-cassandra_connection = CassandraConnection(hosts=app.config['HOSTS'], keyspace=app.config['KEYSPACE'], register_udts=True)
+cassandra_connection = CassandraConnection(hosts=app.config['HOSTS'], port=app.config['PORT'], keyspace=app.config['KEYSPACE'], register_udts=True)
 
 
 def signal_handler(signal, frame):
