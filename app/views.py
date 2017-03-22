@@ -6,7 +6,7 @@ from collections import defaultdict, OrderedDict
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-from flask import make_response
+from flask import abort, make_response
 
 from app import app, cassandra_connection
 from utils import CustomEncoder
@@ -17,11 +17,12 @@ def index():
 
 ########## Locations API ############
 
-@app.route('/api/locations/')
-def get_locations_and_stations(location_id=None):
-    all_locations_query = "SELECT * FROM locations WHERE bucket=0"
+@app.route('/api/locations_and_stations', methods=['GET'])
+@app.route('/api/locations_and_stations/<int:bucket>', methods=['GET'])
+def get_locations_and_stations(bucket=0):
+    all_locations_query = "SELECT * FROM locations WHERE bucket=?"
     prepared_all_locations_query = cassandra_connection.session.prepare(all_locations_query)
-    locations_rows = cassandra_connection.session.execute_async(prepared_all_locations_query).result()
+    locations_rows = cassandra_connection.session.execute_async(prepared_all_locations_query, (bucket,)).result()
     locations_stations_query = "SELECT * FROM stations_by_location WHERE location_id=?"
     prepared_location_stations_query = cassandra_connection.session.prepare(locations_stations_query)
     locations_stations_data = []
@@ -36,20 +37,21 @@ def get_locations_and_stations(location_id=None):
         locations_stations_data.append(location_row)
 
     return json.dumps(locations_stations_data, cls=CustomEncoder)
-    
-@app.route('/api/location/<string:location_id>/')
+
+@app.route('/api/location/<string:location_id>', methods=['GET'])
 def get_location(location_id):
     query = "SELECT * FROM location_info_by_location WHERE location_id=?"
     prepared = cassandra_connection.session.prepare(query)
     rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
     try:
         data = rows[0]
-    except IndexError:
-        data = {}
+    except IndexError:    
+        print("Location with id {} was not found!".format(location_id))
+        abort(404)
     
     return json.dumps(data, cls=CustomEncoder)
     
-@app.route('/api/stations_by_location/<string:location_id>/')
+@app.route('/api/stations_by_location/<string:location_id>', methods=['GET'])
 def get_stations_by_location(location_id):
     query = "SELECT * FROM stations_by_location WHERE location_id=?"
     prepared = cassandra_connection.session.prepare(query)
@@ -58,7 +60,7 @@ def get_stations_by_location(location_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/livewebcams_by_location/<string:location_id>/')
+@app.route('/api/livewebcams_by_location/<string:location_id>', methods=['GET'])
 def get_livewebcams_by_location(location_id):
     query = "SELECT * FROM livewebcams_by_location WHERE location_id=?"
     prepared = cassandra_connection.session.prepare(query)
@@ -67,7 +69,7 @@ def get_livewebcams_by_location(location_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/webcam_photos_by_location/<string:location_id>/<int:from_timestamp>/<int:to_timestamp>')
+@app.route('/api/webcam_photos_by_location/<string:location_id>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
 def get_webcam_photos_by_location(location_id, from_timestamp, to_timestamp):
     query = "SELECT * FROM webcam_photos_by_location WHERE location_id=? AND date=? AND timestamp >=? AND timestamp <=?"
     prepared = cassandra_connection.session.prepare(query)
@@ -78,12 +80,13 @@ def get_webcam_photos_by_location(location_id, from_timestamp, to_timestamp):
     futures = []
 
     current_date = datetime(from_dt.year, from_dt.month, from_dt.day)
-    print(current_date)
+
     while (current_date <= to_dt):
         futures.append(cassandra_connection.session.execute_async(prepared, (location_id, current_date, from_timestamp, to_timestamp,)))
         current_date += relativedelta(days=1)
     
     data = []
+    
     for future in futures:
         rows = future.result()
         for row in rows:
@@ -91,8 +94,8 @@ def get_webcam_photos_by_location(location_id, from_timestamp, to_timestamp):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/webcam_photos_by_location_by_limit/<string:location_id>/<int:date>')
-@app.route('/api/webcam_photos_by_location_by_limit/<string:location_id>/<int:date>/<int:limit>/')
+@app.route('/api/webcam_photos_by_location_by_limit/<string:location_id>/<int:date>', methods=['GET'])
+@app.route('/api/webcam_photos_by_location_by_limit/<string:location_id>/<int:date>/<int:limit>', methods=['GET'])
 def get_webcam_photos_by_location_by_limit(location_id, date, limit=None):
     query = "SELECT * FROM webcam_photos_by_location WHERE location_id=? AND date=?"
     date_partition = datetime.fromtimestamp(date/1000.0)
@@ -107,7 +110,7 @@ def get_webcam_photos_by_location_by_limit(location_id, date, limit=None):
 
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/parameters_by_location/<string:location_id>/')
+@app.route('/api/parameters_by_location/<string:location_id>', methods=['GET'])
 def get_parameters_by_location(location_id):
     query = "SELECT * FROM parameters_by_location WHERE location_id=?"
     prepared = cassandra_connection.session.prepare(query)
@@ -115,17 +118,8 @@ def get_parameters_by_location(location_id):
     data =  [row for row in rows]
     
     return json.dumps(data, cls=CustomEncoder)
-    
-@app.route('/api/status_parameters_by_location/<string:location_id>')
-def get_status_parameters_by_location(location_id):
-    query = "SELECT * FROM status_parameters_by_location WHERE location_id=?"
-    prepared = cassandra_connection.session.prepare(query)
-    rows = cassandra_connection.session.execute_async(prepared, (location_id,)).result()
-    data =  [row for row in rows]
-    
-    return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/sensor_status_by_location/<string:location_id>')
+@app.route('/api/sensor_status_by_location/<string:location_id>', methods=['GET'])
 def get_sensor_status_by_location(location_id):
     query = "SELECT * FROM sensor_status_by_location WHERE location_id=?"
     prepared = cassandra_connection.session.prepare(query)

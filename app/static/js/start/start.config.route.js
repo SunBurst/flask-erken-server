@@ -16,7 +16,7 @@
                 controllerAs: 'vm',
                 resolve: {
                     resolvedLocations: function(locations, startStorage) {
-                        return locations.getLocations()
+                        return locations.getLocationsAndStations()
                             .then(function(response) {
                                 var data = response.data
                                 var initObjects = true;

@@ -1,5 +1,4 @@
 (function() {
-    
     'use strict';
     
     angular
@@ -10,7 +9,6 @@
     
     function locations($resource) {
         
-        var cachedLocationsPromise;
         var customInterceptor = {
             response: function(response) {
                 return response;
@@ -18,35 +16,29 @@
         };
         
         return {
-            getLocations: getLocations,
+            getLocationsAndStations: getLocationsAndStations
         };
         
-        function getLocations() {
-            var promise = cachedLocationsPromise;
-            var resource = $resource('/api/locations/', {}, {
+        function getLocationsAndStations() {
+            var resource = $resource('/api/locations_and_stations/:bucket', {}, {
                 query: {
-                    method: 'GET', params: {},
-                    isArray: true,
+                    method: 'GET', params: {bucket: 0}, isArray: true, 
                     interceptor: customInterceptor
                 }
             });
             
-            if (!promise) {
-                promise = resource.query().$promise
-                    .then(getLocationsComplete)
-                    .catch(getLocationsFailed);
-            }
-            
+            return resource.query().$promise
+                .then(getLocationsComplete)
+                .catch(getLocationsFailed);
+                
             function getLocationsComplete(response) {
-                cachedLocationsPromise = promise;
                 return response;
             }
+            
             function getLocationsFailed(error) {
                 console.log(error);
             }
-            
-            return promise;
-
+        
         }
         
     }

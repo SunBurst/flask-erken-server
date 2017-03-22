@@ -4,6 +4,7 @@
 
     angular.module('app.core', [
         'ui.router',
+        'ngMaterial',
         'ngResource',
         'highcharts-ng',
         'datatables', 

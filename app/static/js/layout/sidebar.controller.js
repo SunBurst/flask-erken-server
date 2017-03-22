@@ -5,24 +5,31 @@
         .module('app.layout')
         .controller('Sidebar', Sidebar);
 
-    Sidebar.$inject = ['locations'];
+    Sidebar.$inject = ['$state', 'locations'];
     
-    function Sidebar(locations) {
+    function Sidebar($state, locations) {
         var vm = this;
         vm.locations = [];
+        vm.selectLocation = selectLocation;
         
         activate();
         
         function activate() {
-            return getLocations().then(function() {});
+            return getLocationsAndStations().then(function() {
+                console.log("Sidebar loaded");
+            });
         }
 
-        function getLocations() {
-            return locations.getLocations()
+        function getLocationsAndStations() {
+            return locations.getLocationsAndStations()
                 .then(function(response) {
                     vm.locations = response.data;
                     return vm.locations;
                 });
+        }
+        
+        function selectLocation(state) {
+            $state.go(state);
         }
     
     }

@@ -1,6 +1,20 @@
-<div data-ng-controller"Shell as vm">
-    <div class="wrapper">
-        <div data-ng-include="'static/partials/layout/nav.html'"></div>
-        <div id="page-wrapper" ui-view></div>
+<div data-ng-controller="Shell as shellVm">
+    
+    <md-toolbar layout="row">
+        <div class="md-toolbar-tools">
+            <md-button class="menu" ng-click="shellVm.toggleList()" hide-gt-sm aria-label="Show Location List">
+                <md-icon md-svg-src="/static/images/svg/menu.svg"></md-icon>
+            </md-button>
+            <h2 md-truncate flex>Erken Laboratory Monitoring</h2>
+            <!-- <md-button ui-sref="start" aria-label="Start"><h2 flex md-truncate>Erken Laboratory Monitoring</h2></md-button> -->
+        </div>
+    </md-toolbar>
+    
+    <div flex layout="row">
+        <div data-ng-include="'static/partials/layout/sidebar.html'"></div>
+        <md-content flex layout="column">
+            <div ui-view></div>
+        </md-content>
     </div>
+
 </div>

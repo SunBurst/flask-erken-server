@@ -10,72 +10,79 @@
     
     <link href="/static/images/favicon.ico" rel="shortcut icon">
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" rel="stylesheet">
-    <!-- <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.min.css" rel="stylesheet"/>
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" 
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" rel="stylesheet"> -->
+    <link href="/static/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.css" rel="stylesheet"/>
     <!-- <link href="/static/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet"> -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <!-- <link href="/static/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"> -->
     <!-- <link href="/static/bower_components/angular-rangeslider/angular.rangeSlider.css" rel="stylesheet"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-bootstrap-lightbox/0.12.0/angular-bootstrap-lightbox.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
     <!-- <link href="/static/bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css" rel="stylesheet"> -->
-    <link href="/static/css/style.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.css">
+    <!-- <link href="/static/css/style.min.css" rel="stylesheet"> -->
     <!-- <link href="/static/css/style.css" rel="stylesheet"> -->
+    <link href="/static/css/style_new.css" rel="stylesheet">
 </head>
     
-<body>
+<body ng-cloak layout="column">
 
     <div data-ng-include="'static/partials/layout/shell.html'"></div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN193fgB-M7MdBiaxqwi2h9i_-2_MAWsk"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous">
-    </script>
-    <!-- <script src="/static/bower_components/jquery/dist/jquery.min.js"></script> -->
-    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    </script> -->
+    <script src="/static/bower_components/jquery/dist/jquery.js"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
     <!-- <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script> --> <!-- Minified -->
     <!-- <script src="/static/bower_components/angular/angular.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script> -->
     <!-- <script src="/static/bower_components/angular-animate/angular-animate.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.min.js"></script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script> -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-aria.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.js"></script>
     <!-- <script src="/static/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.js"></script>
     <!-- <script src="/static/bower_components/angular-ui-router/release/angular-ui-router.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.js"></script>
     <!-- <script src="/static/bower_components/angular-resource/angular-resource.min.js"></script> -->
     <script src="/static/bower_components/gmap-clusterer/markerclusterer/src/markerclusterer.js "></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/angular-datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/angular-datatables.js"></script>
     <!-- <script src="/static/bower_components/angular-datatables/demo/src/archives/dist/angular-datatables.js"></script> -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/css/angular-datatables.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/css/angular-datatables.css">
     <!-- <link href="/static/bower_components/angular-datatables/demo/src/archives/dist/css/angular-datatables.css" rel="stylesheet"> -->
     <!-- <script src="/static/bower_components/moment/moment.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
     <!-- <script src="/static/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.js"></script>
     <script src="/static/bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
     
     <!-- <script src="/static/bower_components/angular-rangeslider/angular.rangeSlider.js"></script> -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" 
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
-    </script>
-    <!-- <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script> -->
+    </script> -->
+    <script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
     <script src="https://code.highcharts.com/modules/heatmap.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts-ng/1.0.1/highcharts-ng.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts-ng/1.0.1/highcharts-ng.js"></script>
     <!-- <script src="/static/bower_components/highcharts-ng/dist/highcharts-ng.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
     <!-- <script src="/static/bower_components/lodash/dist/lodash.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-simple-logger/0.1.7/angular-simple-logger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-simple-logger/0.1.7/angular-simple-logger.js"></script>
     <!-- <script src="/static/bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.4.1/angular-google-maps.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.4.1/angular-google-maps.js"></script>
     <!-- <script src="/static/bower_components/angular-google-maps/dist/angular-google-maps.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-bootstrap-lightbox/0.12.0/angular-bootstrap-lightbox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-bootstrap-lightbox/0.12.0/angular-bootstrap-lightbox.js"></script>
     <!-- <script src="/static/bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script> -->
     
     <script src="/static/js/app.js"></script>

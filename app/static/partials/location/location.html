@@ -1,4 +1,26 @@
-<div>
+<md-content flex>
+    <md-toolbar>
+      <h2 class="md-display-1" ng-model="vm.location.location_name">{[ vm.location.location_name ]}</h2>
+        <h4 class="md-title" ng-model="vm.location.location_position">
+            <i class="fa fa-location-arrow fa-fw"></i> 
+            {[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}
+        </h4>
+        <h4 class="md-title" ng-model="vm.location.location_environment_category">
+            <i class="fa fa-leaf fa-fw"></i> {[ vm.location.location_environment_category ]} 
+        </h4>
+    </md-toolbar>
+    <md-content>
+        <md-tabs md-dynamic-height md-border-bottom>
+          <md-tab label="overview" ui-sref=".overview"></md-tab>
+          <md-tab label="data" ui-sref=".data"></md-tab>
+          <md-tab label="cams & photos" ui-sref=".cams-and-photos"></md-tab>
+          <md-tab label="status" ui-sref=".status"></md-tab>
+        </md-tabs>
+        <div ui-view></div>
+    </md-content>
+    
+</md-content>
+<!-- <div>
     <div class="blue">
         <div class="test">
             <div class="row">
@@ -31,4 +53,4 @@
     <div id="location-tab-content" class="tab-content">
         <div ui-view></div>
     </div>
-</div>
+</div> -->

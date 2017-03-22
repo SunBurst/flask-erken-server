@@ -1,6 +1,6 @@
 CREATE KEYSPACE hydroview WITH replication = {
     'class': 'NetworkTopologyStrategy', 
-    'replication_factor': '3'
+    'datacenter1': '2'
 };
 
 USE hydroview;

@@ -1,5 +1,16 @@
-<div data-ng-controller="Sidebar as vm">
-    <div class="navbar-default sidebar" role="navigation">
+<div data-ng-controller="Sidebar as sidebarVm">
+    <md-sidenav layout="column" ng-click="shellVm.toggleList()" 
+        md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="z2">
+        <md-list>
+            <md-list-item ng-repeat="location in sidebarVm.locations" ui-sref="location({ location_id: location.id })">
+                <md-button>
+                    <md-icon md-font-icon="fa fa-globe" class="fa-fw"></md-icon>
+                    {[ location.name ]}
+                </md-button>
+            </md-list-item>
+        </md-list>
+    </md-sidenav>
+    <!-- <div class="navbar-default sidebar" role="navigation">
 
         <div class="sidebar-nav navbar-collapse">
 
@@ -19,21 +30,10 @@
                             </li>
                         </ul>
                     </li>
-                
-                <!-- <li class="dropdown-header">Parameters</li>
-                <li class="dropdown" ng-repeat="parameter in vm.parameters">
-                    <a data-toggle="dropdown" href="#">
-                        <i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]} <span><i class="fa fa-caret-down fa-fw"></i></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#"><i class="fa fa-thermometer-half fa-fw"></i> {[ parameter.parameter_name ]}</a></li>
-                    </ul>
-
-                </li> -->
 
               </ul>
         
         </div>
 
-    </div>
+    </div> -->
 </div>

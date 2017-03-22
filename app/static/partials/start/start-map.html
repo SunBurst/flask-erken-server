@@ -1,18 +1,16 @@
 <div data-ng-controller="StartMap as vm">
-    <div class="col-xs-12 no-padding">
-        <div>
-            <ui-gmap-google-map center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom'>
-                <ui-gmap-markers
-                    models="vm.markers"
-                    type="'cluster'"
-                    coords="'self'"
-                    icon="'icon'"
-                    idkey="'key'"
-                    options="'options'"
-                    typeOptions="vm.clusterOptions"
-                    fit="true">
-                </ui-gmap-markers>
-            </ui-gmap-google-map>
-        </div>
-    </div>
+    <md-content flex layout="column" layout-fill>
+        <ui-gmap-google-map center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom'>
+            <ui-gmap-markers
+                models="vm.markers"
+                type="'cluster'"
+                coords="'self'"
+                icon="'icon'"
+                idkey="'key'"
+                options="'options'"
+                typeOptions="vm.clusterOptions"
+                fit="true">
+            </ui-gmap-markers>
+        </ui-gmap-google-map>
+    </md-content>
 </div>
