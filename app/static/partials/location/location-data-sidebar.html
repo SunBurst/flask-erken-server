@@ -1,15 +1,26 @@
-<div class="col-sm-3">
-    <div class="card">
-        <div class="card-content">
-            <div class="page-content-nav">
-                <ul>
-                    <li class="dropdown-header">Parameters</li>
-                    <li ng-repeat="(parameter, enabled) in locationDataVm.parameterSelection">
-                        <input id="{[ parameter ]}-checkbox" type="checkbox" ng-model="locationDataVm.parameterSelection[parameter]" ng-change="locationDataVm.changeSelection(parameter, locationDataVm.parameterSelection[parameter])"></input>
-                        <label for="{[ parameter ]}-checkbox">{[ locationDataVm.parameters[parameter].parameter_name ]}</label>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<div flex="25">
+    <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Parameters</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <md-list>
+                <md-list-item ng-repeat="(parameter, enabled) in locationDataVm.parameterSelection">
+                    <p>{[ locationDataVm.parameters[parameter].parameter_name ]}</p>
+                    <md-checkbox class="md-secondary" ng-model="locationDataVm.parameterSelection[parameter]"></md-checkbox>
+                  </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+    
+    
+    <!-- <ul>
+        <li class="dropdown-header">Parameters</li>
+        <li ng-repeat="(parameter, enabled) in locationDataVm.parameterSelection">
+            <input id="{[ parameter ]}-checkbox" type="checkbox" ng-model="locationDataVm.parameterSelection[parameter]" ng-change="locationDataVm.changeSelection(parameter, locationDataVm.parameterSelection[parameter])"></input>
+            <label for="{[ parameter ]}-checkbox">{[ locationDataVm.parameters[parameter].parameter_name ]}</label>
+        </li>
+    </ul> -->
 </div>

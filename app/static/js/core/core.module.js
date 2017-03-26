@@ -8,7 +8,7 @@
         'ngResource',
         'highcharts-ng',
         'datatables', 
-        'daterangepicker',
+        'mdPickers',
         'uiGmapgoogle-maps',
         //'ui-rangeSlider',
         'bootstrapLightbox'

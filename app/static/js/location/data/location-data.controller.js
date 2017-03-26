@@ -9,6 +9,8 @@
         '$scope',
         '$state',
         '$timeout',
+        '$mdpDatePicker',
+        '$mdpTimePicker',
         'resolvedParameters',
         'resolvedParameterSelection',
         'locationStorage',
@@ -17,7 +19,7 @@
         'locationDatePicker'
     ];
         
-    function LocationData($scope, $state, $timeout, resolvedParameters, resolvedParameterSelection, locationStorage, locationDataSource, locationDataStorage, locationDatePicker) {
+    function LocationData($scope, $state, $timeout, $mdpDatePicker, $mdpTimePicker, resolvedParameters, resolvedParameterSelection, locationStorage, locationDataSource, locationDataStorage, locationDatePicker) {
         var vm = this;
 
         vm.changeDataSource = changeDataSource;

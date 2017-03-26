@@ -53,9 +53,11 @@
             'contrastDefaultColor': 'dark'
           });
         
-        $mdThemingProvider.theme('default')
-            .primaryPalette('blue')
-            .backgroundPalette('white');
+        //$mdThemingProvider.theme('default')
+        //    .primaryPalette('blue')
+        //    .accentPalette('orange')
+        //    .warnPalette('red')
+        //    .backgroundPalette('white');
         
     }
     

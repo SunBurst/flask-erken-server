@@ -1,79 +1,60 @@
-<div>
-    <div class="row row-eq-height">
-        
-        <div id="data-view" class="col-lg-5">
-            <div id="location-images-carousel" interval="vm.locationCarouselInterval" class="carousel slide" data-ride="carousel">
-
-                <ol class="carousel-indicators">
-                    <li data-target="#location-images-carousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#location-images-carousel" ng-repeat="station in vm.liveWebcams" data-slide-to="{[ $index + 1 ]}"></li>
-                </ol>
-
-                <div class="carousel-inner">
-                    <div class="item slides active">
-                        <div class="slide-1">
-                            <img class="img-responsive" data-ng-src="data:image/png;base64, {[ vm.location.location_image ]}">
-                        </div>
-                    </div>
-                    <div class="item slides" ng-repeat="station in vm.liveWebcams">
-                        <div class="slide-{[ $index + 2 ]}">
-                            <img class="img-responsive" data-ng-src="{[ station.livewebcam.url ]}">
-                            <div class="carousel-caption">
-                              <h4 class="white"><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
-                              <h5 class="white"><i class="fa fa-circle fa-fw red"></i> Live</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a class="left carousel-control" ng-click="vm.slideCarouselLeft()" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                <a class="right carousel-control" ng-click="vm.slideCarouselRight()" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                
-            </div> 
-        </div>
-        
-        <div class="col-lg-7">
-            <div class="google-map">
-                <ui-gmap-google-map ng-if="vm.map.showMap" center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom' idKey="location-google-map">
-                    <ui-gmap-markers
-                        models="vm.markers"
-                        type="'cluster'"
-                        coords="'self'"
-                        icon="'icon'"
-                        idkey="'key'"
-                        options="'options'"
-                        typeOptions="vm.clusterOptions"
-                        fit="true">
-                    </ui-gmap-markers>
-                </ui-gmap-google-map>
-            </div>
-        </div>
-        
+<md-content class="md-padding" layout-xs="column" layout="row">
+    
+    <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card>
+            <img data-ng-src="data:image/png;base64, {[ vm.location.location_image ]}" class="md-card-image" alt="{[ vm.location.location_name ]}">
+        </md-card>
+        <md-card>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Location Info</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <p class="md-body-2">Environment Category </p><p class="md-body-1">{[ vm.location.location_environment_category ]}</p>
+                <p class="md-body-2">Position (WGS84) </p><p class="md-body-1">{[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}</p>
+                <p class="md-body-2">Description </p><p class="md-body-1">{[ vm.location.location_description.long_description ]}</p>
+            </md-card-content>
+        </md-card>
     </div>
-    <div class="test">
-        <div class="row">
-            <h2 class="section-header">Description</h2>
-        </div>
-        <div class="row">
-            <span ng-model="vm.location.location_description">{[ vm.location.location_description.long_description ]}</span>
-        </div>
-        <div class="row">
-            <h2 class="section-header">Stations</h2>
-        </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="station in vm.stations">
-                <div class="card">
-                    <div class="card-image">
-                        <img ng-if="station.station_image" data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="img-responsive">
-                        <img ng-if="!station.station_image" data-ng-src="http://placehold.it/350x150" class="img-responsive thumbnail">
-                    </div>
-                    <div class="card-content">
-                        <h4><i class="fa fa-map-marker fa-fw"></i> {[ station.station_name ]}</h4>
-                        <p><i class="fa fa-location-arrow fa-fw"></i> {[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</p>
-                        <p><i class="fa fa-leaf fa-fw"></i> {[ station.station_environment_category ]}</p>
-                        <p>{[ station.station_description.short_description ]}</p>
-                    </div>
+    
+    <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card>
+            <img class="md-card-image">
+                <div class="google-map">
+                    <ui-gmap-google-map ng-if="vm.map.showMap" center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom' idKey="location-google-map">
+                        <ui-gmap-markers
+                            models="vm.markers"
+                            type="'cluster'"
+                            coords="'self'"
+                            icon="'icon'"
+                            idkey="'key'"
+                            options="'options'"
+                            typeOptions="vm.clusterOptions"
+                            fit="true">
+                        </ui-gmap-markers>
+                    </ui-gmap-google-map>
                 </div>
-            </div>
-
+            </img>
+      </md-card>
     </div>
-</div>
+
+</md-content>
+
+<md-content class="md-padding">
+    <h2 class="md-display-1">Stations</h2>
+    <div layout-xs="column" layout="row" layout-wrap>
+        <md-card ng-repeat="station in vm.stations" flex-xs="100" flex-gt-md="25">
+            <md-card-header>
+                <md-card-avatar>
+                    <img class="md-user-avatar" data-ng-src="data:image/png;base64, {[ station.station_image ]}"/>
+                </md-card-avatar>
+                <md-card-header-text>
+                    <span class="md-title">{[ station.station_name ]}</span>
+                    <span class="md-subhead">{[ station.station_environment_category ]}</span>
+                </md-card-header-text>
+            </md-card-header>
+            <img data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="md-card-image" alt="{[ station.station_name ]}">
+        </md-card>
+    </div>
+</md-content>

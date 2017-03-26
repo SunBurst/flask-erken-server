@@ -1,56 +1,14 @@
-<md-content flex>
-    <md-toolbar>
-      <h2 class="md-display-1" ng-model="vm.location.location_name">{[ vm.location.location_name ]}</h2>
-        <h4 class="md-title" ng-model="vm.location.location_position">
-            <i class="fa fa-location-arrow fa-fw"></i> 
-            {[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}
-        </h4>
-        <h4 class="md-title" ng-model="vm.location.location_environment_category">
-            <i class="fa fa-leaf fa-fw"></i> {[ vm.location.location_environment_category ]} 
-        </h4>
-    </md-toolbar>
-    <md-content>
-        <md-tabs md-dynamic-height md-border-bottom>
+<md-toolbar layout="row" layout-align="center end" class="md-primary md-hue-4">
+    <div flex flex-sm="100" flex-gt-sm="95" layout="column">
+        <h2 flex md-truncate>{[ vm.location.location_name ]}</h2>
+        <md-tabs md-stretch-tabs="always" class="md-primary md-hue-2">
           <md-tab label="overview" ui-sref=".overview"></md-tab>
           <md-tab label="data" ui-sref=".data"></md-tab>
           <md-tab label="cams & photos" ui-sref=".cams-and-photos"></md-tab>
           <md-tab label="status" ui-sref=".status"></md-tab>
         </md-tabs>
-        <div ui-view></div>
-    </md-content>
-    
-</md-content>
-<!-- <div>
-    <div class="blue">
-        <div class="test">
-            <div class="row">
-                <h3 class="white" ng-model="vm.location.location_name">{[ vm.location.location_name ]}</h3>
-                <h4 class="white" ng-model="vm.location.location_position"><i class="fa fa-location-arrow fa-fw"></i> {[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}</h4>
-                <h4 class="white" ng-model="vm.location.location_environment_category"><i class="fa fa-leaf fa-fw"></i> {[ vm.location.location_environment_category ]} </h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="location-nav">
-                <div class="tabs-wrapper">
-                    <ul class="nav nav-tabs tabs-4 blue-4">
-                      <li class="nav-item" ng-class="{ active: $state.includes('location.overview') }">
-                          <a ui-sref=".overview"><i class="fa fa-info fa-fw"></i> Overview</a>
-                      </li>
-                      <li class="nav-item" ng-class="{ active: $state.includes('location.data') }">
-                          <a ui-sref=".data"><i class="fa fa-bar-chart-o fa-fw"></i> Data</a>
-                      </li>
-                      <li class="nav-item" ng-class="{ active: $state.includes('location.cams-and-photos') }">
-                          <a ui-sref=".cams-and-photos"><i class="fa fa-video-camera fa-fw"></i> Cams & Photos</a>
-                      </li>
-                      <li class="nav-item" ng-class="{ active: $state.includes('location.status') }">
-                          <a ui-sref=".status"><i class="fa fa-bolt fa-fw"></i> Status</a>
-                      </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
-    <div id="location-tab-content" class="tab-content">
-        <div ui-view></div>
-    </div>
-</div> -->
+</md-toolbar>
+
+<div ui-view></div>
+
