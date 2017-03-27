@@ -1,45 +1,38 @@
 (function() {
-    
     'use-strict';
     
     angular
         .module('app.location')
-        .factory('locationDatePicker', locationDatePicker);
+        .factory('locationDataTimeOptions', locationDataTimeOptions);
+
+    function locationDataTimeOptions() {
         
-    locationDatePicker.$inject = ['DatePickerOptions'];
-     
-    function locationDatePicker(DatePickerOptions) {
-        
-        var datePicker = {
-            date: {
+        var timeOptions = {
+            'Last 30 Days': {
                 startDate: moment().subtract(30, 'days'),
                 endDate: moment()
             }
         };
-        
-        var datePickerOptions = DatePickerOptions;
+        var selectedTimeOption = 'Last 30 Days';
         
         return {
-            getDatePickerDate: getDatePickerDate,
-            getDatePickerOptions: getDatePickerOptions,
-            setDatePickerDate: setDatePickerDate
+            getTimeOptions: getTimeOptions,
+            getSelectedTimeOption: getSelectedTimeOption,
+            setSelectedTimeOption: setSelectedTimeOption
         };
         
-        function getDatePickerDate() {
-            return datePicker.date;
+        function getTimeOptions() {
+            return timeOptions;
         }
         
-        function getDatePickerOptions() {
-            return datePickerOptions;
+        function getSelectedTimeOption() {
+            return selectedTimeOption;
         }
         
-        function setDatePickerDate(newDate) {
-            datePicker.date.startDate = newDate.startDate;
-            datePicker.date.endDate = newDate.endDate;
-            
-            return datePicker;
+        function setSelectedTimeOption(newValue) {
+            selectedTimeOption = newValue;
         }
-
-    }
     
+    }
+
 })();

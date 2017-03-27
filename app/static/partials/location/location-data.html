@@ -1,4 +1,8 @@
 <md-content class="md-padding" layout-xs="column" layout="row">
-    <div data-ng-include="'/static/partials/location/location-data-content.html'"></div>
-    <div data-ng-include="'/static/partials/location/location-data-sidebar.html'"></div>
+    <div flex-xs flex-gt-xs="75" layout="column">
+        <div data-ng-include="'/static/partials/location/location-data-content.html'"></div>
+    </div>
+    <div flex-xs flex-gt-xs="25" layout="column">
+        <div data-ng-include="'/static/partials/location/location-data-sidebar.html'"></div>
+    </div>
 </md-content>

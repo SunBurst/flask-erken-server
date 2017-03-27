@@ -1,33 +1,38 @@
-<div flex="75">
-    <md-card>
-        <md-card-content layout="row">
-            <md-card-actions layout="row" layout-align="start center">
-            <div layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+<md-card>
+    <md-card-content layout="column">
+        <md-card-actions layout="column" layout-align="space-around center">
+            <div layout="row" layout-align="space-around center" layout-fill>
                 <span>Data Source</span>
                 <md-select ng-model="locationDataVm.dataSourcesModel.selectedDataSource" class="md-no-underline">
                   <md-option 
                       ng-repeat="source in locationDataVm.dataSourcesModel.dataSources" value="{[ source ]}">{[ source ]}</md-option>
                 </md-select>
             </div>
-            <div layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-                <span>From Time</span>
-                <mdp-date-picker mdp-placeholder="Date" ng-model="locationDataVm.datePickerMasterModel.datePicker.date.startDate"></mdp-date-picker>
-                <mdp-time-picker ng-model="locationDataVm.datePickerMasterModel.datePicker.date.startDate"></mdp-time-picker>
-                <span>To Time</span>
-                <mdp-date-picker mdp-placeholder="Date" ng-model="locationDataVm.datePickerMasterModel.datePicker.date.endDate"></mdp-date-picker>
-                <mdp-time-picker ng-model="locationDataVm.datePickerMasterModel.datePicker.date.endDate"></mdp-time-picker>
+            <div layout="row" layout-align="space-around center" layout-fill>
+                <span>Time</span>
+                <md-select ng-model="locationDataVm.timeOptionsModel.selectedTimeOption" class="md-no-underline">
+                  <md-option 
+                      ng-repeat="(timeoption, timevalue) in locationDataVm.timeOptionsModel.timeOptions" value="{[ timeoption ]}">{[ timeoption ]}</md-option>
+                </md-select>
+            </div>
+            <div layout="column" layout-align="space-around center" layout-fill>
+                <div layout="row" layout-align="space-around center" layout-fill>
+                    <span>From Time</span>
+                    <mdp-date-picker mdp-placeholder="Date" ng-model="locationDataVm.datePickerMasterModel.startDate"></mdp-date-picker>
+                    <mdp-time-picker mdp-placeholder="Time" ng-model="locationDataVm.datePickerMasterModel.startDate"></mdp-time-picker>
+                </div>
+                <div layout="row" layout-align="space-around center" layout-fill>
+                    <span>To Time</span>
+                    <mdp-date-picker mdp-placeholder="Date" ng-model="locationDataVm.datePickerMasterModel.endDate"></mdp-date-picker>
+                    <mdp-time-picker mdp-placeholder="Time" ng-model="locationDataVm.datePickerMasterModel.endDate"></mdp-time-picker>
+                </div>
                 <!-- <input date-range-picker ng-model="locationDataVm.datePickerMasterModel.datePicker.date" class="form-control date-picker" 
                     type="text" options="locationDataVm.datePickerMasterModel.datePickerOptions" ng-change="locationDataVm.changeDataSource()"/> -->
             </div>
-            <div layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-                 <md-button ui-sref=".charts" class="md-raised" ng-class="{ 'md-primary': $state.includes('location.data.charts') }">Charts</md-button>
-                 <md-button ui-sref=".tables" class="md-raised" ng-class="{ 'md-primary': $state.includes('location.data.tables') }">Tables</md-button>
-            </div>
-            </md-card-actions>
-        </md-card-content>
-    </md-card>
+        </md-card-actions>
+    </md-card-content>
+</md-card>
 <!-- </md-content> -->
-</div>
 <!-- <div class="col-sm-9 col-md-9">
     <div class="row">
         <div class="col-xs-12">

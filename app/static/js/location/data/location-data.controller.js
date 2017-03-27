@@ -16,37 +16,43 @@
         'locationStorage',
         'locationDataSource',
         'locationDataStorage',
-        'locationDatePicker'
+        //'locationDatePicker',
+        'locationDataTimeOptions'
     ];
         
-    function LocationData($scope, $state, $timeout, $mdpDatePicker, $mdpTimePicker, resolvedParameters, resolvedParameterSelection, locationStorage, locationDataSource, locationDataStorage, locationDatePicker) {
-        var vm = this;
+    function LocationData($scope, $state, $timeout, $mdpDatePicker, $mdpTimePicker, resolvedParameters, resolvedParameterSelection, locationStorage, locationDataSource, locationDataStorage, locationDataTimeOptions) {        var vm = this;
 
         vm.changeDataSource = changeDataSource;
         vm.changeSelection = changeSelection;
         vm.datePickerMasterModel = {
-            datePicker: {
-                date: {
-                    startDate: null,
-                    endDate: null
-                }
-            },
-            datePickerOptions: null
+            startDate: locationDataTimeOptions.getSelectedTimeOption(),
+            endDate: locationDataTimeOptions.getSelectedTimeOption(), 
+            //datePicker: {
+            //    date: {
+            //        startDate: null,
+            //        endDate: null
+            //    }
+            //}
+            //datePickerOptions: null
         };
         vm.isParameterType = isParameterType;
         vm.parameterList = resolvedParameters;
         vm.parameters = locationStorage.getParameters();
         vm.parameterSelection = resolvedParameterSelection;
         vm.setSelectedDataSource = setSelectedDataSource;
+        vm.timeOptionsModel = {
+            selectedTimeOption: locationDataTimeOptions.getSelectedTimeOption(),
+            timeOptions: locationDataTimeOptions.getTimeOptions()
+        };
         
         vm.dataSourcesModel = {
             dataSources: locationDataSource.getDataSources(),
             selectedDataSource: locationDataSource.getSelectedDataSource()
         };
         
-        vm.datePickerMasterModel.datePicker.date.startDate = locationDatePicker.getDatePickerDate().startDate;
-        vm.datePickerMasterModel.datePicker.date.endDate = locationDatePicker.getDatePickerDate().endDate;
-        vm.datePickerMasterModel.datePickerOptions = locationDatePicker.getDatePickerOptions();
+        //vm.datePickerMasterModel.datePicker.date.startDate = locationDatePicker.getDatePickerDate().startDate;
+        //vm.datePickerMasterModel.datePicker.date.endDate = locationDatePicker.getDatePickerDate().endDate;
+        //vm.datePickerMasterModel.datePickerOptions = locationDatePicker.getDatePickerOptions();
         
         function changeDataSource() {
             vm.setSelectedDataSource();
@@ -72,12 +78,12 @@
             }
         }, 100);
         
-        $scope.$watch(function() {
-            return vm.datePickerMasterModel.datePicker.date;
-        }, function (newDate, oldDate) {
-            var done = locationDatePicker.setDatePickerDate(vm.datePickerMasterModel.datePicker.date);
-            $scope.$broadcast('datePickerChange');
-        });
+        //$scope.$watch(function() {
+        //    return vm.datePickerMasterModel.datePicker.date;
+        //}, function (newDate, oldDate) {
+        //    var done = locationDatePicker.setDatePickerDate(vm.datePickerMasterModel.datePicker.date);
+        //    $scope.$broadcast('datePickerChange');
+        //});
         
     }
         

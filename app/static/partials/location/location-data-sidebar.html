@@ -1,4 +1,12 @@
-<div flex="25">
+<div flex layout="column">
+    <md-card>
+        <md-card-content>
+            <div layout="row" layout-align="space-around center">
+                <md-button ui-sref=".charts" class="md-raised" ng-class="{ 'md-primary': $state.includes('location.data.charts') }">Charts</md-button>
+                <md-button ui-sref=".tables" class="md-raised" ng-class="{ 'md-primary': $state.includes('location.data.tables') }">Tables</md-button>
+            </div>
+        </md-card-content>
+    </md-card>
     <md-card>
         <md-card-title>
           <md-card-title-text>
@@ -14,6 +22,7 @@
             </md-list>
         </md-card-content>
     </md-card>
+</div>
     
     
     <!-- <ul>
@@ -23,4 +32,4 @@
             <label for="{[ parameter ]}-checkbox">{[ locationDataVm.parameters[parameter].parameter_name ]}</label>
         </li>
     </ul> -->
-</div>
+
