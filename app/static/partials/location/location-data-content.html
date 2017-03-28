@@ -3,20 +3,74 @@
         <md-card-actions layout="column" layout-align="space-around center">
             <div layout="row" layout-align="space-around center" layout-fill>
                 <span>Data Source</span>
-                <md-select ng-model="locationDataVm.dataSourcesModel.selectedDataSource" class="md-no-underline">
+                <md-select ng-model="locationDataVm.dataSourcesModel.selectedDataSource" ng-change="locationDataVm.changeDataSource()"
+                    class="md-no-underline">
                   <md-option 
                       ng-repeat="source in locationDataVm.dataSourcesModel.dataSources" value="{[ source ]}">{[ source ]}</md-option>
                 </md-select>
             </div>
             <div layout="row" layout-align="space-around center" layout-fill>
-                <span>Time</span>
-                <md-select ng-model="locationDataVm.timeOptionsModel.selectedTimeOption" class="md-no-underline">
+                <span>Time Range</span>
+                <md-select ng-model="locationDataVm.timeOptionsModel.selectedTimeOption" ng-change="locationDataVm.timeOptionChange()" class="md-no-underline">
                   <md-option 
                       ng-repeat="(timeoption, timevalue) in locationDataVm.timeOptionsModel.timeOptions" value="{[ timeoption ]}">{[ timeoption ]}</md-option>
                 </md-select>
             </div>
-            <div layout="column" layout-align="space-around center" layout-fill>
+            <div ng-show="locationDataVm.isTimeOption('Custom Range')" layout="column" layout-align="space-around center" layout-fill>
+                
+                <!-- <div layout="row" layout-align="space-around center" layout-fill>
+                    <input mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+                        placeholder="Date" show-todays-date="" ng-model="locationDataVm.datePickerMasterModel.startDate" class=" md-input"
+                        readonly="readonly">
+                </div>
                 <div layout="row" layout-align="space-around center" layout-fill>
+                    <input mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+                        placeholder="Date" show-todays-date="" ng-model="locationDataVm.datePickerMasterModel.endDate" class=" md-input"
+                        readonly="readonly">
+                </div>
+                <md-button class="md-raised md-primary" ng-click="locationDataVm.applyCustomTimeRange()">Apply</md-button> -->
+                
+                
+                <div layout="row" layout-align="space-around center" layout-fill>
+                    <div class="range">
+                      <md-input-container>
+                        <label>Start Date/Time</label>
+                        <input mdc-datetime-picker date="true" time="true" type="text"
+                               placeholder="Date"
+                               max-date="locationDataVm.datePickerMasterModel.endDate"
+                               ng-model="locationDataVm.datePickerMasterModel.startDate"
+                        />
+                      </md-input-container>
+                      <md-input-container>
+                        <label>End Date/Time</label>
+                        <input mdc-datetime-picker date="true" time="true" type="text"
+                               placeholder="Date"
+                               min-date="locationDataVm.datePickerMasterModel.startDate"
+                               ng-model="locationDataVm.datePickerMasterModel.endDate"
+                        />
+                      </md-input-container>
+                    </div>
+                    <md-button class="md-raised md-primary" ng-click="locationDataVm.applyCustomTimeRange()">Apply</md-button>
+                </div>
+
+                
+                <!-- <div layout="column" flex-gt-md="30" class="range layout-column flex-gt-md-30">
+                    <md-input-container class="md-input-has-placeholder">
+                        <label>Start Date/Time</label>
+                        <input mdc-datetime-picker="" date="true" time="true" type="text"
+                        placeholder="Date" ng-model="locationDataVm.datePickerMasterModel.startDate" class=" md-input"
+                        max-date="locationDataVm.dateTimeEnd" readonly="readonly" id="input_0">
+                        <div class="md-errors-spacer"></div>
+                    </md-input-container>
+                    <md-input-container class="md-input-has-placeholder">
+                        <label>End Date/Time</label>
+                        <input mdc-datetime-picker="" date="true" time="true" type="text"
+                        placeholder="Date" class=" md-input" readonly="readonly"
+                        id="input_1" min-date="locationDataVm.datePickerMasterModel.startDate"="dateTimeEnd">
+                        <div class="md-errors-spacer"></div>
+                    </md-input-container>
+                </div> -->
+                <!-- <div layout="row" layout-align="space-around center" layout-fill>
                     <span>From Time</span>
                     <mdp-date-picker mdp-placeholder="Date" ng-model="locationDataVm.datePickerMasterModel.startDate"></mdp-date-picker>
                     <mdp-time-picker mdp-placeholder="Time" ng-model="locationDataVm.datePickerMasterModel.startDate"></mdp-time-picker>
@@ -26,12 +80,15 @@
                     <mdp-date-picker mdp-placeholder="Date" ng-model="locationDataVm.datePickerMasterModel.endDate"></mdp-date-picker>
                     <mdp-time-picker mdp-placeholder="Time" ng-model="locationDataVm.datePickerMasterModel.endDate"></mdp-time-picker>
                 </div>
+                <md-button class="md-raised md-primary" ng-click="locationDataVm.applyCustomTimeRange()">Apply</md-button> -->
                 <!-- <input date-range-picker ng-model="locationDataVm.datePickerMasterModel.datePicker.date" class="form-control date-picker" 
                     type="text" options="locationDataVm.datePickerMasterModel.datePickerOptions" ng-change="locationDataVm.changeDataSource()"/> -->
             </div>
         </md-card-actions>
     </md-card-content>
 </md-card>
+
+<div ui-view></div>
 <!-- </md-content> -->
 <!-- <div class="col-sm-9 col-md-9">
     <div class="row">

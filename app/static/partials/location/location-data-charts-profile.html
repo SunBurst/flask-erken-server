@@ -1,6 +1,13 @@
 <div ng-controller="LocationDataChartsProfile as chartProfileVm" ng-init="chartProfileVm.initChartParameter(locationDataVm.parameters[parameter])">
     <!-- <div range-slider min="profileVm.minDepth" max="profileVm.maxDepth" model-min="profileVm.minDepth" model-max="profileVm.maxDepth"></div> -->
     <div ng-repeat="(chart, chartOptions) in chartProfileVm.chartParameter.charts" ng-init="chartProfileVm.initChart(chart)">
-        <highchart id="{[ chart ]}-{[ parameter ]}" config="chartProfileVm.chartParameter.charts[chart]"></highchart>
+        <md-card>
+            <md-card-title>
+                <h4><i class="fa fa-thermometer-half fa-fw"></i> {[ locationDataVm.dataSourcesModel.selectedDataSource ]} {[ locationDataVm.parameters[parameter].parameter_name ]} Chart {[ $index + 1 ]}</h4>
+            </md-card-title>
+            <md-card-content>
+                <highchart id="{[ chart ]}-{[ parameter ]}" config="chartProfileVm.chartParameter.charts[chart]"></highchart>
+            </md-card-content>
+        </md-card>
     </div>
 </div>

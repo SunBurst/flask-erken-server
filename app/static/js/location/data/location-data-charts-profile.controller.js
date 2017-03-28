@@ -10,11 +10,11 @@
         'locationMeasurements',
         'locationStorage',
         'locationDataSource', 
-        'locationDatePicker', 
+        'locationDataTimeOptions',
         'HeatMapOptions'
     ];
     
-    function LocationDataChartsProfile($scope, locationMeasurements, locationStorage, locationDataSource, locationDatePicker, HeatMapOptions) {
+    function LocationDataChartsProfile($scope, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions, HeatMapOptions) {
         var vm = this;
         
         vm.chartParameter = {};
@@ -26,6 +26,8 @@
         vm.location = locationStorage.getLocation();
         vm.setChartSubtitle = setChartSubtitle;
         vm.setChartTitle = setChartTitle;
+        vm.setDatePicker = setDatePicker;
+        vm.setSelectedTimeOption = setSelectedTimeOption;
         vm.updateChartData = updateChartData;
         vm.updateDailyLocationAverageChartData = updateDailyLocationAverageChartData;
         vm.updateHourlyLocationAverageChartData = updateHourlyLocationAverageChartData;
@@ -36,12 +38,15 @@
             selectedDataSource: locationDataSource.getSelectedDataSource()
         };
         
+        vm.selectedTimeOption = null;
+        
         vm.datePickerModel = {
-            datePicker: {
-                date: locationDatePicker.getDatePickerDate()
-            },
-            datePickerOptions: locationDatePicker.getDatePickerOptions()
-        };
+            startDate: null,
+            endDate: null
+        }
+        
+        vm.setSelectedTimeOption();
+        vm.setDatePicker();
         
         //vm.depthModel = {
         //    minDepth: 0.0,
@@ -51,8 +56,8 @@
         function getDailyLocationAverageChartData() {
             var locationId = vm.location.location_id;
             var parameterId = vm.chartParameter.parameter.parameter_id
-            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
-            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            var fromDate = vm.datePickerModel.startDate.valueOf();
+            var toDate = vm.datePickerModel.endDate.valueOf();
             return locationMeasurements.getDailyStationsAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
@@ -62,8 +67,8 @@
         function getHourlyLocationAverageChartData() {
             var locationId = vm.location.location_id;
             var parameterId = vm.chartParameter.parameter.parameter_id
-            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
-            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            var fromDate = vm.datePickerModel.startDate.valueOf();
+            var toDate = vm.datePickerModel.endDate.valueOf();
             return locationMeasurements.getHourlyStationsChartAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
@@ -73,8 +78,8 @@
         function getHighFrequencyLocationAverageChartData() {
             var locationId = vm.location.location_id;
             var parameterId = vm.chartParameter.parameter.parameter_id
-            var fromDate = vm.datePickerModel.datePicker.date.startDate.valueOf();
-            var toDate = vm.datePickerModel.datePicker.date.endDate.valueOf();
+            var fromDate = vm.datePickerModel.startDate.valueOf();
+            var toDate = vm.datePickerModel.endDate.valueOf();
             return locationMeasurements.getHighFrequencyStationsAverageProfileMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
@@ -103,9 +108,18 @@
         }
         
         function setChartSubtitle(chart) {
-            var fromDate = vm.datePickerModel.datePicker.date.startDate.format('YYYY-MM-DD HH:mm:ss');
-            var toDate = vm.datePickerModel.datePicker.date.endDate.format('YYYY-MM-DD HH:mm:ss');
+            var fromDate = vm.datePickerModel.startDate.format('YYYY-MM-DD HH:mm:ss');
+            var toDate = vm.datePickerModel.endDate.format('YYYY-MM-DD HH:mm:ss');
             vm.chartParameter.charts[chart].subtitle.text = fromDate + ' - ' + toDate;
+        }
+        
+        function setDatePicker() {
+            vm.datePickerModel.startDate = locationDataTimeOptions.getTimeOptionDate(vm.selectedTimeOption)[0];
+            vm.datePickerModel.endDate = locationDataTimeOptions.getTimeOptionDate(vm.selectedTimeOption)[1];
+        }
+        
+        function setSelectedTimeOption() {
+            vm.selectedTimeOption = locationDataTimeOptions.getSelectedTimeOption();
         }
         
         function updateDailyLocationAverageChartData() {
@@ -183,7 +197,8 @@
         });
         
         $scope.$on('datePickerChange', function() {
-            vm.datePickerModel.datePicker.date = locationDatePicker.getDatePickerDate();
+            vm.setSelectedTimeOption();
+            vm.setDatePicker();
             vm.updateChartData();
         });
         

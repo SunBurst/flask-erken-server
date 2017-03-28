@@ -2,17 +2,29 @@
     <div ng-if="isSelected">
         <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'parameter')">
             <div ng-controller="LocationDataTablesParameter as parameterVm" ng-init="parameterVm.initTableParameter(locationDataVm.parameters[parameter])">
-                <div ng-repeat="(table, tableOptions) in parameterVm.tableParameter.tables" ng-init="parameterVm.initTable(table)">
-                    <div class="card">
-                        <div class="card-content">
-                            <h4><i class="fa fa-thermometer-half fa-fw"></i> {[ locationDataVm.dataSourcesModel.selectedDataSource ]} {[ locationDataVm.parameters[parameter].parameter_name ]} Table {[ $index + 1 ]}</h4>
-                            <table datatable="{[ table ]}-{[ parameter ]}" dt-options="tableOptions.dtOptions" dt-columns="tableOptions.dtColumns" dt-instance="tableOptions.dtInstance" class="row-border hover" ng-if="tableOptions.dtOptions && tableOptions.dtColumns"></table>
-                        </div>
-                    </div>
-                </div>
+                <!-- <div ng-repeat="(table, tableOptions) in parameterVm.tableParameter.tables" ng-init="parameterVm.initTable(table)"> -->
+                    <md-table-container>
+                      <table md-table md-row-select multiple ng-model="LocationDataTablesParameter.selected">
+                        <thead md-head md-order="date">
+                          <tr md-row>
+                            <th md-column md-order-by="date.value"><span>Date</span></th>
+                            <th md-column><span>Location</span></th>
+                            <th md-column md-numeric>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody md-body>
+                          <tr md-row md-select="measurement" md-select-id="date" md-auto-select ng-repeat="measurement in LocationDataTablesParameter.measurements">
+                            <td md-cell>{[ measurement.date ]}</td>
+                            <td md-cell>{[ measurement.location_name ]}</td>
+                            <td md-cell>{[ measurement.avg_value | number: 2 ]}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </md-table-container>
+                <!-- </div> -->
             </div>
         </div>
-        <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'profile')">
+        <!-- <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'profile')">
             <div ng-controller="LocationDataTablesProfile as profileVm" ng-init="profileVm.initTableParameter(locationDataVm.parameters[parameter])">
                 <div ng-repeat="(table, tableOptions) in profileVm.tableParameter.tables" ng-init="profileVm.initTable(table)">
                      <div class="card">
@@ -23,6 +35,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

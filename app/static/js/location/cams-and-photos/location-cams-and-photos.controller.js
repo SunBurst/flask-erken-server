@@ -1,14 +1,13 @@
 (function() {
-    
     'use strict';
     
     angular
         .module('app.location')
         .controller('LocationCamsAndPhotos', LocationCamsAndPhotos);
     
-    LocationCamsAndPhotos.$inject = ['$scope', 'Lightbox', 'resolvedLiveWebcams', 'locationCamsAndPhotosStorage', 'locationStorage', 'locationWebcams'];
+    LocationCamsAndPhotos.$inject = ['$scope', 'resolvedLiveWebcams', 'locationCamsAndPhotosStorage', 'locationStorage', 'locationWebcams'];
     
-    function LocationCamsAndPhotos($scope, Lightbox, resolvedLiveWebcams, locationCamsAndPhotosStorage, locationStorage, locationWebcams) {
+    function LocationCamsAndPhotos($scope, resolvedLiveWebcams, locationCamsAndPhotosStorage, locationStorage, locationWebcams) {
         var vm = this;
 
         vm.getWebcamPhotos = getWebcamPhotos;

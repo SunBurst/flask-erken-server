@@ -7,11 +7,9 @@
         'ngMaterial',
         'ngResource',
         'highcharts-ng',
-        'datatables', 
-        'mdPickers',
         'uiGmapgoogle-maps',
         //'ui-rangeSlider',
-        'bootstrapLightbox'
+        'ngMaterialDatePicker'
     ]);
     
 })();
