@@ -1,0 +1,21 @@
+<md-table-container>
+  <table md-table>
+    <thead ng-if="!tableParameterVm.options.decapitate" md-head md-order="tableParameterVm.query.order">
+      <tr md-row>
+        <th md-column md-order-by="timestamp"><span>Date & Time</span></th>
+        <th md-column md-order-by="station_name"><span>Station</span></th>
+        <th md-column md-numeric md-order-by="avg_value" md-desc>
+            <span>
+                {[ tableParameterVm.tableParameter.parameter.parameter_name ]} ({[ tableParameterVm.tableParameter.parameter.parameter_unit ]})
+            </span></th>
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row md-select="measurement" md-auto-select="tableParameterVm.options.autoSelect" ng-repeat="measurement in tableParameterVm.measurements | filter: filter.search | orderBy: tableParameterVm.query.order | limitTo: tableParameterVm.query.limit : (tableParameterVm.query.page -1) * tableParameterVm.query.limit">
+        <td md-cell>{[ measurement.timestamp | date:'yyyy-MM-dd HH:mm:ss Z']}</td>
+        <td md-cell>{[ measurement.station_name ]}</td>
+        <td md-cell>{[ measurement.avg_value | number: 2 ]}</td>
+      </tr>
+    </tbody>
+  </table>
+</md-table-container>

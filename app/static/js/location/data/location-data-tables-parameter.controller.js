@@ -8,26 +8,40 @@
     LocationDataTablesParameter.$inject = [
         '$filter',
         '$scope',        
+        'DataTableParameterOptions',
         'locationMeasurements',
         'locationStorage',
         'locationDataSource', 
         'locationDataTimeOptions'
     ];
     
-    function LocationDataTablesParameter($filter, $scope, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions) {
+    function LocationDataTablesParameter($filter, $scope, DataTableParameterOptions, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions) {
         var vm = this;
         
         vm.getDailyStationsAverageData = getDailyStationsAverageData;
         vm.getHighFrequencyStationsAverageData = getHighFrequencyStationsAverageData;
         vm.getHourlyStationsAverageData = getHourlyStationsAverageData;
         vm.initTableParameter = initTableParameter;
+        vm.initTables = initTables;
+        vm.limitOptions = [5, 10, 15];
         vm.location = locationStorage.getLocation();
+        vm.dataTableOptions = {};
+        vm.query = {};
+        vm.setDataTableOptions = setDataTableOptions;
         vm.setDatePicker = setDatePicker;
         vm.setSelectedTimeOption = setSelectedTimeOption;
         vm.tableParameter = {};
-        vm.updateTableData = updateTableData;
+        vm.updateDailyStationsAverageData = updateDailyStationsAverageData;
+        vm.updateHourlyStationsAverageData = updateHourlyStationsAverageData;
+        vm.updateHighFrequencyStationsAverageData = updateHighFrequencyStationsAverageData;
         
-        vm.selected = [];
+        vm.options = {
+            decapitate: false,
+            boundaryLinks: false,
+            limitSelect: true,
+            pageSelect: true
+        };
+        
         vm.measurements = [];
         
         vm.dataSourcesModel = {
@@ -43,6 +57,7 @@
         };
         
         vm.setSelectedTimeOption();
+        vm.setDataTableOptions();
         vm.setDatePicker();
         
         function getDailyStationsAverageData() {
@@ -52,7 +67,7 @@
             var toDate = vm.datePickerModel.endDate.valueOf();
             return locationMeasurements.getDailyStationsAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
-                    return response;
+                    return response.data;
                 });
         }
         
@@ -63,7 +78,7 @@
             var toDate = vm.datePickerModel.endDate.valueOf();
             return locationMeasurements.getHighFrequencyStationsAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
-                    return response;
+                    return response.data;
                 });
         }
         
@@ -74,16 +89,18 @@
             var toDate = vm.datePickerModel.endDate.valueOf();
             return locationMeasurements.getHourlyStationsAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
-                    return response;
+                    return response.data;
                 });
         }
         
         function initTableParameter(parameter) {
-            console.log(parameter);
             vm.tableParameter.parameter = parameter;
-            vm.getDailyStationsAverageData().then(function(data) {
-                vm.measurements = data;
-            });
+            vm.initTables();
+        }
+        
+        function setDataTableOptions() {
+            vm.dataTableOptions = DataTableParameterOptions(vm.dataSourcesModel.selectedDataSource);
+            vm.query = vm.dataTableOptions.query;
         }
         
         function setDatePicker() {
@@ -95,20 +112,45 @@
             vm.selectedTimeOption = locationDataTimeOptions.getSelectedTimeOption();
         }
         
-        function updateTableData() {
-            //vm.tableParameter.tables.locationAverageTable.changeData();
-            //vm.tableParameter.tables.stationsAverageTable.changeData();
+        function initTables() {
+            if (vm.dataSourcesModel.selectedDataSource === 'Daily') {
+                vm.updateDailyStationsAverageData();
+            }
+            else if (vm.dataSourcesModel.selectedDataSource === 'Hourly') {
+                vm.updateHourlyStationsAverageData();
+            }
+            else if (vm.dataSourcesModel.selectedDataSource === 'High Frequency') {
+                vm.updateHighFrequencyStationsAverageData();
+            }
+        }
+        
+        function updateDailyStationsAverageData() {
+            vm.getDailyStationsAverageData().then(function(data) {
+                vm.measurements = data;
+            });
+        }
+        
+        function updateHourlyStationsAverageData() {
+            vm.getHourlyStationsAverageData().then(function(data) {
+                vm.measurements = data;
+            });
+        }
+        
+        function updateHighFrequencyStationsAverageData() {
+            vm.getHighFrequencyStationsAverageData().then(function(data) {
+                vm.measurements = data;
+            });
         }
         
         $scope.$on('dataSourceChange', function() {
             vm.dataSourcesModel.selectedDataSource = locationDataSource.getSelectedDataSource();
-            //vm.reInitTables();
+            vm.initTables();
         });
         
         $scope.$on('datePickerChange', function() {
             vm.setSelectedTimeOption();
             vm.setDatePicker();
-            vm.updateTableData();
+            vm.initTables();
         });
         
     }

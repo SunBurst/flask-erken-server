@@ -27,14 +27,17 @@
             getTimeOptions: getTimeOptions,
             getSelectedTimeOption: getSelectedTimeOption,
             setCustomRangeTimeOptions: setCustomRangeTimeOptions,
+            setPredefinedTimeOptions: setPredefinedTimeOptions,
             setSelectedTimeOption: setSelectedTimeOption
         };
         
         function getTimeOptionDate(timeOption) {
+            setPredefinedTimeOptions();
             return timeOptions[timeOption];
         }
         
         function getTimeOptions() {
+            setPredefinedTimeOptions();
             return timeOptions;
         }
         
@@ -46,10 +49,24 @@
             timeOptions['Custom Range'] = [moment(startDate), moment(endDate)];
         }
         
+        function setPredefinedTimeOptions() {
+            timeOptions['Today'] = [moment(), moment()];
+            timeOptions['Yesterday'] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
+            timeOptions['Last 7 Days'] = [moment().subtract(6, 'days'), moment()];
+            timeOptions['Last 30 Days'] = [moment().subtract(29, 'days'), moment()];
+            timeOptions['This Month'] = [moment().startOf('month'), moment().endOf('month')];
+            timeOptions['Last Month'] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+            timeOptions['Last 365 Days'] = [moment().subtract(364, 'days'), moment()];
+            timeOptions['This Year'] = [moment().startOf('year'), moment().endOf('year')];
+            timeOptions['Last Year'] = [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')];
+            
+            return timeOptions;
+        }
+        
         function setSelectedTimeOption(newValue) {
             selectedTimeOption = newValue;
         }
-    
+
     }
 
 })();

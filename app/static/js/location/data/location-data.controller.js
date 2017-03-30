@@ -26,6 +26,7 @@
             startDate: null,
             endDate: null
         };
+        vm.isDataSource = isDataSource;
         vm.isParameterType = isParameterType;
         vm.isTimeOption = isTimeOption;
         vm.parameterList = resolvedParameters;
@@ -60,6 +61,10 @@
         function changeSelection(parameterId, newValue) {
             locationDataStorage.setParameterSelectedValue(parameterId, newValue);
             $scope.$broadcast('parameterSelectionChange');
+        }
+        
+        function isDataSource(dataSource) {
+            return dataSource === vm.dataSourcesModel.selectedDataSource;
         }
         
         function isParameterType(parameterType, isOfType) {

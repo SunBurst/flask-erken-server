@@ -9,7 +9,6 @@
     
     function LocationDataTables($scope, locationDataStorage) {
         var vm = this;
-        
         vm.parameterSelection = locationDataStorage.getParameterSelection();
         
         $scope.$on('parameterSelectionChange', function() {

@@ -1,0 +1,20 @@
+<md-table-container>
+  <table md-table>
+    <thead ng-if="!tableProfileVm.options.decapitate" md-head md-order="tableProfileVm.query.order">
+      <tr md-row>
+        <th md-column md-order-by="timestamp"><span>Date & Time</span></th>
+        <th md-column md-order-by="station_name"><span>Station</span></th>
+        <th md-column md-numeric md-order-by="depth" md-desc><span>Depth (m)</span></th>
+        <th md-column md-numeric md-order-by="avg_value" md-desc><span>{[ tableProfileVm.tableParameter.parameter.parameter_name ]} ({[ tableProfileVm.tableParameter.parameter.parameter_unit ]})</span></th>
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row md-select="measurement" md-auto-select="tableProfileVm.options.autoSelect" ng-repeat="measurement in tableProfileVm.measurements | filter: filter.search | orderBy: tableProfileVm.query.order | limitTo: tableProfileVm.query.limit : (tableProfileVm.query.page -1) * tableProfileVm.query.limit">
+        <td md-cell>{[ measurement.timestamp | date: 'yyyy-MM-dd HH:mm:ss Z']}</td>
+        <td md-cell>{[ measurement.station_name ]}</td>
+        <td md-cell>{[ measurement.depth | number: 2 ]}</td>
+        <td md-cell>{[ measurement.avg_value | number: 2 ]}</td>
+      </tr>
+    </tbody>
+  </table>
+</md-table-container>

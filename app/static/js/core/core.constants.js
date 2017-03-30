@@ -3,6 +3,33 @@
     
     angular
         .module('app.core')
+        .constant('DataTableParameterOptions', function getDataTableParameterOptions(dataSource) {
+            var dataSourcesOptions = {
+                'Daily': {
+                    query: {
+                        order: 'date',
+                        limit: 5,
+                        page: 1
+                    }
+                },
+                'Hourly': {
+                    query: {
+                        order: 'date_hour',
+                        limit: 5,
+                        page: 1
+                    }
+                },
+                'High Frequency': {
+                    query: {
+                        order: 'timestamp',
+                        limit: 5,
+                        page: 1
+                    }
+                }
+            };
+            
+            return dataSourcesOptions[dataSource];
+        })
         .constant('DatePickerOptions', getDatePickerOptions())
         .constant('GoogleMapClusterOptions', getGoogleMapClusterOptions())
         .constant('GoogleMapDefaultOptions', getDefaultMapOptions())
@@ -10,6 +37,8 @@
         .constant('HeatMapOptions', getHeatMapOptions())
         .constant('HighChartOptions', getHighChartOptions());
 
+    
+    
     function getDatePickerOptions() {
         return {
             applyClass: 'btn-success',
@@ -20,15 +49,6 @@
                 toLabel: "To",
                 cancelLabel: 'Cancel',
                 customRangeLabel: 'Custom Range'
-            },
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'Last 365 Days': [moment().subtract(364, 'days'), moment()]
             }
         };
     }

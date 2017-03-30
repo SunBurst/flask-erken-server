@@ -1,4 +1,35 @@
-<div class="test">
+<md-content class="md-padding" layout-xs="column" layout="row">
+    <div layout-xs="column" layout="row" layout-wrap>
+        <md-card ng-repeat="stationLiveWebcam in locationCamsAndPhotosVm.liveWebcams" flex-xs="100" flex-gt-md="50">
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">{[ stationLiveWebcam.station_name ]}</span>
+                </md-card-header-text>
+            </md-card-header>
+            <img data-ng-src="{[ stationLiveWebcam.livewebcam.url ]}" fallback-src="http://google.com/favicon.ico" class="md-card-image" alt="{[ stationLiveWebcam.station_name ]}">
+        </md-card>
+    </div>
+</md-content>
+
+<md-content layout-padding>
+    <md-card>
+        <md-content>
+            <input time="false" date="true" mdc-datetime-picker="" type="text" id="date" placeholder="Date"
+                ng-model="locationCamsAndPhotosVm.datePickerModel.date" class=" md-input" readonly="readonly"
+                ng-change="locationCamsAndPhotosVm.dateChange()">
+        </md-content>
+    </md-card>
+    <md-grid-list
+        md-cols-gt-md="12" md-cols="3" md-cols-md="8"
+        md-row-height-gt-md="1:1" md-row-height="4:3"
+        md-gutter-gt-md="16px" md-gutter-md="8px" md-gutter="4px">
+      <md-grid-tile
+          ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.webcamPhotos">
+      </md-grid-tile>
+    </md-grid-list>
+</md-content>
+
+<!-- <div class="test">
     <div class="row">
         <h2 class="page-header">Live Webcams</h2>
         <div class="col-xs-12 col-md-6" ng-repeat="station in locationCamsAndPhotosVm.liveWebcams">
@@ -36,4 +67,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
