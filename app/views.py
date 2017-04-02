@@ -69,6 +69,16 @@ def get_livewebcams_by_location(location_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
+@app.route('/api/webcam_photos_by_location/<string:location_id>/<int:on_date>', methods=['GET'])
+def get_webcam_photos_by_location_on_date(location_id, on_date):
+    query = "SELECT * FROM webcam_photos_by_location WHERE location_id=? AND date=? ORDER BY timestamp ASC"
+    prepared = cassandra_connection.session.prepare(query)
+    on_dt = datetime.fromtimestamp(on_date/1000)
+    rows = cassandra_connection.session.execute_async(prepared, (location_id, on_dt,)).result()   
+    data = [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/webcam_photos_by_location/<string:location_id>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
 def get_webcam_photos_by_location(location_id, from_timestamp, to_timestamp):
     query = "SELECT * FROM webcam_photos_by_location WHERE location_id=? AND date=? AND timestamp >=? AND timestamp <=?"

@@ -1,19 +1,10 @@
-<div data-ng-controller="Shell as shellVm">
-    
-    <md-toolbar layout="row" class="md-toolbar-tools">
-        <md-button class="menu" ng-click="shellVm.toggleList()" hide-gt-sm aria-label="Show Location List">
-            <md-icon md-svg-src="/static/images/svg/menu.svg"></md-icon>
-        </md-button>
-        <h2 md-truncate flex>Erken Laboratory Monitoring</h2>
-    </md-toolbar>
-    
-    <div flex layout="row">
-        
-        <div data-ng-include="'static/partials/layout/sidebar.html'"></div>
-        <div layout="column" flex>
-            <div ui-view></div>
-        </div>
-        
-    </div>
-
+<div layout="row" flex ng-controller="Shell as shellVm">
+    <ng-include="'/static/partials/layout/sidebar.html'" flex layout="column" data-ng-controller="Sidebar as sidebarVm"></ng-include>
+    <ng-include="'/static/partials/layout/main-content.html'" flex layout="column"></ng-include>
 </div>
+<!-- <md-toolbar layout="row" class="md-toolbar-tools">
+    <md-button class="menu" ng-click="shellVm.toggleList()" hide-gt-sm aria-label="Show Location List">
+        <md-icon md-svg-src="/static/images/svg/menu.svg"></md-icon>
+    </md-button>
+    <h2 md-truncate flex>Erken Laboratory Monitoring</h2>
+</md-toolbar> -->

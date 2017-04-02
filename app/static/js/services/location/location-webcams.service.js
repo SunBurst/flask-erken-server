@@ -46,6 +46,34 @@
             }
         }
         
+        function getWebcamPhotosOnDate(locationId, onDate) {
+            var resource = $resource('/api/webcam_photos_by_location/:location_id/:on_date', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        on_date: onDate
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                    location_id: locationId, 
+                    on_date: onDate
+                }).$promise
+                .then(getWebcamPhotosOnDateComplete)
+                .catch(getWebcamPhotosOnDateFailed);
+                
+            function getWebcamPhotosOnDateComplete(response) {
+                return response;
+            }
+            
+            function getWebcamPhotosOnDateFailed(error) {
+                console.log(error);
+            }
+        }
+        
         function getWebcamPhotos(locationId, fromTimestamp, toTimestamp) {
             var resource = $resource('/api/webcam_photos_by_location/:location_id/:from_timestamp/:to_timestamp', {}, {
                 query: {

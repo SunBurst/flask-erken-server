@@ -9,14 +9,16 @@
     
     function Location($state, $timeout, locationStorage) {
         var vm = this;
-
-        vm.location = locationStorage.getLocation();
         
-        $timeout(function() {
-            if ($state.current.name === 'location') {
-                $state.go('location.overview');
-            }
-        }, 100);
+        vm.initTab = "overview";
+        vm.location = locationStorage.getLocation();
+        vm.selectedItem = vm.initTab;
+        $state.go("location." + vm.initTab);
+        //$timeout(function() {
+        //    if ($state.current.name === 'location') {
+        //        $state.go('location.overview');
+        //    }
+        //}, 100);
 
     }
     

@@ -1,49 +1,43 @@
-<div data-ng-controller="Sidebar as sidebarVm">
-    
-    <md-sidenav layout="column" md-theme-default class="md-sidenav-left md-whiteframe-z2" ng-click="shellVm.toggleList()" 
-        md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
-        <md-content layout-padding class="md-primary">
-            <md-list flex>
-                <md-subheader class="md-no-sticky">Locations</md-subheader>
-                <md-list-item class="md-3-line" ng-repeat="location in sidebarVm.locations">
-                    <img data-ng-src="data:image/png;base64, {[ location.image ]}" class="md-avatar" alt="{[ location.name ]}"/>
-                    <div class="md-list-item-text" layout="column">
-                        <h3>{[ location.name ]}</h3>
-                        <h4>{[ location.environment_category ]}</h4>
-                        <p>{[ location.position.latitude ]}, {[ location.position.longitude ]}</p>
-                    </div>
-                    <div class="md-list-item" layout="column">
-                        <md-menu class="md-secondary">
-                            <md-button md-menu-origin aria-label="Open {[ location.name ]} menu"
-                                ng-click="$mdOpenMenu($event)"><span>Go to</span>
-                            </md-button>
-                            <md-menu-content width="4">
-                                <md-list>
-                                    <md-subheader class="md-no-sticky">Location</md-subheader>
-                                    <md-list-item class="md-3-line" ui-sref="location({ location_id: location.id })">
-                                        <img data-ng-src="data:image/png;base64, {[ location.image ]}" class="md-avatar" alt="{[ location.name ]}"/>
-                                        <div class="md-list-item-text">
-                                            <h3>{[ location.name ]}</h3>
-                                            <h4>{[ location.environment_category ]}</h4>
-                                            <p>{[ location.position.latitude ]}, {[ location.position.longitude ]}</p>
-                                        </div>
-                                    </md-list-item>
-                                    <md-subheader class="md-no-sticky">Stations</md-subheader>
-                                    <md-list-item class="md-3-line" ng-repeat="station in location.location_stations" ui-sref="station({ location_id: location.id, station_id: station.station_id })">
-                                        <img data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="md-avatar" alt="{[ station.station_name ]}"/>
-                                        <div class="md-list-item-text" layout="column">
-                                            <h3>{[ station.station_name ]}</h3>
-                                            <h4>{[ station.station_environment_category ]}</h4>
-                                            <p>{[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</p>
-                                        </div>
-                                    </md-list-item>
-                                </md-list>
-                            </md-menu-content>
-                        </md-menu>
-                    </div>
-                </md-list-item>
-            </md-list>
-        </md-content>
-    </md-sidenav>
-
-</div>
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" ng-click="shellVm.toggleList()" 
+    md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" flex>
+    <md-list>
+        <md-subheader>Locations</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="location in sidebarVm.locations">
+            <img data-ng-src="data:image/png;base64, {[ location.image ]}" class="md-avatar" alt="{[ location.name ]}"/>
+            <div class="md-list-item-text" layout="column">
+                <h3>{[ location.name ]}</h3>
+                <h4>{[ location.environment_category ]}</h4>
+                <p>{[ location.position.latitude ]}, {[ location.position.longitude ]}</p>
+            </div>
+            <div class="md-list-item" layout="column">
+                <md-menu class="md-secondary">
+                    <md-button md-menu-origin aria-label="Open {[ location.name ]} menu"
+                        ng-click="$mdOpenMenu($event)"><span>Go to</span>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-list>
+                            <md-subheader class="md-no-sticky">Location</md-subheader>
+                            <md-list-item class="md-3-line" ui-sref="location({ location_id: location.id })">
+                                <img data-ng-src="data:image/png;base64, {[ location.image ]}" class="md-avatar" alt="{[ location.name ]}"/>
+                                <div class="md-list-item-text">
+                                    <h3>{[ location.name ]}</h3>
+                                    <h4>{[ location.environment_category ]}</h4>
+                                    <p>{[ location.position.latitude ]}, {[ location.position.longitude ]}</p>
+                                </div>
+                            </md-list-item>
+                            <md-subheader class="md-no-sticky">Stations</md-subheader>
+                            <md-list-item class="md-3-line" ng-repeat="station in location.location_stations" ui-sref="station({ location_id: location.id, station_id: station.station_id })">
+                                <img data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="md-avatar" alt="{[ station.station_name ]}"/>
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{[ station.station_name ]}</h3>
+                                    <h4>{[ station.station_environment_category ]}</h4>
+                                    <p>{[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</p>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </md-list-item>
+    </md-list>
+</md-sidenav>

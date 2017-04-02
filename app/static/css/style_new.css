@@ -1,14 +1,32 @@
-html, body {
+.flexbox {
+    display: flex
+}
+
+$gray: #eee;
+
+md-content.md-default-theme {
+  background-color: $gray;
+}
+
+md-sidenav {
+  fill: #737373;
+  ng-md-icon {
+    position: relative;
+    top: 5px; // adjust for svg viewbox
+  }
+}
+
+/*html, body {
   font-family: 'Roboto', sans-serif;
   font-size:14px;
   height:100%;
   margin: 0px;
   padding: 0px;
-}
+}*/
 
 /* Toolbar area */
 
-.menu {
+/*.menu {
   background-color: transparent;
   border: none;
   height: 38px;
@@ -20,11 +38,11 @@ html, body {
 md-toolbar h3 {
   margin: auto;
   font-weight: 500;
-}
+}*/
 
 /* Sidenav area */
 
-md-list-item > button {
+/*md-list-item > button {
   width:100%;
   text-align:left !important;
 }
@@ -35,12 +53,12 @@ md-list-item > button {
 
   md-sidenav  md-list {
     padding: 0px 0px 8px 0px;
-  }
+  }*/
 
 
 /* Primary content area */
 
-#content {
+/*#content {
   overflow: hidden;
 }
 
@@ -88,17 +106,17 @@ md-button.menuBtn > md-icon {
   display: block;
   height: auto;
   max-width: 500px;
-}
+}*/
 
 /* Utils */
 
-.content-wrapper {
+/*.content-wrapper {
   position: relative;
-}
+}*/
 
 /* Typography support coming in 0.8.0 */
 
-md-toolbar h1 {
+/*md-toolbar h1 {
   font-size: 1.250em;
   font-weight: 400;
 }
@@ -128,7 +146,7 @@ span.name {
   font-weight: bold;
   font-size:1.1em;
   padding-left:5px;
-}
+} */
 
 .google-map {
     width: 100%;
