@@ -1,8 +1,87 @@
 <md-content class="md-padding" layout-xs="column" layout="row">
+    
     <div flex-xs flex-gt-xs="75" layout="column">
-        <div data-ng-include="'/static/partials/location/location-data-content.html'"></div>
+        <md-card>
+            <md-card-content layout="column">
+                <md-card-actions layout="column" layout-align="space-around center">
+                    <div layout="row" layout-align="space-around center" layout-fill>
+                        <span>Data Source</span>
+                        <md-select ng-model="locationDataVm.dataSourcesModel.selectedDataSource" ng-change="locationDataVm.changeDataSource()"
+                            class="md-no-underline">
+                          <md-option 
+                              ng-repeat="source in locationDataVm.dataSourcesModel.dataSources" value="{[ source ]}">{[ source ]}</md-option>
+                        </md-select>
+                    </div>
+                    <div layout="row" layout-align="space-around center" layout-fill>
+                        <span>Time Range</span>
+                        <md-select ng-model="locationDataVm.timeOptionsModel.selectedTimeOption" ng-change="locationDataVm.timeOptionChange()" class="md-no-underline">
+                          <md-option 
+                              ng-repeat="(timeoption, timevalue) in locationDataVm.timeOptionsModel.timeOptions" value="{[ timeoption ]}">{[ timeoption ]}</md-option>
+                        </md-select>
+                    </div>
+                    <div ng-show="locationDataVm.isTimeOption('Custom Range')" layout="column" layout-align="space-around center" layout-fill>
+                        <div layout="row" layout-align="space-around center" layout-fill>
+                            <div class="range">
+                              <md-input-container>
+                                <label>Start Date/Time</label>
+                                <input mdc-datetime-picker date="true" time="true" type="text"
+                                       placeholder="Date"
+                                       max-date="locationDataVm.datePickerMasterModel.endDate"
+                                       ng-model="locationDataVm.datePickerMasterModel.startDate">
+                                </input>
+                              </md-input-container>
+                              <md-input-container>
+                                <label>End Date/Time</label>
+                                <input mdc-datetime-picker date="true" time="true" type="text"
+                                       placeholder="Date"
+                                       min-date="locationDataVm.datePickerMasterModel.startDate"
+                                       ng-model="locationDataVm.datePickerMasterModel.endDate">
+                                </input>
+                              </md-input-container>
+                            </div>
+                            <md-button class="md-raised md-primary" ng-click="locationDataVm.applyCustomTimeRange()">Apply</md-button>
+                        </div>
+                    </div>
+                </md-card-actions>
+            </md-card-content>
+        </md-card>
+
+        <ui-view></ui-view>
+
+        <!-- <div data-ng-include="'/static/partials/location/location-data-content.html'"></div> -->
     </div>
+    
     <div flex-xs flex-gt-xs="25" layout="column">
-        <div data-ng-include="'/static/partials/location/location-data-sidebar.html'"></div>
+        
+        <div flex layout="column">
+            <md-card>
+                <md-card-content>
+                    <div layout="row" layout-align="space-around center">
+                        <md-button ui-sref=".charts" class="md-raised" ng-class="{'md-primary': $state.includes('location.data.charts') }">Charts</md-button>
+                        <md-button ui-sref=".tables" class="md-raised" ng-class="{'md-primary': $state.includes('location.data.tables') }">Tables</md-button>
+                    </div>
+                </md-card-content>
+            </md-card>
+            <md-card>
+                <md-card-title>
+                  <md-card-title-text>
+                    <span class="md-headline">Parameters</span>
+                  </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <md-list>
+                        <md-list-item ng-repeat="(parameter, enabled) in locationDataVm.parameterSelection">
+                            <p>{[ locationDataVm.parameters[parameter].parameter_name ]}</p>
+                            <md-checkbox class="md-secondary" ng-model="locationDataVm.parameterSelection[parameter]"
+                                ng-change="locationDataVm.changeSelection(parameter, locationDataVm.parameterSelection[parameter])">
+                            </md-checkbox>
+                          </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+        </div>
+
+        <!-- <div data-ng-include="'/static/partials/location/location-data-sidebar.html'"></div> -->
     </div>
+
 </md-content>

@@ -14,7 +14,13 @@
         vm.addStationMarkers = addStationMarkers;
         vm.clusterOptions = GoogleMapClusterOptions;
         vm.locationList = startStorage.getLocationList();
-        vm.map = { center: { latitude: 63, longitude: 16}, zoom: 12 };
+        vm.map = {
+            center: { 
+                latitude: 63, 
+                longitude: 16
+            }, 
+            zoom: 12 
+        };
         vm.mapOptions = GoogleMapDefaultOptions;
         vm.mapIcons = GoogleMapIcons;
         vm.markers = [];
