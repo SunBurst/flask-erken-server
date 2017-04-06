@@ -115,18 +115,6 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.parameters_by_location (
-            location_id text,
-            parameter_name text,
-            parameter_id text,
-            parameter_description frozen <description>,
-            parameter_unit text,
-            measurement_type text,
-            PRIMARY KEY ((location_id), parameter_name, parameter_id)
-        ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
-    )
-    
-    cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.status_parameters_by_location (
             location_id text,
             parameter_name text,
@@ -1058,6 +1046,88 @@ def sync_cassandra():
             station_position frozen <position>,
             PRIMARY KEY ((parameter_id), location_name, station_name, location_id, station_id)
         ) WITH CLUSTERING ORDER BY (location_name ASC, station_name ASC, location_id ASC, station_id ASC) """.format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.video_urls_by_location (
+            location_id text,
+            date date,
+            timestamp timestamp,
+            station_name text,
+            station_id text,
+            video_url text,
+            PRIMARY KEY ((location_id, date), timestamp, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (timestamp DESC, station_name ASC, station_id ASC) """.format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.daily_wind_rose_measurements_by_location (
+            location_id text,
+            wind_rose_id text,
+            qc_level int,
+            year int,
+            date timestamp,
+            direction float,
+            station_name text,
+            station_id text,
+            avg_wind_speed float,
+            unit text static,
+            PRIMARY KEY ((location_id, wind_rose_id, qc_level, year), date, direction, station_name, station_id)
+        ) WITH CLUSTERING ORDER BY (date DESC, direction ASC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.parameters_all_measurement_types_by_location (
+            location_id text,
+            measurement_type_name text,
+            measurement_type_id text,
+            parameter_name text,
+            parameter_id text,
+            parameter_description frozen <description>,
+            PRIMARY KEY ((location_id), measurement_type_name, parameter_name, measurement_type_id, parameter_id)
+        ) WITH CLUSTERING ORDER BY (measurement_type_name ASC, parameter_name ASC, measurement_type_id ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.parameters_by_location (
+            location_id text,
+            parameter_name text,
+            parameter_id text,
+            parameter_description frozen <description>,
+            parameter_unit text,
+            PRIMARY KEY ((location_id), parameter_name, parameter_id)
+        ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.profile_parameters_by_location (
+            location_id text,
+            parameter_name text,
+            parameter_id text,
+            parameter_description frozen <description>,
+            parameter_unit text,
+            PRIMARY KEY ((location_id), parameter_name, parameter_id)
+        ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.wind_rose_parameters_by_location (
+            location_id text,
+            wind_rose_name text,
+            wind_rose_id text,
+            wind_rose_description frozen <description>,
+            PRIMARY KEY ((location_id), wind_rose_name, wind_rose_id)
+        ) WITH CLUSTERING ORDER BY (wind_rose_name ASC, wind_rose_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.parameter_groups_by_location (
+            location_id text,
+            group_name text,
+            group_id text,
+            group_description frozen <description>,
+            PRIMARY KEY ((location_id), group_name, group_id)
+        ) WITH CLUSTERING ORDER BY (group_name ASC, group_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     log.info('All done!')

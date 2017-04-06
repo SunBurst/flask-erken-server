@@ -1,5 +1,9 @@
-<md-content class="md-padding" layout-xs="column" layout="row">
+<md-content class="md-padding">
+    
     <div layout-xs="column" layout="row" layout-wrap>
+        <div ng-show="locationCamsAndPhotosVm.noLiveWebcams()">
+            <p class="md-body-1">No live webcams available!</p>
+        </div>
         <md-card ng-repeat="stationLiveWebcam in locationCamsAndPhotosVm.liveWebcams" flex-xs="100" flex-gt-md="50">
             <md-card-header>
                 <md-card-header-text>
@@ -10,13 +14,11 @@
             <img data-ng-src="{[ stationLiveWebcam.livewebcam.url ]}" fallback-src="http://google.com/favicon.ico" class="md-card-image" alt="{[ stationLiveWebcam.station_name ]}">
         </md-card>
     </div>
-</md-content>
 
-<md-content class="md-padding">
     <md-card>
         <md-card-header>
             <md-card-header-text>
-                <span class="md-title">Webcam Archive</span>
+                <span class="md-title">Archive</span>
             </md-card-header-text>
         </md-card-header>
         <md-card-content>
@@ -28,22 +30,52 @@
             </md-input-container>
         </md-card-content>
     </md-card>
-    
-</md-content>
 
-<md-content class="md-padding">
-    <div layout-xs="column" layout="row" layout-wrap>
-        <md-card flex="33" ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.webcamPhotos" 
-            ng-click="locationCamsAndPhotosVm.showPhoto($event, $index)">
-            <md-card-header>
-                <md-card-header-text>
-                    <span class="md-title">{[ stationWebcamPhoto.station_name ]}</span>
-                    <span class="md-subhead">{[ stationWebcamPhoto.timestamp | date: 'yyyy-MM-dd HH:mm:ss Z' ]}</span>
-                </md-card-header-text>
-            </md-card-header>
-            <img data-ng-src="data:image/png;base64, {[ stationWebcamPhoto.photo ]}" fallback-src="http://google.com/favicon.ico" class="md-card-image" alt="{[ stationWebcamPhoto.station_name ]}">
-        </md-card>
-    </div>
+    <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <span class="md-title">Videos</span>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <div ng-show="locationCamsAndPhotosVm.noVideos()">
+                <p class="md-body-1">No videos available!</p>
+            </div>
+            <div layout-xs="column" layout="row" layout-wrap>
+                <div ng-repeat="stationVideoUrl in locationCamsAndPhotosVm.videoUrls" flex-xs="100" flex-gt-md="50">
+                    <embed-video data-ng-href="{[ stationVideoUrl.video_url ]}" width="100%" height=480 
+                        iframe-id="youtube{[ $index ]}" enablejsapi="1" controls=1>
+                        <a href="{[ stationVideoUrl.video_url ]}">Watch</a>
+                    </embed-video>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+
+    <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <span class="md-title">Photos</span>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <div ng-show="locationCamsAndPhotosVm.noWebcamPhotos()">
+                <p class="md-body-1">No photos available!</p>
+            </div>
+            <div layout-xs="column" layout="row" layout-wrap layout-align="space-around center">
+                <md-card flex="33" ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.webcamPhotos" 
+                    ng-click="locationCamsAndPhotosVm.showPhoto($event, $index)">
+                    <md-card-header>
+                        <md-card-header-text>
+                            <span class="md-title">{[ stationWebcamPhoto.station_name ]}</span>
+                            <span class="md-subhead">{[ stationWebcamPhoto.timestamp | date: 'yyyy-MM-dd HH:mm:ss Z' ]}</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <img data-ng-src="data:image/png;base64, {[ stationWebcamPhoto.photo ]}" fallback-src="http://google.com/favicon.ico" class="md-card-image" alt="{[ stationWebcamPhoto.station_name ]}">
+                </md-card>
+            </div>
+    </md-card>
+
 </md-content>
 
 <!-- <div class="test">

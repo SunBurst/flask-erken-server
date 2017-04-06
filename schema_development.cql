@@ -415,14 +415,15 @@ CREATE TABLE hydroview.edited_parameter_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview.status_parameters_by_location (
+CREATE TABLE hydroview.parameters_all_measurement_types_by_location (
     location_id text,
+    measurement_type_name text,
     parameter_name text,
+    measurement_type_id text,
     parameter_id text,
     parameter_description frozen<description>,
-    parameter_unit text,
-    PRIMARY KEY (location_id, parameter_name, parameter_id)
-) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)
+    PRIMARY KEY (location_id, measurement_type_name, parameter_name, measurement_type_id, parameter_id)
+) WITH CLUSTERING ORDER BY (measurement_type_name ASC, parameter_name ASC, measurement_type_id ASC, parameter_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -437,6 +438,8 @@ CREATE TABLE hydroview.status_parameters_by_location (
     AND min_index_interval = 128
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
+
+
 
 CREATE TABLE hydroview.locations_webcam_photos (
     bucket int,
@@ -1761,6 +1764,149 @@ CREATE TABLE hydroview.status_parameter_measurements_by_station (
     value float,
     PRIMARY KEY ((station_id, parameter, qc_level), timestamp, sensor_id)
 ) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview.video_urls_by_location (
+    location_id text,
+    date date,
+    timestamp timestamp,
+    station_name text,
+    station_id text,
+    video_url text,
+    PRIMARY KEY ((location_id, date), timestamp, station_name, station_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, station_name ASC, station_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview.daily_wind_rose_measurements_by_location (
+    location_id text,
+    wind_rose_id text,
+    qc_level int,
+    year int,
+    date timestamp,
+    direction float,
+    station_name text,
+    station_id text,
+    avg_wind_speed float,
+    unit text static,
+    PRIMARY KEY ((location_id, wind_rose_id, qc_level, year), date, direction, station_name, station_id)
+) WITH CLUSTERING ORDER BY (date DESC, direction ASC, station_name ASC, station_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview.parameters_by_location (
+    location_id text,
+    parameter_name text,
+    parameter_id text,
+    parameter_description frozen<description>,
+    parameter_unit text,
+    PRIMARY KEY (location_id, parameter_name, parameter_id)
+) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview.profile_parameters_by_location (
+    location_id text,
+    parameter_name text,
+    parameter_id text,
+    parameter_description frozen<description>,
+    parameter_unit text,
+    PRIMARY KEY (location_id, parameter_name, parameter_id)
+) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview.wind_rose_parameters_by_location (
+    location_id text,
+    wind_rose_name text,
+    wind_rose_id text,
+    wind_rose_description frozen<description>,
+    PRIMARY KEY (location_id, wind_rose_name, wind_rose_id)
+) WITH CLUSTERING ORDER BY (wind_rose_name ASC, wind_rose_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+    
+CREATE TABLE hydroview.parameter_groups_by_location (
+    location_id text,
+    group_name text,
+    group_id text,
+    group_description frozen<description>,
+    PRIMARY KEY (location_id, group_name, group_id)
+) WITH CLUSTERING ORDER BY (group_name ASC, group_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''

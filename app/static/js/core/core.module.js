@@ -1,5 +1,4 @@
 (function() {
-    
     'use strict';
 
     angular.module('app.core', [
@@ -10,7 +9,9 @@
         'uiGmapgoogle-maps',
         //'ui-rangeSlider',
         'ngMaterialDatePicker',
-        'md.data.table'
+        'md.data.table',
+        'videosharing-embed'
+        //'youtube-embed'
     ]);
     
 })();

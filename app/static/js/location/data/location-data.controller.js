@@ -29,12 +29,14 @@
         vm.isDataSource = isDataSource;
         vm.isParameterType = isParameterType;
         vm.isTimeOption = isTimeOption;
+        vm.isViewMode = isViewMode;
         vm.parameterList = resolvedParameters;
         vm.parameters = locationStorage.getParameters();
         vm.parameterSelection = resolvedParameterSelection;
         vm.setDatePicker = setDatePicker;
         vm.setSelectedDataSource = setSelectedDataSource;
         vm.timeOptionChange = timeOptionChange;
+        vm.viewMode = 'Charts';
         
         vm.timeOptionsModel = {
             selectedTimeOption: locationDataTimeOptions.getSelectedTimeOption(),
@@ -73,6 +75,10 @@
         
         function isTimeOption(timeOption) {
             return timeOption === vm.timeOptionsModel.selectedTimeOption;
+        }
+        
+        function isViewMode(viewMode) {
+            return viewMode === vm.viewMode;
         }
         
         function setDatePicker() {

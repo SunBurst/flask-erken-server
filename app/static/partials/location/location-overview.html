@@ -7,15 +7,15 @@
                 <img data-ng-src="data:image/png;base64, {[ vm.location.location_image ]}" class="md-card-image" alt="{[ vm.location.location_name ]}">
             </md-card>
             <md-card>
-                <md-card-title>
-                  <md-card-title-text>
-                    <span class="md-headline">Location Info</span>
-                  </md-card-title-text>
-                </md-card-title>
                 <md-card-content>
-                    <h4 class="md-subhead">Environment Category </h4><p class="md-body-1">{[ vm.location.location_environment_category ]}</p>
-                    <h4 class="md-subhead">Position (WGS84) </h4><p class="md-body-1">{[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}</p>
-                    <h4 class="md-subhead">Description </h4><p class="md-body-1">{[ vm.location.location_description.long_description ]}</p>
+                    <h3 class="md-headline">Location Info</h3>
+                    <div layout="row" layout-align="space-between center">
+                        <p class="md-body-2">Environment Category: </p><p class="md-body-2">{[ vm.location.location_environment_category ]}</p>
+                    </div>
+                    <div layout="row" layout-align="space-between center">
+                        <p class="md-body-2">Position (WGS84): </p><p class="md-body-2">{[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}</p>
+                    </div>
+                    <h4 class="title">Description </h4><p class="md-body-2">{[ vm.location.location_description.long_description ]}</p>
                 </md-card-content>
             </md-card>
         </div>
@@ -46,7 +46,7 @@
     <div layout="column" flex>
         <h2>Stations</h2>
         <div layout-xs="column" layout="row" layout-wrap>
-            <md-card ng-repeat="station in vm.stations" flex-xs="100" flex-gt-xs="50" flex-gt-md="25">
+            <md-card ng-repeat="station in vm.stations" flex-xs="100" flex-gt-xs="50" flex-gt-md="33">
                 <md-card-header>
                     <md-card-avatar>
                         <img class="md-user-avatar" data-ng-src="data:image/png;base64, {[ station.station_image ]}"/>

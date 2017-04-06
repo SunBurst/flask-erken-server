@@ -5,26 +5,41 @@
         .module('app.location')
         .controller('LocationCamsAndPhotos', LocationCamsAndPhotos);
     
-    LocationCamsAndPhotos.$inject = ['$scope', '$mdDialog', '$mdMedia', 'resolvedLiveWebcams', 'locationCamsAndPhotosStorage', 'locationStorage', 'locationWebcams'];
+    LocationCamsAndPhotos.$inject = ['$scope', '$mdDialog', '$mdMedia', 'resolvedLiveWebcams', 'locationCamsAndPhotosStorage', 'locationStorage', 'locationVideos', 'locationWebcams'];
     
-    function LocationCamsAndPhotos($scope, $mdDialog, $mdMedia, resolvedLiveWebcams, locationCamsAndPhotosStorage, locationStorage, locationWebcams) {
+    function LocationCamsAndPhotos($scope, $mdDialog, $mdMedia, resolvedLiveWebcams, locationCamsAndPhotosStorage, locationStorage, locationVideos, locationWebcams) {
         var vm = this;
         
         vm.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
         vm.dateChange = dateChange;
+        vm.getVideoUrls = getVideoUrls;
         vm.getWebcamPhotosOnDate = getWebcamPhotosOnDate;
         vm.liveWebcams = resolvedLiveWebcams;
         vm.location = locationStorage.getLocation();
+        vm.noLiveWebcams = noLiveWebcams;
+        vm.noVideos = noVideos;
+        vm.noWebcamPhotos = noWebcamPhotos;
         vm.showPhoto = showPhoto;
         vm.updateWebcamPhotos = updateWebcamPhotos;
         vm.webcamPhotos = [];
+        vm.videoUrls = [];
        
         vm.datePickerModel = {
             date: moment().startOf('day')
         };
 
         function dateChange() {
+            updateVideoUrls();
             updateWebcamPhotos();
+        }
+        
+        function getVideoUrls() {
+            var locationId = vm.location.location_id;
+            var onDate = vm.datePickerModel.date.valueOf();
+            return locationVideos.getVideoUrls(locationId, onDate)
+                .then(function(response) {
+                    return response.data;
+                });
         }
         
         function getWebcamPhotosOnDate() {
@@ -34,6 +49,28 @@
                 .then(function(response) {
                     return response.data;
                 });
+        }
+        
+        function noLiveWebcams() {
+            if (vm.liveWebcams.length == 0) {
+                return true;
+            }
+            return false;
+        }
+        
+        function noVideos() {
+            if (vm.videoUrls.length == 0) {
+                return true;
+            }
+            return false;
+            
+        }
+        
+        function noWebcamPhotos() {
+            if (vm.webcamPhotos.length == 0) {
+                return true;
+            }
+            return false;
         }
         
         function showPhoto(ev, index) {
@@ -58,6 +95,12 @@
                 vm.customFullscreen = (wantsFullScreen === true);
             });
           };
+        
+        function updateVideoUrls() {
+            vm.getVideoUrls().then(function(data) {
+                vm.videoUrls = data;
+            });
+        }
         
         function updateWebcamPhotos() {
             vm.getWebcamPhotosOnDate().then(function(data) {

@@ -35,7 +35,8 @@
         .constant('GoogleMapDefaultOptions', getDefaultMapOptions())
         .constant('GoogleMapIcons', getGoogleMapIcons())
         .constant('HeatMapOptions', getHeatMapOptions())
-        .constant('HighChartOptions', getHighChartOptions());
+        .constant('HighChartOptions', getHighChartOptions())
+        .constant('WindRoseChartOptions', getWindRoseChartOptions());
 
     
     
@@ -255,6 +256,72 @@
             tooltip: {
                 pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + '' + '</b><br/>',
                 shared: true
+            },
+            series: [],
+        };
+    }
+    
+    function getWindRoseChartOptions() {
+        return {
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            chart: {
+                polar: true,
+                type: 'column'
+            },
+            categories: [
+                'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 
+                'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'
+            ],
+            pane: {
+                size: '85%'
+            },
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                y: 100,
+                layout: 'vertical'
+            },
+            xAxis: {
+                min: 0,
+                max: 360,
+                type: "",
+                tickInterval: 22.5,
+                tickmarkPlacement: 'on',
+                labels: {
+                    formatter: function () {
+                        return categories[this.value / 22.5] + '°';
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                endOnTick: false,
+                showLastLabel: true,
+                title: {
+                    text: 'Frequency (%)'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value + '%';
+                    }
+                },
+                reversedStacks: false
+            },
+            tooltip: {
+                valueSuffix: '%'
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal',
+                    shadow: false,
+                    groupPadding: 0,
+                    pointPlacement: 'on'
+                }
             },
             series: [],
         };

@@ -70,18 +70,18 @@
                 controller: 'LocationData',
                 controllerAs: 'locationDataVm',
                 resolve: {
-                    resolvedParameters: function($stateParams, locationParameters, locationStorage) {
+                    resolvedParametersAllMeasurementTypes: function($stateParams, locationParametersAllMeasurementTypes, locationStorage) {
                         var locationId = $stateParams.location_id;
-                        return locationParameters.getParameters(locationId)
+                        return locationParametersAllMeasurementTypes.getParametersAllMeasurementTypes(locationId)
                             .then(function(response) {
                                 var data = response.data;
                                 var initObjects = true;
-                                locationStorage.setParameterList(data, initObjects);
+                                locationStorage.setParametersAllMeasurementTypesList(data, initObjects);
                                 return data;
                             });
                     },
-                    resolvedParameterSelection: ['resolvedParameters', 'locationDataStorage', function(resolvedParameters, locationDataStorage) {
-                        return locationDataStorage.setParameterSelection(resolvedParameters);
+                    resolvedParameterAllMeasurementTypesSelection: ['resolvedParametersAllMeasurementTypes', 'locationDataStorage', function(resolvedParametersAllMeasurementTypes, locationDataStorage) {
+                        return locationDataStorage.setParametersAllMeasurementTypesSelection(resolvedParametersAllMeasurementTypes);
                     }]
                 }
             })

@@ -3,11 +3,11 @@
     
     angular
         .module('app.services')
-        .factory('locationParameters', locationParameters);
+        .factory('locationParametersAllMeasurementTypes', locationParametersAllMeasurementTypes);
     
-    locationParameters.$inject = ['$resource'];
+    locationParametersAllMeasurementTypes.$inject = ['$resource'];
     
-    function locationParameters($resource) {
+    function locationParametersAllMeasurementTypes($resource) {
 
         var customInterceptor = {
             response: function(response) {
@@ -16,11 +16,11 @@
         };
         
         return {
-            getParameterMeasurementTypes: getParameterMeasurementTypes
+            getParametersAllMeasurementTypes: getParametersAllMeasurementTypes
         };
         
-        function getParameterMeasurementTypes(locationId) {
-            var resource = $resource('/api/parameter_measurement_types_by_location/:location_id', {}, {
+        function getParametersAllMeasurementTypes(locationId) {
+            var resource = $resource('/api/parameters_all_measurement_types_by_location/:location_id', {}, {
                 query: {
                     method: 'GET', params: {
                         location_id: locationId, 
@@ -31,14 +31,14 @@
             });
             
             return resource.query({location_id: locationId}).$promise
-                .then(getParameterMeasurementTypesComplete)
-                .catch(getParameterMeasurementTypesFailed);
+                .then(getParametersAllMeasurementTypesComplete)
+                .catch(getParametersAllMeasurementTypesFailed);
                 
-            function getParameterMeasurementTypesComplete(response) {
+            function getParametersAllMeasurementTypesComplete(response) {
                 return response;
             }
             
-            function getParameterMeasurementTypesFailed(error) {
+            function getParametersAllMeasurementTypesFailed(error) {
                 console.log(error);
             }
 
