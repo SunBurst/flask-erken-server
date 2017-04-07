@@ -10,10 +10,10 @@
     
     function LocationDataCharts($scope, locationDataStorage) {
         var vm = this;
-        vm.parameterSelection = locationDataStorage.getParameterSelection();
+        vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection()
         
         $scope.$on('parameterSelectionChange', function() {
-            vm.parameterSelection = locationDataStorage.getParameterSelection();
+            vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection();
         });
         
     }

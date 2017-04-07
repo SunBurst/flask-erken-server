@@ -4,18 +4,18 @@
         
         <div flex-xs flex-gt-xs="50" layout="column">
             <md-card>
-                <img data-ng-src="data:image/png;base64, {[ vm.location.location_image ]}" class="md-card-image" alt="{[ vm.location.location_name ]}">
+                <img data-ng-src="data:image/png;base64, {[ locationOverviewVm.location.location_image ]}" class="md-card-image" alt="{[ locationOverviewVm.location.location_name ]}">
             </md-card>
             <md-card>
                 <md-card-content>
                     <h3 class="md-headline">Location Info</h3>
                     <div layout="row" layout-align="space-between center">
-                        <p class="md-body-2">Environment Category: </p><p class="md-body-2">{[ vm.location.location_environment_category ]}</p>
+                        <p class="md-body-2">Environment Category: </p><p class="md-body-2">{[ locationOverviewVm.location.location_environment_category ]}</p>
                     </div>
                     <div layout="row" layout-align="space-between center">
-                        <p class="md-body-2">Position (WGS84): </p><p class="md-body-2">{[ vm.location.location_position.latitude ]}, {[ vm.location.location_position.longitude ]}</p>
+                        <p class="md-body-2">Position (WGS84): </p><p class="md-body-2">{[ locationOverviewVm.location.location_position.latitude ]}, {[ locationOverviewVm.location.location_position.longitude ]}</p>
                     </div>
-                    <h4 class="title">Description </h4><p class="md-body-2">{[ vm.location.location_description.long_description ]}</p>
+                    <h4 class="title">Description </h4><p class="md-body-2">{[ locationOverviewVm.location.location_description.long_description ]}</p>
                 </md-card-content>
             </md-card>
         </div>
@@ -24,15 +24,15 @@
             <md-card>
                 <img class="md-card-image">
                     <div class="google-map">
-                        <ui-gmap-google-map ng-if="vm.map.showMap" center='vm.map.center' options='vm.mapOptions' zoom='vm.map.zoom' idKey="location-google-map">
+                        <ui-gmap-google-map ng-if="locationOverviewVm.map.showMap" center='locationOverviewVm.map.center' options='locationOverviewVm.mapOptions' zoom='locationOverviewVm.map.zoom' idKey="location-google-map">
                             <ui-gmap-markers
-                                models="vm.markers"
+                                models="locationOverviewVm.markers"
                                 type="'cluster'"
                                 coords="'self'"
                                 icon="'icon'"
                                 idkey="'key'"
                                 options="'options'"
-                                typeOptions="vm.clusterOptions"
+                                typeOptions="locationOverviewVm.clusterOptions"
                                 fit="true">
                             </ui-gmap-markers>
                         </ui-gmap-google-map>
@@ -46,7 +46,7 @@
     <div layout="column" flex>
         <h2>Stations</h2>
         <div layout-xs="column" layout="row" layout-wrap>
-            <md-card ng-repeat="station in vm.stations" flex-xs="100" flex-gt-xs="50" flex-gt-md="33">
+            <md-card ng-repeat="station in locationOverviewVm.stations" flex-xs="100" flex-gt-xs="50" flex-gt-md="33">
                 <md-card-header>
                     <md-card-avatar>
                         <img class="md-user-avatar" data-ng-src="data:image/png;base64, {[ station.station_image ]}"/>

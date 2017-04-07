@@ -9,15 +9,15 @@
         '$scope',
         '$state',
         '$timeout',
-        'resolvedParameters',
-        'resolvedParameterSelection',
+        'resolvedParametersAllMeasurementTypes',
+        'resolvedParameterAllMeasurementTypesSelection',
         'locationStorage',
         'locationDataSource',
         'locationDataStorage',
         'locationDataTimeOptions'
     ];
         
-    function LocationData($scope, $state, $timeout, resolvedParameters, resolvedParameterSelection, locationStorage, locationDataSource, locationDataStorage, locationDataTimeOptions) {
+    function LocationData($scope, $state, $timeout, resolvedParametersAllMeasurementTypes, resolvedParameterAllMeasurementTypesSelection, locationStorage, locationDataSource, locationDataStorage, locationDataTimeOptions) {
         var vm = this;
         vm.applyCustomTimeRange = applyCustomTimeRange;
         vm.changeDataSource = changeDataSource;
@@ -30,9 +30,9 @@
         vm.isParameterType = isParameterType;
         vm.isTimeOption = isTimeOption;
         vm.isViewMode = isViewMode;
-        vm.parameterList = resolvedParameters;
-        vm.parameters = locationStorage.getParameters();
-        vm.parameterSelection = resolvedParameterSelection;
+        vm.parameterList = resolvedParametersAllMeasurementTypes;
+        vm.parameters = locationStorage.getParametersAllMeasurementTypes();
+        vm.parameterSelection = resolvedParameterAllMeasurementTypesSelection;
         vm.setDatePicker = setDatePicker;
         vm.setSelectedDataSource = setSelectedDataSource;
         vm.timeOptionChange = timeOptionChange;

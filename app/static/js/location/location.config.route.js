@@ -1,5 +1,4 @@
 (function() {
-    
     'use strict';
     
     angular
@@ -13,7 +12,7 @@
                 url: '/location/:location_id',
                 templateUrl: 'static/partials/location/location.html',
                 controller: 'Location',
-                controllerAs: 'vm',
+                controllerAs: 'locationVm',
                 resolve: {
                     resolvedLocation: function($stateParams, location, locationStorage) {
                         var locationId = $stateParams.location_id;
@@ -30,7 +29,7 @@
                 url: '/overview',
                 templateUrl: '/static/partials/location/location-overview.html',
                 controller: 'LocationOverview',
-                controllerAs: 'vm',
+                controllerAs: 'locationOverviewVm',
                 resolve: {
                     resolvedStations: function($stateParams, locationStations, locationStorage) {
                         var locationId = $stateParams.location_id;

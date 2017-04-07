@@ -22,22 +22,21 @@
             getLastWebcamPhoto: getLastWebcamPhoto,
             getLiveWebcamList: getLiveWebcamList,
             getLocation: getLocation,
-            getparameterMeasurementTypeList: getparameterMeasurementTypeList,
+            getParametersAllMeasurementTypes: getParametersAllMeasurementTypes,
             getParametersAllMeasurementTypesList: getParametersAllMeasurementTypesList,
             getStationList: getStationList,
             getStations: getStations,
-            getStatusparameterMeasurementTypeList: getStatusparameterMeasurementTypeList,
             getStatusParameters: getStatusParameters,
             getWebcamPhotoList: getWebcamPhotoList,
-            setLocation: setLocation,
             setLastWebcamPhoto: setLastWebcamPhoto,
             setLiveWebcamList: setLiveWebcamList,
+            setLocation: setLocation,
             setParametersAllMeasurementTypesList: setParametersAllMeasurementTypesList,
-            setParameters: setParameters,
+            setParametersAllMeasurementTypes: setParametersAllMeasurementTypes,
+            //setParameters: setParameters,
             setStationList: setStationList,
-            setStatusparameterMeasurementTypeList: setStatusparameterMeasurementTypeList,
-            setStatusParameters: setStatusParameters,
             setStations: setStations,
+            setStatusParameters: setStatusParameters,
             setWebcamPhotosList: setWebcamPhotosList
         };
         
@@ -53,6 +52,10 @@
             return location;
         }
         
+        function getParametersAllMeasurementTypes() {
+            return parametersAllMeasurementTypes;
+        }
+        
         function getParametersAllMeasurementTypesList() {
             return parametersAllMeasurementTypeList;
         }
@@ -63,10 +66,6 @@
         
         function getStations() {
             return stations;
-        }
-        
-        function getParametersAllMeasurementTypesList() {
-            return statusparameterMeasurementTypesList;
         }
         
         function getStatusParameters() {
@@ -99,26 +98,28 @@
         function setParametersAllMeasurementTypes(data) {
             var tempParametersAllMeasurementTypes = {};
             for (var i = 0; i < data.length; i++) {
-                var parameterNotInObject = !(data[i].parameter_id in tempParametersAllMeasurementTypes);
+                var parameterId = data[i].parameter_id;
+                var measurementTypeId = data[i].measurement_type_id;
+                var parameterNotInObject = !(parameterId in tempParametersAllMeasurementTypes);
                 if (parameterNotInObject) {
-                    tempParametersAllMeasurementTypes[data[i].parameter_id] = null;
+                    tempParametersAllMeasurementTypes[parameterId] = {};
                 }
-                var measurementTypeNotInObject = !(data[i].measurement_type_id in tempParametersAllMeasurementTypes[data[i].parameter_id]);
+                var measurementTypeNotInObject = !(measurementTypeId in tempParametersAllMeasurementTypes[parameterId]);
                 if (measurementTypeNotInObject) {
-                    tempParametersAllMeasurementTypes[data[i].parameter_id][data[i].measurement_type_id] = null;
+                    tempParametersAllMeasurementTypes[parameterId][measurementTypeId] = {};
                 }
-                tempParametersAllMeasurementTypes[data[i].parameter_id][data[i].measurement_type] = data[i];
+                tempParametersAllMeasurementTypes[parameterId][measurementTypeId] = data[i];
             }
             parametersAllMeasurementTypes = tempParametersAllMeasurementTypes;
         }
         
-        function setParameters(data) {
-            var tempParameters = {};
-            for (var i = 0; i < data.length; i++) {
-                tempParameters[data[i].parameter_id] = data[i];
-            }
-            parameters = tempParameters;
-        }
+        //function setParameters(data) {
+        //    var tempParameters = {};
+        //    for (var i = 0; i < data.length; i++) {
+        //        tempParameters[data[i].parameter_id] = data[i];
+        //    }
+        //    parameters = tempParameters;
+        //}
         
         function setStationList(data, initObjects) {
             stationList = data;
@@ -133,13 +134,6 @@
                 tempStations[data[i].station_id] = data[i];
             }
             stations = tempStations; 
-        }
-        
-        function setStatusparameterMeasurementTypeList(data, initObjects) {
-            statusparameterMeasurementTypeList = data;
-            if (initObjects) {
-                setStatusParameters(data);
-            }
         }
         
         function setStatusParameters(data) {

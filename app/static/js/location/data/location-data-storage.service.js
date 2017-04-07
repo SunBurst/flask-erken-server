@@ -7,7 +7,7 @@
 
     function locationDataStorage() {
         
-        var parameterSelection = {};
+        var parametersAllMeasurementTypesSelection = {};
         
         return {
             getParameterSelectedValue: getParameterSelectedValue,
@@ -17,48 +17,49 @@
         };
         
         function getParameterSelectedValue(parameterId, measurementTypeId) {
-            return parameterSelection[parameterId][measurementTypeId];
+            return parametersAllMeasurementTypesSelection[parameterId][measurementTypeId];
         }
         
         function getParametersAllMeasurementTypesSelection() {
-            return parameterSelection;
+            return parametersAllMeasurementTypesSelection;
         }
         
         function setParametersAllMeasurementTypesSelection(data) {
             var tempSelection = {};
+
             for (var i = 0; i < data.length; i++) {
                 var parameterId = data[i].parameter_id;
                 var measurementTypeId = data[i].measurement_type_id;
                 var parameterNotInObject = !(parameterId in tempSelection);
-                var measurementNotInObject = !(measurementTypeId in tempSelection[parameterId]);
                 if (parameterNotInObject) {
-                    tempSelection[parameterId] = null;
+                    tempSelection[parameterId] = {};
                 }
+                var measurementNotInObject = !(measurementTypeId in tempSelection[parameterId]);
                 if (measurementNotInObject) {
-                    tempSelection[parameterId][measurementTypeId] = null;
+                    tempSelection[parameterId][measurementTypeId] = false;
                 }
                 
                 tempSelection[parameterId][measurementTypeId] = false;
                 
             }
-            parameterSelection = tempSelection;
-        
-            return parameterSelection;
+            parametersAllMeasurementTypesSelection = tempSelection;
+
+            return parametersAllMeasurementTypesSelection;
 
         }
         
-        function setParameterSelection(data) {
-            var tempSelection = {};
-            for (var i = 0; i < data.length; i++) {
-                var parameterId = data[i].parameter_id;
-                tempSelection[parameterId] = false;
+        //function setParameterSelection(data) {
+        //    var tempSelection = {};
+        //    for (var i = 0; i < data.length; i++) {
+        //        var parameterId = data[i].parameter_id;
+        //        tempSelection[parameterId] = false;
                 
-            }
-            parameterSelection = tempSelection;
+        //    }
+        //    parameterSelection = tempSelection;
         
-            return parameterSelection;
+        //    return parameterSelection;
 
-        }
+        //}
         
         function setParameterSelectedValue(parameterId, measurementTypeId, newValue) {
             parameterSelection[parameterId][measurementTypeId] = newValue;

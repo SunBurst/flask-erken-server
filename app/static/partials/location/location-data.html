@@ -73,15 +73,18 @@
                 </md-card-title>
                 <md-card-content>
                     <md-list>
-                        <md-list-item ng-repeat="(parameter, enabled) in locationDataVm.parameterSelection">
-                            <p>{[ locationDataVm.parameters[parameter].parameter_name ]}</p>
-                            <md-checkbox class="md-secondary" ng-model="locationDataVm.parameterSelection[parameter]"
-                                ng-change="locationDataVm.changeSelection(parameter, locationDataVm.parameterSelection[parameter])">
+                        <md-list-item ng-repeat="(parameterId, measurementType) in locationDataVm.parameterSelection">
+                            {[ locationDataVm.parameters[parameterId] ]}
+                            <!-- <p>{[ locationDataVm.parameters[parameterId][measurementType.measurement_type_id].parameter_name ]} 
+                                ({[ locationDataVm.parameters[parameterId][measurementType.measurement_type_id].measurement_type_name ]})</p> -->
+                            <md-checkbox class="md-secondary" ng-model="locationDataVm.parameterSelection[parameterId]"
+                                ng-change="locationDataVm.changeSelection(parameter, locationDataVm.parameterSelection[parameterId])">
                             </md-checkbox>
                           </md-list-item>
                     </md-list>
                 </md-card-content>
             </md-card>
+
         </div>
 
         <!-- <div data-ng-include="'/static/partials/location/location-data-sidebar.html'"></div> -->
