@@ -48,21 +48,8 @@
 
         }
         
-        //function setParameterSelection(data) {
-        //    var tempSelection = {};
-        //    for (var i = 0; i < data.length; i++) {
-        //        var parameterId = data[i].parameter_id;
-        //        tempSelection[parameterId] = false;
-                
-        //    }
-        //    parameterSelection = tempSelection;
-        
-        //    return parameterSelection;
-
-        //}
-        
         function setParameterSelectedValue(parameterId, measurementTypeId, newValue) {
-            parameterSelection[parameterId][measurementTypeId] = newValue;
+            parametersAllMeasurementTypesSelection[parameterId][measurementTypeId] = newValue;
         }
         
     }

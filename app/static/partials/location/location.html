@@ -1,20 +1,18 @@
-<div ng-controller="Location as locationVm">
-    <md-toolbar class="md-hue-2">
-        
-        <div class="md-toolbar-tools">
-            <h3 md-truncate>{[ locationVm.location.location_name ]}</h3><span flex></span>
-        </div>
-        
-        <md-tabs md-stretch-tabs="always" class="md-hue-2">
-            <md-tab label="overview" ui-sref=".overview"></md-tab>
-            <md-tab label="data" ui-sref=".data"></md-tab>
-            <md-tab label="cams & photos" ui-sref=".cams-and-photos"></md-tab>
-            <!-- <md-tab label="status" ui-sref=".status"></md-tab> -->
-        </md-tabs>
-        
-    </md-toolbar>
-
-    <div layout="column" layout-fill flex>
-        <ui-view></ui-view>
+<md-toolbar class="md-hue-2">
+    
+    <div class="md-toolbar-tools">
+        <h3 md-truncate>{[ locationVm.location.location_name ]}</h3><span flex></span>
     </div>
+    
+    <md-tabs md-stretch-tabs="always" class="md-hue-2">
+        <md-tab label="overview" ui-sref=".overview"></md-tab>
+        <md-tab label="data" ui-sref=".data"></md-tab>
+        <md-tab label="cams & photos" ui-sref=".cams-and-photos"></md-tab>
+        <!-- <md-tab label="status" ui-sref=".status"></md-tab> -->
+    </md-tabs>
+    
+</md-toolbar>
+
+<div layout="column" layout-fill flex>
+    <ui-view></ui-view>
 </div>

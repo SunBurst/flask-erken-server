@@ -3,18 +3,18 @@
     
     angular
         .module('app.location')
-        .controller('LocationCamsAndPhotos', LocationCamsAndPhotos);
+        .controller('LocationCamsAndPhotosCtrl', LocationCamsAndPhotosCtrl);
     
-    LocationCamsAndPhotos.$inject = ['$scope', '$mdDialog', '$mdMedia', 'resolvedLiveWebcams', 'locationCamsAndPhotosStorage', 'locationStorage', 'locationVideos', 'locationWebcams'];
+    LocationCamsAndPhotosCtrl.$inject = ['$scope', '$mdDialog', '$mdMedia', 'locationStorage', 'locationVideos', 'LocationWebcamsFactory'];
     
-    function LocationCamsAndPhotos($scope, $mdDialog, $mdMedia, resolvedLiveWebcams, locationCamsAndPhotosStorage, locationStorage, locationVideos, locationWebcams) {
+    function LocationCamsAndPhotosCtrl($scope, $mdDialog, $mdMedia, locationStorage, locationVideos, LocationWebcamsFactory) {
         var vm = this;
         
         vm.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
         vm.dateChange = dateChange;
         vm.getVideoUrls = getVideoUrls;
         vm.getWebcamPhotosOnDate = getWebcamPhotosOnDate;
-        vm.liveWebcams = resolvedLiveWebcams;
+        vm.liveWebcams = locationStorage.getLiveWebcamList();
         vm.location = locationStorage.getLocation();
         vm.noLiveWebcams = noLiveWebcams;
         vm.noVideos = noVideos;
@@ -45,7 +45,7 @@
         function getWebcamPhotosOnDate() {
             var locationId = vm.location.location_id;
             var onDate = vm.datePickerModel.date.valueOf();
-            return locationWebcams.getWebcamPhotos(locationId, onDate)
+            return LocationWebcamsFactory.getWebcamPhotos(locationId, onDate)
                 .then(function(response) {
                     return response.data;
                 });

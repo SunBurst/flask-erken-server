@@ -1,14 +1,16 @@
 (function() {
-    
     'use strict';
     
     angular
         .module('app.location')
-        .controller('LocationOverview', LocationOverview);
+        .controller('LocationOverviewCtrl', LocationOverviewCtrl);
     
-    LocationOverview.$inject = ['$timeout', 'GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons', 'locationStorage', 'uiGmapGoogleMapApi'];
+    LocationOverviewCtrl.$inject = [
+        '$timeout', 'GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 
+        'GoogleMapIcons', 'locationStorage', 'uiGmapGoogleMapApi'
+    ];
     
-    function LocationOverview($timeout, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons, locationStorage, uiGmapGoogleMapApi) {
+    function LocationOverviewCtrl($timeout, GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons, locationStorage, uiGmapGoogleMapApi) {
         var vm = this;
 
         vm.addLocationMarker = addLocationMarker;

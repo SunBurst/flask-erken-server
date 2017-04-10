@@ -1,14 +1,13 @@
 (function() {
-    
     'use strict';
     
     angular
         .module('app.services')
-        .factory('location', location);
+        .factory('LocationFactory', LocationFactory);
     
-    location.$inject = ['$resource'];
+    LocationFactory.$inject = ['$resource'];
     
-    function location($resource) {
+    function LocationFactory($resource) {
 
         var customInterceptor = {
             response: function(response) {

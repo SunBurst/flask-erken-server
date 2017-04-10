@@ -1,14 +1,13 @@
 (function() {
-    
     'use strict';
     
     angular
         .module('app.services')
-        .factory('locationWebcams', locationWebcams);
+        .factory('LocationWebcamsFactory', LocationWebcamsFactory);
     
-    locationWebcams.$inject = ['$resource'];
+    LocationWebcamsFactory.$inject = ['$resource'];
     
-    function locationWebcams($resource) {
+    function LocationWebcamsFactory($resource) {
 
         var customInterceptor = {
             response: function(response) {

@@ -3,11 +3,11 @@
     
     angular
         .module('app.services')
-        .factory('locationParametersAllMeasurementTypes', locationParametersAllMeasurementTypes);
+        .factory('LocationParametersFactory', LocationParametersFactory);
     
-    locationParametersAllMeasurementTypes.$inject = ['$resource'];
+    LocationParametersFactory.$inject = ['$resource'];
     
-    function locationParametersAllMeasurementTypes($resource) {
+    function LocationParametersFactory($resource) {
 
         var customInterceptor = {
             response: function(response) {

@@ -4,11 +4,11 @@
     
     angular
         .module('app.services')
-        .factory('locationStations', locationStations);
+        .factory('LocationStationsFactory', LocationStationsFactory);
     
-    locationStations.$inject = ['$resource'];
+    LocationStationsFactory.$inject = ['$resource'];
     
-    function locationStations($resource) {
+    function LocationStationsFactory($resource) {
 
         var customInterceptor = {
             response: function(response) {

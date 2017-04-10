@@ -3,21 +3,19 @@
     
     angular
         .module('app.location')
-        .controller('LocationData', LocationData);
+        .controller('LocationDataCtrl', LocationDataCtrl);
         
-    LocationData.$inject = [
+    LocationDataCtrl.$inject = [
         '$scope',
         '$state',
         '$timeout',
-        'resolvedParametersAllMeasurementTypes',
-        'resolvedParameterAllMeasurementTypesSelection',
         'locationStorage',
         'locationDataSource',
         'locationDataStorage',
         'locationDataTimeOptions'
     ];
         
-    function LocationData($scope, $state, $timeout, resolvedParametersAllMeasurementTypes, resolvedParameterAllMeasurementTypesSelection, locationStorage, locationDataSource, locationDataStorage, locationDataTimeOptions) {
+    function LocationDataCtrl($scope, $state, $timeout, locationStorage, locationDataSource, locationDataStorage, locationDataTimeOptions) {
         var vm = this;
         vm.applyCustomTimeRange = applyCustomTimeRange;
         vm.changeDataSource = changeDataSource;
@@ -30,9 +28,9 @@
         vm.isParameterType = isParameterType;
         vm.isTimeOption = isTimeOption;
         vm.isViewMode = isViewMode;
-        vm.parameterList = resolvedParametersAllMeasurementTypes;
+        vm.parameterList = locationStorage.getParametersAllMeasurementTypesList();
         vm.parameters = locationStorage.getParametersAllMeasurementTypes();
-        vm.parameterSelection = resolvedParameterAllMeasurementTypesSelection;
+        vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection();
         vm.setDatePicker = setDatePicker;
         vm.setSelectedDataSource = setSelectedDataSource;
         vm.timeOptionChange = timeOptionChange;
@@ -60,8 +58,9 @@
             $scope.$broadcast('dataSourceChange');
         }
         
-        function changeSelection(parameterId, newValue) {
-            locationDataStorage.setParameterSelectedValue(parameterId, newValue);
+        function changeSelection(parameterId, measurementTypeId, newValue) {
+            console.log(parameterId, measurementTypeId, newValue);
+            locationDataStorage.setParameterSelectedValue(parameterId, measurementTypeId, newValue);
             $scope.$broadcast('parameterSelectionChange');
         }
         

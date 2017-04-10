@@ -11,12 +11,12 @@
             .state('location', {
                 url: '/location/:location_id',
                 templateUrl: 'static/partials/location/location.html',
-                controller: 'Location',
+                controller: 'LocationCtrl',
                 controllerAs: 'locationVm',
                 resolve: {
-                    resolvedLocation: function($stateParams, location, locationStorage) {
+                    _location: function($stateParams, LocationFactory, locationStorage) {
                         var locationId = $stateParams.location_id;
-                        return location.getLocation(locationId)
+                        return LocationFactory.getLocation(locationId)
                             .then(function(response) {
                                 var data = response.data;
                                 locationStorage.setLocation(data);
@@ -28,35 +28,16 @@
             .state('location.overview', {
                 url: '/overview',
                 templateUrl: '/static/partials/location/location-overview.html',
-                controller: 'LocationOverview',
+                controller: 'LocationOverviewCtrl',
                 controllerAs: 'locationOverviewVm',
                 resolve: {
-                    resolvedStations: function($stateParams, locationStations, locationStorage) {
+                    _stations: function($stateParams, LocationStationsFactory, locationStorage) {
                         var locationId = $stateParams.location_id;
-                        return locationStations.getStations(locationId)
+                        return LocationStationsFactory.getStations(locationId)
                             .then(function(response) {
                                 var data = response.data;
                                 var initObjects = true;
                                 locationStorage.setStationList(data, initObjects);
-                                return data;
-                            });
-                    },
-                    resolvedLiveWebcams: function($stateParams, locationWebcams, locationStorage) {
-                        var locationId = $stateParams.location_id;
-                        return locationWebcams.getLiveWebcams(locationId)
-                            .then(function(response) {
-                                var data = response.data;
-                                locationStorage.setLiveWebcamList(data);
-                                return data;
-                            });
-                    },
-                    resolvedWebcamPhotos: function($stateParams, locationWebcams, locationStorage) {
-                        var locationId = $stateParams.location_id;
-                        var date = moment().startOf('day').valueOf();
-                        return locationWebcams.getWebcamPhotosByLimit(locationId, date, 7)
-                            .then(function(response) {
-                                var data = response.data;
-                                locationStorage.setWebcamPhotosList(data);
                                 return data;
                             });
                     }
@@ -66,12 +47,12 @@
             .state('location.data', {
                 url: '/data',
                 templateUrl: '/static/partials/location/location-data.html',
-                controller: 'LocationData',
+                controller: 'LocationDataCtrl',
                 controllerAs: 'locationDataVm',
                 resolve: {
-                    resolvedParametersAllMeasurementTypes: function($stateParams, locationParametersAllMeasurementTypes, locationStorage) {
+                    _parametersAllMeasurementTypes: function($stateParams, LocationParametersFactory, locationStorage) {
                         var locationId = $stateParams.location_id;
-                        return locationParametersAllMeasurementTypes.getParametersAllMeasurementTypes(locationId)
+                        return LocationParametersFactory.getParametersAllMeasurementTypes(locationId)
                             .then(function(response) {
                                 var data = response.data;
                                 var initObjects = true;
@@ -79,8 +60,8 @@
                                 return data;
                             });
                     },
-                    resolvedParameterAllMeasurementTypesSelection: ['resolvedParametersAllMeasurementTypes', 'locationDataStorage', function(resolvedParametersAllMeasurementTypes, locationDataStorage) {
-                        return locationDataStorage.setParametersAllMeasurementTypesSelection(resolvedParametersAllMeasurementTypes);
+                    _parameterAllMeasurementTypesSelection: ['_parametersAllMeasurementTypes', 'locationDataStorage', function(_parametersAllMeasurementTypes, locationDataStorage) {
+                        return locationDataStorage.setParametersAllMeasurementTypesSelection(_parametersAllMeasurementTypes);
                     }]
                 }
             })
@@ -99,12 +80,12 @@
             .state('location.cams-and-photos', {
                 url: '/cams-and-photos',
                 templateUrl: '/static/partials/location/location-cams-and-photos.html',
-                controller: 'LocationCamsAndPhotos',
+                controller: 'LocationCamsAndPhotosCtrl',
                 controllerAs: 'locationCamsAndPhotosVm',
                 resolve: {
-                    resolvedLiveWebcams: function($stateParams, locationWebcams, locationStorage) {
+                    _liveWebcams: function($stateParams, LocationWebcamsFactory, locationStorage) {
                         var locationId = $stateParams.location_id;
-                        return locationWebcams.getLiveWebcams(locationId)
+                        return LocationWebcamsFactory.getLiveWebcams(locationId)
                             .then(function(response) {
                                 var data = response.data;
                                 locationStorage.setLiveWebcamList(data);
