@@ -3,11 +3,11 @@
     
     angular
         .module('app.services')
-        .factory('locationParameters', locationParameters);
+        .factory('LocationParametersFactory', LocationParametersFactory);
     
-    locationParameters.$inject = ['$resource'];
+    LocationParametersFactory.$inject = ['$resource'];
     
-    function locationParameters($resource) {
+    function LocationParametersFactory($resource) {
 
         var customInterceptor = {
             response: function(response) {
@@ -16,11 +16,38 @@
         };
         
         return {
-            getParameterMeasurementTypes: getParameterMeasurementTypes
+            getGroupParameters: getGroupParameters,
+            getParametersAllMeasurementTypes: getParametersAllMeasurementTypes
         };
         
-        function getParameterMeasurementTypes(locationId) {
-            var resource = $resource('/api/parameter_measurement_types_by_location/:location_id', {}, {
+        function getGroupParameters(locationId, groupId) {
+            var resource = $resource('/api/group_parameters_by_location_group/:location_id/:group_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        group_id: groupId
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({location_id: locationId, group_id: groupId}).$promise
+                .then(getGroupParametersComplete)
+                .catch(getGroupParametersFailed);
+                
+            function getGroupParametersComplete(response) {
+                return response;
+            }
+            
+            function getGroupParametersFailed(error) {
+                console.log(error);
+            }
+
+        }
+        
+        function getParametersAllMeasurementTypes(locationId) {
+            var resource = $resource('/api/parameters_all_measurement_types_by_location/:location_id', {}, {
                 query: {
                     method: 'GET', params: {
                         location_id: locationId, 
@@ -31,14 +58,14 @@
             });
             
             return resource.query({location_id: locationId}).$promise
-                .then(getParameterMeasurementTypesComplete)
-                .catch(getParameterMeasurementTypesFailed);
+                .then(getParametersAllMeasurementTypesComplete)
+                .catch(getParametersAllMeasurementTypesFailed);
                 
-            function getParameterMeasurementTypesComplete(response) {
+            function getParametersAllMeasurementTypesComplete(response) {
                 return response;
             }
             
-            function getParameterMeasurementTypesFailed(error) {
+            function getParametersAllMeasurementTypesFailed(error) {
                 console.log(error);
             }
 

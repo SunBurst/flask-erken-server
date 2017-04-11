@@ -1,6 +1,6 @@
-<div ng-controller="LocationDataChartsParameterCtrl as chartParameterVm" 
-    ng-init="chartParameterVm.initChartParameter(locationDataVm.parameters[parameter.parameter_id][parameter.measurement_type_id])">
-    <div ng-repeat="(chart, chartOptions) in chartParameterVm.chartParameter.charts" ng-init="chartParameterVm.initChart(chart)">
+<div ng-controller="LocationDataChartsGroupCtrl as chartGroupVm" 
+    ng-init="chartGroupVm.initChartParameter(locationDataVm.parameters[parameter.parameter_id][parameter.measurement_type_id])">
+    <div ng-repeat="(chart, chartOptions) in chartGroupVm.chartParameter.charts" ng-init="chartGroupVm.initChart(chart)">
         <md-card>
             <md-card-header>
                 <md-card-header-text>
@@ -11,7 +11,7 @@
             <md-card-content>
                 <div layout="column" layout-align="space-around center">
                     <highchart id="{[ chart ]}-{[ parameter.parameter_id ]}-{[ parameter.measurement_type_id ]}" 
-                        config="chartParameterVm.chartParameter.charts[chart]"></highchart>
+                        config="chartGroupVm.chartParameter.charts[chart]"></highchart>
                 </div>
             </md-card-content>
         </md-card>

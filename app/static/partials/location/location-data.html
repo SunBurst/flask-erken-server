@@ -47,7 +47,6 @@
 
         <ui-view></ui-view>
 
-        <!-- <div data-ng-include="'/static/partials/location/location-data-content.html'"></div> -->
     </div>
     
     <div flex-xs flex-gt-xs="25" layout="column">
@@ -56,8 +55,6 @@
             <md-card>
                 <md-card-content>
                     <div layout="column" layout-align="space-around">
-                        <!-- <md-button ui-sref=".charts" class="md-raised" ng-class="{md-primary: $state.includes('location.data.charts') }">Charts</md-button>
-                        <md-button ui-sref=".tables" class="md-raised" ng-class="{md-primary: $state.includes('location.data.tables') }">Tables</md-button> -->
                         <md-radio-group ng-model="locationDataVm.viewMode">
                           <md-radio-button value="Charts" ui-sref=".charts" ng-class="{'md-primary': locationDataVm.isViewMode('Charts')}">Charts</md-radio-button>
                           <md-radio-button value="Tables" ui-sref=".tables" ng-class="{'md-primary': locationDataVm.isViewMode('Tables')}">Tables</md-radio-button>
@@ -69,13 +66,11 @@
                 <md-card-content>
                     <md-list>
                         <md-subheader class="md-no-sticky">Parameters</md-subheader>
-                        <md-list-item ng-repeat="(parameterId, measurementTypes) in locationDataVm.parameterSelection">
-                            <div ng-repeat="(measurementType, selected) in locationDataVm.parameterSelection[parameterId]">
-                                <p>{[ locationDataVm.parameters[parameterId][measurementType].parameter_name ]} ({[ locationDataVm.parameters[parameterId][measurementType].measurement_type_name ]})</p>
-                                <md-checkbox class="md-secondary" ng-model="locationDataVm.parameterSelection[parameterId][measurementType]"   
-                                    ng-change="locationDataVm.changeSelection(parameterId, locationDataVm.parameters[parameterId][measurementType].measurement_type_id, locationDataVm.parameterSelection[parameterId][measurementType])">
-                                </md-checkbox>
-                            </div>
+                        <md-list-item ng-repeat="parameter in locationDataVm.parameterSelection">
+                            <p>{[ parameter.parameter_name ]} ({[ parameter.measurement_type_name ]})</p>
+                            <md-checkbox class="md-secondary" ng-model="parameter.selected"
+                                ng-change="locationDataVm.changeSelection()">
+                            </md-checkbox>
                           </md-list-item>
                     </md-list>
                 </md-card-content>
@@ -83,7 +78,6 @@
 
         </div>
 
-        <!-- <div data-ng-include="'/static/partials/location/location-data-sidebar.html'"></div> -->
     </div>
 
 </md-content>

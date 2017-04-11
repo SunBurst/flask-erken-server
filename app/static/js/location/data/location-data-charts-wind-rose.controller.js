@@ -3,21 +3,24 @@
     
     angular
         .module('app.location')
-        .controller('LocationDataChartsParameterCtrl', LocationDataChartsParameterCtrl);
+        .controller('LocationDataChartsWindRoseCtrl', LocationDataChartsWindRoseCtrl);
     
-    LocationDataChartsParameterCtrl.$inject = [
+    LocationDataChartsWindRoseCtrl.$inject = [
         '$scope',
         'locationMeasurements',
         'locationStorage',
         'locationDataSource', 
         'locationDataTimeOptions', 
-        'HighChartOptions'
+        'WindRoseChartOptions'
     ];
     
-    function LocationDataChartsParameterCtrl($scope, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions, HighChartOptions) {
+    function LocationDataChartsWindRoseCtrl($scope, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions, WindRoseChartOptions) {
         var vm = this;
         
-        vm.chartParameter = {};
+        vm.chartParameter = {
+            charts: {},
+            wind_rose: {}
+        };
         vm.getDailyStationsAverageChartData = getDailyStationsAverageChartData;
         vm.getHighFrequencyStationsAverageChartData = getHighFrequencyStationsAverageChartData;
         vm.getHourlyStationsAverageChartData = getHourlyStationsAverageChartData;
@@ -81,20 +84,24 @@
                 });
         }
         
-        function initChartParameter(parameter) {
-            console.log(parameter);
-            vm.chartParameter.parameter = parameter;
-            vm.chartParameter.charts = {
-                stationsAverageChart: angular.copy(HighChartOptions)
-            };
+        function initChartParameter(windRose) {
+            vm.chartParameter.wind_rose = windRose;
+            vm.chartParameter.charts.stationsAverageChart = angular.copy(WindRoseChartOptions);
         }
         
         function initChart(chart) {
-            vm.setChartSubtitle(chart);
-            vm.setChartTitle(chart);
-            vm.chartParameter.charts[chart].chart.zoomType = 'x';
-            vm.chartParameter.charts[chart].yAxis.title.text = vm.chartParameter.parameter.parameter_name + ' (' + vm.chartParameter.parameter.parameter_unit + ')';
-            vm.updateChartData();
+            var windDirection = [202,229,218,208,230,202,205,213,223,227,239,250,237,240,248];
+            var windSpeed = [9,13.4,12,9.7,6.6,12.1,10.2,12.2,4.6,9,6.6,6.6,8.7,8.3,9.7];
+            var data = [];
+            for (var i = 0; i < windDirection.length; i++) {
+                data.push([ windDirection[i], windSpeed[i] ]);
+            }
+            vm.chartParameter.charts.stationsAverageChart.series.push({'name':'test', 'data': data});
+            //vm.setChartSubtitle(chart);
+            //vm.setChartTitle(chart);
+            //vm.chartParameter.charts[chart].chart.zoomType = 'x';
+            //vm.chartParameter.charts[chart].yAxis.title.text = vm.chartParameter.parameter.parameter_name + ' (' + vm.chartParameter.parameter.parameter_unit + ')';
+            //vm.updateChartData();
         }
         
         function setChartTitle(chart) {

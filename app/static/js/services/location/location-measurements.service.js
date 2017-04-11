@@ -20,6 +20,7 @@
             //Daily
             getDailyStationsAverageParameterMeasurements: getDailyStationsAverageParameterMeasurements,
             getDailyStationsAverageProfileMeasurements: getDailyStationsAverageProfileMeasurements,
+            getDailyStationsChartAverageParameterGroupMeasurements: getDailyStationsChartAverageParameterGroupMeasurements,
             getDailyStationsChartAverageParameterMeasurements: getDailyStationsChartAverageParameterMeasurements,
             //High Frequency
             getHighFrequencyStationsAverageParameterMeasurements: getHighFrequencyStationsAverageParameterMeasurements,
@@ -97,6 +98,41 @@
             }
             
             function getDailyStationsAverageProfileMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getDailyStationsChartAverageParameterGroupMeasurements(locationId, groupId, qcLevel, fromDate, toDate) {
+            var resource = $resource('/api/daily_stations_average_parameter_group_measurements_by_location_chart/:location_id/:group_id/:qc_level/:from_date/:to_date', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        group_id: groupId,
+                        qc_level: qcLevel,
+                        from_date: fromDate,
+                        to_date: toDate
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                location_id: locationId, 
+                group_id: groupId, 
+                qc_level: qcLevel, 
+                from_date: fromDate, 
+                to_date: toDate
+            }).$promise
+                .then(getDailyStationsChartAverageParameterGroupMeasurementsComplete)
+                .catch(getDailyStationsChartAverageParameterGroupMeasurementsFailed);
+                
+            function getDailyStationsChartAverageParameterGroupMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getDailyStationsChartAverageParameterGroupMeasurementsFailed(error) {
                 console.log(error);
             }
         

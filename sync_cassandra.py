@@ -1084,8 +1084,9 @@ def sync_cassandra():
             parameter_name text,
             parameter_id text,
             parameter_description frozen <description>,
-            PRIMARY KEY ((location_id), measurement_type_name, parameter_name, measurement_type_id, parameter_id)
-        ) WITH CLUSTERING ORDER BY (measurement_type_name ASC, parameter_name ASC, measurement_type_id ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
+            parameter_unit text,
+            PRIMARY KEY ((location_id), parameter_name, measurement_type_name, measurement_type_id, parameter_id)
+        ) WITH CLUSTERING ORDER BY (parameter_name ASC, measurement_type_name ASC, measurement_type_id ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
@@ -1128,6 +1129,38 @@ def sync_cassandra():
             group_description frozen <description>,
             PRIMARY KEY ((location_id), group_name, group_id)
         ) WITH CLUSTERING ORDER BY (group_name ASC, group_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.group_parameters_by_location_group (
+            location_id text,
+            group_id text,
+            parameter_name text,
+            parameter_id text,
+            group_name text static,
+            group_description frozen <description> static,
+            group_unit text static,
+            parameter_description frozen <description>,
+            parameter_unit text,
+            PRIMARY KEY ((location_id, group_id), parameter_name, parameter_id)
+        ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
+    )
+    
+    cassandra_connection.session.execute(
+        """CREATE TABLE IF NOT EXISTS {keyspace}.daily_parameter_group_measurements_by_location (
+            location_id text,
+            group_id text,
+            qc_level int,
+            year int,
+            date timestamp,
+            parameter_name text,
+            parameter_id text,
+            station_name text,
+            station_id text,
+            avg_value float,
+            unit text static,
+            PRIMARY KEY ((location_id, group_id, qc_level, year), date, parameter_name, station_name, parameter_id, station_id)
+        ) WITH CLUSTERING ORDER BY (date DESC, parameter_name ASC, station_name ASC, parameter_id ASC, station_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     log.info('All done!')

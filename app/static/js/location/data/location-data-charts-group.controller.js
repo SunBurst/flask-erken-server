@@ -3,10 +3,11 @@
     
     angular
         .module('app.location')
-        .controller('LocationDataChartsParameterCtrl', LocationDataChartsParameterCtrl);
+        .controller('LocationDataChartsGroupCtrl', LocationDataChartsGroupCtrl);
     
-    LocationDataChartsParameterCtrl.$inject = [
+    LocationDataChartsGroupCtrl.$inject = [
         '$scope',
+        'LocationParametersFactory',
         'locationMeasurements',
         'locationStorage',
         'locationDataSource', 
@@ -14,10 +15,13 @@
         'HighChartOptions'
     ];
     
-    function LocationDataChartsParameterCtrl($scope, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions, HighChartOptions) {
+    function LocationDataChartsGroupCtrl($scope, LocationParametersFactory, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions, HighChartOptions) {
         var vm = this;
         
-        vm.chartParameter = {};
+        vm.chartParameter = {
+            charts: {},
+            group: {}
+        };
         vm.getDailyStationsAverageChartData = getDailyStationsAverageChartData;
         vm.getHighFrequencyStationsAverageChartData = getHighFrequencyStationsAverageChartData;
         vm.getHourlyStationsAverageChartData = getHourlyStationsAverageChartData;
@@ -48,17 +52,24 @@
         vm.setSelectedTimeOption();
         vm.setDatePicker();
         
-        function getDailyStationsAverageChartData() {
-            var locationId = vm.location.location_id;
-            var parameterId = vm.chartParameter.parameter.parameter_id
-            var fromDate = vm.datePickerModel.startDate.valueOf();
-            var toDate = vm.datePickerModel.endDate.valueOf();
+        function getDailyStationsAverageChartData(locationId, parameterId, qcLevel, fromDate, toDate) {
             return locationMeasurements.getDailyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
         }
-
+        
+        function getDailyStationsAverageChartData() {
+            var locationId = vm.location.location_id;
+            var groupId = vm.chartParameter.group.parameter_id;
+            var fromDate = vm.datePickerModel.startDate.valueOf();
+            var toDate = vm.datePickerModel.endDate.valueOf();
+            return locationMeasurements.getDailyStationsChartAverageParameterGroupMeasurements(locationId, groupId, 0, fromDate, toDate)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
         function getHighFrequencyStationsAverageChartData() {
             var locationId = vm.location.location_id;
             var parameterId = vm.chartParameter.parameter.parameter_id
@@ -81,27 +92,24 @@
                 });
         }
         
-        function initChartParameter(parameter) {
-            console.log(parameter);
-            vm.chartParameter.parameter = parameter;
-            vm.chartParameter.charts = {
-                stationsAverageChart: angular.copy(HighChartOptions)
-            };
+        function initChartParameter(group) {
+            vm.chartParameter.group = group;
+            vm.chartParameter.charts.stationsAverageChart = angular.copy(HighChartOptions);
         }
         
         function initChart(chart) {
             vm.setChartSubtitle(chart);
             vm.setChartTitle(chart);
             vm.chartParameter.charts[chart].chart.zoomType = 'x';
-            vm.chartParameter.charts[chart].yAxis.title.text = vm.chartParameter.parameter.parameter_name + ' (' + vm.chartParameter.parameter.parameter_unit + ')';
+            vm.chartParameter.charts[chart].yAxis.title.text = vm.chartParameter.group.parameter_name + ' (' + vm.chartParameter.group.parameter_unit + ')';
             vm.updateChartData();
         }
         
         function setChartTitle(chart) {
             var selectedDataSource = vm.dataSourcesModel.selectedDataSource;
-            var parameterName = vm.chartParameter.parameter.parameter_name;
+            var groupName = vm.chartParameter.group.parameter_name;
             var locationName = vm.location.location_name;
-            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' Average ' + parameterName + ' at ' + locationName;
+            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' Average ' + groupName + ' at ' + locationName;
         }
         
         function setChartSubtitle(chart) {
@@ -133,7 +141,8 @@
         }
         
         function updateDailyStationsAverageChartData() {
-            var parameterUnit = vm.chartParameter.parameter.parameter_unit;
+            
+            var parameterUnit = vm.chartParameter.group.parameter_unit;
             vm.chartParameter.charts.stationsAverageChart.series = [];
             vm.setChartTitle('stationsAverageChart');
             vm.setChartSubtitle('stationsAverageChart');
@@ -141,7 +150,7 @@
                 for (var i = 0; i < data.length; i++) {
                     var series = data[i];
                     series.tooltip = {
-                        'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d}</span><br/>',
+                        'headerFormat': '<span style="font-size: 10px">{point.key: %Y-%m-%d %H:%M:%S}</span><br/>',
                         'pointFormat': '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + parameterUnit + '</b><br/>'
                     };
                     vm.chartParameter.charts.stationsAverageChart.series.push(series);

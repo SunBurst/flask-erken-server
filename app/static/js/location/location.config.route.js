@@ -68,7 +68,7 @@
             .state('location.data.charts', {
                 url: '/charts',
                 templateUrl: '/static/partials/location/location-data-charts.html',
-                controller: 'LocationDataCharts',
+                controller: 'LocationDataChartsCtrl',
                 controllerAs: 'locationDataChartsVm',
             })
             .state('location.data.tables', {

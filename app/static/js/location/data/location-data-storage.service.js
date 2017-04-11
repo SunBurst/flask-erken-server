@@ -13,7 +13,8 @@
             getParameterSelectedValue: getParameterSelectedValue,
             getParametersAllMeasurementTypesSelection: getParametersAllMeasurementTypesSelection,
             setParameterSelectedValue: setParameterSelectedValue,
-            setParametersAllMeasurementTypesSelection: setParametersAllMeasurementTypesSelection
+            setParametersAllMeasurementTypesSelection: setParametersAllMeasurementTypesSelection,
+            updateParametersAllMeasurementTypesSelection: updateParametersAllMeasurementTypesSelection
         };
         
         function getParameterSelectedValue(parameterId, measurementTypeId) {
@@ -25,21 +26,13 @@
         }
         
         function setParametersAllMeasurementTypesSelection(data) {
-            var tempSelection = {};
 
+            var tempSelection = [];
+            // [ {parameterId: water_temperature, parameterName: Water Temperature}, {}, ..]
             for (var i = 0; i < data.length; i++) {
-                var parameterId = data[i].parameter_id;
-                var measurementTypeId = data[i].measurement_type_id;
-                var parameterNotInObject = !(parameterId in tempSelection);
-                if (parameterNotInObject) {
-                    tempSelection[parameterId] = {};
-                }
-                var measurementNotInObject = !(measurementTypeId in tempSelection[parameterId]);
-                if (measurementNotInObject) {
-                    tempSelection[parameterId][measurementTypeId] = false;
-                }
-                
-                tempSelection[parameterId][measurementTypeId] = false;
+                tempDataEntry = angular.copy(data[i]);
+                tempDataEntry['selected'] = false;
+                tempSelection.push(tempDataEntry);
                 
             }
             parametersAllMeasurementTypesSelection = tempSelection;
@@ -50,6 +43,10 @@
         
         function setParameterSelectedValue(parameterId, measurementTypeId, newValue) {
             parametersAllMeasurementTypesSelection[parameterId][measurementTypeId] = newValue;
+        }
+        
+        function updateParametersAllMeasurementTypesSelection(newData) {
+            parametersAllMeasurementTypesSelection = angular.copy(newData);
         }
         
     }

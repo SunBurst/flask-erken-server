@@ -263,66 +263,44 @@
     
     function getWindRoseChartOptions() {
         return {
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
             chart: {
-                polar: true,
-                type: 'column'
-            },
-            categories: [
-                'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 
-                'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'
-            ],
-            pane: {
-                size: '85%'
-            },
-            legend: {
-                align: 'right',
-                verticalAlign: 'top',
-                y: 100,
-                layout: 'vertical'
-            },
-            xAxis: {
+                polar: true
+              },
+
+              title: {
+                text: ''
+              },
+
+              pane: {
+                startAngle: 0,
+                endAngle: 360
+              },
+
+              xAxis: {
+                tickInterval: 45,
                 min: 0,
                 max: 360,
-                type: "",
-                tickInterval: 22.5,
-                tickmarkPlacement: 'on',
                 labels: {
-                    formatter: function () {
-                        return categories[this.value / 22.5] + '°';
-                    }
+                  formatter: function () {
+                    return this.value + '°';
+                  }
                 }
-            },
-            yAxis: {
-                min: 0,
-                endOnTick: false,
-                showLastLabel: true,
-                title: {
-                    text: 'Frequency (%)'
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value + '%';
-                    }
-                },
-                reversedStacks: false
-            },
-            tooltip: {
-                valueSuffix: '%'
-            },
-            plotOptions: {
+              },
+
+              yAxis: {
+                min: 0
+              },
+
+              plotOptions: {
                 series: {
-                    stacking: 'normal',
-                    shadow: false,
-                    groupPadding: 0,
-                    pointPlacement: 'on'
+                  pointStart: 0,
+                  pointInterval: 45
+                },
+                column: {
+                  pointPadding: 0,
+                  groupPadding: 0
                 }
-            },
+              },
             series: [],
         };
     }

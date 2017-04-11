@@ -3,12 +3,12 @@
     
     angular
         .module('app.location')
-        .controller('LocationDataCharts', LocationDataCharts);
+        .controller('LocationDataChartsCtrl', LocationDataChartsCtrl);
         
-    LocationDataCharts.$inject = ['$scope', 'locationDataStorage'];
+    LocationDataChartsCtrl.$inject = ['$scope', 'locationDataStorage'];
     
     
-    function LocationDataCharts($scope, locationDataStorage) {
+    function LocationDataChartsCtrl($scope, locationDataStorage) {
         var vm = this;
         vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection()
         

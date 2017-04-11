@@ -1,6 +1,8 @@
-<div ng-repeat="(parameter, isSelected) in locationDataChartsVm.parameterSelection">
-    <div ng-if="isSelected">
-        <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'parameter')" ng-include="'/static/partials/location/location-data-charts-parameter.html'"></div>
-        <div ng-if="locationDataVm.isParameterType(locationDataVm.parameters[parameter].measurement_type, 'profile')" ng-include="'/static/partials/location/location-data-charts-profile.html'"></div>
+<div ng-repeat="parameter in locationDataChartsVm.parameterSelection">
+    <div ng-if="parameter.selected">
+        <div ng-if="locationDataVm.isParameterType(parameter.measurement_type_id, 'group')" ng-include="'/static/partials/location/location-data-charts-group.html'"></div>
+        <div ng-if="locationDataVm.isParameterType(parameter.measurement_type_id, 'parameter')" ng-include="'/static/partials/location/location-data-charts-parameter.html'"></div>
+        <div ng-if="locationDataVm.isParameterType(parameter.measurement_type_id, 'profile')" ng-include="'/static/partials/location/location-data-charts-profile.html'"></div>
+        <div ng-if="locationDataVm.isParameterType(parameter.measurement_type_id, 'wind_rose')" ng-include="'/static/partials/location/location-data-charts-wind-rose.html'"></div>
     </div>
 </div>

@@ -58,9 +58,9 @@
             $scope.$broadcast('dataSourceChange');
         }
         
-        function changeSelection(parameterId, measurementTypeId, newValue) {
-            console.log(parameterId, measurementTypeId, newValue);
-            locationDataStorage.setParameterSelectedValue(parameterId, measurementTypeId, newValue);
+        function changeSelection() {
+            locationDataStorage.updateParametersAllMeasurementTypesSelection(vm.parameterSelection);
+            //locationDataStorage.setParameterSelectedValue(parameterId, measurementTypeId, newValue);
             $scope.$broadcast('parameterSelectionChange');
         }
         
