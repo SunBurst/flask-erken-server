@@ -3,9 +3,9 @@
     
     angular
         .module('app.location')
-        .controller('LocationDataTablesParameterCtrl', LocationDataTablesParameterCtrl);
+        .controller('LocationDataTablesGroupCtrl', LocationDataTablesGroupCtrl);
     
-    LocationDataTablesParameterCtrl.$inject = [
+    LocationDataTablesGroupCtrl.$inject = [
         '$filter',
         '$scope',        
         'DataTableParameterOptions',
@@ -15,7 +15,7 @@
         'locationDataTimeOptions'
     ];
     
-    function LocationDataTablesParameterCtrl($filter, $scope, DataTableParameterOptions, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions) {
+    function LocationDataTablesGroupCtrl($filter, $scope, DataTableParameterOptions, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions) {
         var vm = this;
         
         vm.getDailyStationsAverageData = getDailyStationsAverageData;
@@ -30,7 +30,9 @@
         vm.setDataTableOptions = setDataTableOptions;
         vm.setDatePicker = setDatePicker;
         vm.setSelectedTimeOption = setSelectedTimeOption;
-        vm.tableParameter = {};
+        vm.tableParameter = {
+            group: {}
+        };
         vm.updateDailyStationsAverageData = updateDailyStationsAverageData;
         vm.updateHourlyStationsAverageData = updateHourlyStationsAverageData;
         vm.updateHighFrequencyStationsAverageData = updateHighFrequencyStationsAverageData;
@@ -62,10 +64,10 @@
         
         function getDailyStationsAverageData() {
             var locationId = vm.location.location_id;
-            var parameterId = vm.tableParameter.parameter.parameter_id;
+            var groupId = vm.tableParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
-            return locationMeasurements.getDailyStationsAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getDailyStationsAverageParameterGroupMeasurements(locationId, groupId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -93,8 +95,8 @@
                 });
         }
         
-        function initTableParameter(parameter) {
-            vm.tableParameter.parameter = parameter;
+        function initTableParameter(group) {
+            vm.tableParameter.group = group;
             vm.initTables();
         }
         

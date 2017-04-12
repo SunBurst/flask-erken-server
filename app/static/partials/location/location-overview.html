@@ -7,8 +7,14 @@
                 <img data-ng-src="data:image/png;base64, {[ locationOverviewVm.location.location_image ]}" class="md-card-image" alt="{[ locationOverviewVm.location.location_name ]}">
             </md-card>
             <md-card>
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+                        <h3>
+                            <span>Location Info</span>
+                        </h3>
+                    </div>
+                </md-toolbar>
                 <md-card-content>
-                    <h3 class="md-headline">Location Info</h3>
                     <div layout="row" layout-align="space-between center">
                         <p class="md-body-2">Environment Category: </p><p class="md-body-2">{[ locationOverviewVm.location.location_environment_category ]}</p>
                     </div>
@@ -44,7 +50,30 @@
     </div>
 
     <div layout="column" flex>
-        <h2>Stations</h2>
+        <md-card>
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <h3>
+                        <span>Stations</span>
+                    </h3>
+                </div>
+            </md-toolbar>
+            <md-card-content>
+                <md-content>
+                    <md-list flex>
+                        <md-list-item class="md-3-line" ng-repeat="station in locationOverviewVm.stations" ng-click="null">
+                            <img class="md-avatar" data-ng-src="data:image/png;base64, {[ station.station_image ]}"/>
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{[ station.station_name ]}</h3>
+                                <h4>{[ station.station_environment_category ]}</h4>
+                                <p>{[ station.station_description.short_description ]}</p>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </md-card-content>
+        </md-card>
+        <!-- <h2>Stations</h2>
         <div layout-xs="column" layout="row" layout-wrap>
             <md-card ng-repeat="station in locationOverviewVm.stations" flex-xs="100" flex-gt-xs="50" flex-gt-md="33">
                 <md-card-header>
@@ -58,6 +87,6 @@
                 </md-card-header>
                 <img data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="md-card-image" alt="{[ station.station_name ]}">
             </md-card>
-        </div>
+        </div> -->
     </div>
 </md-content>

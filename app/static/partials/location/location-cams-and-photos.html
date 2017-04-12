@@ -11,16 +11,18 @@
                     <span class="md-subhead">Live</span>
                 </md-card-header-text>
             </md-card-header>
-            <img data-ng-src="{[ stationLiveWebcam.livewebcam.url ]}" fallback-src="http://google.com/favicon.ico" class="md-card-image" alt="{[ stationLiveWebcam.station_name ]}">
+            <img data-ng-src="{[ stationLiveWebcam.livewebcam.url ]}" class="md-card-image" alt="{[ stationLiveWebcam.station_name ]}">
         </md-card>
     </div>
 
     <md-card>
-        <md-card-header>
-            <md-card-header-text>
-                <span class="md-title">Archive</span>
-            </md-card-header-text>
-        </md-card-header>
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h3>
+                    <span>Archive</span>
+                </h3>
+            </div>
+        </md-toolbar>
         <md-card-content>
             <md-input-container flex-gt-md="30">
                 <label>Select Date</label>
@@ -32,11 +34,13 @@
     </md-card>
 
     <md-card>
-        <md-card-header>
-            <md-card-header-text>
-                <span class="md-title">Videos</span>
-            </md-card-header-text>
-        </md-card-header>
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h3>
+                    <span>Videos</span>
+                </h3>
+            </div>
+        </md-toolbar>
         <md-card-content>
             <div ng-show="locationCamsAndPhotosVm.noVideos()">
                 <p class="md-body-1">No videos available!</p>
@@ -53,17 +57,19 @@
     </md-card>
 
     <md-card>
-        <md-card-header>
-            <md-card-header-text>
-                <span class="md-title">Photos</span>
-            </md-card-header-text>
-        </md-card-header>
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h3>
+                    <span>Photos</span>
+                </h3>
+            </div>
+        </md-toolbar>
         <md-card-content>
             <div ng-show="locationCamsAndPhotosVm.noWebcamPhotos()">
                 <p class="md-body-1">No photos available!</p>
             </div>
             <div layout-xs="column" layout="row" layout-wrap layout-align="space-around center">
-                <md-card flex="33" ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.webcamPhotos" 
+                <md-card flex-gt-xs="33" ng-repeat="stationWebcamPhoto in locationCamsAndPhotosVm.webcamPhotos" 
                     ng-click="locationCamsAndPhotosVm.showPhoto($event, $index)">
                     <md-card-header>
                         <md-card-header-text>

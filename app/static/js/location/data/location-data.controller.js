@@ -28,6 +28,8 @@
         vm.isParameterType = isParameterType;
         vm.isTimeOption = isTimeOption;
         vm.isViewMode = isViewMode;
+        vm.maxDate = moment();
+        vm.minDate = moment(0);
         vm.parameterList = locationStorage.getParametersAllMeasurementTypesList();
         vm.parameters = locationStorage.getParametersAllMeasurementTypes();
         vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection();
@@ -81,6 +83,7 @@
         }
         
         function setDatePicker() {
+            vm.maxDate = moment();
             vm.datePickerMasterModel.startDate = locationDataTimeOptions.getTimeOptionDate(vm.timeOptionsModel.selectedTimeOption)[0];
             vm.datePickerMasterModel.endDate = locationDataTimeOptions.getTimeOptionDate(vm.timeOptionsModel.selectedTimeOption)[1];
         }

@@ -23,7 +23,7 @@
         vm.updateWebcamPhotos = updateWebcamPhotos;
         vm.webcamPhotos = [];
         vm.videoUrls = [];
-       
+        
         vm.datePickerModel = {
             date: moment().startOf('day')
         };
@@ -31,6 +31,10 @@
         function dateChange() {
             updateVideoUrls();
             updateWebcamPhotos();
+        }
+        
+        function changeCameraMode() {
+            
         }
         
         function getVideoUrls() {

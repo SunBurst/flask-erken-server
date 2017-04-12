@@ -74,7 +74,7 @@
             .state('location.data.tables', {
                 url: '/tables',
                 templateUrl: '/static/partials/location/location-data-tables.html',
-                controller: 'LocationDataTables',
+                controller: 'LocationDataTablesCtrl',
                 controllerAs: 'locationDataTablesVm'
             })
             .state('location.cams-and-photos', {
@@ -95,39 +95,6 @@
                 }
                 
             })
-            .state('location.status', {
-                url: '/status',
-                templateUrl: '/static/partials/location/location-status.html',
-                controller: 'LocationStatus',
-                controllerAs: 'locationStatusVm',
-                resolve: {
-                    resolvedStatusParameters: function($stateParams, locationStatusParameters, locationStorage) {
-                        var locationId = $stateParams.location_id;
-                        return locationStatusParameters.getStatusParameters(locationId)
-                            .then(function(response) {
-                                var data = response.data;
-                                var initObjects = true;
-                                locationStorage.setStatusParameterList(data, initObjects);
-                                return data;
-                            });
-                    },
-                    resolvedStatusParameterSelection: ['resolvedStatusParameters', 'locationStatusStorage', function(resolvedStatusParameters, locationStatusStorage) {
-                        return locationStatusStorage.setStatusParameterSelection(resolvedStatusParameters);
-                    }]
-                }
-            })
-            .state('location.status.charts', {
-                url: '/charts',
-                templateUrl: '/static/partials/location/location-status-charts.html',
-                controller: 'LocationStatusCharts',
-                controllerAs: 'locationStatusChartsVm',
-            })
-            .state('location.status.tables', {
-                url: '/tables',
-                templateUrl: '/static/partials/location/location-status-tables.html',
-                controller: 'LocationStatusTables',
-                controllerAs: 'locationStatusTablesVm'
-            });
     
     }
     

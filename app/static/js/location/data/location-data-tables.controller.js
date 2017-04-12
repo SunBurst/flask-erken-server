@@ -3,16 +3,16 @@
     
     angular
         .module('app.location')
-        .controller('LocationDataTables', LocationDataTables);
+        .controller('LocationDataTablesCtrl', LocationDataTablesCtrl);
         
-    LocationDataTables.$inject = ['$scope', 'locationDataStorage'];
+    LocationDataTablesCtrl.$inject = ['$scope', 'locationDataStorage'];
     
-    function LocationDataTables($scope, locationDataStorage) {
+    function LocationDataTablesCtrl($scope, locationDataStorage) {
         var vm = this;
-        vm.parameterSelection = locationDataStorage.getParameterSelection();
+        vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection()
         
         $scope.$on('parameterSelectionChange', function() {
-            vm.parameterSelection = locationDataStorage.getParameterSelection();
+            vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection();
         });
         
     }

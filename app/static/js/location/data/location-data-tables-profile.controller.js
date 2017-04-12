@@ -3,9 +3,9 @@
     
     angular
         .module('app.location')
-        .controller('LocationDataTablesProfile', LocationDataTablesProfile);
+        .controller('LocationDataTablesProfileCtrl', LocationDataTablesProfileCtrl);
     
-    LocationDataTablesProfile.$inject = [
+    LocationDataTablesProfileCtrl.$inject = [
         '$filter',
         '$scope',        
         'DataTableParameterOptions',
@@ -15,7 +15,7 @@
         'locationDataTimeOptions'
     ];
     
-    function LocationDataTablesProfile($filter, $scope, DataTableParameterOptions, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions) {
+    function LocationDataTablesProfileCtrl($filter, $scope, DataTableParameterOptions, locationMeasurements, locationStorage, locationDataSource, locationDataTimeOptions) {
         var vm = this;
         
         vm.getDailyStationsAverageData = getDailyStationsAverageData;

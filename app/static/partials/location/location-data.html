@@ -2,8 +2,14 @@
     
     <div flex-xs flex-gt-xs="75" layout="column">
         <md-card>
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <h3>
+                        <span>Global Options</span>
+                    </h3>
+                </div>
+            </md-toolbar>
             <md-card-content layout="column">
-                <h3 class="md-headline">Global Options</h3>
                 <md-card-actions layout="column" layout-align="space-around center">
                     <div layout="row" layout-align="space-between center" layout-fill>
                         <span>Data Source</span>
@@ -26,14 +32,14 @@
                               <md-input-container>
                                 <label>Start Date/Time</label>
                                 <input mdc-datetime-picker date="true" time="true" type="text"
-                                       placeholder="Date"
+                                       placeholder="Date" min-date="locationDataVm.minDate"
                                        ng-model="locationDataVm.datePickerMasterModel.startDate">
                                 </input>
                               </md-input-container>
                               <md-input-container>
                                 <label>End Date/Time</label>
                                 <input mdc-datetime-picker date="true" time="true" type="text"
-                                       placeholder="Date"
+                                       placeholder="Date" max-date="locationDataVm.maxDate"
                                        ng-model="locationDataVm.datePickerMasterModel.endDate">
                                 </input>
                               </md-input-container>
@@ -53,6 +59,13 @@
         
         <div flex layout="column">
             <md-card>
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+                        <h3>
+                            <span>View</span>
+                        </h3>
+                    </div>
+                </md-toolbar>
                 <md-card-content>
                     <div layout="column" layout-align="space-around">
                         <md-radio-group ng-model="locationDataVm.viewMode">
@@ -63,9 +76,15 @@
                 </md-card-content>
             </md-card>
             <md-card>
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+                        <h3>
+                            <span>Parameters</span>
+                        </h3>
+                    </div>
+                </md-toolbar>
                 <md-card-content>
                     <md-list>
-                        <md-subheader class="md-no-sticky">Parameters</md-subheader>
                         <md-list-item ng-repeat="parameter in locationDataVm.parameterSelection">
                             <p>{[ parameter.parameter_name ]} ({[ parameter.measurement_type_name ]})</p>
                             <md-checkbox class="md-secondary" ng-model="parameter.selected"

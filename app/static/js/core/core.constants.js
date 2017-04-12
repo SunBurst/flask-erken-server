@@ -35,11 +35,8 @@
         .constant('GoogleMapDefaultOptions', getDefaultMapOptions())
         .constant('GoogleMapIcons', getGoogleMapIcons())
         .constant('HeatMapOptions', getHeatMapOptions())
-        .constant('HighChartOptions', getHighChartOptions())
-        .constant('WindRoseChartOptions', getWindRoseChartOptions());
+        .constant('HighChartOptions', getHighChartOptions());
 
-    
-    
     function getDatePickerOptions() {
         return {
             applyClass: 'btn-success',
@@ -257,50 +254,6 @@
                 pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.2f} ' + '' + '</b><br/>',
                 shared: true
             },
-            series: [],
-        };
-    }
-    
-    function getWindRoseChartOptions() {
-        return {
-            chart: {
-                polar: true
-              },
-
-              title: {
-                text: ''
-              },
-
-              pane: {
-                startAngle: 0,
-                endAngle: 360
-              },
-
-              xAxis: {
-                tickInterval: 45,
-                min: 0,
-                max: 360,
-                labels: {
-                  formatter: function () {
-                    return this.value + '°';
-                  }
-                }
-              },
-
-              yAxis: {
-                min: 0
-              },
-
-              plotOptions: {
-                series: {
-                  pointStart: 0,
-                  pointInterval: 45
-                },
-                column: {
-                  pointPadding: 0,
-                  groupPadding: 0
-                }
-              },
             series: [],
         };
     }

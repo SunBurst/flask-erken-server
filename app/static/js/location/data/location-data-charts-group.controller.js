@@ -52,12 +52,12 @@
         vm.setSelectedTimeOption();
         vm.setDatePicker();
         
-        function getDailyStationsAverageChartData(locationId, parameterId, qcLevel, fromDate, toDate) {
-            return locationMeasurements.getDailyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
+        //function getDailyStationsAverageChartData(locationId, parameterId, qcLevel, fromDate, toDate) {
+        //    return locationMeasurements.getDailyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+        //        .then(function(response) {
+        //            return response.data;
+        //        });
+        // }
         
         function getDailyStationsAverageChartData() {
             var locationId = vm.location.location_id;

@@ -1,18 +1,22 @@
-<div ng-controller="LocationDataTablesProfile as tableProfileVm" ng-init="tableProfileVm.initTableParameter(locationDataVm.parameters[parameter])">
+<div ng-controller="LocationDataTablesProfileCtrl as tableProfileVm" 
+    ng-init="tableProfileVm.initTableParameter(locationDataVm.parameters[parameter.parameter_id][parameter.measurement_type_id])">
     <md-content>
         <md-card>
             <md-card-header>
                 <md-card-header-text>
-                    <span class="md-headline">{[ locationDataVm.parameters[parameter].parameter_name ]}</span>
+                    <span class="md-headline">{[ parameter.parameter_name ]} ({[ parameter.measurement_type_name ]})</span>
                     <span class="md-subhead">{[ locationDataVm.dataSourcesModel.selectedDataSource ]}</span>
                 </md-card-header-text>
             </md-card-header>
                 <md-card-content>
-                    <div layout="column" layout-align="space-around center">
+                    <div layout="column" layout-align="space-around">
                         <div ng-if="locationDataVm.isDataSource('Daily')" ng-include="'/static/partials/location/location-data-tables-profile-daily.html'"></div>
                         <div ng-if="locationDataVm.isDataSource('Hourly')" ng-include="'/static/partials/location/location-data-tables-profile-hourly.html'"></div>
                         <div ng-if="locationDataVm.isDataSource('High Frequency')" ng-include="'/static/partials/location/location-data-tables-profile-high-frequency.html'"></div>
-                        <md-table-pagination md-limit="tableProfileVm.query.limit" md-limit-options="tableProfileVm.limitOptions" md-page="tableProfileVm.query.page" md-total="{[ tableProfileVm.measurements.length ]}" md-page-select="tableProfileVm.options.pageSelect" md-boundary-links="tableProfileVm.options.boundaryLinks"></md-table-pagination>
+                        <md-table-pagination md-limit="tableProfileVm.query.limit" md-limit-options="tableProfileVm.limitOptions" 
+                            md-page="tableProfileVm.query.page" md-total="{[ tableProfileVm.measurements.length ]}" 
+                            md-page-select="tableProfileVm.options.pageSelect" md-boundary-links="tableProfileVm.options.boundaryLinks">
+                        </md-table-pagination>
                     </div>
                 </md-card-content>
             </md-card>

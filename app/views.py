@@ -243,7 +243,49 @@ def get_daily_stations_average_parameter_measurements_by_location_chart(location
     series = [station_name_data for station_id, station_name_data in stations.items()]
     
     return json.dumps(series, cls=CustomEncoder)
+
+@app.route('/api/daily_stations_average_parameter_group_measurements_by_location/<string:location_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
+def get_daily_stations_average_parameter_group_measurements_by_location(location_id, group_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_parameter_group_measurements_by_location WHERE location_id=? AND group_id=? AND qc_level=? AND year=? AND date>=? AND date<=?"
+    prepared = cassandra_connection.session.prepare(query)
     
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(cassandra_connection.session.execute_async(prepared, (location_id, group_id, qc_level, year, from_date, to_date, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
+    #parameters_by_stations = OrderedDict()
+
+    #for future in futures:
+    #    rows = future.result()
+    #    for row in rows:
+    #        parameter_id = row.get('parameter_id')
+    #        parameter_name = row.get('parameter_name')
+    #        station_id = row.get('station_id')
+    #        station_name = row.get('station_name')
+    #        parameter_by_station_id = "{parameter_id}-{station_id}".format(parameter_id=parameter_id, station_id=station_id)
+    #        parameter_by_station_name = "{parameter_name} ({station_name})".format(parameter_name=parameter_name, station_name=station_name)
+    #        if parameter_by_station_id not in parameters_by_stations:
+    #            parameters_by_stations[parameter_by_station_id] = {
+    #                'id': parameter_by_station_id, 
+    #                'name': parameter_by_station_name, 
+    #                'data': []
+    #            }
+
+    #        parameters_by_stations[parameter_by_station_id]['data'].append([row.get('date'), row.get('avg_value')])
+
+    #series = [parameters_by_station_data for parameter_by_station_id, parameters_by_station_data in parameters_by_stations.items()]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/daily_stations_average_parameter_group_measurements_by_location_chart/<string:location_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
 def get_daily_stations_average_parameter_group_measurements_by_location_chart(location_id, group_id, qc_level, from_date, to_date):
     query = "SELECT * FROM daily_parameter_group_measurements_by_location WHERE location_id=? AND group_id=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"

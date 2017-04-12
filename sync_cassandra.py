@@ -1061,22 +1061,6 @@ def sync_cassandra():
     )
     
     cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.daily_wind_rose_measurements_by_location (
-            location_id text,
-            wind_rose_id text,
-            qc_level int,
-            year int,
-            date timestamp,
-            direction float,
-            station_name text,
-            station_id text,
-            avg_wind_speed float,
-            unit text static,
-            PRIMARY KEY ((location_id, wind_rose_id, qc_level, year), date, direction, station_name, station_id)
-        ) WITH CLUSTERING ORDER BY (date DESC, direction ASC, station_name ASC, station_id ASC)""".format(keyspace=KEYSPACE)
-    )
-    
-    cassandra_connection.session.execute(
         """CREATE TABLE IF NOT EXISTS {keyspace}.parameters_all_measurement_types_by_location (
             location_id text,
             measurement_type_name text,
@@ -1109,16 +1093,6 @@ def sync_cassandra():
             parameter_unit text,
             PRIMARY KEY ((location_id), parameter_name, parameter_id)
         ) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)""".format(keyspace=KEYSPACE)
-    )
-    
-    cassandra_connection.session.execute(
-        """CREATE TABLE IF NOT EXISTS {keyspace}.wind_rose_parameters_by_location (
-            location_id text,
-            wind_rose_name text,
-            wind_rose_id text,
-            wind_rose_description frozen <description>,
-            PRIMARY KEY ((location_id), wind_rose_name, wind_rose_id)
-        ) WITH CLUSTERING ORDER BY (wind_rose_name ASC, wind_rose_id ASC)""".format(keyspace=KEYSPACE)
     )
     
     cassandra_connection.session.execute(
