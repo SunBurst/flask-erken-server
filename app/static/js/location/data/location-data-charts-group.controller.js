@@ -72,10 +72,10 @@
         
         function getHighFrequencyStationsAverageChartData() {
             var locationId = vm.location.location_id;
-            var parameterId = vm.chartParameter.parameter.parameter_id
+            var groupId = vm.chartParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
-            return locationMeasurements.getHighFrequencyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getHighFrequencyStationsChartAverageParameterGroupMeasurements(locationId, groupId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -83,10 +83,10 @@
         
         function getHourlyStationsAverageChartData() {
             var locationId = vm.location.location_id;
-            var parameterId = vm.chartParameter.parameter.parameter_id
+            var groupId = vm.chartParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
-            return locationMeasurements.getHourlyStationsChartAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getHourlyStationsChartAverageParameterGroupMeasurements(locationId, groupId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -159,7 +159,7 @@
         }
         
         function updateHighFrequencyStationsAverageChartData() {
-            var parameterUnit = vm.chartParameter.parameter.parameter_unit;
+            var parameterUnit = vm.chartParameter.group.parameter_unit;
             vm.chartParameter.charts.stationsAverageChart.series = [];
             vm.setChartTitle('stationsAverageChart');
             vm.setChartSubtitle('stationsAverageChart');
@@ -176,7 +176,7 @@
         }
         
         function updateHourlyStationsAverageChartData() {
-            var parameterUnit = vm.chartParameter.parameter.parameter_unit;
+            var parameterUnit = vm.chartParameter.group.parameter_unit;
             vm.chartParameter.charts.stationsAverageChart.series = [];
             vm.setChartTitle('stationsAverageChart');
             vm.setChartSubtitle('stationsAverageChart');

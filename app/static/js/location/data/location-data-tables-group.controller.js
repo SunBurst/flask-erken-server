@@ -75,10 +75,10 @@
         
         function getHighFrequencyStationsAverageData() {
             var locationId = vm.location.location_id;
-            var parameterId = vm.tableParameter.parameter.parameter_id;
+            var groupId = vm.tableParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
-            return locationMeasurements.getHighFrequencyStationsAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getHighFrequencyStationsAverageParameterGroupMeasurements(locationId, groupId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -86,10 +86,10 @@
         
         function getHourlyStationsAverageData() {
             var locationId = vm.location.location_id;
-            var parameterId = vm.tableParameter.parameter.parameter_id;
+            var groupId = vm.tableParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
-            return locationMeasurements.getHourlyStationsAverageParameterMeasurements(locationId, parameterId, 0, fromDate, toDate)
+            return locationMeasurements.getHourlyStationsAverageParameterGroupMeasurements(locationId, groupId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });

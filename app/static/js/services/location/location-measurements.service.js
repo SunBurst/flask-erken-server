@@ -25,12 +25,16 @@
             getDailyStationsChartAverageParameterMeasurements: getDailyStationsChartAverageParameterMeasurements,
             //High Frequency
             getHighFrequencyStationsAverageParameterMeasurements: getHighFrequencyStationsAverageParameterMeasurements,
+            getHighFrequencyStationsAverageParameterGroupMeasurements: getHighFrequencyStationsAverageParameterGroupMeasurements,
             getHighFrequencyStationsAverageProfileMeasurements: getHighFrequencyStationsAverageProfileMeasurements,
+            getHighFrequencyStationsChartAverageParameterGroupMeasurements: getHighFrequencyStationsChartAverageParameterGroupMeasurements,
             getHighFrequencyStationsChartAverageParameterMeasurements: getHighFrequencyStationsChartAverageParameterMeasurements,
             //Hourly
             getHourlyStationsAverageParameterMeasurements: getHourlyStationsAverageParameterMeasurements,
+            getHourlyStationsAverageParameterGroupMeasurements: getHourlyStationsAverageParameterGroupMeasurements,
             getHourlyStationsAverageProfileMeasurements: getHourlyStationsAverageProfileMeasurements,
             getHourlyStationsChartAverageParameterMeasurements: getHourlyStationsChartAverageParameterMeasurements,
+            getHourlyStationsChartAverageParameterGroupMeasurements: getHourlyStationsChartAverageParameterGroupMeasurements,
             getHourlyStationsChartAverageProfileMeasurements: getHourlyStationsChartAverageProfileMeasurements
         };
         
@@ -244,6 +248,41 @@
 
         }
         
+        function getHighFrequencyStationsAverageParameterGroupMeasurements(locationId, groupId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/parameter_group_measurements_by_location/:location_id/:group_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        group_id: groupId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                location_id: locationId, 
+                group_id: groupId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getHighFrequencyStationsAverageParameterGroupMeasurementsComplete)
+                .catch(getHighFrequencyStationsAverageParameterGroupMeasurementsFailed);
+                
+            function getHighFrequencyStationsAverageParameterGroupMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getHighFrequencyStationsAverageParameterGroupMeasurementsFailed(error) {
+                console.log(error);
+            }
+
+        }
+        
         function getHighFrequencyStationsAverageProfileMeasurements(locationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
             var resource = $resource('/api/profile_measurements_by_location/:location_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
                 query: {
@@ -278,7 +317,42 @@
             }
 
         }
-
+        
+        function getHighFrequencyStationsChartAverageParameterGroupMeasurements(locationId, groupId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/parameter_group_measurements_by_location_chart/:location_id/:group_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        group_id: groupId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                location_id: locationId, 
+                group_id: groupId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getHighFrequencyStationsChartAverageParameterGroupMeasurementsComplete)
+                .catch(getHighFrequencyStationsChartAverageParameterGroupMeasurementsFailed);
+                
+            function getHighFrequencyStationsChartAverageParameterGroupMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getHighFrequencyStationsChartAverageParameterGroupMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
         function getHighFrequencyStationsChartAverageParameterMeasurements(locationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
             var resource = $resource('/api/parameter_measurements_by_location_chart/:location_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
                 query: {
@@ -349,6 +423,41 @@
 
         }
         
+        function getHourlyStationsAverageParameterGroupMeasurements(locationId, groupId, qcLevel, fromDateHour, toDateHour) {
+            var resource = $resource('/api/hourly_parameter_group_measurements_by_location/:location_id/:group_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        group_id: groupId,
+                        qc_level: qcLevel,
+                        from_date_hour: fromDateHour,
+                        to_date_hour: toDateHour
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                location_id: locationId, 
+                group_id: groupId, 
+                qc_level: qcLevel, 
+                from_date_hour: fromDateHour, 
+                to_date_hour: toDateHour
+            }).$promise
+                .then(getHourlyStationsAverageParameterGroupMeasurementsComplete)
+                .catch(getHourlyStationsAverageParameterGroupMeasurementsFailed);
+                
+            function getHourlyStationsAverageParameterGroupMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getHourlyStationsAverageParameterGroupMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
         function getHourlyStationsChartAverageParameterMeasurements(locationId, parameterId, qcLevel, fromDateHour, toDateHour) {
             var resource = $resource('/api/hourly_stations_average_parameter_measurements_by_location_chart/:location_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
                 query: {
@@ -414,6 +523,41 @@
             }
             
             function getHourlyStationsAverageProfileMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getHourlyStationsChartAverageParameterGroupMeasurements(locationId, groupId, qcLevel, fromDateHour, toDateHour) {
+            var resource = $resource('/api/hourly_parameter_group_measurements_by_location_chart/:location_id/:group_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
+                query: {
+                    method: 'GET', params: {
+                        location_id: locationId,
+                        group_id: groupId,
+                        qc_level: qcLevel,
+                        from_date_hour: fromDateHour,
+                        to_date_hour: toDateHour
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                location_id: locationId, 
+                group_id: groupId, 
+                qc_level: qcLevel, 
+                from_date_hour: fromDateHour, 
+                to_date_hour: toDateHour
+            }).$promise
+                .then(getHourlyStationsChartAverageParameterGroupMeasurementsComplete)
+                .catch(getHourlyStationsChartAverageParameterGroupMeasurementsFailed);
+                
+            function getHourlyStationsChartAverageParameterGroupMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getHourlyStationsChartAverageParameterGroupMeasurementsFailed(error) {
                 console.log(error);
             }
         
