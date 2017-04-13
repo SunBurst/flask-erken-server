@@ -28,6 +28,7 @@
         vm.setChartTitle = setChartTitle;
         vm.setDatePicker = setDatePicker;
         vm.setSelectedTimeOption = setSelectedTimeOption;
+        vm.toggleLoading = toggleLoading;
         vm.updateChartData = updateChartData;
         vm.updateDailyStationsAverageChartData = updateDailyStationsAverageChartData;
         vm.updateHighFrequencyStationsAverageChartData = updateHighFrequencyStationsAverageChartData;
@@ -82,7 +83,6 @@
         }
         
         function initChartParameter(parameter) {
-            console.log(parameter);
             vm.chartParameter.parameter = parameter;
             vm.chartParameter.charts = {
                 stationsAverageChart: angular.copy(HighChartOptions)

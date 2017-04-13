@@ -1,4 +1,5 @@
 import json
+import pytz
 import time
 import uuid
 
@@ -23,7 +24,8 @@ class CustomEncoder(json.JSONEncoder):
         elif isinstance(obj, Position):
             return {'latitude': obj.latitude, 'longitude': obj.longitude}
         elif isinstance(obj, datetime):
-            return time.mktime(obj.timetuple()) * 1e3
+            timestamp_utc = pytz.utc.localize(obj)
+            return int(timestamp_utc.timestamp()) * 1e3
         elif isinstance(obj, bytes):
             base64_bytes = b64encode(obj)
             base64_string = base64_bytes.decode('utf-8')

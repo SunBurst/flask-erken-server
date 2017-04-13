@@ -170,10 +170,7 @@
                 type: 'heatmap'
             },
             xAxis: {
-                type: 'datetime',
-                title: {
-                    text: 'Time'
-                }
+                type: 'datetime'
             },
             yAxis: {
                 title: {
@@ -219,10 +216,7 @@
                 type: 'spline'
             },
             xAxis: {
-                type: 'datetime',
-                title: {
-                    text: 'Time'
-                }
+                type: 'datetime'
             },
             yAxis: {
                 title: {
@@ -238,9 +232,9 @@
                 }]
             },
             legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle',
+                layout: 'horizontal',
+                align: 'left',
+                verticalAlign: 'bottom',
                 borderWidth: 0
             },
             plotOptions: {
@@ -255,6 +249,9 @@
                 shared: true
             },
             series: [],
+            credits: {
+                enabled: false
+            }
         };
     }
 
