@@ -28,7 +28,6 @@
         vm.setChartTitle = setChartTitle;
         vm.setDatePicker = setDatePicker;
         vm.setSelectedTimeOption = setSelectedTimeOption;
-        vm.toggleLoading = toggleLoading;
         vm.updateChartData = updateChartData;
         vm.updateDailyStationsAverageChartData = updateDailyStationsAverageChartData;
         vm.updateHighFrequencyStationsAverageChartData = updateHighFrequencyStationsAverageChartData;
