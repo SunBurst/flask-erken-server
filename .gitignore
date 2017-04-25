@@ -1,3 +1,4 @@
 app/static/bower_components
 node_modules
 *.pyc
+config.py

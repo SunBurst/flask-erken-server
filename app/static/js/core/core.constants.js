@@ -215,6 +215,9 @@
             chart: {
                 type: 'spline'
             },
+            boost: {
+                useGPUTranslations: true
+            },
             xAxis: {
                 type: 'datetime'
             },

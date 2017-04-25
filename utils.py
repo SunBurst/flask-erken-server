@@ -8,7 +8,7 @@ from datetime import datetime
 
 from cassandra.util import OrderedMapSerializedKey
 
-from cassandra_connection import Description, Livewebcam, Position
+from cassandra_udts import Description, Livewebcam, Position
 
 
 class CustomEncoder(json.JSONEncoder):
