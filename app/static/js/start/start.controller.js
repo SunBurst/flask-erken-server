@@ -4,9 +4,9 @@
     
     angular
         .module('app.start')
-        .controller('Start', Start);
+        .controller('StartCtrl', StartCtrl);
         
-    function Start() {
+    function StartCtrl() {
 
     }
 

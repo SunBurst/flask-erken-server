@@ -3,17 +3,16 @@
     
     angular
         .module('app.start')
-        .controller('StartMap', StartMap);
+        .controller('StartMapCtrl', StartMapCtrl);
     
-    StartMap.$inject = ['GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons', 'startStorage'];
+    StartMapCtrl.$inject = ['GoogleMapClusterOptions', 'GoogleMapDefaultOptions', 'GoogleMapIcons', 'startStorage'];
     
-    function StartMap(GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons, startStorage) {
+    function StartMapCtrl(GoogleMapClusterOptions, GoogleMapDefaultOptions, GoogleMapIcons, startStorage) {
         var vm = this;
         
-        vm.addLocationMarkers = addLocationMarkers;
         vm.addStationMarkers = addStationMarkers;
         vm.clusterOptions = GoogleMapClusterOptions;
-        vm.locationList = startStorage.getLocationList();
+        vm.stationList = startStorage.getStationList();
         vm.map = {
             center: { 
                 latitude: 63, 
@@ -27,44 +26,26 @@
         
         activate();
 
-        function addLocationMarkers(locations) {
+        function addStationMarkers(stations) {
             var markers = [];
-            for (var i = 0; i < locations.length; i++) {
+            for (var i = 0; i < stations.length; i++) {
                 markers.push({
-                    latitude: locations[i].position.latitude,
-                    longitude: locations[i].position.longitude,
-                    icon: vm.mapIcons.redicon,
-                    key: 'marker-id-' + locations[i].id,
+                    latitude: stations[i].position.latitude,
+                    longitude: stations[i].position.longitude,
+                    icon: vm.mapIcons.blueicon,
+                    key: 'marker-id-' + stations[i].id,
                     options: {
-                        title: locations[i].name,
+                        title: stations[i].name,
                     }
                 });
-                
-                markers = addStationMarkers(locations[i].location_stations, markers);
 
             }
             
             return markers;
         }
         
-        function addStationMarkers(stations, markers) {
-            for (var i = 0; i < stations.length; i++) {
-                markers.push({
-                    latitude: stations[i].station_position.latitude,
-                    longitude: stations[i].station_position.longitude,
-                    icon: vm.mapIcons.blueicon,
-                    key: 'marker-id-' + stations[i].station_id,
-                    options: {
-                        title: stations[i].station_name,
-                    }
-                });
-            }
-            
-            return markers;
-        }
-        
         function activate() {
-            vm.markers = addLocationMarkers(vm.locationList);
+            vm.markers = addStationMarkers(vm.stationList);
         }
         
     }

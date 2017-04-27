@@ -45,20 +45,27 @@
         <div layout="row" ng-controller="Sidebar as sidebarVm">
             <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" ng-click="shellVm.toggleList()" 
                 md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+                    <!--<md-toolbar class="md-toolbar-tools">
+                        <form>
+                        <md-input-container>
+                        <md-select ng-model="sidbebarVm.selectedDomain" class="md-no-underline">
+                          <md-option value="stations">Stations</md-option>
+                          <md-option value="cluster">Clusters</md-option>
+                        </md-select>
+                        </md-input-container>
+                        </form>
+                    </md-toolbar> -->
                 <md-list>
-                    <md-subheader>Locations</md-subheader>
-                    <md-list-item class="md-3-line" layout-align="start center" ng-repeat="location in sidebarVm.locations">
-                        <img data-ng-src="data:image/png;base64, {[ location.image ]}" class="md-avatar" alt="{[ location.name ]}"/>
+                    <md-subheader>Stations</md-subheader>
+                    <md-list-item ng-repeat="station in sidebarVm.stations" class="md-3-line" ui-sref="station({ station_id: station.id })" layout-align="start center">
+                        <img data-ng-src="data:image/png;base64, {[ station.image ]}" class="md-avatar" alt="{[ station.name ]}"/>
                         <div class="md-list-item-text" layout="column">
-                            <h3>{[ location.name ]}</h3>
-                            <h4>{[ location.environment_category ]}</h4>
-                            <p>{[ location.position.latitude ]}, {[ location.position.longitude ]}</p>
+                            <h3>{[ station.name ]}</h3>
+                            <h4>{[ station.environment_category ]}</h4>
+                            <p>{[ station.position.latitude ]}, {[ station.position.longitude ]}</p>
                         </div>
-                        <div class="md-list-item" layout="column">
+                        <!-- <div class="md-list-item" layout="column">
                             <md-menu class="md-secondary">
-                                <md-button md-menu-origin aria-label="Open {[ location.name ]} menu"
-                                    ng-click="$mdOpenMenu($event)"><span>Go to</span>
-                                </md-button>
                                 <md-menu-content width="4">
                                     <md-list>
                                         <md-subheader class="md-no-sticky">Location</md-subheader>
@@ -82,7 +89,7 @@
                                     </md-list>
                                 </md-menu-content>
                             </md-menu>
-                        </div>
+                        </div> -->
                     </md-list-item>
                 </md-list>
             </md-sidenav>
@@ -167,6 +174,10 @@
     <script src="/static/js/services/location/location-stations.service.js"></script>
     <script src="/static/js/services/location/location-videos.service.js"></script>
     <script src="/static/js/services/location/location-webcams.service.js"></script>
+    <script src="/static/js/services/station/station.service.js"></script>
+    <script src="/static/js/services/station/station-measurements.service.js"></script>
+    <script src="/static/js/services/station/station-parameters.service.js"></script>
+    <script src="/static/js/services/station/station-sensors.service.js"></script>
     
     <script src="/static/js/core/core.module.js"></script>
     <script src="/static/js/core/core.config.js"></script>
@@ -197,6 +208,21 @@
     <script src="/static/js/location/data/location-data-tables-parameter.controller.js"></script>
     <script src="/static/js/location/data/location-data-tables-profile.controller.js"></script>
     <script src="/static/js/location/overview/location-overview.controller.js"></script>
+    
+    <script src="/static/js/station/station.module.js"></script>
+    <script src="/static/js/station/station.config.js"></script>
+    <script src="/static/js/station/station.config.route.js"></script>
+    <script src="/static/js/station/station.controller.js"></script>
+    <script src="/static/js/station/station-storage.service.js"></script>
+    <script src="/static/js/station/data/station-data.controller.js"></script>
+    <script src="/static/js/station/data/station-data-storage.service.js"></script>
+    <script src="/static/js/station/data/station-data-datasource.service.js"></script>
+    <script src="/static/js/station/data/station-data-datepicker.service.js"></script>
+    <script src="/static/js/station/data/station-data-charts.controller.js"></script>
+    <script src="/static/js/station/data/station-data-charts-group.controller.js"></script>
+    <script src="/static/js/station/data/station-data-charts-parameter.controller.js"></script>
+    <script src="/static/js/station/data/station-data-charts-profile.controller.js"></script>
+    <script src="/static/js/station/overview/station-overview.controller.js"></script>
     
     <script src="/static/js/start/start.module.js"></script>
     <script src="/static/js/start/start.config.route.js"></script>

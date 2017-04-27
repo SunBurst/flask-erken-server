@@ -1,5 +1,4 @@
 (function() {
-    
     'use strict';
     
     angular
@@ -8,7 +7,8 @@
             'app.layout',
             'app.location',
             'app.services',
-            'app.start'
+            'app.start',
+            'app.station'
         ]);
 
 })();

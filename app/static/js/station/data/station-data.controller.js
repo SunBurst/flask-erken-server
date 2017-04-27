@@ -2,20 +2,20 @@
     'use strict';
     
     angular
-        .module('app.location')
-        .controller('LocationDataCtrl', LocationDataCtrl);
+        .module('app.station')
+        .controller('StationDataCtrl', StationDataCtrl);
         
-    LocationDataCtrl.$inject = [
+    StationDataCtrl.$inject = [
         '$scope',
         '$state',
         '$timeout',
-        'locationStorage',
-        'locationDataSource',
-        'locationDataStorage',
-        'locationDataTimeOptions'
+        'stationStorage',
+        'stationDataSource',
+        'stationDataStorage',
+        'stationDataTimeOptions'
     ];
         
-    function LocationDataCtrl($scope, $state, $timeout, locationStorage, locationDataSource, locationDataStorage, locationDataTimeOptions) {
+    function StationDataCtrl($scope, $state, $timeout, stationStorage, stationDataSource, stationDataStorage, stationDataTimeOptions) {
         var vm = this;
         
         vm.applyCustomTimeRange = applyCustomTimeRange;
@@ -31,28 +31,28 @@
         vm.isViewMode = isViewMode;
         vm.maxDate = moment();
         vm.minDate = moment(0);
-        vm.parameterList = locationStorage.getParametersAllMeasurementTypesList();
-        vm.parameters = locationStorage.getParametersAllMeasurementTypes();
-        vm.parameterSelection = locationDataStorage.getParametersAllMeasurementTypesSelection();
+        vm.parameterList = stationStorage.getParametersAllMeasurementTypesList();
+        vm.parameters = stationStorage.getParametersAllMeasurementTypes();
+        vm.parameterSelection = stationDataStorage.getParametersAllMeasurementTypesSelection();
         vm.setDatePicker = setDatePicker;
         vm.setSelectedDataSource = setSelectedDataSource;
         vm.timeOptionChange = timeOptionChange;
         vm.viewMode = 'Charts';
         
         vm.timeOptionsModel = {
-            selectedTimeOption: locationDataTimeOptions.getSelectedTimeOption(),
-            timeOptions: locationDataTimeOptions.getTimeOptions()
+            selectedTimeOption: stationDataTimeOptions.getSelectedTimeOption(),
+            timeOptions: stationDataTimeOptions.getTimeOptions()
         };
         
         vm.dataSourcesModel = {
-            dataSources: locationDataSource.getDataSources(),
-            selectedDataSource: locationDataSource.getSelectedDataSource()
+            dataSources: stationDataSource.getDataSources(),
+            selectedDataSource: stationDataSource.getSelectedDataSource()
         };
         
         vm.setDatePicker();
 
         function applyCustomTimeRange() {
-            locationDataTimeOptions.setCustomRangeTimeOptions(vm.datePickerMasterModel.startDate, vm.datePickerMasterModel.endDate);
+            stationDataTimeOptions.setCustomRangeTimeOptions(vm.datePickerMasterModel.startDate, vm.datePickerMasterModel.endDate);
             $scope.$broadcast('datePickerChange');
         }
         
@@ -62,8 +62,7 @@
         }
         
         function changeSelection() {
-            locationDataStorage.updateParametersAllMeasurementTypesSelection(vm.parameterSelection);
-            //locationDataStorage.setParameterSelectedValue(parameterId, measurementTypeId, newValue);
+            stationDataStorage.updateParametersAllMeasurementTypesSelection(vm.parameterSelection);
             $scope.$broadcast('parameterSelectionChange');
         }
         
@@ -85,16 +84,16 @@
         
         function setDatePicker() {
             vm.maxDate = moment();
-            vm.datePickerMasterModel.startDate = locationDataTimeOptions.getTimeOptionDate(vm.timeOptionsModel.selectedTimeOption)[0];
-            vm.datePickerMasterModel.endDate = locationDataTimeOptions.getTimeOptionDate(vm.timeOptionsModel.selectedTimeOption)[1];
+            vm.datePickerMasterModel.startDate = stationDataTimeOptions.getTimeOptionDate(vm.timeOptionsModel.selectedTimeOption)[0];
+            vm.datePickerMasterModel.endDate = stationDataTimeOptions.getTimeOptionDate(vm.timeOptionsModel.selectedTimeOption)[1];
         }
 
         function setSelectedDataSource() {
-            locationDataSource.setSelectedDataSource(vm.dataSourcesModel.selectedDataSource);
+            stationDataSource.setSelectedDataSource(vm.dataSourcesModel.selectedDataSource);
         }
         
         function timeOptionChange() {
-            locationDataTimeOptions.setSelectedTimeOption(vm.timeOptionsModel.selectedTimeOption);
+            stationDataTimeOptions.setSelectedTimeOption(vm.timeOptionsModel.selectedTimeOption);
             if (vm.timeOptionsModel.selectedTimeOption !== 'Custom Range') {
                 vm.setDatePicker();
                 $scope.$broadcast('datePickerChange');
@@ -102,17 +101,10 @@
         }
         
         $timeout(function() {
-            if ($state.current.name === 'location.data') {
-                $state.go('location.data.charts');
+            if ($state.current.name === 'station.data') {
+                $state.go('station.data.charts');
             }
         }, 100);
-        
-        //$scope.$watch(function() {
-        //    return vm.datePickerMasterModel.datePicker.date;
-        //}, function (newDate, oldDate) {
-        //    var done = locationDatePicker.setDatePickerDate(vm.datePickerMasterModel.datePicker.date);
-        //    $scope.$broadcast('datePickerChange');
-        //});
         
     }
         

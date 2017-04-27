@@ -3,11 +3,11 @@
     
     angular
         .module('app.services')
-        .factory('locations', locations);
+        .factory('stations', stations);
     
-    locations.$inject = ['$resource'];
+    stations.$inject = ['$resource'];
     
-    function locations($resource) {
+    function stations($resource) {
         
         var customInterceptor = {
             response: function(response) {
@@ -16,11 +16,11 @@
         };
         
         return {
-            getLocationsAndStations: getLocationsAndStations
+            getStations: getStations
         };
         
-        function getLocationsAndStations() {
-            var resource = $resource('/api/locations_and_stations/:bucket', {}, {
+        function getStations() {
+            var resource = $resource('/api/stations/:bucket', {}, {
                 query: {
                     method: 'GET', params: {bucket: 0}, isArray: true, 
                     interceptor: customInterceptor
@@ -28,14 +28,14 @@
             });
             
             return resource.query().$promise
-                .then(getLocationsComplete)
-                .catch(getLocationsFailed);
+                .then(getStationsComplete)
+                .catch(getStationsFailed);
                 
-            function getLocationsComplete(response) {
+            function getStationsComplete(response) {
                 return response;
             }
             
-            function getLocationsFailed(error) {
+            function getStationsFailed(error) {
                 console.log(error);
             }
         

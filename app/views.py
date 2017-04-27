@@ -15,41 +15,29 @@ from utils import CustomEncoder
 def index():
     return make_response(open('app/templates/index.html').read())
 
-########## Locations API ############
+########## Stations API ############
 
-@app.route('/api/locations_and_stations', methods=['GET'])
-@app.route('/api/locations_and_stations/<int:bucket>', methods=['GET'])
-def get_locations_and_stations(bucket=0):
-    all_locations_query = "SELECT * FROM locations WHERE bucket=?"
-    prepared_all_locations_query = session.prepare(all_locations_query)
-    locations_rows = session.execute_async(prepared_all_locations_query, (bucket,)).result()
-    locations_stations_query = "SELECT * FROM stations_by_location WHERE location_id=?"
-    prepared_location_stations_query = session.prepare(locations_stations_query)
-    locations_stations_data = []
-    
-    for location_row in locations_rows:
-        location_id = location_row.get('id')
-        stations_rows = session.execute_async(
-            prepared_location_stations_query, (location_id,)).result()
-        location_stations_data = [station_row for station_row in stations_rows]
-        location_row['location_stations'] = location_stations_data
-        
-        locations_stations_data.append(location_row)
-
-    return json.dumps(locations_stations_data, cls=CustomEncoder)
-
-@app.route('/api/location/<string:location_id>', methods=['GET'])
-def get_location(location_id):
-    query = "SELECT * FROM location_info_by_location WHERE location_id=?"
+@app.route('/api/stations', methods=['GET'])
+@app.route('/api/stations/<int:bucket>', methods=['GET'])
+def get_stations(bucket=0):
+    query = "SELECT * FROM stations WHERE bucket=?"
     prepared = session.prepare(query)
-    rows = session.execute_async(prepared, (location_id,)).result()
+    rows = session.execute_async(prepared, (bucket,)).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/station/<string:station_id>', methods=['GET'])
+def get_station(station_id):
+    query = "SELECT * FROM station_info_by_station WHERE id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
     try:
         data = rows[0]
     except IndexError:    
-        print("Location with id {} was not found!".format(location_id))
         abort(404)
     
-    return json.dumps(data, cls=CustomEncoder)
+    return json.dumps(data, cls=CustomEncoder)    
     
 @app.route('/api/stations_by_location/<string:location_id>', methods=['GET'])
 def get_stations_by_location(location_id):
@@ -762,5 +750,209 @@ def get_status_parameter_measurements_by_location_chart(location_id, parameter_i
             stations[station_id]['data'].append([row.get('timestamp'), row.get('value')])
 
     series = [station_name_data for station_id, station_name_data in stations.items()]
+    
+    return json.dumps(series, cls=CustomEncoder)
+
+@app.route('/api/sensors_by_station/<string:station_id>', methods=['GET'])
+def get_sensors_by_station(station_id):
+    query = "SELECT * FROM sensors_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
+    data = [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/parameters_all_measurement_types_by_station/<string:station_id>', methods=['GET'])
+def get_parameters_all_measurement_types_by_station(station_id):
+    query = "SELECT * FROM parameters_all_measurement_types_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/parameters_by_station/<string:station_id>', methods=['GET'])
+def get_parameters_by_station(station_id):
+    query = "SELECT * FROM parameters_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/profile_parameters_by_station/<string:station_id>', methods=['GET'])
+def get_profile_parameters_by_station(station_id):
+    query = "SELECT * FROM profile_parameters_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/parameter_groups_by_station/<string:station_id>', methods=['GET'])
+def get_parameter_groups_by_station(station_id):
+    query = "SELECT * FROM parameter_groups_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/group_parameters_by_station_group/<string:station_id>/<string:group_id>', methods=['GET'])
+def get_group_parameters_by_station_group(station_id, group_id):
+    query = "SELECT * FROM group_parameters_by_station_group WHERE station_id=? AND group_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id, group_id, )).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/daily_single_parameter_measurements_by_station/<string:station_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
+def get_daily_stations_average_parameter_measurements_by_station(station_id, parameter_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_single_parameter_measurements_by_station WHERE station_id=? AND parameter_id=? AND qc_level=? AND year=? AND date>=? AND date<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(session.execute_async(prepared, (station_id, parameter_id, qc_level, year, from_date, to_date, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/daily_single_parameter_measurements_by_station_chart/<string:station_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
+def get_daily_single_parameter_measurements_by_station_chart(station_id, parameter_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_single_parameter_measurements_by_station WHERE station_id=? AND parameter_id=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(session.execute_async(prepared, (station_id, parameter_id, qc_level, year, from_date, to_date, )))
+    
+    sensors = OrderedDict()
+
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            sensor_id = row.get('sensor_id')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {'id': sensor_id, 'name': row.get('sensor_name'), 'data': []}
+                
+            sensors[sensor_id]['data'].append([row.get('date'), row.get('avg_value')])
+
+    series = [sensor_name_data for sensor_id, sensor_name_data in sensors.items()]
+    
+    return json.dumps(series, cls=CustomEncoder)    
+
+@app.route('/api/hourly_single_parameter_measurements_by_station/<string:station_id>/<string:parameter_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_single_parameter_measurements_by_station(station_id, parameter_id, qc_level, from_date_hour, to_date_hour):
+    query = "SELECT * FROM hourly_single_parameter_measurements_by_station WHERE station_id=? AND parameter_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date_hour/1000.0)
+    to_dt = datetime.fromtimestamp(to_date_hour/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(session.execute_async(prepared, (station_id, parameter_id, qc_level, year, from_date_hour, to_date_hour, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/hourly_single_parameter_measurements_by_station_chart/<string:station_id>/<string:parameter_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter_id, qc_level, from_date_hour, to_date_hour):
+    query = "SELECT * FROM hourly_single_parameter_measurements_by_station WHERE station_id=? AND parameter_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=? ORDER BY date_hour ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date_hour/1000.0)
+    to_dt = datetime.fromtimestamp(to_date_hour/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(session.execute_async(prepared, (station_id, parameter_id, qc_level, year, from_date_hour, to_date_hour, )))
+    
+    sensors = OrderedDict()
+
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            sensor_id = row.get('sensor_id')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {'id': "{}-series".format(sensor_id), 'name': row.get('sensor_name'), 'data': []}
+                
+            sensors[sensor_id]['data'].append([row.get('date_hour'), row.get('avg_value')])
+
+    series = [sensor_name_data for sensor_id, sensor_name_data in sensors.items()]
+    
+    return json.dumps(series, cls=CustomEncoder)
+
+@app.route('/api/single_parameter_measurements_by_station/<string:station_id>/<string:parameter_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_single_parameter_measurements_by_station(station_id, parameter_id, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM single_parameter_measurements_by_station WHERE station_id=? AND parameter_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/single_parameter_measurements_by_station_chart/<string:station_id>/<string:parameter_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_single_parameter_measurements_by_station_chart(station_id, parameter_id, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM single_parameter_measurements_by_station WHERE station_id=? AND parameter_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    sensors = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            sensor_id = row.get('sensor_id')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {'id': "{}-series".format(sensor_id), 'name': row.get('sensor_name'), 'data': []}
+                
+            sensors[sensor_id]['data'].append([row.get('timestamp'), row.get('value')])
+
+    series = [sensor_name_data for sensor_id, sensor_name_data in sensors.items()]
     
     return json.dumps(series, cls=CustomEncoder)

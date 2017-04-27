@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+    HydroView-Flask
+    ~~~~~~
+    
+    Python Flask version of HydroView with Apache Cassandra as backend.
+    
+"""
+
 import logging
 import os
 import sys
@@ -8,7 +17,6 @@ from cassandra.cluster import Cluster
 from cassandra.query import dict_factory
 
 from cassandra_udts import Description
-from cassandra_udts import Livewebcam
 from cassandra_udts import Name
 from cassandra_udts import Position
 
@@ -24,6 +32,7 @@ log.setLevel(app.config['CASSANDRA_LOGLEVEL'])
 handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s"))
 log.addHandler(handler)
+log.info("Running HydroView-Flask using {config} settings".format(config=os.environ['HYDROVIEW_CONFIG']))
 
 def cassandra_connect():
     global cluster, session
@@ -35,7 +44,6 @@ def cassandra_connect():
     session.row_factory = dict_factory
     
     cluster.register_user_type(app.config['KEYSPACE'], 'description', Description)
-    cluster.register_user_type(app.config['KEYSPACE'], 'livewebcam', Livewebcam)
     cluster.register_user_type(app.config['KEYSPACE'], 'name', Name)
     cluster.register_user_type(app.config['KEYSPACE'], 'position', Position)
     
@@ -68,5 +76,3 @@ else:
         from app import views
         
     uwsgi.atexit = cassandra_disconnect
-
-

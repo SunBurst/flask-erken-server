@@ -2,10 +2,10 @@
     'use-strict';
     
     angular
-        .module('app.location')
-        .factory('locationDataStorage', locationDataStorage);
+        .module('app.station')
+        .factory('stationDataStorage', stationDataStorage);
 
-    function locationDataStorage() {
+    function stationDataStorage() {
         
         var parametersAllMeasurementTypesSelection = {};
         

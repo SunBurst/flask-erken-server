@@ -12,15 +12,15 @@
             .state('start', {
                 url: '/start',
                 templateUrl: 'static/partials/start/start.html',
-                controller: 'Start',
-                controllerAs: 'vm',
+                controller: 'StartCtrl',
+                controllerAs: 'startVm',
                 resolve: {
-                    resolvedLocations: function(locations, startStorage) {
-                        return locations.getLocationsAndStations()
+                    _stations: function(stations, startStorage) {
+                        return stations.getStations()
                             .then(function(response) {
                                 var data = response.data
                                 var initObjects = true;
-                                startStorage.setLocationList(data, initObjects);
+                                startStorage.setStationList(data, initObjects);
                                 return data;
                             });
                     }

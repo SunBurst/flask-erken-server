@@ -3,11 +3,11 @@
     
     angular
         .module('app.services')
-        .factory('LocationStationsFactory', LocationStationsFactory);
+        .factory('StationSensorsFactory', StationSensorsFactory);
     
-    LocationStationsFactory.$inject = ['$resource'];
+    StationSensorsFactory.$inject = ['$resource'];
     
-    function LocationStationsFactory($resource) {
+    function StationSensorsFactory($resource) {
 
         var customInterceptor = {
             response: function(response) {
@@ -16,29 +16,29 @@
         };
         
         return {
-            getStations: getStations
+            getSensors: getSensors
         };
         
-        function getStations(locationId) {
-            var resource = $resource('/api/stations_by_location/:location_id', {}, {
+        function getSensors(stationId) {
+            var resource = $resource('/api/sensors_by_station/:station_id', {}, {
                 query: {
                     method: 'GET', params: {
-                        location_id: locationId, 
+                        station_id: stationId, 
                     },
                     isArray: true,
                     interceptor: customInterceptor
                 }
             });
             
-            return resource.query({location_id: locationId}).$promise
-                .then(getStationsComplete)
-                .catch(getStationsFailed);
+            return resource.query({station_id: stationId}).$promise
+                .then(getSensorsComplete)
+                .catch(getSensorsFailed);
                 
-            function getStationsComplete(response) {
+            function getSensorsComplete(response) {
                 return response;
             }
             
-            function getStationsFailed(error) {
+            function getSensorsFailed(error) {
                 console.log(error);
             }
         }

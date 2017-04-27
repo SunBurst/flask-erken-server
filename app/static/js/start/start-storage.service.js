@@ -1,5 +1,4 @@
-(function() {
-    
+(function() {    
     'use-strict';
     
     angular
@@ -8,37 +7,37 @@
 
     function startStorage() {
         
-        var locationList = [];
-        var locations = {};
+        var stationList = [];
+        var stations = {};
         
         return {
-            getLocationList: getLocationList,
-            getLocations: getLocations,
-            setLocationList: setLocationList,
-            setLocations: setLocations
+            getStationList: getStationList,
+            getStations: getStations,
+            setStationList: setStationList,
+            setStations: setStations
         };
         
-        function getLocationList() {
-            return locationList;
+        function getStationList() {
+            return stationList;
         }
         
-        function getLocations() {
-            return locations;
+        function getStations() {
+            return stations;
         }
         
-        function setLocationList(data, initObjects) {
-            locationList = data;
+        function setStationList(data, initObjects) {
+            stationList = data;
             if (initObjects) {
-                setLocations(data);
+                setStations(data);
             }
         }
         
-        function setLocations(data) {
-            var tempLocations = {};
+        function setStations(data) {
+            var tempStations = {};
             for (var i = 0; i < data.length; i++) {
-                tempLocations[data[i].location_id] = data[i];
+                tempStations[data[i].station_id] = data[i];
             }
-            locations = tempLocations; 
+            stations = tempStations; 
         }
         
     }
