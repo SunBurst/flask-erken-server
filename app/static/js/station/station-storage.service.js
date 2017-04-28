@@ -14,18 +14,24 @@
         var sensors = {};
         
         return {
+            getLiveWebcamList: getLiveWebcamList,
             getParametersAllMeasurementTypes: getParametersAllMeasurementTypes,
             getParametersAllMeasurementTypesList: getParametersAllMeasurementTypesList,
             getStation: getStation,
             getSensorList: getSensorList,
             getSensors: getSensors,
+            setLiveWebcamList: setLiveWebcamList,
             setParametersAllMeasurementTypes: setParametersAllMeasurementTypes,
             setParametersAllMeasurementTypesList: setParametersAllMeasurementTypesList,
             setStation: setStation,
             setSensorList: setSensorList,
             setSensors: setSensors
         };
-                
+        
+        function getLiveWebcamList() {
+            return liveWebcamList;
+        }
+        
         function getParametersAllMeasurementTypes() {
             return parametersAllMeasurementTypes;
         }
@@ -44,6 +50,10 @@
         
         function getSensors() {
             return sensors;
+        }
+        
+        function setLiveWebcamList(newLiveWebcams) {
+            liveWebcamList = newLiveWebcams;
         }
         
         function setParametersAllMeasurementTypesList(data, initObjects) {

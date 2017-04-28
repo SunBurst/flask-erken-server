@@ -27,7 +27,7 @@
         vm.getHourlyChartData = getHourlyChartData;
         vm.initChart = initChart;
         vm.initChartParameter = initChartParameter;
-        vm.location = stationStorage.getLocation();
+        vm.station = stationStorage.getStation();
         vm.setChartSubtitle = setChartSubtitle;
         vm.setChartTitle = setChartTitle;
         vm.setDatePicker = setDatePicker;
@@ -53,7 +53,7 @@
         vm.setDatePicker();
         
         function getDailyChartData() {
-            var stationId = vm.location.location_id;
+            var stationId = vm.station.id;
             var groupId = vm.chartParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
@@ -64,7 +64,7 @@
         }
         
         function getHighFrequencyChartData() {
-            var stationId = vm.location.location_id;
+            var stationId = vm.station.id;
             var groupId = vm.chartParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
@@ -75,7 +75,7 @@
         }
         
         function getHourlyChartData() {
-            var stationId = vm.location.location_id;
+            var stationId = vm.station.id;
             var groupId = vm.chartParameter.group.parameter_id;
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
@@ -101,8 +101,8 @@
         function setChartTitle(chart) {
             var selectedDataSource = vm.dataSourcesModel.selectedDataSource;
             var groupName = vm.chartParameter.group.parameter_name;
-            var stationName = vm.station.station_name;
-            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' Average ' + groupName + ' at ' + stationName;
+            var stationName = vm.station.name;
+            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' ' + groupName + ' at ' + stationName;
         }
         
         function setChartSubtitle(chart) {

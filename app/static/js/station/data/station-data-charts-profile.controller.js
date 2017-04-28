@@ -54,7 +54,7 @@
         //};
         
         function getDailyChartData() {
-            var stationId = vm.station.station_id;
+            var stationId = vm.station.id;
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
@@ -65,7 +65,7 @@
         }
         
         function getHourlyChartData() {
-            var stationId = vm.station.station_id;
+            var stationId = vm.station.id;
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
@@ -76,7 +76,7 @@
         }
         
         function getHighFrequencyChartData() {
-            var stationId = vm.station.station_id;
+            var stationId = vm.station.id;
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
@@ -103,8 +103,8 @@
         function setChartTitle(chart) {
             var selectedDataSource = vm.dataSourcesModel.selectedDataSource;
             var parameterName = vm.chartParameter.parameter.parameter_name;
-            var stationName = vm.station.station_name;
-            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' Average ' + parameterName + ' at ' + stationName;
+            var stationName = vm.station.name;
+            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' ' + parameterName + ' at ' + stationName;
         }
         
         function setChartSubtitle(chart) {
@@ -131,7 +131,7 @@
             vm.getDailyChartData().then(function(data) {
                 var series = data;
                 series.colsize = 24 * 36e5;
-                series.name = vm.station.station_name;
+                series.name = vm.station.name;
                 series.tooltip = {
                     'headerFormat': '',
                     'pointFormat': '{point.x: %Y-%m-%d}<br> {point.y:.1f} m <br>' + parameterName + ': <b>{point.value:.2f} ' + parameterUnit + '</br>'
@@ -151,7 +151,7 @@
                 var series = data[0];
                 series.colsize = 1 * 36e5;
                 series.turboThreshold = 100000;
-                series.name = vm.station.station_name;
+                series.name = vm.station.name;
                 series.tooltip = {
                     'headerFormat': '',
                     'pointFormat': '{point.x: %Y-%m-%d}<br> {point.y:.1f} m <br>' + parameterName + ': <b>{point.value:.2f} ' + parameterUnit + '</br>'
@@ -169,7 +169,7 @@
             vm.getHighFrequencyChartData().then(function(data) {
                 var series = data;
                 series.colsize = (1 * 36e5)/4;
-                series.name = vm.station.station_name;
+                series.name = vm.station.name;
                 series.tooltip = {
                     'headerFormat': '',
                     'pointFormat': '{point.x: %Y-%m-%d}<br> {point.y:.1f} m <br>' + parameterName + ': <b>{point.value:.2f} ' + parameterUnit + '</br>'

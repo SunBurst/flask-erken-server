@@ -82,7 +82,17 @@
                 templateUrl: '/static/partials/station/station-cams-and-photos.html',
                 controller: 'StationCamsAndPhotosCtrl',
                 controllerAs: 'stationCamsAndPhotosVm',
-                resolve: {}
+                resolve: {
+                    _liveWebcams: function($stateParams, StationWebcamsFactory, stationStorage) {
+                        var stationId = $stateParams.station_id;
+                        return StationWebcamsFactory.getLiveWebcams(stationId)
+                            .then(function(response) {
+                                var data = response.data;
+                                stationStorage.setLiveWebcamList(data);
+                                return data;
+                            });
+                    }
+                }
                 
             })
     

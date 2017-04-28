@@ -100,7 +100,7 @@
             var selectedDataSource = vm.dataSourcesModel.selectedDataSource;
             var parameterName = vm.chartParameter.parameter.parameter_name;
             var stationName = vm.station.name;;
-            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' Average ' + parameterName + ' at ' + stationName;
+            vm.chartParameter.charts[chart].title.text = selectedDataSource + ' ' + parameterName + ' at ' + stationName;
         }
         
         function setChartSubtitle(chart) {
