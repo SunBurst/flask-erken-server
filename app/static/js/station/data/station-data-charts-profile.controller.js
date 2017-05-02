@@ -58,7 +58,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
-            return stationMeasurements.getDailyProfileMeasurements(stationId, parameterId, 0, fromDate, toDate)
+            return stationMeasurements.getDailyChartProfileMeasurements(stationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -80,7 +80,7 @@
             var parameterId = vm.chartParameter.parameter.parameter_id
             var fromDate = vm.datePickerModel.startDate.valueOf();
             var toDate = vm.datePickerModel.endDate.valueOf();
-            return stationMeasurements.getHighFrequencyProfileMeasurements(stationId, parameterId, 0, fromDate, toDate)
+            return stationMeasurements.getHighFrequencyChartProfileMeasurements(stationId, parameterId, 0, fromDate, toDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -129,7 +129,7 @@
             vm.setChartTitle('stationAverageChart');
             vm.setChartSubtitle('stationAverageChart');
             vm.getDailyChartData().then(function(data) {
-                var series = data;
+                var series = data[0];   // TEMP HACK
                 series.colsize = 24 * 36e5;
                 series.name = vm.station.name;
                 series.tooltip = {
@@ -148,7 +148,7 @@
             vm.setChartSubtitle('stationAverageChart');
             vm.getHourlyChartData().then(function(data) {
                 vm.chartParameter.charts.stationAverageChart.series = [];
-                var series = data[0];
+                var series = data[0];   // TEMP HACK
                 series.colsize = 1 * 36e5;
                 series.turboThreshold = 100000;
                 series.name = vm.station.name;
@@ -167,7 +167,7 @@
             vm.setChartTitle('stationAverageChart');
             vm.setChartSubtitle('stationAverageChart');
             vm.getHighFrequencyChartData().then(function(data) {
-                var series = data;
+                var series = data[0];   // TEMP HACK
                 series.colsize = (1 * 36e5)/4;
                 series.name = vm.station.name;
                 series.tooltip = {

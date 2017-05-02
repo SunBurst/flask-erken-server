@@ -21,12 +21,14 @@
             getDailyParameterGroupMeasurements: getDailyParameterGroupMeasurements,
             getDailyProfileMeasurements: getDailyProfileMeasurements,
             getDailyChartParameterGroupMeasurements: getDailyChartParameterGroupMeasurements,
+            getDailyChartProfileMeasurements: getDailyChartProfileMeasurements,
             getDailyChartSingleParameterMeasurements: getDailyChartSingleParameterMeasurements,
             //High Frequency
             getHighFrequencySingleParameterMeasurements: getHighFrequencySingleParameterMeasurements,
             getHighFrequencyParameterGroupMeasurements: getHighFrequencyParameterGroupMeasurements,
             getHighFrequencyProfileMeasurements: getHighFrequencyProfileMeasurements,
             getHighFrequencyChartParameterGroupMeasurements: getHighFrequencyChartParameterGroupMeasurements,
+            getHighFrequencyChartProfileMeasurements: getHighFrequencyChartProfileMeasurements,
             getHighFrequencyChartSingleParameterMeasurements: getHighFrequencyChartSingleParameterMeasurements,
             //Hourly
             getHourlySingleParameterMeasurements: getHourlySingleParameterMeasurements,
@@ -172,6 +174,41 @@
             }
             
             function getDailyChartParameterGroupMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getDailyChartProfileMeasurements(stationId, parameterId, qcLevel, fromDate, toDate) {
+            var resource = $resource('/api/daily_profile_measurements_by_station_chart/:station_id/:parameter_id/:qc_level/:from_date/:to_date', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter_id: parameterId,
+                        qc_level: qcLevel,
+                        from_date: fromDate,
+                        to_date: toDate
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                station_id: stationId, 
+                parameter_id: parameterId, 
+                qc_level: qcLevel, 
+                from_date: fromDate, 
+                to_date: toDate
+            }).$promise
+                .then(getDailyChartProfileMeasurementsComplete)
+                .catch(getDailyChartProfileMeasurementsFailed);
+                
+            function getDailyChartProfileMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getDailyChartProfileMeasurementsFailed(error) {
                 console.log(error);
             }
         
@@ -347,6 +384,41 @@
             }
             
             function getHighFrequencyChartParameterGroupMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getHighFrequencyChartProfileMeasurements(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/profile_measurements_by_station_chart/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter_id: parameterId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                station_id: stationId, 
+                parameter_id: parameterId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getHighFrequencyChartProfileMeasurementsComplete)
+                .catch(getHighFrequencyChartProfileMeasurementsFailed);
+                
+            function getHighFrequencyChartProfileMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getHighFrequencyChartProfileMeasurementsFailed(error) {
                 console.log(error);
             }
         

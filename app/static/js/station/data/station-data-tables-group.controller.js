@@ -24,7 +24,7 @@
         vm.initTableParameter = initTableParameter;
         vm.initTables = initTables;
         vm.limitOptions = [5, 10, 15];
-        vm.location = stationStorage.getStation();
+        vm.station = stationStorage.getStation();
         vm.dataTableOptions = {};
         vm.query = {};
         vm.setDataTableOptions = setDataTableOptions;
