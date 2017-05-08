@@ -168,7 +168,7 @@
             vm.setChartSubtitle('stationAverageChart');
             vm.getHighFrequencyChartData().then(function(data) {
                 var series = data[0];   // TEMP HACK
-                series.colsize = (1 * 36e5)/4;
+                series.colsize = (24 * 36e5)/12;
                 series.name = vm.station.name;
                 series.tooltip = {
                     'headerFormat': '',
