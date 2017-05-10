@@ -169,6 +169,9 @@
             chart: {
                 type: 'heatmap'
             },
+            boost: {
+                useGPUTranslations: true
+            },
             xAxis: {
                 type: 'datetime'
             },

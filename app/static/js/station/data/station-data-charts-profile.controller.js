@@ -130,6 +130,8 @@
             vm.setChartSubtitle('stationAverageChart');
             vm.getDailyChartData().then(function(data) {
                 var series = data[0];   // TEMP HACK
+                series.boostThreshold = 100;
+                series.turboThreshold = Number.MAX_VALUE;
                 series.colsize = 24 * 36e5;
                 series.name = vm.station.name;
                 series.tooltip = {
@@ -150,7 +152,8 @@
                 vm.chartParameter.charts.stationAverageChart.series = [];
                 var series = data[0];   // TEMP HACK
                 series.colsize = 1 * 36e5;
-                series.turboThreshold = 100000;
+                series.boostThreshold = 100;
+                series.turboThreshold = Number.MAX_VALUE;
                 series.name = vm.station.name;
                 series.tooltip = {
                     'headerFormat': '',
@@ -167,8 +170,11 @@
             vm.setChartTitle('stationAverageChart');
             vm.setChartSubtitle('stationAverageChart');
             vm.getHighFrequencyChartData().then(function(data) {
+                vm.chartParameter.charts.stationAverageChart.series = [];
                 var series = data[0];   // TEMP HACK
                 series.colsize = 3e5;
+                series.boostThreshold = 100;
+                series.turboThreshold = Number.MAX_VALUE;
                 series.name = vm.station.name;
                 series.tooltip = {
                     'headerFormat': '',
