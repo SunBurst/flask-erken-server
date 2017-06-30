@@ -12,7 +12,7 @@
 
     <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" 
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" rel="stylesheet"> -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- <link href="/static/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet"> -->
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.css" rel="stylesheet"/> -->
     <!-- <link href="/static/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet"> -->
@@ -26,74 +26,58 @@
     <link href="/static/bower_components/angular-material-datetimepicker/css/material-datetimepicker.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-material-data-table/0.10.10/md-data-table.css" rel="stylesheet">
     <!-- <link href="/static/bower_components/angular-material-data-table/dist/md-data-table.css" rel="stylesheet"> -->
-    <link href="/static/css/style.min.css" rel="stylesheet">
-    <!-- <link href="/static/css/style.css" rel="stylesheet"> -->
+    <!-- <link href="/static/css/style.min.css" rel="stylesheet"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highcharts-ng/1.1.0/highcharts-ng.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 </head>
     
-<body layout="column" ng-controller="Shell as shellVm" ng-cloak>
+<body layout="column" layout-fill ng-controller="Shell as shellVm" ng-cloak>
     
-    <md-toolbar layout="row">
+    <md-toolbar class="md-hue-2" layout="row">
         <div class="md-toolbar-tools">
             <md-button class="menu" ng-click="shellVm.toggleList()" hide-gt-sm aria-label="Show Location List">
                 <md-icon md-svg-src="/static/images/svg/menu.svg"></md-icon>
             </md-button>
-            <md-button ui-sref="start">Erken Laboratory Monitoring</md-button>
+            <md-button ui-sref="start">HydroView</md-button>
         </div>
     </md-toolbar>
     
     <div layout="row" flex>
         
         <div layout="row" ng-controller="Sidebar as sidebarVm">
-            <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" ng-click="shellVm.toggleList()" 
+            <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" 
                 md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
-                    <!--<md-toolbar class="md-toolbar-tools">
-                        <form>
-                        <md-input-container>
-                        <md-select ng-model="sidbebarVm.selectedDomain" class="md-no-underline">
-                          <md-option value="stations">Stations</md-option>
-                          <md-option value="cluster">Clusters</md-option>
-                        </md-select>
-                        </md-input-container>
-                        </form>
-                    </md-toolbar> -->
+                    <!-- <md-toolbar class="md-tall md-hue-2"></md-toolbar> -->
                 <md-list>
+                    <!-- <md-subheader>Networks</md-subheader>
+                    <md-list-item ng-show="sidebarVm.loadingNetworks" class="layout-align-center-center" layout-align="center center">
+                        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                    </md-list-item>
+                    <md-list-item ng-repeat="network in sidebarVm.networks" class="md-2-line" ui-sref="network({ network_id: network.id })" layout-align="start center">
+                        <img ng-if="sidebarVm.isImage(network.image)" data-ng-src="data:image/png;base64, {[ network.image ]}" class="md-avatar" alt="{[ network.name ]}"/>
+                        <ng-md-icon ng-if="!sidebarVm.isImage(network.image)" class="md-avatar" icon="public" size="40"></ng-md-icon> 
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{[ network.name ]}</h3>
+                            <h4>{[ network.type ]}</h4>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider> -->
                     <md-subheader>Stations</md-subheader>
+                    <md-list-item ng-show="sidebarVm.loadingStations">
+                        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                    </md-list-item>
                     <md-list-item ng-repeat="station in sidebarVm.stations" class="md-3-line" ui-sref="station({ station_id: station.id })" layout-align="start center">
-                        <img data-ng-src="data:image/png;base64, {[ station.image ]}" class="md-avatar" alt="{[ station.name ]}"/>
+                        <img ng-if="sidebarVm.isImage(station.image)" data-ng-src="data:image/png;base64, {[ station.image ]}" class="md-avatar" alt="{[ station.name ]}"/>
+                        <ng-md-icon ng-if="!sidebarVm.isImage(station.image)" class="md-avatar" icon="place" size="40"></ng-md-icon> 
                         <div class="md-list-item-text" layout="column">
                             <h3>{[ station.name ]}</h3>
                             <h4>{[ station.environment_category ]}</h4>
                             <p>{[ station.position.latitude ]}, {[ station.position.longitude ]}</p>
                         </div>
-                        <!-- <div class="md-list-item" layout="column">
-                            <md-menu class="md-secondary">
-                                <md-menu-content width="4">
-                                    <md-list>
-                                        <md-subheader class="md-no-sticky">Location</md-subheader>
-                                        <md-list-item class="md-3-line" ui-sref="location({ location_id: location.id })">
-                                            <img data-ng-src="data:image/png;base64, {[ location.image ]}" class="md-avatar" alt="{[ location.name ]}"/>
-                                            <div class="md-list-item-text">
-                                                <h3>{[ location.name ]}</h3>
-                                                <h4>{[ location.environment_category ]}</h4>
-                                                <p>{[ location.position.latitude ]}, {[ location.position.longitude ]}</p>
-                                            </div>
-                                        </md-list-item>
-                                        <md-subheader class="md-no-sticky">Stations</md-subheader>
-                                        <md-list-item class="md-3-line" ng-repeat="station in location.location_stations" ui-sref="station({ location_id: location.id, station_id: station.station_id })">
-                                            <img data-ng-src="data:image/png;base64, {[ station.station_image ]}" class="md-avatar" alt="{[ station.station_name ]}"/>
-                                            <div class="md-list-item-text" layout="column">
-                                                <h3>{[ station.station_name ]}</h3>
-                                                <h4>{[ station.station_environment_category ]}</h4>
-                                                <p>{[ station.station_position.latitude ]}, {[ station.station_position.longitude ]}</p>
-                                            </div>
-                                        </md-list-item>
-                                    </md-list>
-                                </md-menu-content>
-                            </md-menu>
-                        </div> -->
                     </md-list-item>
                 </md-list>
             </md-sidenav>
+
         </div>
 
         <div layout="column" flex id="content">
@@ -141,7 +125,7 @@
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" 
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
     </script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
     <!-- <script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script> -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
@@ -161,6 +145,7 @@
     <!-- <script src="/static/bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script> -->
     <script src="/static/bower_components/angular-material-datetimepicker/js/angular-material-datetimepicker.js"></script>
     <script src="/static/bower_components/angular-material-data-table/dist/md-data-table.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.1/angular-material-icons.min.js"></script> 
     <!-- <script src="https://www.youtube.com/iframe_api"></script> -->
     <!-- <script src="https://bowercdn.net/c/angular-youtube-mb-1.3.1/dist/angular-youtube-embed.min.js"></script> -->
     <!-- <script src="/static/bower_components/angular-youtube-mb/src/angular-youtube-embed.js"></script> -->
@@ -171,6 +156,7 @@
     
     <script src="/static/js/services/services.module.js"></script>
     <script src="/static/js/services/locations.service.js"></script>
+    <script src="/static/js/services/networks.service.js"></script>
     <script src="/static/js/services/location/location.service.js"></script>
     <script src="/static/js/services/location/location-measurements.service.js"></script>
     <script src="/static/js/services/location/location-parameters.service.js"></script>

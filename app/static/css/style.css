@@ -8,6 +8,25 @@ md-content.md-default-theme {
   background-color: $gray;
 }
 
+md-toolbar {
+  .md-button.md-default-theme {
+    border-radius: 99%; // round toolbar buttons
+  }
+}
+h2 {
+  font-weight: 400;
+}
+.md-toolbar-tools-bottom {
+  font-size: small;
+  & :last-child {
+    opacity: 0.8;
+  }
+}
+md-toolbar:not(.md-hue-1),
+.md-fab {
+  fill: #fff;
+}
+
 md-sidenav {
   fill: #737373;
   ng-md-icon {
@@ -31,4 +50,23 @@ md-sidenav {
 .angular-google-map {
     width: 100%;
     height: 380px;
+}
+
+.nav-tabs-station md-tab md-icon {
+  margin: 20px;
+  margin-top: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.md-tab > md-icon {
+    margin-bottom: 5px;
+}
+
+md-pagination-wrapper, md-tabs-canvas {
+    height: 72px;
+}
+
+.md-subheader {
+    background-color: inherit;
 }

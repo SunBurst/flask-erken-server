@@ -15,6 +15,39 @@ from utils import CustomEncoder
 def index():
     return make_response(open('app/templates/index.html').read())
 
+########## Networks API ############
+@app.route('/api/networks', methods=['GET'])
+@app.route('/api/networks/<int:bucket>', methods=['GET'])
+def get_networks(bucket=0):
+    query = "SELECT * FROM networks WHERE bucket=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (bucket,)).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/network/<string:network_id>', methods=['GET'])
+def get_network(network_id):
+    query = "SELECT * FROM network_info_by_network WHERE id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (network_id,)).result()
+    try:
+        data = rows[0]
+    except IndexError:    
+        abort(404)
+    
+    return json.dumps(data, cls=CustomEncoder) 
+    
+@app.route('/api/stations_by_network/<string:network_id>', methods=['GET'])
+def get_stations_by_network(network_id):
+    query = "SELECT * FROM stations_by_network WHERE network_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (network_id,)).result()
+    data = [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+
 ########## Stations API ############
 
 @app.route('/api/stations', methods=['GET'])

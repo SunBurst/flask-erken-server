@@ -5,22 +5,45 @@
         .module('app.layout')
         .controller('Sidebar', Sidebar);
 
-    Sidebar.$inject = ['$state', 'stations'];
+    Sidebar.$inject = ['$state', 'networks', 'stations'];
     
-    function Sidebar($state, stations) {
+    function Sidebar($state, networks, stations) {
         var vm = this;
+        
         vm.stations = [];
-        vm.selectedDomain = 'stations';
-        vm.selectStation = selectStation;
+        vm.isImage = isImage;
+        vm.loadingNetworks = false;
+        vm.loadingStations = false;
         
         activate();
         
         function activate() {
-            return getStations().then(function() {
-                console.log("Sidebar loaded");
+            //loadNetworks();
+            loadStations();
+        }
+        
+        function isImage(img) {
+            if (!img) {
+                return false;
+            }
+            return true;
+        }
+        
+        function getNetworks() {
+            return networks.getNetworks()
+                .then(function(response) {
+                    vm.networks = response.data;
+                    return vm.networks;
+                });
+        }
+        
+        function loadNetworks() {
+            vm.loadingNetworks = true;
+            return getNetworks().then(function() {
+                vm.loadingNetworks = false;
             });
         }
-
+        
         function getStations() {
             return stations.getStations()
                 .then(function(response) {
@@ -29,9 +52,16 @@
                 });
         }
         
-        function selectStation(state) {
-            $state.go(state);
+        function loadStations() {
+            vm.loadingStations = true;
+            return getStations().then(function() {
+                vm.loadingStations = false;
+            });
         }
+        
+        //function selectStation(state) {
+        //    $state.go(state);
+        //}
     
     }
     

@@ -219,6 +219,32 @@ CREATE TABLE hydroview.parameters_all_measurement_types_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
+CREATE TABLE hydroview.parameters_all_measurement_types_by_station_enb (
+    station_id text,
+    parameter_name text,
+    measurement_type_name text,
+    measurement_type_id text,
+    parameter_id text,
+    parameter_description frozen<description>,
+    parameter_unit text,
+    parameter_enabled boolean,
+    PRIMARY KEY (station_id, parameter_name, measurement_type_name, measurement_type_id, parameter_id)
+) WITH CLUSTERING ORDER BY (parameter_name ASC, measurement_type_name ASC, measurement_type_id ASC, parameter_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
 CREATE TABLE hydroview.hourly_single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,

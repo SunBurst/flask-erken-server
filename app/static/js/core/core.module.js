@@ -10,7 +10,8 @@
         //'ui-rangeSlider',
         'ngMaterialDatePicker',
         'md.data.table',
-        'videosharing-embed'
+        'videosharing-embed',
+        'ngMdIcons'
         //'youtube-embed'
     ]);
     
