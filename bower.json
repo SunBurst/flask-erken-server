@@ -24,7 +24,8 @@
     "mdPickers": "^0.7.5",
     "angular-material-datetimepicker": "^1.5.1",
     "angular-material-data-table": "^0.10.10",
-    "angular-youtube-mb": "^1.3.1"
+    "angular-youtube-mb": "^1.3.1",
+    "angular-material-icons": "^0.7.1"
   },
   "homepage": "https://github.com/SunBurst/flask-erken-server",
   "authors": [
