@@ -16,6 +16,13 @@ CREATE TYPE hydroview_development.position (
     longitude double
 );
 
+CREATE TYPE hydroview_development.thumbnails (
+    xl blob,
+    l blob,
+    m blob,
+    s blob
+);
+
 CREATE TABLE hydroview_development.single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
@@ -122,7 +129,7 @@ CREATE TABLE hydroview_development.stations (
     id text,
     description frozen<description>,
     environment_category text,
-    image blob,
+    thumbnails frozen<thumbnails>,
     position frozen<position>,
     PRIMARY KEY (bucket, name, id)
 ) WITH CLUSTERING ORDER BY (name ASC, id ASC)
@@ -378,6 +385,7 @@ CREATE TABLE hydroview_development.station_info_by_station (
     id text PRIMARY KEY,
     description frozen<description>,
     environment_category text,
+    thumbnails frozen<thumbnails>,
     image blob,
     name text,
     position frozen<position>

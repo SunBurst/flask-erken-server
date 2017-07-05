@@ -67,8 +67,8 @@
                         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                     </md-list-item>
                     <md-list-item ng-repeat="station in sidebarVm.stations" class="md-3-line" ui-sref="station({ station_id: station.id })" layout-align="start center">
-                        <img ng-if="sidebarVm.isImage(station.image)" data-ng-src="data:image/png;base64, {[ station.image ]}" class="md-avatar" alt="{[ station.name ]}"/>
-                        <ng-md-icon ng-if="!sidebarVm.isImage(station.image)" class="md-avatar" icon="place" size="40"></ng-md-icon> 
+                        <img ng-if="sidebarVm.isImage(station.thumbnails.xl)" data-ng-src="data:image/png;base64, {[ station.thumbnails.xl ]}" class="md-avatar" alt="{[ station.name ]}"/>
+                        <ng-md-icon ng-if="!sidebarVm.isImage(station.thumbnails.xl)" class="md-avatar" icon="place" size="40"></ng-md-icon> 
                         <div class="md-list-item-text" layout="column">
                             <h3>{[ station.name ]}</h3>
                             <h4>{[ station.environment_category ]}</h4>

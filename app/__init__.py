@@ -19,6 +19,7 @@ from cassandra.query import dict_factory
 from cassandra_udts import Description
 from cassandra_udts import Name
 from cassandra_udts import Position
+from cassandra_udts import Thumbnails
 
 
 cluster = None
@@ -46,6 +47,7 @@ def cassandra_connect():
     cluster.register_user_type(app.config['KEYSPACE'], 'description', Description)
     cluster.register_user_type(app.config['KEYSPACE'], 'name', Name)
     cluster.register_user_type(app.config['KEYSPACE'], 'position', Position)
+    cluster.register_user_type(app.config['KEYSPACE'], 'thumbnails', Thumbnails)
     
     return "Done"
 

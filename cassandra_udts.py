@@ -20,3 +20,10 @@ class Position(object):
     def __init__(self, latitude, longitude):
         self.latitude = latitude
         self.longitude = longitude
+
+class Thumbnails(object):
+    def __init__(self, xl, l, m, s):
+        self.xl = xl
+        self.l = l
+        self.m = m
+        self.s = s

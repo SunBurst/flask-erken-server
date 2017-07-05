@@ -8,7 +8,7 @@ from datetime import datetime
 
 from cassandra.util import OrderedMapSerializedKey
 
-from cassandra_udts import Description, Livewebcam, Position
+from cassandra_udts import Description, Livewebcam, Position, Thumbnails
 
 
 class CustomEncoder(json.JSONEncoder):
@@ -30,3 +30,10 @@ class CustomEncoder(json.JSONEncoder):
             base64_bytes = b64encode(obj)
             base64_string = base64_bytes.decode('utf-8')
             return base64_string
+        elif isinstance(obj, Thumbnails):
+            return {
+                'xl': b64encode(obj.xl).decode('utf-8'),
+                'l': b64encode(obj.l).decode('utf-8'),
+                'm': b64encode(obj.m).decode('utf-8'),
+                's': b64encode(obj.s).decode('utf-8')
+            }
