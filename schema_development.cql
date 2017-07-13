@@ -274,6 +274,195 @@ CREATE TABLE hydroview_development.hourly_single_parameter_measurements_by_stati
     AND min_index_interval = 128
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.thirty_min_single_parameter_measurements_by_station (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    year int,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, year), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.twenty_min_single_parameter_measurements_by_station (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    year int,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, year), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.fifteen_min_single_parameter_measurements_by_station (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.ten_min_single_parameter_measurements_by_station (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.five_min_single_parameter_measurements_by_station (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview_development.one_min_single_parameter_measurements_by_station (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    week_first_day timestamp,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, week_first_day), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.second_single_parameter_measurements_by_station (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    hour timestamp,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, hour), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
 
 CREATE TABLE hydroview_development.video_urls_by_station (
     station_id text,
@@ -473,6 +662,202 @@ CREATE TABLE hydroview_development.hourly_profile_measurements_by_station_time (
     unit text static,
     PRIMARY KEY ((station_id, parameter_id, qc_level, year), date_hour, depth, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (date_hour DESC, depth DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.thirty_min_profile_measurements_by_station_time (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    depth float,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, depth, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.twenty_min_profile_measurements_by_station_time (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    depth float,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, depth, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.fifteen_min_profile_measurements_by_station_time (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    depth float,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, depth, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.ten_min_profile_measurements_by_station_time (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    depth float,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, depth, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.five_min_profile_measurements_by_station_time (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    month_first_day timestamp,
+    timestamp timestamp,
+    depth float,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, depth, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.one_min_profile_measurements_by_station_time (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    week_first_day timestamp,
+    timestamp timestamp,
+    depth float,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, week_first_day), timestamp, depth, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.second_profile_measurements_by_station_time (
+    station_id text,
+    parameter_id text,
+    qc_level int,
+    hour timestamp,
+    timestamp timestamp,
+    depth float,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter_id, qc_level, hour), timestamp, depth, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, depth DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''

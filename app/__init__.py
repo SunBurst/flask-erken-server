@@ -43,6 +43,8 @@ def cassandra_connect():
     cluster = Cluster(app.config['HOSTS'], app.config['PORT'])
     session = cluster.connect(app.config['KEYSPACE'])
     session.row_factory = dict_factory
+    session.default_consistency_level=4
+    log.debug(session.default_consistency_level)
     
     cluster.register_user_type(app.config['KEYSPACE'], 'description', Description)
     cluster.register_user_type(app.config['KEYSPACE'], 'name', Name)
