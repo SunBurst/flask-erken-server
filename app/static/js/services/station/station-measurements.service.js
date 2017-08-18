@@ -36,7 +36,8 @@
             getHourlyProfileMeasurements: getHourlyProfileMeasurements,
             getHourlyChartSingleParameterMeasurements: getHourlyChartSingleParameterMeasurements,
             getHourlyChartParameterGroupMeasurements: getHourlyChartParameterGroupMeasurements,
-            getHourlyChartProfileMeasurements: getHourlyChartProfileMeasurements
+            getHourlyChartProfileMeasurements: getHourlyChartProfileMeasurements,
+            getMeasurementFrequencies: getMeasurementFrequencies
         };
         
         function getDailySingleParameterMeasurements(stationId, parameterId, qcLevel, fromDate, toDate) {
@@ -667,6 +668,31 @@
                 console.log(error);
             }
         
+        }
+        
+        function getMeasurementFrequencies(stationId) {
+            var resource = $resource('/api/measurement_frequencies_by_station/:station_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId
+                    },
+                    isArray: false,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({station_id: stationId}).$promise
+                .then(getMeasurementFrequenciesComplete)
+                .catch(getMeasurementFrequenciesFailed);
+                
+            function getMeasurementFrequenciesComplete(response) {
+                return response;
+            }
+            
+            function getMeasurementFrequenciesFailed(error) {
+                console.log(error);
+            }
+
         }
         
     }

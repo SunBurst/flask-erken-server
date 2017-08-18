@@ -1,29 +1,29 @@
 
-CREATE KEYSPACE hydroview_development WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+CREATE KEYSPACE IF NOT EXISTS hydroview_development WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 
-CREATE TYPE hydroview_development.description (
+CREATE TYPE IF NOT EXISTS hydroview_development.description (
     short_description text,
     long_description text
 );
 
-CREATE TYPE hydroview_development.name (
+CREATE TYPE IF NOT EXISTS hydroview_development.name (
     first_name text,
     last_name text
 );
 
-CREATE TYPE hydroview_development.position (
+CREATE TYPE IF NOT EXISTS hydroview_development.position (
     latitude double,
     longitude double
 );
 
-CREATE TYPE hydroview_development.thumbnails (
+CREATE TYPE IF NOT EXISTS hydroview_development.thumbnails (
     xl blob,
     l blob,
     m blob,
     s blob
 );
 
-CREATE TABLE hydroview_development.single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -50,7 +50,7 @@ CREATE TABLE hydroview_development.single_parameter_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -78,7 +78,7 @@ CREATE TABLE hydroview_development.profile_measurements_by_station_time (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.sensors_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.sensors_by_station (
     station_id text,
     sensor_name text,
     sensor_id text,
@@ -101,7 +101,7 @@ CREATE TABLE hydroview_development.sensors_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.webcam_photos_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.webcam_photos_by_station (
     station_id text,
     date date,
     timestamp timestamp,
@@ -123,7 +123,7 @@ CREATE TABLE hydroview_development.webcam_photos_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.stations (
+CREATE TABLE IF NOT EXISTS hydroview_development.stations (
     bucket int,
     name text,
     id text,
@@ -148,7 +148,7 @@ CREATE TABLE hydroview_development.stations (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.webcam_live_urls_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.webcam_live_urls_by_station (
     station_id text,
     url text,
     PRIMARY KEY (station_id, url)
@@ -168,7 +168,7 @@ CREATE TABLE hydroview_development.webcam_live_urls_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.daily_parameter_group_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.daily_parameter_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -197,7 +197,7 @@ CREATE TABLE hydroview_development.daily_parameter_group_measurements_by_station
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameters_all_measurement_types_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.parameters_all_measurement_types_by_station (
     station_id text,
     parameter_name text,
     measurement_type_name text,
@@ -222,7 +222,7 @@ CREATE TABLE hydroview_development.parameters_all_measurement_types_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.parameters_all_measurement_types_by_station_enb (
+CREATE TABLE IF NOT EXISTS hydroview_development.parameters_all_measurement_types_by_station_enb (
     station_id text,
     parameter_name text,
     measurement_type_name text,
@@ -248,7 +248,7 @@ CREATE TABLE hydroview_development.parameters_all_measurement_types_by_station_e
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.hourly_single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -275,7 +275,7 @@ CREATE TABLE hydroview_development.hourly_single_parameter_measurements_by_stati
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.thirty_min_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.thirty_min_single_param_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -302,7 +302,7 @@ CREATE TABLE hydroview_development.thirty_min_single_parameter_measurements_by_s
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.twenty_min_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.twenty_min_single_param_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -329,7 +329,7 @@ CREATE TABLE hydroview_development.twenty_min_single_parameter_measurements_by_s
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.fifteen_min_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.fifteen_min_sing_param_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -356,7 +356,7 @@ CREATE TABLE hydroview_development.fifteen_min_single_parameter_measurements_by_
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.ten_min_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -383,7 +383,7 @@ CREATE TABLE hydroview_development.ten_min_single_parameter_measurements_by_stat
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.five_min_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.five_min_single_param_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -410,7 +410,7 @@ CREATE TABLE hydroview_development.five_min_single_parameter_measurements_by_sta
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_min_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.one_min_single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -437,7 +437,7 @@ CREATE TABLE hydroview_development.one_min_single_parameter_measurements_by_stat
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.second_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.second_single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -464,7 +464,7 @@ CREATE TABLE hydroview_development.second_single_parameter_measurements_by_stati
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.video_urls_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.video_urls_by_station (
     station_id text,
     date date,
     timestamp timestamp,
@@ -486,7 +486,7 @@ CREATE TABLE hydroview_development.video_urls_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameter_group_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.parameter_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -515,7 +515,55 @@ CREATE TABLE hydroview_development.parameter_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.group_parameters_by_station_group (
+CREATE TABLE hydroview_development.group_measurement_frequencies_by_station (
+    station_id text,
+    group_id text,
+    measurement_frequencies list<text>,
+    PRIMARY KEY (station_id, group_id)
+) WITH CLUSTERING ORDER BY (group_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE IF NOT EXISTS hydroview_development.group_parameters_by_station (
+    station_id text,
+    group_id text,
+    parameter_name text,
+    parameter_id text,
+    group_description frozen<description>,
+    group_unit text,
+    parameter_description frozen<description>,
+    parameter_unit text,
+    PRIMARY KEY ((station_id), group_id, parameter_name, parameter_id)
+) WITH CLUSTERING ORDER BY (group_id ASC, parameter_name ASC, parameter_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+CREATE TABLE IF NOT EXISTS hydroview_development.group_parameters_by_station_group (
     station_id text,
     group_id text,
     parameter_name text,
@@ -542,7 +590,7 @@ CREATE TABLE hydroview_development.group_parameters_by_station_group (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.daily_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.daily_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -570,7 +618,7 @@ CREATE TABLE hydroview_development.daily_profile_measurements_by_station_time (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.station_info_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.station_info_by_station (
     id text PRIMARY KEY,
     description frozen<description>,
     environment_category text,
@@ -593,7 +641,7 @@ CREATE TABLE hydroview_development.station_info_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_parameter_group_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.hourly_parameter_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -622,7 +670,7 @@ CREATE TABLE hydroview_development.hourly_parameter_group_measurements_by_statio
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.daily_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.daily_single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -649,7 +697,7 @@ CREATE TABLE hydroview_development.daily_single_parameter_measurements_by_statio
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.hourly_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -677,7 +725,7 @@ CREATE TABLE hydroview_development.hourly_profile_measurements_by_station_time (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.thirty_min_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.thirty_min_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -705,7 +753,7 @@ CREATE TABLE hydroview_development.thirty_min_profile_measurements_by_station_ti
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.twenty_min_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.twenty_min_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -733,7 +781,7 @@ CREATE TABLE hydroview_development.twenty_min_profile_measurements_by_station_ti
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.fifteen_min_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.fifteen_min_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -761,7 +809,7 @@ CREATE TABLE hydroview_development.fifteen_min_profile_measurements_by_station_t
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.ten_min_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -789,7 +837,7 @@ CREATE TABLE hydroview_development.ten_min_profile_measurements_by_station_time 
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.five_min_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.five_min_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -817,7 +865,26 @@ CREATE TABLE hydroview_development.five_min_profile_measurements_by_station_time
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.one_min_profile_measurements_by_station_time (
+CREATE TABLE hydroview_development.measurement_frequencies_by_station (
+    station_id text PRIMARY KEY,
+    measurement_frequencies list<text>
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+    
+CREATE TABLE IF NOT EXISTS hydroview_development.one_min_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -845,7 +912,7 @@ CREATE TABLE hydroview_development.one_min_profile_measurements_by_station_time 
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE hydroview_development.second_profile_measurements_by_station_time (
+CREATE TABLE IF NOT EXISTS hydroview_development.second_profile_measurements_by_station_time (
     station_id text,
     parameter_id text,
     qc_level int,
@@ -873,7 +940,7 @@ CREATE TABLE hydroview_development.second_profile_measurements_by_station_time (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.networks (
+CREATE TABLE IF NOT EXISTS hydroview_development.networks (
     bucket int,
     name text,
     id text,
@@ -897,7 +964,54 @@ CREATE TABLE hydroview_development.networks (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.network_info_by_network (
+CREATE TABLE hydroview_development.parameters_by_station_group (
+    station_id text,
+    group_id text,
+    parameter_name text,
+    parameter_id text,
+    parameter_description frozen<description>,
+    parameter_unit text,
+    PRIMARY KEY ((station_id, group_id), parameter_name, parameter_id)
+) WITH CLUSTERING ORDER BY (parameter_name ASC, parameter_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview_development.parameter_groups_by_station_frequency (
+    station_id text,
+    measurement_frequency text,
+    group_name text,
+    group_id text,
+    PRIMARY KEY ((station_id, measurement_frequency), group_name, group_id)
+) WITH CLUSTERING ORDER BY (group_name ASC, group_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+CREATE TABLE IF NOT EXISTS hydroview_development.network_info_by_network (
     id text PRIMARY KEY,
     description frozen<description>,
     image blob,
@@ -918,7 +1032,7 @@ CREATE TABLE hydroview_development.network_info_by_network (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.stations_by_network (
+CREATE TABLE IF NOT EXISTS hydroview_development.stations_by_network (
     network_id text,
     station_name text,
     station_id text,

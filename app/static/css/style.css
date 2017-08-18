@@ -63,7 +63,11 @@ md-sidenav {
     margin-bottom: 5px;
 }
 
-md-pagination-wrapper, md-tabs-canvas {
+md-tabs.noTabPanel md-tabs-wrapper {
+    display: none !important;
+}
+
+.nav-tabs-station md-pagination-wrapper, .nav-tabs-station md-tabs-canvas {
     height: 72px;
 }
 

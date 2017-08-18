@@ -21,6 +21,7 @@
         vm.applyCustomTimeRange = applyCustomTimeRange;
         vm.changeDataSource = changeDataSource;
         vm.changeSelection = changeSelection;
+        vm.currentNavItem;
         vm.datePickerMasterModel = {
             startDate: null,
             endDate: null
@@ -30,6 +31,7 @@
         vm.isTimeOption = isTimeOption;
         vm.isViewMode = isViewMode;
         vm.maxDate = moment();
+        vm.measurementFrequencies = stationDataStorage.getMeasurementFrequencies();
         vm.minDate = moment(0);
         vm.parameterList = stationStorage.getParametersAllMeasurementTypesList();
         vm.parameters = stationStorage.getParametersAllMeasurementTypes();
@@ -100,11 +102,11 @@
             }
         }
         
-        $timeout(function() {
-            if ($state.current.name === 'station.data') {
-                $state.go('station.data.charts');
-            }
-        }, 100);
+        //$timeout(function() {
+        //    if ($state.current.name === 'station.data') {
+        //        $state.go('station.data.charts');
+        //    }
+        //}, 100);
         
     }
         

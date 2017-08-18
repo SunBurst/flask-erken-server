@@ -1,22 +1,76 @@
-<!-- <md-tabs md-stretch-tabs="always" md-dynamic-height md-border-bottom>
-    <md-tab label="daily"></md-tab>
-    <md-tab label="hourly"></md-tab>
-    <md-tab label="5 min"></md-tab>
+<md-tabs md-selected="stationDataVm.measurementTypeMode" md-border-bottom md-autoselect md-stretch-tabs="always">
+    <md-tab ui-sref=".groups">
+        Groups
+    </md-tab>
+    <md-tab ui-sref=".parameters">
+        Parameters
+    </md-tab>
+    <md-tab ui-sref=".sensors">
+        Sensors
+    </md-tab>
+</md-tabs>
+<ui-view></ui-view>
+<!-- <md-tabs md-selected="stationDataVm.currentTabItem" md-border-bottom md-autoselect md-stretch-tabs="always">
+  <md-tab ng-repeat="frequency in stationDataVm.measurementFrequencies.measurement_frequencies"
+          label="{[ frequency ]}" ui-sref=".frequency({ frequency: frequency })">
+  </md-tab>
+</md-tabs>
+<ui-view></ui-view> -->
+
+<!-- <div layout="row" ng-controller="StationDataSidenavCtrl as stationDataSidenavVm">
+  <md-sidenav layout="column" md-component-id="right" class="md-sidenav-right">
+    Left Nav!
+  </md-sidenav>
+</md-sidenav>
+<md-content>           
+    <md-button ng-click="stationDataSidenavVm.toggleRight()">Open Right Menu</md-button>
+</md-content>
+</div> -->
+
+<!-- <md-content class="md-padding">
+    <md-toolbar class="md-hue-2">
+        <md-tabs class="md-hue-2" md-selected="stationDataVm.viewMode">
+            <md-tab id="tab1" aria-controls="tab1-content">Charts</md-tab>
+            <md-tab id="tab2" aria-controls="tab2-content">Tables</md-tab>
+        </md-tabs>
+    </md-toolbar>
+    <md-tabs md-dynamic-height md-selected="stationDataVm.viewMode" class="noTabPanel">
+        <md-tab label="Tab One">
+            <md-content>
+            Content of Tab One.
+            </md-content>
+        </md-tab>
+        <md-tab label="Tab Two">
+            <md-content>
+            Content of Tab Two.
+            </md-content>
+        </md-tab>
+    </md-tabs>
+</md-content> -->
+<!-- <md-tabs md-stretch-tabs="always" md-dynamic-height="false">
+    <md-tab ui-sref=".charts">
+        <md-tab-label>
+            <div show-gt-sm>Charts</div>
+        </md-tab-label>
+    </md-tab>
+    <md-tab ui-sref=".tables">
+        <md-tab-label>
+            <div show-gt-sm>Tables</div>
+        </md-tab-label>
+    </md-tab>
 </md-tabs> -->
 
-
-<md-content class="md-padding" layout-xs="column" layout="row">
-    
+<!-- <md-content class="md-padding" layout-xs="column" layout="row">
     <div flex-xs flex-gt-xs="75" layout="column">
-        <md-card>
-            <md-toolbar class="md-hue-2">
-                <div class="md-toolbar-tools">
-                    <h3>
-                        <span>Global Options</span>
-                    </h3>
-                </div>
-            </md-toolbar>
-            <md-card-content layout="column">
+        
+        <md-card> -->
+            
+            <!-- <div class="md-toolbar-tools">
+                <h3>
+                    <span>Global Options</span>
+                </h3>
+            </div> -->
+            <!-- <md-card-content layout="column">
                 <md-card-actions layout="column" layout-align="space-around center">
                     <div layout="row" layout-align="space-between center" layout-fill>
                         <span>Data Source</span>
@@ -64,8 +118,8 @@
     
     <div flex-xs flex-gt-xs="25" layout="column">
         
-        <div flex layout="column">
-            <md-card>
+        <div flex layout="column"> -->
+            <!-- <md-card>
                 <md-toolbar class="md-hue-2">
                     <div class="md-toolbar-tools">
                         <h3>
@@ -81,8 +135,8 @@
                         </md-radio-group>
                     </div>
                 </md-card-content>
-            </md-card>
-            <md-card>
+            </md-card> -->
+            <!-- <md-card>
                 <md-toolbar class="md-hue-2">
                     <div class="md-toolbar-tools">
                         <h3>
@@ -106,4 +160,4 @@
 
     </div>
 
-</md-content>
+</md-content> -->

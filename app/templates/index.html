@@ -45,8 +45,8 @@
     <div layout="row" flex>
         
         <div layout="row" ng-controller="Sidebar as sidebarVm">
-            <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" 
-                md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+            <md-sidenav layout="column" class="md-sidenav-left" 
+                md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
                     <!-- <md-toolbar class="md-tall md-hue-2"></md-toolbar> -->
                 <md-list>
                     <!-- <md-subheader>Networks</md-subheader>
@@ -95,7 +95,7 @@
     <!-- <script src="/static/bower_components/jquery/dist/jquery.js"></script> -->
     <!-- <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script> -->
     <!-- <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script> --> <!-- Minified -->
     <!-- <script src="/static/bower_components/angular/angular.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script> -->
@@ -128,12 +128,14 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
     <!-- <script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script> -->
     <!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
     <script src="https://code.highcharts.com/modules/heatmap.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
-    <script src="https://code.highcharts.com/modules/boost.js"></script>
+    <script src="https://code.highcharts.com/modules/boost.js"></script> -->
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts-ng/1.0.1/highcharts-ng.js"></script>
     <!-- <script src="/static/bower_components/highcharts-ng/dist/highcharts-ng.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
@@ -165,6 +167,7 @@
     <script src="/static/js/services/location/location-videos.service.js"></script>
     <script src="/static/js/services/location/location-webcams.service.js"></script>
     <script src="/static/js/services/station/station.service.js"></script>
+    <script src="/static/js/services/station/station-groups.service.js"></script>
     <script src="/static/js/services/station/station-measurements.service.js"></script>
     <script src="/static/js/services/station/station-parameters.service.js"></script>
     <script src="/static/js/services/station/station-sensors.service.js"></script>
@@ -208,6 +211,7 @@
     <script src="/static/js/station/station-storage.service.js"></script>
     <script src="/static/js/station/cams-and-photos/station-cams-and-photos.controller.js"></script>
     <script src="/static/js/station/data/station-data.controller.js"></script>
+    <script src="/static/js/station/data/station-data-sidenav.controller.js"></script>
     <script src="/static/js/station/data/station-data-storage.service.js"></script>
     <script src="/static/js/station/data/station-data-datasource.service.js"></script>
     <script src="/static/js/station/data/station-data-datepicker.service.js"></script>
@@ -215,6 +219,10 @@
     <script src="/static/js/station/data/station-data-charts-group.controller.js"></script>
     <script src="/static/js/station/data/station-data-charts-parameter.controller.js"></script>
     <script src="/static/js/station/data/station-data-charts-profile.controller.js"></script>
+    <script src="/static/js/station/data/station-data-frequency.controller.js"></script>
+    <script src="/static/js/station/data/station-data-frequency-groups.controller.js"></script>
+    <script src="/static/js/station/data/station-data-frequency-parameters.controller.js"></script>
+    <script src="/static/js/station/data/station-data-frequency-sensors.controller.js"></script>
     <script src="/static/js/station/data/station-data-tables.controller.js"></script>
     <script src="/static/js/station/data/station-data-tables-group.controller.js"></script>
     <script src="/static/js/station/data/station-data-tables-parameter.controller.js"></script>

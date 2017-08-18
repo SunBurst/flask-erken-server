@@ -34,6 +34,7 @@
         .constant('GoogleMapClusterOptions', getGoogleMapClusterOptions())
         .constant('GoogleMapDefaultOptions', getDefaultMapOptions())
         .constant('GoogleMapIcons', getGoogleMapIcons())
+        .constant('GroupHighChartOptions', getGroupHighChartOptions())
         .constant('HeatMapOptions', getHeatMapOptions())
         .constant('HighChartOptions', getHighChartOptions());
 
@@ -173,7 +174,15 @@
                 useGPUTranslations: true
             },
             xAxis: {
-                type: 'datetime'
+                type: 'datetime',
+                events: {
+                    setExtremes: function(e) {
+                        console.log(this);
+                        if (typeof(e.rangeSelectorButton)!== 'undefined') {
+                            alert('count: '+e.rangeSelectorButton.count + 'text: ' + e.rangeSelectorButton.text + ' type:' + e.rangeSelectorButton.type);
+                        }
+                    }
+                }
             },
             yAxis: {
                 title: {
@@ -205,6 +214,61 @@
             },
             series: [],
         };
+    }
+    
+    function getGroupHighChartOptions() {
+        return {
+            
+            title: {
+                text: ''
+            },
+            
+            charts: {
+                type: 'spline',
+                zoomType: 'xy'
+            },
+            
+            rangeSelector: {
+                buttons: [{
+                    type: 'week',
+                    count: 1,
+                    text: '1w'
+                }, {
+                    type: 'month',
+                    count: 1,
+                    text: '1m'
+                }, {
+                    type: 'month',
+                    count: 6,
+                    text: '6m'
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: '1y'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }],
+                selected: 1,
+                enabled: true
+            },
+
+            plotOptions: {
+                series: {
+                    showInNavigator: true
+                }
+            },
+            
+            xAxis: [{
+              type: 'datetime'
+            }],
+            
+            yAxis: [],
+            
+            series: []
+        
+        };
+
     }
     
     function getHighChartOptions() {

@@ -195,13 +195,36 @@ def get_profile_parameters_by_station(station_id):
     data =  [row for row in rows]
     
     return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/groups_by_station/<string:station_id>', methods=['GET'])
+def get_groups_by_station(station_id):
+    query = "SELECT * FROM parameter_groups_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
+    data =  [row for row in rows]
     
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/parameter_groups_by_station/<string:station_id>', methods=['GET'])
 def get_parameter_groups_by_station(station_id):
     query = "SELECT * FROM parameter_groups_by_station WHERE station_id=?"
     prepared = session.prepare(query)
     rows = session.execute_async(prepared, (station_id,)).result()
-    data =  [row for row in rows]
+    data = [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/measurement_frequencies_by_station/<string:station_id>', methods=['GET'])
+def get_measurement_frequencies_by_station(station_id):
+    query = "SELECT * FROM measurement_frequencies_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id,)).result()
+    try:
+        row = rows[0]
+    except IndexError:
+        data = {}
+    else:
+        data = row
     
     return json.dumps(data, cls=CustomEncoder)
     
@@ -505,9 +528,27 @@ def get_profile_measurements_by_station_chart(station_id, parameter_id, qc_level
 
     return json.dumps(series, cls=CustomEncoder)
 
+@app.route('/api/group_measurement_frequencies_by_station/<string:station_id>', methods=['GET'])
+def get_group_measurement_frequencies_by_station(station_id):
+    query = "SELECT * FROM group_measurement_frequencies_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id, )).result()
+    data = [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/group_parameters_by_station/<string:station_id>', methods=['GET'])
+def get_group_parameters_by_station(station_id):
+    query = "SELECT * FROM group_parameters_by_station WHERE station_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id, )).result()
+    data =  [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/group_parameters_by_station_group/<string:station_id>/<string:group_id>', methods=['GET'])
 def get_group_parameters_by_station_group(station_id, group_id):
-    query = "SELECT * FROM group_parameters_by_station_group WHERE station_id=? AND group_id=?"
+    query = "SELECT * FROM parameters_by_station_group WHERE station_id=? AND group_id=?"
     prepared = session.prepare(query)
     rows = session.execute_async(prepared, (station_id, group_id, )).result()
     data =  [row for row in rows]
@@ -553,6 +594,7 @@ def get_daily_parameter_group_measurements_by_station_chart(station_id, group_id
         for row in rows:
             parameter_id = row.get('parameter_id')
             parameter_name = row.get('parameter_name')
+            parameter_unit = row.get('unit')
             sensor_id = row.get('sensor_id')
             sensor_name = row.get('sensor_name')
             parameter_by_sensor_id = "{parameter_id}-{sensor_id}".format(parameter_id=parameter_id, sensor_id=sensor_id)
@@ -561,6 +603,7 @@ def get_daily_parameter_group_measurements_by_station_chart(station_id, group_id
                 parameters_by_sensors[parameter_by_sensor_id] = {
                     'id': parameter_by_sensor_id, 
                     'name': parameter_by_sensor_name, 
+                    'unit': parameter_unit,
                     'data': []
                 }
 
