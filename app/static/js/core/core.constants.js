@@ -228,6 +228,10 @@
                 zoomType: 'xy'
             },
             
+            navigator: {
+                adaptToUpdatedData: false
+            },
+            
             rangeSelector: {
                 buttons: [{
                     type: 'week',
@@ -259,8 +263,17 @@
                 }
             },
             
+            scrollbar: {
+                liveRedraw: false
+            },
+            
             xAxis: [{
-              type: 'datetime'
+                events: {
+                    setExtremes: function(e) {
+                        console.log(e);
+                    }
+                },
+                type: 'datetime'
             }],
             
             yAxis: [],

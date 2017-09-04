@@ -1,45 +1,8 @@
 <md-content class="md-padding">
-    <md-card ng-repeat="group in stationDataGroupsVm.groups">
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-title">{[ group.group_name ]}</span>
-            </md-card-title-text>
-        </md-card-title>        
-        <!-- <md-card-actions layout="row" layout-align="start center">
-          <md-button ng-repeat="frequency in stationDataGroupsVm.groupMeasurementFrequencies[group.group_id].measurement_frequencies">{[ frequency ]}</md-button>
-        </md-card-actions> -->
-        <md-tabs md-selected="stationDataGroupsVm.groupMeasurementFrequencies[group.group_id].selected" md-border-bottom md-stretch-tabs="always">
-            <md-tab ng-repeat="frequency in stationDataGroupsVm.groupMeasurementFrequencies[group.group_id].measurement_frequencies"
-                label="{[ frequency ]}" md-on-select="stationDataGroupsVm.frequencyChange(group.group_id, frequency)">
-          </md-tab>
-        </md-tabs>
-        <!-- <md-card-actions layout="row" layout-align="start center">
-          <md-button>Chart</md-button>
-          <md-button>Table</md-button>
-        </md-card-actions> -->
-        <md-card-content>
-            <highchart id="{[ stationDataGroupsVm.groupCharts[group.group_id].chartId ]}" config="stationDataGroupsVm.groupCharts[group.group_id].chartConfig"></highchart>
-            <md-table-container>
-                <table md-table>
-                    <thead ng-if="!stationDataGroupsVm.options.decapitate" md-head md-order="stationDataGroupsVm.query.order">
-                        <tr md-row>
-                            <th md-column md-order-by="date"><span>Date</span></th>
-                            <th md-column ng-repeat="groupParameter in stationDataGroupsVm.groupParameters[group.group_id]">
-                                <span>{[ groupParameter.parameter_name ]}</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody md-body>
-                        <tr md-row ng-repeat="measurement in stationDataGroupsVm.measurements | filter: filter.search | orderBy: stationDataGroupsVm.query.order | limitTo: stationDataGroupsVm.query.limit : (stationDataGroupsVm.query.page -1) * stationDataGroupsVm.query.limit" 
-                            md-select="measurement" md-auto-select="stationDataGroupsVm.options.autoSelect">
-                                <td md-cell>{[ measurement.date | date:'yyyy-MM-dd']}</td>
-                                <td md-cell>{[ measurement.sensor_name ]}</td>
-                                <td md-cell>{[ measurement.parameter_name ]}</td>
-                                <td md-cell>{[ measurement.avg_value | number: 2 ]}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </md-table-container>
-        </md-card-content>
+    <md-card ng-repeat="group in stationDataGroupsVm.groupList">
+        <station-data-group 
+            station="stationDataGroupsVm.station"
+            group="stationDataGroupsVm.groups[group.group_id]">
+        </station-data-group>
     </md-card>
 </md-content>

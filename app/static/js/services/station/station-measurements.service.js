@@ -37,7 +37,9 @@
             getHourlyChartSingleParameterMeasurements: getHourlyChartSingleParameterMeasurements,
             getHourlyChartParameterGroupMeasurements: getHourlyChartParameterGroupMeasurements,
             getHourlyChartProfileMeasurements: getHourlyChartProfileMeasurements,
-            getMeasurementFrequencies: getMeasurementFrequencies
+            getMeasurementFrequencies: getMeasurementFrequencies,
+            getGroupMeasurements: getGroupMeasurements,
+            getGroupMeasurementsChart: getGroupMeasurementsChart
         };
         
         function getDailySingleParameterMeasurements(stationId, parameterId, qcLevel, fromDate, toDate) {
@@ -356,7 +358,7 @@
         }
         
         function getHighFrequencyChartParameterGroupMeasurements(stationId, groupId, qcLevel, fromTimestamp, toTimestamp) {
-            var resource = $resource('/api/parameter_group_measurements_by_station_chart/:station_id/:group_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+            var resource = $resource('/api/five_min_parameter_group_measurements_by_station_chart/:station_id/:group_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
                 query: {
                     method: 'GET', params: {
                         station_id: stationId,
@@ -693,6 +695,76 @@
                 console.log(error);
             }
 
+        }
+        
+        function getGroupMeasurementsChart(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/group_measurements_by_station_chart/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter_id: parameterId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                station_id: stationId, 
+                parameter_id: parameterId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getGroupMeasurementsChartComplete)
+                .catch(getGroupMeasurementsChartFailed);
+                
+            function getGroupMeasurementsChartComplete(response) {
+                return response;
+            }
+            
+            function getGroupMeasurementsChartFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getGroupMeasurements(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/group_measurements_by_station/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter_id: parameterId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                station_id: stationId, 
+                parameter_id: parameterId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getGroupMeasurementsComplete)
+                .catch(getGroupMeasurementsFailed);
+                
+            function getGroupMeasurementsComplete(response) {
+                return response;
+            }
+            
+            function getGroupMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
         }
         
     }

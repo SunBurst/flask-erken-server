@@ -1,0 +1,43 @@
+<md-card-title>
+    <md-card-title-text>
+        <span class="md-title">{[ stationDataGroupItemVm.group.group_name ]}</span>
+    </md-card-title-text>
+</md-card-title>
+<!-- <md-tabs md-selected="stationDataGroupItemVm.group.frequencies.selected" 
+    md-border-bottom md-stretch-tabs="always">
+    <md-tab ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list"
+        label="{[ frequency ]}">
+         md-on-select="stationDataGroupItemVm.frequencyChange(frequency)"
+    </md-tab>
+</md-tabs> -->
+<!-- <md-nav-bar md-selected-nav-item="stationDataGroupItemVm.group.frequencies.selected"
+    nav-bar-aria-label="data frequency navigation links">
+    <md-nav-item ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
+        md-nav-click="stationDataGroupItemVm.frequencyChange(frequency)" name="{[ frequency ]}">
+        {[ frequency ]}
+    </md-nav-item>
+</md-nav-bar> -->
+<md-card-content>
+    <highchart ng-if="stationDataGroupItemVm.chartReady" id="chart-{[ group.group_id ]}" config="stationDataGroupItemVm.chartConfig"></highchart>
+    <!-- <div id="chart-{[stationDataGroupItemVm.group.group_id]}"></div> -->
+    <md-table-container>
+        <table md-table>
+            <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
+                <tr md-row>
+                    <th md-column md-order-by="date"><span>Date</span></th>
+                    <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
+                        <span>{[ groupParameter.parameter_name ]}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
+                    md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
+                        <td md-cell>{[ measurement.date | date:'yyyy-MM-dd']}</td>
+                        <td md-cell>{[ measurement.parameter_name ]}</td>
+                        <td md-cell>{[ measurement.avg_value | number: 2 ]}</td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+</md-card-content>

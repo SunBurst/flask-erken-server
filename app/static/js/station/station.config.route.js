@@ -85,17 +85,21 @@
                 controller: 'StationDataGroupsCtrl',
                 controllerAs: 'stationDataGroupsVm',
                 resolve: {
-                    _groups: function($stateParams, StationGroupsFactory, stationDataStorage) {
+                    _station: function(stationStorage) {
+                        var station = stationStorage.getStation();
+                        return station;
+                    },
+                    _groupList: function($stateParams, StationGroupsFactory) {
                         var stationId = $stateParams.station_id;
                         return StationGroupsFactory.getGroups(stationId)
                             .then(function(response) {
                                 return response.data;
                             });
                     },
-                    _groupsObj: ['_groups', function(_groups) {
+                    _groupsObj: ['_groupList', function(_groupList) {
                         var groupsObj = {};
-                        for (var i = 0; i < _groups.length; i++) {
-                            groupsObj[_groups[i].group_id] = _groups[i];
+                        for (var i = 0; i < _groupList.length; i++) {
+                            groupsObj[_groupList[i].group_id] = _groupList[i];
                         }
                         return groupsObj;
                     }],
@@ -107,14 +111,14 @@
                                     return response.data;
                                 });
                     }],
-                    _groupParameterList: ['_groups', '$q', '$stateParams', 'StationGroupsFactory', 'stationDataStorage', 
-                        function(_groups, $q, $stateParams, StationGroupsFactory, stationDataStorage) {
+                    _groupParameterList: ['_groupList', '$q', '$stateParams', 'StationGroupsFactory', 'stationDataStorage', 
+                        function(_groupList, $q, $stateParams, StationGroupsFactory, stationDataStorage) {
                             var itemArray = []
-                            if (_groups.length > 0) {
+                            if (_groupList.length > 0) {
                                 var stationId = $stateParams.station_id;
                                 var promiseArray = [];
-                                for (var i = 0; i < _groups.length; i++) {
-                                  var groupId = _groups[i].group_id;
+                                for (var i = 0; i < _groupList.length; i++) {
+                                  var groupId = _groupList[i].group_id;
                                   var currentPromise = StationGroupsFactory.getGroupParameters(stationId, groupId)
                                     .then(function (response) {
                                         var data = response.data;
@@ -186,13 +190,13 @@
                             }
                         return groupsMeasurementFrequencies;
                     }],
-                    _groupCharts: ['_groups', '_groupUnits', 'GroupHighChartOptions', function(_groups, _groupUnits, GroupHighChartOptions) {
+                    _groupCharts: ['_groupList', '_groupUnits', 'GroupHighChartOptions', function(_groupList, _groupUnits, GroupHighChartOptions) {
                         
                         var groupCharts = {};
                         
-                        for (var i = 0; i < _groups.length; i++) {
+                        for (var i = 0; i < _groupList.length; i++) {
                 
-                            var groupId = _groups[i].group_id;
+                            var groupId = _groupList[i].group_id;
                             var groupNotInObject = !(groupId in groupCharts);
                             var chartId = 'chart-' + i;
                             
@@ -201,6 +205,7 @@
                                     'chartId': chartId,
                                     'chartConfig': angular.copy(GroupHighChartOptions)
                                 };
+                                
                             }
                             
                             var groupParameterUnits = _groupUnits[groupId];
@@ -223,6 +228,56 @@
                         
                         return groupCharts;
                         
+                    }],
+                    _groups: ['_groupList', '_getGroupsParameters', '_groupMeasurementFrequencies', '_groupUnits', 
+                        function(_groupList, _getGroupsParameters, _groupMeasurementFrequencies, _groupUnits) {
+                        var groups = {};
+                        
+                        for (var i = 0; i < _groupList.length; i++) {
+                            var groupId = _groupList[i].group_id;
+                            groups[groupId] = _groupList[i];
+                            groups[groupId]['parameters'] = {
+                                'list': [],
+                                'objects': {}
+                            };
+                            groups[groupId]['frequencies'] = {
+                                'list': [],
+                                'selected': null
+                            };
+                            groups[groupId]['units'] = {
+                                'list': []
+                            };
+                            
+                            var groupInParameters = (groupId in _getGroupsParameters);
+
+                            if (groupInParameters) {
+                                groups[groupId].parameters.list = _getGroupsParameters[groupId];
+                                for (var j = 0; j < _getGroupsParameters[groupId].length; j++) {
+                                    var parameterId = _getGroupsParameters[groupId][j].parameter_id;
+                                    groups[groupId].parameters.objects[parameterId] = {
+                                        'parameter_description': _getGroupsParameters[groupId][j].parameter_description,
+                                        'parameter_name': _getGroupsParameters[groupId][j].parameter_name,
+                                        'parameter_unit': _getGroupsParameters[groupId][j].parameter_unit
+                                    };
+                                }
+                            }
+                            
+                            var groupInMeasurementFrequencies = (groupId in _groupMeasurementFrequencies);
+
+                            if (groupInMeasurementFrequencies) {
+                                groups[groupId].frequencies.list = _groupMeasurementFrequencies[groupId].measurement_frequencies;
+                                groups[groupId].frequencies.selected = _groupMeasurementFrequencies[groupId].selected;
+                            }
+                            
+                            var groupInUnits = (groupId in _groupUnits);
+                            
+                            if (groupInUnits) {
+                                groups[groupId].units.list = _groupUnits[groupId];
+                            }
+                            
+                        }
+    
+                        return groups;
                     }]
                 }
             })

@@ -23,7 +23,7 @@
         };
         
         function getGroups(stationId) {
-            var resource = $resource('/api/groups_by_station/:station_id/', {}, {
+            var resource = $resource('/api/groups_by_station/:station_id', {}, {
                 query: {
                     method: 'GET', params: {
                         station_id: stationId
