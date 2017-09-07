@@ -39,7 +39,8 @@
             getHourlyChartProfileMeasurements: getHourlyChartProfileMeasurements,
             getMeasurementFrequencies: getMeasurementFrequencies,
             getGroupMeasurements: getGroupMeasurements,
-            getGroupMeasurementsChart: getGroupMeasurementsChart
+            getGroupMeasurementsChart: getGroupMeasurementsChart,
+            getGroupMeasurementsTimeGrouped: getGroupMeasurementsTimeGrouped
         };
         
         function getDailySingleParameterMeasurements(stationId, parameterId, qcLevel, fromDate, toDate) {
@@ -707,7 +708,7 @@
                         from_timestamp: fromTimestamp,
                         to_timestamp: toTimestamp
                     },
-                    isArray: true,
+                    isArray: false,
                     interceptor: customInterceptor
                 }
             });
@@ -762,6 +763,41 @@
             }
             
             function getGroupMeasurementsFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getGroupMeasurementsTimeGrouped(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/group_measurements_by_station_time_grouped/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter_id: parameterId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                station_id: stationId, 
+                parameter_id: parameterId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getGroupMeasurementsTimeGroupedComplete)
+                .catch(getGroupMeasurementsTimeGroupedFailed);
+                
+            function getGroupMeasurementsTimeGroupedComplete(response) {
+                return response;
+            }
+            
+            function getGroupMeasurementsTimeGroupedFailed(error) {
                 console.log(error);
             }
         

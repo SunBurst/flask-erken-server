@@ -1,43 +1,129 @@
-<md-card-title>
-    <md-card-title-text>
-        <span class="md-title">{[ stationDataGroupItemVm.group.group_name ]}</span>
-    </md-card-title-text>
-</md-card-title>
-<!-- <md-tabs md-selected="stationDataGroupItemVm.group.frequencies.selected" 
-    md-border-bottom md-stretch-tabs="always">
-    <md-tab ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list"
-        label="{[ frequency ]}">
-         md-on-select="stationDataGroupItemVm.frequencyChange(frequency)"
-    </md-tab>
-</md-tabs> -->
-<!-- <md-nav-bar md-selected-nav-item="stationDataGroupItemVm.group.frequencies.selected"
-    nav-bar-aria-label="data frequency navigation links">
-    <md-nav-item ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
-        md-nav-click="stationDataGroupItemVm.frequencyChange(frequency)" name="{[ frequency ]}">
-        {[ frequency ]}
-    </md-nav-item>
-</md-nav-bar> -->
-<md-card-content>
-    <highchart ng-if="stationDataGroupItemVm.chartReady" id="chart-{[ group.group_id ]}" config="stationDataGroupItemVm.chartConfig"></highchart>
-    <!-- <div id="chart-{[stationDataGroupItemVm.group.group_id]}"></div> -->
-    <md-table-container>
-        <table md-table>
-            <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
-                <tr md-row>
-                    <th md-column md-order-by="date"><span>Date</span></th>
-                    <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
-                        <span>{[ groupParameter.parameter_name ]}</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody md-body>
-                <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
-                    md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
-                        <td md-cell>{[ measurement.date | date:'yyyy-MM-dd']}</td>
-                        <td md-cell>{[ measurement.parameter_name ]}</td>
-                        <td md-cell>{[ measurement.avg_value | number: 2 ]}</td>
-                </tr>
-            </tbody>
-        </table>
-    </md-table-container>
-</md-card-content>
+<md-card>
+    
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-title">{[ stationDataGroupItemVm.group.group_name ]}</span>
+        </md-card-title-text>
+    </md-card-title>
+    <!-- <md-tabs md-selected="stationDataGroupItemVm.group.frequencies.selected" 
+        md-border-bottom md-stretch-tabs="always">
+        <md-tab ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list"
+            label="{[ frequency ]}">
+             md-on-select="stationDataGroupItemVm.frequencyChange(frequency)"
+        </md-tab>
+    </md-tabs> -->
+    <!-- <md-nav-bar md-selected-nav-item="stationDataGroupItemVm.group.frequencies.selected"
+        nav-bar-aria-label="data frequency navigation links">
+        <md-nav-item ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
+            md-nav-click="stationDataGroupItemVm.frequencyChange(frequency)" name="{[ frequency ]}">
+            {[ frequency ]}
+        </md-nav-item>
+    </md-nav-bar> -->
+    <md-card-content>
+        
+        <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" style="height: 400px; min-width: 600px"></div>
+        
+        <md-divider></md-divider>
+        
+        <md-toolbar class="md-table-toolbar md-default">
+            <div class="md-toolbar-tools">
+                <h2 class="md-title">Averages</h2>
+            </div>
+        </md-toolbar>
+        
+        <md-table-container>
+            <table md-table>
+                <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
+                    <tr md-row>
+                        <th md-column md-order-by="time"><span>Timestamp</span></th>
+                        <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
+                            <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
+                            <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
+                        md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
+                        <td ng-if="measurement.date" md-cell>{[ measurement.time | date:'yyyy-MM-dd']}</td>
+                        <td ng-if="measurement.date_hour" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                        <td ng-if="measurement.timestamp" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
+                            {[ measurement.data[groupParameter.parameter_id].avg_value | number: 2 ]}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        
+        <md-divider></md-divider>
+        
+        <md-toolbar class="md-table-toolbar md-default">
+            <div class="md-toolbar-tools">
+                <h2 class="md-title">Minimums</h2>
+            </div>
+        </md-toolbar>
+        
+        <md-table-container>
+            <table md-table>
+                <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
+                    <tr md-row>
+                        <th md-column md-order-by="time"><span>Timestamp</span></th>
+                        <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
+                            <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
+                            <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
+                        md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
+                        <td ng-if="measurement.date" md-cell>{[ measurement.time | date:'yyyy-MM-dd']}</td>
+                        <td ng-if="measurement.date_hour" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                        <td ng-if="measurement.timestamp" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
+                            {[ measurement.data[groupParameter.parameter_id].min_value | number: 2 ]}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        
+        <md-divider></md-divider>
+        
+        <md-toolbar class="md-table-toolbar md-default">
+            <div class="md-toolbar-tools">
+                <h2 class="md-title">Maximums</h2>
+            </div>
+        </md-toolbar>
+        
+        <md-table-container>
+            <table md-table>
+                <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
+                    <tr md-row>
+                        <th md-column md-order-by="time"><span>Timestamp</span></th>
+                        <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
+                            <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
+                            <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
+                        md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
+                        <td ng-if="measurement.date" md-cell>{[ measurement.time | date:'yyyy-MM-dd']}</td>
+                        <td ng-if="measurement.date_hour" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                        <td ng-if="measurement.timestamp" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
+                            {[ measurement.data[groupParameter.parameter_id].max_value | number: 2 ]}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        
+        <md-divider></md-divider>
+        
+    </md-card-content>
+
+</md-card>

@@ -23,6 +23,13 @@ CREATE TYPE IF NOT EXISTS hydroview_development.thumbnails (
     s blob
 );
 
+CREATE TYPE IF NOT EXISTS hydroview_development.averages (
+    min_value float,
+    avg_value float,
+    max_value float,
+    unit text
+);
+
 CREATE TABLE IF NOT EXISTS hydroview_development.single_parameter_measurements_by_station (
     station_id text,
     parameter_id text,
@@ -196,7 +203,80 @@ CREATE TABLE IF NOT EXISTS hydroview_development.daily_parameter_group_measureme
     AND min_index_interval = 128
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview_development.daily_group_measurements_by_station_grouped (
+    station_id text,
+    group_id text,
+    qc_level int,
+    year int,
+    date timestamp,
+    data map<text, frozen<averages>>,
+    PRIMARY KEY ((station_id, group_id, qc_level, year), date)
+) WITH CLUSTERING ORDER BY (date DESC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview_development.hourly_group_measurements_by_station_grouped (
+    station_id text,
+    group_id text,
+    qc_level int,
+    year int,
+    date_hour timestamp,
+    data map<text, frozen<averages>>,
+    PRIMARY KEY ((station_id, group_id, qc_level, year), date_hour)
+) WITH CLUSTERING ORDER BY (date_hour DESC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
     
+CREATE TABLE hydroview_development.five_min_group_measurements_by_station_grouped (
+    station_id text,
+    group_id text,
+    qc_level int,
+    month_first_day date,
+    timestamp timestamp,
+    data map<text, frozen<averages>>,
+    PRIMARY KEY ((station_id, group_id, qc_level, month_first_day), timestamp)
+) WITH CLUSTERING ORDER BY (timestamp DESC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
 CREATE TABLE hydroview_development.year_buckets_by_station_group (
     station_id text,
     group_id text,

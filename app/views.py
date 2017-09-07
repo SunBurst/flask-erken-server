@@ -250,7 +250,7 @@ def get_group_measurements_by_station(station_id, group_id, qc_level, from_times
     to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
     
     delta = to_dt - from_dt
-    print(delta.days)
+
     if delta.days > 465:
         if 'Daily' in frequencies:
             return get_daily_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
@@ -280,9 +280,9 @@ def get_group_measurements_by_station(station_id, group_id, qc_level, from_times
     
     
     return json.dumps([], cls=CustomEncoder)
-
-@app.route('/api/group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+    
+@app.route('/api/group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     
     frequencies_query = "SELECT * FROM group_measurement_frequencies_by_station WHERE station_id=? AND group_id=?"
     prepared_frequencies_query = session.prepare(frequencies_query)
@@ -303,7 +303,60 @@ def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from
     to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
     
     delta = to_dt - from_dt
-    print(delta.days)
+
+    if delta.days > 465:
+        if 'Daily' in frequencies:
+            return get_daily_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif 'Hourly' in frequencies:
+            return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '5 Min' in frequencies:
+            return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+    else:   # days <= 465
+        if delta.days <= 30:
+            if delta.days <= 1:
+                if '5 Min' in frequencies:
+                    return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif 'Hourly' in frequencies:
+                    return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            else: # 1 < days <= 30
+                if 'Hourly' in frequencies:
+                    return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '5 Min' in frequencies:
+                    return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        else:   # 30 < days <= 465 
+            if 'Daily' in frequencies:
+                return get_daily_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif 'Hourly' in frequencies:
+                return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '5 Min' in frequencies:
+                return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+    
+    
+    return json.dumps([], cls=CustomEncoder)
+
+@app.route('/api/group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+    
+    frequencies_query = "SELECT * FROM group_measurement_frequencies_by_station WHERE station_id=? AND group_id=?"
+    prepared_frequencies_query = session.prepare(frequencies_query)
+    frequencies_rows = session.execute_async(prepared_frequencies_query, (station_id, group_id,)).result()
+    frequencies = []
+    
+    try:
+        frequencies_row = frequencies_rows[0]
+    except IndexError as e:
+        print(e)
+    else:
+        frequencies = frequencies_row.get('measurement_frequencies', [])
+        
+    if not frequencies:
+        return json.dumps({}, cls=CustomEncoder)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    delta = to_dt - from_dt
+
     if delta.days > 465:
         if 'Daily' in frequencies:
             return get_daily_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
@@ -332,7 +385,7 @@ def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from
                 return get_five_min_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     
     
-    return json.dumps([], cls=CustomEncoder)
+    return json.dumps({}, cls=CustomEncoder)
     
 @app.route('/api/daily_single_parameter_measurements_by_station/<string:station_id>/<string:parameter_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
 def get_daily_stations_average_parameter_measurements_by_station(station_id, parameter_id, qc_level, from_date, to_date):
@@ -681,6 +734,26 @@ def get_daily_parameter_group_measurements_by_station(station_id, group_id, qc_l
     
     return json.dumps(data, cls=CustomEncoder)
 
+@app.route('/api/daily_parameter_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
+def get_daily_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_date, to_date):
+    query = "SELECT * FROM daily_group_measurements_by_station_grouped WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date>=? AND date<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date/1000.0)
+    to_dt = datetime.fromtimestamp(to_date/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(session.execute_async(prepared, (station_id, group_id, qc_level, year, from_date, to_date, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/daily_parameter_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
 def get_daily_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_date, to_date):
     query = "SELECT * FROM daily_parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"
@@ -706,14 +779,16 @@ def get_daily_parameter_group_measurements_by_station_chart(station_id, group_id
                     'id': parameter_id, 
                     'name': parameter_name, 
                     'unit': parameter_unit,
-                    'data': []
+                    'averages': [],
+                    'ranges': []
                 }
 
-            parameters[parameter_id]['data'].append([row.get('date'), row.get('avg_value')])
+            parameters[parameter_id]['averages'].append([row.get('date'), row.get('avg_value')])
+            parameters[parameter_id]['ranges'].append([row.get('date'), row.get('min_value'), row.get('max_value')])
 
-    series = [parameters_data for parameter_id, parameters_data in parameters.items()]
+    #series = [parameters_data for parameter_id, parameters_data in parameters.items()]
 
-    return json.dumps(series, cls=CustomEncoder)
+    return json.dumps(parameters, cls=CustomEncoder)
 
 @app.route('/api/hourly_parameter_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
 def get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_date_hour, to_date_hour):
@@ -733,6 +808,26 @@ def get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_
         for row in rows:
             data.append(row)
 
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/hourly_parameter_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>', methods=['GET'])
+def get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_date_hour, to_date_hour):
+    query = "SELECT * FROM hourly_group_measurements_by_station_grouped WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_date_hour/1000.0)
+    to_dt = datetime.fromtimestamp(to_date_hour/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(session.execute_async(prepared, (station_id, group_id, qc_level, year, from_date_hour, to_date_hour, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
     return json.dumps(data, cls=CustomEncoder)
     
 @app.route('/api/hourly_parameter_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
@@ -760,14 +855,15 @@ def get_hourly_parameter_group_measurements_by_station_chart(station_id, group_i
                     'id': parameter_id, 
                     'name': parameter_name, 
                     'unit': parameter_unit,
-                    'data': []
+                    'averages': [],
+                    'ranges': []
                 }
 
-            parameters[parameter_id]['data'].append([row.get('date_hour'), row.get('avg_value')])
+            parameters[parameter_id]['averages'].append([row.get('date_hour'), row.get('avg_value')])
+            parameters[parameter_id]['ranges'].append([row.get('date_hour'), row.get('min_value'), row.get('max_value')])
+    #series = [parameters_data for parameter_id, parameters_data in parameters.items()]
 
-    series = [parameters_data for parameter_id, parameters_data in parameters.items()]
-
-    return json.dumps(series, cls=CustomEncoder)
+    return json.dumps(parameters, cls=CustomEncoder)
 
 @app.route('/api/parameter_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
 def get_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp):
@@ -815,6 +911,29 @@ def get_five_min_parameter_group_measurements_by_station(station_id, group_id, q
     
     return json.dumps(data, cls=CustomEncoder)
 
+@app.route('/api/five_min_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM five_min_group_measurements_by_station_grouped WHERE station_id=? AND group_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, group_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+    
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/five_min_parameter_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
 def get_five_min_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     query = "SELECT * FROM five_min_parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
@@ -843,11 +962,13 @@ def get_five_min_parameter_group_measurements_by_station_chart(station_id, group
                     'id': parameter_id, 
                     'name': parameter_name, 
                     'unit': parameter_unit,
-                    'data': []
+                    'averages': [],
+                    'ranges': []
                 }
 
-            parameters[parameter_id]['data'].append([row.get('timestamp'), row.get('avg_value')])
+            parameters[parameter_id]['averages'].append([row.get('timestamp'), row.get('avg_value')])
+            parameters[parameter_id]['ranges'].append([row.get('timestamp'), row.get('min_value'), row.get('max_value')])
 
-    series = [parameters_data for parameter_id, parameters_data in parameters.items()]
+    #series = [parameters_data for parameter_id, parameters_data in parameters.items()]
 
-    return json.dumps(series, cls=CustomEncoder)
+    return json.dumps(parameters, cls=CustomEncoder)

@@ -16,6 +16,7 @@ from flask import Flask
 from cassandra.cluster import Cluster
 from cassandra.query import dict_factory
 
+from cassandra_udts import Averages
 from cassandra_udts import Description
 from cassandra_udts import Name
 from cassandra_udts import Position
@@ -46,6 +47,7 @@ def cassandra_connect():
     session.default_consistency_level=4
     log.debug(session.default_consistency_level)
     
+    cluster.register_user_type(app.config['KEYSPACE'], 'averages', Averages)
     cluster.register_user_type(app.config['KEYSPACE'], 'description', Description)
     cluster.register_user_type(app.config['KEYSPACE'], 'name', Name)
     cluster.register_user_type(app.config['KEYSPACE'], 'position', Position)

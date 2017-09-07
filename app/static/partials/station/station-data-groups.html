@@ -1,8 +1,8 @@
 <md-content class="md-padding">
-    <md-card ng-repeat="group in stationDataGroupsVm.groupList">
+    <div ng-repeat="group in stationDataGroupsVm.groupList">
         <station-data-group 
             station="stationDataGroupsVm.station"
             group="stationDataGroupsVm.groups[group.group_id]">
         </station-data-group>
-    </md-card>
+    </div>
 </md-content>

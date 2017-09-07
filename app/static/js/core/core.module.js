@@ -8,7 +8,7 @@
         'highcharts-ng',
         'uiGmapgoogle-maps',
         //'ui-rangeSlider',
-        'ngMaterialDatePicker',
+        //'ngMaterialDatePicker',
         'md.data.table',
         'videosharing-embed',
         'ngMdIcons'

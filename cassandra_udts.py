@@ -1,3 +1,11 @@
+class Averages(object):
+    def __init__(self, min_value, avg_value, max_value, unit):
+        self.min_value = min_value
+        self.avg_value = avg_value
+        self.max_value = max_value
+        self.unit = unit
+        
+
 class Description(object):
     def __init__(self, short_description, long_description):
         self.short_description = short_description

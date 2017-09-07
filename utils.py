@@ -8,7 +8,7 @@ from datetime import datetime
 
 from cassandra.util import OrderedMapSerializedKey
 
-from cassandra_udts import Description, Livewebcam, Position, Thumbnails
+from cassandra_udts import Averages, Description, Livewebcam, Position, Thumbnails
 
 
 class CustomEncoder(json.JSONEncoder):
@@ -17,6 +17,9 @@ class CustomEncoder(json.JSONEncoder):
             return dict(obj)
         elif isinstance(obj, uuid.UUID):
             return str(obj)
+        elif isinstance(obj, Averages):
+            return {'min_value': obj.min_value, 'avg_value': obj.avg_value,
+                'max_value': obj.max_value, 'unit': obj.unit}
         elif isinstance(obj, Description):
             return {'short_description': obj.short_description, 'long_description': obj.long_description}
         elif isinstance(obj, Livewebcam):
