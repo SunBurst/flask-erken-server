@@ -33,9 +33,12 @@
         
         <md-table-container>
             <table md-table>
-                <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
+                <thead ng-if="!stationDataGroupItemVm.averageTableOptions.options.decapitate" md-head 
+                    md-order="stationDataGroupItemVm.averageTableOptions.query.order">
                     <tr md-row>
-                        <th md-column md-order-by="time"><span>Timestamp</span></th>
+                        <th md-column md-order-by="measurement[stationDataGroupItemVm.averageTableOptions.query.order]">
+                            <span>{[ stationDataGroupItemVm.averageTableOptions.query.label ]}</span>
+                        </th>
                         <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
                             <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
                             <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
@@ -43,11 +46,9 @@
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
-                        md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
-                        <td ng-if="measurement.date" md-cell>{[ measurement.time | date:'yyyy-MM-dd']}</td>
-                        <td ng-if="measurement.date_hour" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
-                        <td ng-if="measurement.timestamp" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.averageTableOptions.data | filter: filter.search | orderBy: stationDataGroupItemVm.averageTableOptions.query.order | limitTo: stationDataGroupItemVm.query.averageTableOptions.limit : (stationDataGroupItemVm.averageTableOptions.query.page -1) * stationDataGroupItemVm.averageTableOptions.query.limit" 
+                        md-select="measurement" md-auto-select="stationDataGroupItemVm.averageTableOptions.options.autoSelect">
+                        <td md-cell>{[ measurement[stationDataGroupItemVm.averageTableOptions.query.order] | date: stationDataGroupItemVm.averageTableOptions.query.dateFormat ]}</td>
                         <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
                             {[ measurement.data[groupParameter.parameter_id].avg_value | number: 2 ]}
                         </td>
@@ -66,9 +67,11 @@
         
         <md-table-container>
             <table md-table>
-                <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
+                <thead ng-if="!stationDataGroupItemVm.minimumTableOptions.options.decapitate" md-head md-order="stationDataGroupItemVm.minimumTableOptions.query.order">
                     <tr md-row>
-                        <th md-column md-order-by="time"><span>Timestamp</span></th>
+                        <th md-column md-order-by="stationDataGroupItemVm.minimumTableOptions.query.order">
+                            <span>{[ stationDataGroupItemVm.averageTableOptions.query.label ]}</span>
+                        </th>
                         <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
                             <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
                             <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
@@ -76,11 +79,9 @@
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
-                        md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
-                        <td ng-if="measurement.date" md-cell>{[ measurement.time | date:'yyyy-MM-dd']}</td>
-                        <td ng-if="measurement.date_hour" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
-                        <td ng-if="measurement.timestamp" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.minimumTableOptions.data | filter: filter.search | orderBy: stationDataGroupItemVm.minimumTableOptions.query.order | limitTo: stationDataGroupItemVm.query.minimumTableOptions.limit : (stationDataGroupItemVm.minimumTableOptions.query.page -1) * stationDataGroupItemVm.minimumTableOptions.query.limit" 
+                        md-select="measurement" md-auto-select="stationDataGroupItemVm.minimumTableOptions.options.autoSelect">
+                        <td md-cell>{[ measurement[stationDataGroupItemVm.minimumTableOptions.query.order] | date: stationDataGroupItemVm.minimumTableOptions.query.dateFormat ]}</td>
                         <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
                             {[ measurement.data[groupParameter.parameter_id].min_value | number: 2 ]}
                         </td>
@@ -99,9 +100,11 @@
         
         <md-table-container>
             <table md-table>
-                <thead ng-if="!stationDataGroupItemVm.options.decapitate" md-head md-order="stationDataGroupItemVm.query.order">
+                <thead ng-if="!stationDataGroupItemVm.maximumTableOptions.options.decapitate" md-head md-order="stationDataGroupItemVm.maximumTableOptions.query.order">
                     <tr md-row>
-                        <th md-column md-order-by="time"><span>Timestamp</span></th>
+                        <th md-column md-order-by="stationDataGroupItemVm.maximumTableOptions.query.order">
+                            <span>{[ stationDataGroupItemVm.averageTableOptions.query.label ]}</span>
+                        </th>
                         <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
                             <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
                             <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
@@ -109,11 +112,9 @@
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.measurements | filter: filter.search | orderBy: stationDataGroupItemVm.query.order | limitTo: stationDataGroupItemVm.query.limit : (stationDataGroupItemVm.query.page -1) * stationDataGroupItemVm.query.limit" 
-                        md-select="measurement" md-auto-select="stationDataGroupItemVm.options.autoSelect">
-                        <td ng-if="measurement.date" md-cell>{[ measurement.time | date:'yyyy-MM-dd']}</td>
-                        <td ng-if="measurement.date_hour" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
-                        <td ng-if="measurement.timestamp" md-cell>{[ measurement.time | date:'yyyy-MM-dd HH:mm:ss']}</td>
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.maximumTableOptions.data | filter: filter.search | orderBy: stationDataGroupItemVm.maximumTableOptions.query.order | limitTo: stationDataGroupItemVm.query.maximumTableOptions.limit : (stationDataGroupItemVm.maximumTableOptions.query.page -1) * stationDataGroupItemVm.maximumTableOptions.query.limit" 
+                        md-select="measurement" md-auto-select="stationDataGroupItemVm.maximumTableOptions.options.autoSelect">
+                        <td md-cell>{[ measurement[stationDataGroupItemVm.maximumTableOptions.query.order] | date: stationDataGroupItemVm.maximumTableOptions.query.dateFormat ]}</td>
                         <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
                             {[ measurement.data[groupParameter.parameter_id].max_value | number: 2 ]}
                         </td>

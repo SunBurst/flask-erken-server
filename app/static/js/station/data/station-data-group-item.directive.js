@@ -28,18 +28,54 @@
         
         vm.$onInit = onInit;
         
-        vm.options = {
-            decapitate: false,
-            boundaryLinks: false,
-            limitSelect: true,
-            pageSelect: true
+        vm.averageTableOptions = {
+            options: {
+                decapitate: false,
+                boundaryLinks: false,
+                limitSelect: true,
+                pageSelect: true
+            },
+            query: {
+                order: 'timestamp',
+                dateFormat: 'yyyy-MM-dd HH:mm:ss',
+                limit: 15,
+                page: 1
+            },
+            data: []
         };
-        vm.query = {
-            order: 'time',
-            limit: 15,
-            page: 1
+        
+        vm.minimumTableOptions = {
+            options: {
+                decapitate: false,
+                boundaryLinks: false,
+                limitSelect: true,
+                pageSelect: true
+            },
+            query: {
+                order: 'timestamp',
+                dateFormat: 'yyyy-MM-dd HH:mm:ss',
+                limit: 15,
+                page: 1
+            },
+            data: []
         };
-        vm.measurements = [];
+        
+        vm.maximumTableOptions = {
+            options: {
+                decapitate: false,
+                boundaryLinks: false,
+                limitSelect: true,
+                pageSelect: true
+            },
+            query: {
+                order: 'timestamp',
+                label: 'Timestamp',
+                dateFormat: 'yyyy-MM-dd HH:mm:ss',
+                limit: 15,
+                page: 1
+            },
+            data: []
+        };
         
         function afterSetExtremes(e) {
             if (e.trigger != undefined) {
@@ -69,20 +105,48 @@
                     chart.hideLoading();
                     chart.redraw();
                 });
-                vm.measurements = [];
+                vm.averageTableOptions.data = [];
+                vm.minimumTableOptions.data = [];
+                vm.maximumTableOptions.data = [];
                 getTableData(min, max).then(function(data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var row = data[i];
-                        if ('date' in row) {
-                            row['time'] = row.date;
+                    if (Array.isArray(data) || data.length) {
+                        var firstRow = data[0];
+                        if ('date' in firstRow) {
+                            vm.averageTableOptions.query.order = 'date';
+                            vm.averageTableOptions.query.label = 'Date';
+                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.minimumTableOptions.query.order = 'date';
+                            vm.minimumTableOptions.query.label = 'Date';
+                            vm.minimumTableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.maximumTableOptions.query.order = 'date';
+                            vm.maximumTableOptions.query.label = 'Date';
+                            vm.maximumTableOptions.query.dateFormat = 'yyyy-MM-dd';
                         }
-                        if ('date_hour' in row) {
-                            row['time'] = row.date_hour;
+                        else if ('date_hour' in firstRow) {
+                            vm.averageTableOptions.query.order = 'date_hour';
+                            vm.averageTableOptions.query.label = 'Date & Hour';
+                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.minimumTableOptions.query.order = 'date_hour';
+                            vm.minimumTableOptions.query.label = 'Date & Hour';
+                            vm.minimumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.maximumTableOptions.query.order = 'date_hour';
+                            vm.maximumTableOptions.query.label = 'Date & Hour';
+                            vm.maximumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
                         }
-                        if ('timestamp' in row) {
-                            row['time'] = row.timestamp;
+                        else if ('timestamp' in firstRow) {
+                            vm.averageTableOptions.query.order = 'timestamp';
+                            vm.averageTableOptions.query.label = 'Timestamp';
+                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.minimumTableOptions.query.order = 'timestamp';
+                            vm.minimumTableOptions.query.label = 'Timestamp';
+                            vm.minimumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.maximumTableOptions.query.order = 'timestamp';
+                            vm.maximumTableOptions.query.label = 'Timestamp';
+                            vm.maximumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
                         }
-                        vm.measurements.push(row);
+                        vm.averageTableOptions.data = data;
+                        vm.minimumTableOptions.data = data;
+                        vm.maximumTableOptions.data = data;
                     }
                 });
             }
@@ -255,24 +319,51 @@
         }
         
         function initTable() {
-            vm.measurements = [];
+            vm.averageTableOptions.data = [];
+            vm.minimumTableOptions.data = [];
+            vm.maximumTableOptions.data = [];
             getTableData(moment(0).valueOf(), moment().valueOf())
                 .then(function(data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var row = data[i];
-                        if ('date' in row) {
-                            row['time'] = row.date;
+                    if (Array.isArray(data) || data.length) {
+                        var firstRow = data[0];
+                        if ('date' in firstRow) {
+                            vm.averageTableOptions.query.order = 'date';
+                            vm.averageTableOptions.query.label = 'Date';
+                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.minimumTableOptions.query.order = 'date';
+                            vm.minimumTableOptions.query.label = 'Date';
+                            vm.minimumTableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.maximumTableOptions.query.order = 'date';
+                            vm.maximumTableOptions.query.label = 'Date';
+                            vm.maximumTableOptions.query.dateFormat = 'yyyy-MM-dd';
                         }
-                        if ('date_hour' in row) {
-                            row['time'] = row.date_hour;
+                        else if ('date_hour' in firstRow) {
+                            vm.averageTableOptions.query.order = 'date_hour';
+                            vm.averageTableOptions.query.label = 'Date & Hour';
+                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.minimumTableOptions.query.order = 'date_hour';
+                            vm.minimumTableOptions.query.label = 'Date & Hour';
+                            vm.minimumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.maximumTableOptions.query.order = 'date_hour';
+                            vm.maximumTableOptions.query.label = 'Date & Hour';
+                            vm.maximumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
                         }
-                        if ('timestamp' in row) {
-                            row['time'] = row.timestamp;
+                        else if ('timestamp' in firstRow) {
+                            vm.averageTableOptions.query.order = 'timestamp';
+                            vm.averageTableOptions.query.label = 'Timestamp';
+                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.minimumTableOptions.query.order = 'timestamp';
+                            vm.minimumTableOptions.query.label = 'Timestamp';
+                            vm.minimumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.maximumTableOptions.query.order = 'timestamp';
+                            vm.maximumTableOptions.query.label = 'Timestamp';
+                            vm.maximumTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
                         }
-                        vm.measurements.push(row);
+                        vm.averageTableOptions.data = data;
+                        vm.minimumTableOptions.data = data;
+                        vm.maximumTableOptions.data = data;
                     }
             });
-            console.log(vm.measurements);
         }
         
         function inityAxis() {
