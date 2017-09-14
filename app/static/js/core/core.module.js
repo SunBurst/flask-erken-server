@@ -9,6 +9,8 @@
         'uiGmapgoogle-maps',
         //'ui-rangeSlider',
         //'ngMaterialDatePicker',
+        'ngSanitize', 
+        'ngCsv',
         'md.data.table',
         'videosharing-embed',
         'ngMdIcons'

@@ -25,105 +25,44 @@
         
         <md-divider></md-divider>
         
-        <md-toolbar class="md-table-toolbar md-default">
+        <md-toolbar ng-if="stationDataGroupItemVm.averageTableOptions.isReady" class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
-                <h2 class="md-title">Averages</h2>
+                <div flex></div>
+                <!-- <md-button ng-csv="stationDataGroupItemVm.averagesTableOptions.data" 
+                    filename="{[ stationDataGroupItemVm.group.group_name ]}.csv" 
+                        lazy-load="true">
+                    <ng-md-icon icon="file_download" style="fill: #000000"></ng-md-icon>
+                </md-button> -->
             </div>
         </md-toolbar>
         
-        <md-table-container>
+        <!-- Average table -->
+        <md-table-container ng-if="stationDataGroupItemVm.averageTableOptions.isReady">
             <table md-table>
-                <thead ng-if="!stationDataGroupItemVm.averageTableOptions.options.decapitate" md-head 
-                    md-order="stationDataGroupItemVm.averageTableOptions.query.order">
+                <thead ng-if="!stationDataGroupItemVm.averageTableOptions.options.decapitate" md-head>
                     <tr md-row>
-                        <th md-column md-order-by="measurement[stationDataGroupItemVm.averageTableOptions.query.order]">
+                        <th md-column>
                             <span>{[ stationDataGroupItemVm.averageTableOptions.query.label ]}</span>
                         </th>
-                        <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
-                            <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
-                            <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
+                        <th md-column md-numeric ng-repeat="groupParameter in stationDataGroupItemVm.averageTableOptions.header">
+                            <span>{[ groupParameter.header ]}</span>
                         </th>
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.averageTableOptions.data | filter: filter.search | orderBy: stationDataGroupItemVm.averageTableOptions.query.order | limitTo: stationDataGroupItemVm.query.averageTableOptions.limit : (stationDataGroupItemVm.averageTableOptions.query.page -1) * stationDataGroupItemVm.averageTableOptions.query.limit" 
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.averageTableOptions.data | filter: filter.search | limitTo: stationDataGroupItemVm.averageTableOptions.query.limit : (stationDataGroupItemVm.averageTableOptions.query.page -1) * stationDataGroupItemVm.averageTableOptions.query.limit" 
                         md-select="measurement" md-auto-select="stationDataGroupItemVm.averageTableOptions.options.autoSelect">
                         <td md-cell>{[ measurement[stationDataGroupItemVm.averageTableOptions.query.order] | date: stationDataGroupItemVm.averageTableOptions.query.dateFormat ]}</td>
-                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
-                            {[ measurement.data[groupParameter.parameter_id].avg_value | number: 2 ]}
+                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.averageTableOptions.header">
+                            {[ measurement.data[groupParameter.parameterId][groupParameter.valueType] | number: 2 ]}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </md-table-container>
         
-        <md-divider></md-divider>
-        
-        <md-toolbar class="md-table-toolbar md-default">
-            <div class="md-toolbar-tools">
-                <h2 class="md-title">Minimums</h2>
-            </div>
-        </md-toolbar>
-        
-        <md-table-container>
-            <table md-table>
-                <thead ng-if="!stationDataGroupItemVm.minimumTableOptions.options.decapitate" md-head md-order="stationDataGroupItemVm.minimumTableOptions.query.order">
-                    <tr md-row>
-                        <th md-column md-order-by="stationDataGroupItemVm.minimumTableOptions.query.order">
-                            <span>{[ stationDataGroupItemVm.averageTableOptions.query.label ]}</span>
-                        </th>
-                        <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
-                            <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
-                            <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.minimumTableOptions.data | filter: filter.search | orderBy: stationDataGroupItemVm.minimumTableOptions.query.order | limitTo: stationDataGroupItemVm.query.minimumTableOptions.limit : (stationDataGroupItemVm.minimumTableOptions.query.page -1) * stationDataGroupItemVm.minimumTableOptions.query.limit" 
-                        md-select="measurement" md-auto-select="stationDataGroupItemVm.minimumTableOptions.options.autoSelect">
-                        <td md-cell>{[ measurement[stationDataGroupItemVm.minimumTableOptions.query.order] | date: stationDataGroupItemVm.minimumTableOptions.query.dateFormat ]}</td>
-                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
-                            {[ measurement.data[groupParameter.parameter_id].min_value | number: 2 ]}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </md-table-container>
-        
-        <md-divider></md-divider>
-        
-        <md-toolbar class="md-table-toolbar md-default">
-            <div class="md-toolbar-tools">
-                <h2 class="md-title">Maximums</h2>
-            </div>
-        </md-toolbar>
-        
-        <md-table-container>
-            <table md-table>
-                <thead ng-if="!stationDataGroupItemVm.maximumTableOptions.options.decapitate" md-head md-order="stationDataGroupItemVm.maximumTableOptions.query.order">
-                    <tr md-row>
-                        <th md-column md-order-by="stationDataGroupItemVm.maximumTableOptions.query.order">
-                            <span>{[ stationDataGroupItemVm.averageTableOptions.query.label ]}</span>
-                        </th>
-                        <th md-column ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
-                            <span ng-if="!groupParameter.parameter_unit">{[ groupParameter.parameter_name ]}</span>
-                            <span ng-if="groupParameter.parameter_unit">{[ groupParameter.parameter_name ]} ({[ groupParameter.parameter_unit ]})</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.maximumTableOptions.data | filter: filter.search | orderBy: stationDataGroupItemVm.maximumTableOptions.query.order | limitTo: stationDataGroupItemVm.query.maximumTableOptions.limit : (stationDataGroupItemVm.maximumTableOptions.query.page -1) * stationDataGroupItemVm.maximumTableOptions.query.limit" 
-                        md-select="measurement" md-auto-select="stationDataGroupItemVm.maximumTableOptions.options.autoSelect">
-                        <td md-cell>{[ measurement[stationDataGroupItemVm.maximumTableOptions.query.order] | date: stationDataGroupItemVm.maximumTableOptions.query.dateFormat ]}</td>
-                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.group.parameters.list">
-                            {[ measurement.data[groupParameter.parameter_id].max_value | number: 2 ]}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </md-table-container>
-        
-        <md-divider></md-divider>
+        <md-table-pagination md-limit="stationDataGroupItemVm.averageTableOptions.query.limit" md-limit-options="[5, 10, 15]" md-page="stationDataGroupItemVm.averageTableOptions.query.page" md-total="{[ stationDataGroupItemVm.averageTableOptions.count ]}" md-page-select="stationDataGroupItemVm.averageTableOptions.options.pageSelect"></md-table-pagination>
+        <!-- /Average table -->
         
     </md-card-content>
 

@@ -96,13 +96,6 @@
                                 return response.data;
                             });
                     },
-                    _groupsObj: ['_groupList', function(_groupList) {
-                        var groupsObj = {};
-                        for (var i = 0; i < _groupList.length; i++) {
-                            groupsObj[_groupList[i].group_id] = _groupList[i];
-                        }
-                        return groupsObj;
-                    }],
                     _groupsParameterList: ['$stateParams', 'StationGroupsFactory', 
                         function($stateParams, StationGroupsFactory) {
                             var stationId = $stateParams.station_id;
@@ -110,32 +103,6 @@
                                 .then(function(response) {
                                     return response.data;
                                 });
-                    }],
-                    _groupParameterList: ['_groupList', '$q', '$stateParams', 'StationGroupsFactory', 'stationDataStorage', 
-                        function(_groupList, $q, $stateParams, StationGroupsFactory, stationDataStorage) {
-                            var itemArray = []
-                            if (_groupList.length > 0) {
-                                var stationId = $stateParams.station_id;
-                                var promiseArray = [];
-                                for (var i = 0; i < _groupList.length; i++) {
-                                  var groupId = _groupList[i].group_id;
-                                  var currentPromise = StationGroupsFactory.getGroupParameters(stationId, groupId)
-                                    .then(function (response) {
-                                        var data = response.data;
-                                        itemArray.push(data);
-                                        return true; 
-                                  });
-                                  promiseArray.push(currentPromise);
-                                }
-                                $q.all(promiseArray) 
-                                .then(function(data){ 
-                                    return data;
-                                },function(error){
-                                    console.log("Error occured")
-                                });
-
-                            }
-                            return itemArray;
                     }],
                     _getGroupsParameters: ['_groupsParameterList', function(_groupsParameterList) {
                         var groupsParameters = {};
@@ -189,45 +156,6 @@
                                 }
                             }
                         return groupsMeasurementFrequencies;
-                    }],
-                    _groupCharts: ['_groupList', '_groupUnits', 'GroupHighChartOptions', function(_groupList, _groupUnits, GroupHighChartOptions) {
-                        
-                        var groupCharts = {};
-                        
-                        for (var i = 0; i < _groupList.length; i++) {
-                
-                            var groupId = _groupList[i].group_id;
-                            var groupNotInObject = !(groupId in groupCharts);
-                            var chartId = 'chart-' + i;
-                            
-                            if (groupNotInObject) {
-                                groupCharts[groupId] = {
-                                    'chartId': chartId,
-                                    'chartConfig': angular.copy(GroupHighChartOptions)
-                                };
-                                
-                            }
-                            
-                            var groupParameterUnits = _groupUnits[groupId];
-                            if (groupParameterUnits) {
-                                for (var j = 0; j < groupParameterUnits.length; j++) {
-                                    var unit = groupParameterUnits[j];
-                                    var unitIndex = j;
-                                    var axis = {
-                                        labels: {
-                                            format: '{value} ' + unit,
-                                        },
-                                        opposite: (unitIndex % 2 == 0) ? true : false
-                                    }
-                                    
-                                    groupCharts[groupId].chartConfig.yAxis.push(axis);
-                                }
-                            }
-
-                        }
-                        
-                        return groupCharts;
-                        
                     }],
                     _groups: ['_groupList', '_getGroupsParameters', '_groupMeasurementFrequencies', '_groupUnits', 
                         function(_groupList, _getGroupsParameters, _groupMeasurementFrequencies, _groupUnits) {
