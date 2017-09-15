@@ -74,3 +74,9 @@ md-tabs.noTabPanel md-tabs-wrapper {
 .md-subheader {
     background-color: inherit;
 }
+
+.chart-group {
+	height: 400px;
+	min-width: 310px;
+	max-width: 100%;
+}

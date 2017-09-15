@@ -1,10 +1,24 @@
 <md-card>
     
-    <md-card-title>
+    <md-toolbar class="md-default">
+        <div class="md-toolbar-tools">
+            <h2 flex>{[ stationDataGroupItemVm.group.group_name ]}</h2>
+            <md-input-container>
+                <label>Frequency</label>
+                <md-select ng-model="stationDataGroupItemVm.group.frequencies.selected" 
+                    class="md-no-underline">
+                    <md-option value="Dynamic">Dynamic</md-option>
+                    <md-option ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
+                        value="{[ frequency ]}">{[ frequency ]}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+    </md-toolbar>
+    <!-- <md-card-title>
         <md-card-title-text>
-            <span class="md-title">{[ stationDataGroupItemVm.group.group_name ]}</span>
+            <span flex class="md-title">{[ stationDataGroupItemVm.group.group_name ]}</span>
         </md-card-title-text>
-    </md-card-title>
+    </md-card-title> -->
     <!-- <md-tabs md-selected="stationDataGroupItemVm.group.frequencies.selected" 
         md-border-bottom md-stretch-tabs="always">
         <md-tab ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list"
@@ -21,39 +35,47 @@
     </md-nav-bar> -->
     <md-card-content>
         
-        <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" style="height: 400px; min-width: 600px"></div>
+        <!-- <md-card-actions layout="row" layout-align="end center"> -->
+            
+            <!-- <md-button>Dynamic</md-button>
+            <md-button ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list">
+                {[ frequency ]}
+            </md-button> -->
+        <!-- </md-card-actions> -->
+        
+        <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" class="chart-group"></div>
         
         <md-divider></md-divider>
         
-        <md-toolbar ng-if="stationDataGroupItemVm.averageTableOptions.isReady" class="md-table-toolbar md-default">
+        <md-toolbar ng-if="stationDataGroupItemVm.tableOptions.isReady" class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
                 <div flex></div>
-                <!-- <md-button ng-csv="stationDataGroupItemVm.averagesTableOptions.data" 
-                    filename="{[ stationDataGroupItemVm.group.group_name ]}.csv" 
-                        lazy-load="true">
+                <md-button class="md-icon-button" ng-csv="stationDataGroupItemVm.prepareCSVExport()"
+                    csv-header="stationDataGroupItemVm.getHeader()"
+                        filename="{[ stationDataGroupItemVm.station.name ]} {[ stationDataGroupItemVm.group.group_name ]}.csv" 
+                            lazy-load="true">
                     <ng-md-icon icon="file_download" style="fill: #000000"></ng-md-icon>
-                </md-button> -->
+                </md-button>
             </div>
         </md-toolbar>
         
-        <!-- Average table -->
-        <md-table-container ng-if="stationDataGroupItemVm.averageTableOptions.isReady">
+        <md-table-container ng-if="stationDataGroupItemVm.tableOptions.isReady">
             <table md-table>
-                <thead ng-if="!stationDataGroupItemVm.averageTableOptions.options.decapitate" md-head>
+                <thead ng-if="!stationDataGroupItemVm.tableOptions.options.decapitate" md-head>
                     <tr md-row>
                         <th md-column>
-                            <span>{[ stationDataGroupItemVm.averageTableOptions.query.label ]}</span>
+                            <span>{[ stationDataGroupItemVm.tableOptions.query.label ]}</span>
                         </th>
-                        <th md-column md-numeric ng-repeat="groupParameter in stationDataGroupItemVm.averageTableOptions.header">
+                        <th md-column md-numeric ng-repeat="groupParameter in stationDataGroupItemVm.tableOptions.header">
                             <span>{[ groupParameter.header ]}</span>
                         </th>
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.averageTableOptions.data | filter: filter.search | limitTo: stationDataGroupItemVm.averageTableOptions.query.limit : (stationDataGroupItemVm.averageTableOptions.query.page -1) * stationDataGroupItemVm.averageTableOptions.query.limit" 
-                        md-select="measurement" md-auto-select="stationDataGroupItemVm.averageTableOptions.options.autoSelect">
-                        <td md-cell>{[ measurement[stationDataGroupItemVm.averageTableOptions.query.order] | date: stationDataGroupItemVm.averageTableOptions.query.dateFormat ]}</td>
-                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.averageTableOptions.header">
+                    <tr md-row ng-repeat="measurement in stationDataGroupItemVm.tableOptions.data | filter: filter.search | limitTo: stationDataGroupItemVm.tableOptions.query.limit : (stationDataGroupItemVm.tableOptions.query.page -1) * stationDataGroupItemVm.tableOptions.query.limit" 
+                        md-select="measurement" md-auto-select="stationDataGroupItemVm.tableOptions.options.autoSelect">
+                        <td md-cell>{[ measurement[stationDataGroupItemVm.tableOptions.query.order] | date: stationDataGroupItemVm.tableOptions.query.dateFormat ]}</td>
+                        <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.tableOptions.header">
                             {[ measurement.data[groupParameter.parameterId][groupParameter.valueType] | number: 2 ]}
                         </td>
                     </tr>
@@ -61,8 +83,7 @@
             </table>
         </md-table-container>
         
-        <md-table-pagination md-limit="stationDataGroupItemVm.averageTableOptions.query.limit" md-limit-options="[5, 10, 15]" md-page="stationDataGroupItemVm.averageTableOptions.query.page" md-total="{[ stationDataGroupItemVm.averageTableOptions.count ]}" md-page-select="stationDataGroupItemVm.averageTableOptions.options.pageSelect"></md-table-pagination>
-        <!-- /Average table -->
+        <md-table-pagination md-limit="stationDataGroupItemVm.tableOptions.query.limit" md-limit-options="[5, 10, 15]" md-page="stationDataGroupItemVm.tableOptions.query.page" md-total="{[ stationDataGroupItemVm.tableOptions.count ]}" md-page-select="stationDataGroupItemVm.tableOptions.options.pageSelect"></md-table-pagination>
         
     </md-card-content>
 

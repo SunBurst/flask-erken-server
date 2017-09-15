@@ -27,8 +27,10 @@
         var vm = this;
         
         vm.$onInit = onInit;
+        vm.getHeader = getHeader;
+        vm.prepareCSVExport = prepareCSVExport;
         
-        vm.averageTableOptions = {
+        vm.tableOptions = {
             options: {
                 decapitate: false,
                 boundaryLinks: false,
@@ -36,8 +38,10 @@
                 pageSelect: true
             },
             query: {
+                label: 'Timestamp',
                 order: 'timestamp',
                 dateFormat: 'yyyy-MM-dd HH:mm:ss',
+                momentDateFormat: 'YYYY-MM-DD HH:mm:ss',
                 limit: 5,
                 page: 1
             },
@@ -75,30 +79,33 @@
                     chart.hideLoading();
                     chart.redraw();
                 });
-                vm.averageTableOptions.data = [];
-                vm.averageTableOptions.count = 0;
+                vm.tableOptions.data = [];
+                vm.tableOptions.count = 0;
                 getTableData(min, max).then(function(data) {
                     if (Array.isArray(data) || data.length) {
                         var firstRow = data[0];
                         if ('date' in firstRow) {
-                            vm.averageTableOptions.query.order = 'date';
-                            vm.averageTableOptions.query.label = 'Date';
-                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.tableOptions.query.order = 'date';
+                            vm.tableOptions.query.label = 'Date';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD';
                         }
                         else if ('date_hour' in firstRow) {
-                            vm.averageTableOptions.query.order = 'date_hour';
-                            vm.averageTableOptions.query.label = 'Date & Hour';
-                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.tableOptions.query.order = 'date_hour';
+                            vm.tableOptions.query.label = 'Date & Hour';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
                         }
                         else if ('timestamp' in firstRow) {
-                            vm.averageTableOptions.query.order = 'timestamp';
-                            vm.averageTableOptions.query.label = 'Timestamp';
-                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
                         }
-                        vm.averageTableOptions.count = data.length;
-                        vm.averageTableOptions.data = data;
+                        vm.tableOptions.count = data.length;
+                        vm.tableOptions.data = data;
                     }
-                    vm.averageTableOptions.isReady = true;
+                    vm.tableOptions.isReady = true;
                 });
             }
         }
@@ -115,6 +122,40 @@
                 .then(function(response) {
                     return response.data;
                 });
+        }
+        
+        function getHeader() {
+            var header = [];
+            var timeLabel = vm.tableOptions.query.label + ' (Local Time)';
+            header.push(timeLabel);
+            
+            for (var i = 0; i < vm.tableOptions.header.length; i++) {
+                header.push(vm.tableOptions.header[i].header);
+            }
+            
+            return header;
+            
+        }
+        
+        function prepareCSVExport() {
+            var data = [];
+            var timeLabel = vm.tableOptions.query.label;
+            for (var i = 0; i < vm.tableOptions.count; i++) {
+                var timestamp = vm.tableOptions.data[i][vm.tableOptions.query.order];
+                var date = moment(timestamp).format(vm.tableOptions.query.momentDateFormat);
+                var row = {timeLabel: date}
+                for (var j = 0; j < vm.tableOptions.header.length; j++) {
+                    var parameterId = vm.tableOptions.header[j].parameterId;
+                    var headerName = vm.tableOptions.header[j].header;
+                    var valueType = vm.tableOptions.header[j].valueType;
+                    var measurement = vm.tableOptions.data[i].data[parameterId][valueType]
+                    row[headerName] = measurement;
+                }
+                
+                data.push(row);
+            }
+            
+            return data;
         }
         
         function initChart() {
@@ -139,7 +180,8 @@
                   },
                   
                   legend: {
-                      enabled: true
+                      enabled: true,
+                      margin: 30
                   },
                   
                   rangeSelector: {
@@ -170,9 +212,6 @@
 
                   navigator: {
                     adaptToUpdatedData: false
-                    //series: {
-                    //    includeInCSVExport: false
-                    //}
                   },
 
                   series: seriesOptions,
@@ -228,7 +267,7 @@
                 
                 var averageSeries = {
                     'id': seriesId,
-                    'name': seriesName,
+                    'name': seriesName + ' (Avg.)',
                     'yAxis': i,
                     'tooltip': {
                         'valueDecimals': 2,
@@ -248,7 +287,7 @@
                 
                 var rangeSeries = {
                     'id': seriesId + '-ranges',
-                    'name': seriesName + ' Ranges',
+                    'name': seriesName + ' (Min. - Max.)',
                     'type': 'areasplinerange',
                     'yAxis': i,
                     'lineWidth': 0,
@@ -294,30 +333,33 @@
         }
         
         function initTable() {
-            vm.averageTableOptions.header = initTableHeader();
+            vm.tableOptions.header = initTableHeader();
             getTableData(moment(0).valueOf(), moment().valueOf())
                 .then(function(data) {
                     if (Array.isArray(data) || data.length) {
                         var firstRow = data[0];
                         if ('date' in firstRow) {
-                            vm.averageTableOptions.query.order = 'date';
-                            vm.averageTableOptions.query.label = 'Date';
-                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.tableOptions.query.order = 'date';
+                            vm.tableOptions.query.label = 'Date';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD';
                         }
                         else if ('date_hour' in firstRow) {
-                            vm.averageTableOptions.query.order = 'date_hour';
-                            vm.averageTableOptions.query.label = 'Date & Hour';
-                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.tableOptions.query.order = 'date_hour';
+                            vm.tableOptions.query.label = 'Date & Hour';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
                         }
                         else if ('timestamp' in firstRow) {
-                            vm.averageTableOptions.query.order = 'timestamp';
-                            vm.averageTableOptions.query.label = 'Timestamp';
-                            vm.averageTableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
                         }
-                        vm.averageTableOptions.count = data.length;
-                        vm.averageTableOptions.data = data;
+                        vm.tableOptions.count = data.length;
+                        vm.tableOptions.data = data;
                     }
-                    vm.averageTableOptions.isReady = true;
+                    vm.tableOptions.isReady = true;
             });
         }
         
