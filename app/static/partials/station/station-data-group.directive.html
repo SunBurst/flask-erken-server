@@ -1,6 +1,22 @@
+<div layout="row" layout-xs="column">
+    <h1 flex class="md-headline">{[ stationDataGroupItemVm.group.group_name ]}</h1>
+
+    <md-input-container>
+        <label>Frequency</label>
+        <md-select ng-model="stationDataGroupItemVm.group.frequencies.selected" 
+            class="md-no-underline" ng-change="stationDataGroupItemVm.frequencyChange()">
+            <md-optgroup label="Frequencies">
+                <md-option value="Dynamic">Dynamic</md-option>
+                <md-option ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
+                    value="{[ frequency ]}">{[ frequency ]}</md-option>
+            </md-optgroup>
+        </md-select>
+    </md-input-container>
+
+</div>
 <md-card>
     
-    <md-toolbar class="md-default">
+    <!-- <md-toolbar class="md-default">
         <div class="md-toolbar-tools">
             <h2 flex>{[ stationDataGroupItemVm.group.group_name ]}</h2>
             <md-input-container>
@@ -12,8 +28,11 @@
                         value="{[ frequency ]}">{[ frequency ]}</md-option>
                 </md-select>
             </md-input-container>
+            <md-button class="md-icon-button" aria-label="More">
+                <ng-md-icon icon="more_vert"></ng-md-icon>
+            </md-button>
         </div>
-    </md-toolbar>
+    </md-toolbar> -->
     <!-- <md-card-title>
         <md-card-title-text>
             <span flex class="md-title">{[ stationDataGroupItemVm.group.group_name ]}</span>
@@ -33,7 +52,6 @@
             {[ frequency ]}
         </md-nav-item>
     </md-nav-bar> -->
-    <md-card-content>
         
         <!-- <md-card-actions layout="row" layout-align="end center"> -->
             
@@ -43,7 +61,9 @@
             </md-button> -->
         <!-- </md-card-actions> -->
         
-        <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" class="chart-group"></div>
+        <img class="md-card-image">
+            <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" class="chart-group"></div>
+        </img>
         
         <md-divider></md-divider>
         
@@ -84,7 +104,5 @@
         </md-table-container>
         
         <md-table-pagination md-limit="stationDataGroupItemVm.tableOptions.query.limit" md-limit-options="[5, 10, 15]" md-page="stationDataGroupItemVm.tableOptions.query.page" md-total="{[ stationDataGroupItemVm.tableOptions.count ]}" md-page-select="stationDataGroupItemVm.tableOptions.options.pageSelect"></md-table-pagination>
-        
-    </md-card-content>
 
 </md-card>

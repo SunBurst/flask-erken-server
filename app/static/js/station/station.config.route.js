@@ -194,7 +194,7 @@
 
                             if (groupInMeasurementFrequencies) {
                                 groups[groupId].frequencies.list = _groupMeasurementFrequencies[groupId].measurement_frequencies;
-                                groups[groupId].frequencies.selected = _groupMeasurementFrequencies[groupId].selected;
+                                groups[groupId].frequencies.selected = 'Dynamic';
                             }
                             
                             var groupInUnits = (groupId in _groupUnits);

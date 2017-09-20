@@ -7,7 +7,7 @@
     
     Shell.$inject = ['$mdSidenav', '$timeout'];
     
-    function Shell($mdSidenav, $timeout) {
+    function Shell($mdSidenav, $mdMedia, $timeout) {
         var vm = this;
         vm.toggleList = toggleList;
         

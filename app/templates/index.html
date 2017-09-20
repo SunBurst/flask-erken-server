@@ -35,7 +35,7 @@
     
     <md-toolbar class="md-hue-2" layout="row">
         <div class="md-toolbar-tools">
-            <md-button class="menu" ng-click="shellVm.toggleList()" hide-gt-sm aria-label="Show Location List">
+            <md-button class="menu" ng-click="shellVm.toggleList()" aria-label="Show app navigation menu">
                 <md-icon md-svg-src="/static/images/svg/menu.svg"></md-icon>
             </md-button>
             <md-button ui-sref="start">HydroView</md-button>
@@ -46,7 +46,7 @@
         
         <div layout="row" ng-controller="Sidebar as sidebarVm">
             <md-sidenav layout="column" class="md-sidenav-left" 
-                md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
+                md-component-id="left" md-whiteframe="4">
                     <!-- <md-toolbar class="md-tall md-hue-2"></md-toolbar> -->
                 <md-list>
                     <!-- <md-subheader>Networks</md-subheader>
@@ -157,7 +157,7 @@
     <!-- <script src="/static/bower_components/angular-youtube-mb/src/angular-youtube-embed.js"></script> -->
     <script src="https://bowercdn.net/c/ng-videosharing-embed-0.3.8/build/ng-videosharing-embed.min.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
-
+    
     <script src="/static/js/app.js"></script>
     
     <script src="/static/js/services/services.module.js"></script>

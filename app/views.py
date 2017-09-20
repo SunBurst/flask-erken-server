@@ -253,30 +253,30 @@ def get_group_measurements_by_station(station_id, group_id, qc_level, from_times
 
     if delta.days > 465:
         if 'Daily' in frequencies:
-            return get_daily_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_daily_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif 'Hourly' in frequencies:
-            return get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif '5 Min' in frequencies:
-            return get_five_min_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     else:   # days <= 465
         if delta.days <= 30:
             if delta.days <= 1:
                 if '5 Min' in frequencies:
-                    return get_five_min_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
                 elif 'Hourly' in frequencies:
-                    return get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             else: # 1 < days <= 30
                 if 'Hourly' in frequencies:
-                    return get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
                 elif '5 Min' in frequencies:
-                    return get_five_min_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         else:   # 30 < days <= 465 
             if 'Daily' in frequencies:
-                return get_daily_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_daily_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             elif 'Hourly' in frequencies:
-                return get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             elif '5 Min' in frequencies:
-                return get_five_min_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     
     
     return json.dumps([], cls=CustomEncoder)
@@ -306,30 +306,30 @@ def get_group_measurements_by_station_time_grouped(station_id, group_id, qc_leve
 
     if delta.days > 465:
         if 'Daily' in frequencies:
-            return get_daily_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif 'Hourly' in frequencies:
-            return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif '5 Min' in frequencies:
-            return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     else:   # days <= 465
         if delta.days <= 30:
             if delta.days <= 1:
                 if '5 Min' in frequencies:
-                    return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
                 elif 'Hourly' in frequencies:
-                    return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             else: # 1 < days <= 30
                 if 'Hourly' in frequencies:
-                    return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
                 elif '5 Min' in frequencies:
-                    return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         else:   # 30 < days <= 465 
             if 'Daily' in frequencies:
-                return get_daily_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             elif 'Hourly' in frequencies:
-                return get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             elif '5 Min' in frequencies:
-                return get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     
     
     return json.dumps([], cls=CustomEncoder)
@@ -359,30 +359,30 @@ def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from
 
     if delta.days > 465:
         if 'Daily' in frequencies:
-            return get_daily_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif 'Hourly' in frequencies:
-            return get_hourly_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif '5 Min' in frequencies:
-            return get_five_min_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     else:   # days <= 465
         if delta.days <= 30:
             if delta.days <= 1:
                 if '5 Min' in frequencies:
-                    return get_five_min_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
                 elif 'Hourly' in frequencies:
-                    return get_hourly_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             else: # 1 < days <= 30
                 if 'Hourly' in frequencies:
-                    return get_hourly_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
                 elif '5 Min' in frequencies:
-                    return get_five_min_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         else:   # 30 < days <= 465 
             if 'Daily' in frequencies:
-                return get_daily_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             elif 'Hourly' in frequencies:
-                return get_hourly_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             elif '5 Min' in frequencies:
-                return get_five_min_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     
     
     return json.dumps({}, cls=CustomEncoder)
@@ -714,8 +714,8 @@ def get_group_parameters_by_station_group(station_id, group_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/daily_parameter_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
-def get_daily_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_date, to_date):
+@app.route('/api/daily_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
+def get_daily_group_measurements_by_station(station_id, group_id, qc_level, from_date, to_date):
     query = "SELECT * FROM daily_parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date>=? AND date<=?"
     prepared = session.prepare(query)
     
@@ -734,8 +734,8 @@ def get_daily_parameter_group_measurements_by_station(station_id, group_id, qc_l
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/daily_parameter_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
-def get_daily_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_date, to_date):
+@app.route('/api/daily_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
+def get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_date, to_date):
     query = "SELECT * FROM daily_group_measurements_by_station_grouped WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date>=? AND date<=?"
     prepared = session.prepare(query)
     
@@ -754,8 +754,8 @@ def get_daily_parameter_group_measurements_by_station_time_grouped(station_id, g
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/daily_parameter_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
-def get_daily_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_date, to_date):
+@app.route('/api/daily_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
+def get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_date, to_date):
     query = "SELECT * FROM daily_parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"
     prepared = session.prepare(query)
     
@@ -790,8 +790,8 @@ def get_daily_parameter_group_measurements_by_station_chart(station_id, group_id
 
     return json.dumps(parameters, cls=CustomEncoder)
 
-@app.route('/api/hourly_parameter_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
-def get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_date_hour, to_date_hour):
+@app.route('/api/hourly_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_date_hour, to_date_hour):
     query = "SELECT * FROM hourly_parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
     prepared = session.prepare(query)
     
@@ -810,8 +810,8 @@ def get_hourly_parameter_group_measurements_by_station(station_id, group_id, qc_
 
     return json.dumps(data, cls=CustomEncoder)
     
-@app.route('/api/hourly_parameter_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>', methods=['GET'])
-def get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_date_hour, to_date_hour):
+@app.route('/api/hourly_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>', methods=['GET'])
+def get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_date_hour, to_date_hour):
     query = "SELECT * FROM hourly_group_measurements_by_station_grouped WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
     prepared = session.prepare(query)
     
@@ -830,8 +830,8 @@ def get_hourly_parameter_group_measurements_by_station_time_grouped(station_id, 
     
     return json.dumps(data, cls=CustomEncoder)
     
-@app.route('/api/hourly_parameter_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
-def get_hourly_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_date_hour, to_date_hour):
+@app.route('/api/hourly_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_date_hour>/<int:to_date_hour>/')
+def get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_date_hour, to_date_hour):
     query = "SELECT * FROM hourly_parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=? ORDER BY date_hour ASC"
     prepared = session.prepare(query)
     
@@ -889,7 +889,7 @@ def get_parameter_group_measurements_by_station(station_id, group_id, qc_level, 
     return json.dumps(data, cls=CustomEncoder)
     
 @app.route('/api/five_min_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_five_min_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+def get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     query = "SELECT * FROM parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
     prepared = session.prepare(query)
     
@@ -912,7 +912,7 @@ def get_five_min_parameter_group_measurements_by_station(station_id, group_id, q
     return json.dumps(data, cls=CustomEncoder)
 
 @app.route('/api/five_min_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_five_min_parameter_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+def get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     query = "SELECT * FROM five_min_group_measurements_by_station_grouped WHERE station_id=? AND group_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
     prepared = session.prepare(query)
     
@@ -934,8 +934,8 @@ def get_five_min_parameter_group_measurements_by_station_time_grouped(station_id
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/five_min_parameter_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
-def get_five_min_parameter_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+@app.route('/api/five_min_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     query = "SELECT * FROM five_min_parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
     prepared = session.prepare(query)
     
