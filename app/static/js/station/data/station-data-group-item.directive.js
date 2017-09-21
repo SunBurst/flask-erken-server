@@ -147,10 +147,281 @@
                             vm.tableOptions.count = data.length;
                             vm.tableOptions.data = data;
                         }
-                        console.log(vm.tableOptions.data);
                         vm.tableOptions.isReady = true;
                     });
                 }
+                else if (vm.group.frequencies.selected === 'Hourly') {
+                    getHourlyChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getHourlyTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'date_hour';
+                            vm.tableOptions.query.label = 'Date & Hour';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                else if (vm.group.frequencies.selected === '30 Min') {
+                    getThirtyMinChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getThirtyMinTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                
+                else if (vm.group.frequencies.selected === '20 Min') {
+                    getTwentyMinChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getTwentyMinTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                
+                else if (vm.group.frequencies.selected === '15 Min') {
+                    getFifteenMinChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getFifteenMinTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                
+                else if (vm.group.frequencies.selected === '10 Min') {
+                    getTenMinChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getTenMinTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                
+                else if (vm.group.frequencies.selected === '5 Min') {
+                    getFiveMinChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getFiveMinTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                
+                else if (vm.group.frequencies.selected === '1 Min') {
+                    getOneMinChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getOneMinTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                
             }
         }
         
@@ -187,8 +458,92 @@
                 });
         }
         
+        function getOneMinChartData(start, end) {
+            return stationMeasurements.getOneMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFiveMinTableData(start, end) {
+            return stationMeasurements.getFiveMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneMinTableData(start, end) {
+            return stationMeasurements.getOneMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getThirtyMinChartData(start, end) {
+            return stationMeasurements.getThirtyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTwentyMinChartData(start, end) {
+            return stationMeasurements.getTwentyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFifteenMinChartData(start, end) {
+            return stationMeasurements.getFifteenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTenMinChartData(start, end) {
+            return stationMeasurements.getTenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
         function getHourlyChartData(start, end) {
             return stationMeasurements.getHourlyGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getHourlyTableData(start, end) {
+            return stationMeasurements.getHourlyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getThirtyMinTableData(start, end) {
+            return stationMeasurements.getThirtyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTwentyMinTableData(start, end) {
+            return stationMeasurements.getTwentyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFifteenMinTableData(start, end) {
+            return stationMeasurements.getFifteenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTenMinTableData(start, end) {
+            return stationMeasurements.getTenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -241,369 +596,927 @@
             
             if (vm.group.frequencies.selected === 'Dynamic') {
                 getChartData(moment(0).valueOf(), moment().valueOf())
-                  .then(function(data) {
-                    var seriesOptions = initSeriesOptions(data);
-                    chart = new Highcharts.stockChart({
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
                     
-                      chart: {
-                          renderTo: chartId,
-                          style: {
-                              fontFamily: 'Roboto'
-                          },
-                          type: 'spline',
-                          zoomType: 'x'
-                      },
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
 
-                      credits: {
-                          enabled: false
-                      },
+                            credits: {
+                                enabled: false
+                            },
 
-                      lang: {
-                          noData: 'No data to display'
-                      },
-                      
-                      legend: {
-                          enabled: true,
-                          margin: 30
-                      },
-                      
-                      rangeSelector: {
-                        //allButtonsEnabled: true,
-                        buttons: [{
-                          type: 'hour',
-                          count: 1,
-                          text: '1h'
-                        }, {
-                          type: 'day',
-                          count: 1,
-                          text: '1d'
-                        }, {
-                          type: 'month',
-                          count: 1,
-                          text: '1m'
-                        }, {
-                          type: 'year',
-                          count: 1,
-                          text: '1y'
-                        }, {
-                          type: 'all',
-                          text: 'All'
-                        }],
-                        selected: 4,
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'hour',
+                                    count: 1,
+                                    text: '1h'
+                                }, {
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, { 
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                              selected: 4,
 
-                      },
+                            },
 
-                      navigator: {
-                        adaptToUpdatedData: false
-                      },
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
 
-                      series: seriesOptions,
-                    
-                      title: {
-                          text: vm.group.group_name + ' at ' + vm.station.name
-                      },
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
 
-                      noData: {
-                        style: {
-                          fontWeight: 'bold',
-                          fontSize: '15px',
-                          color: '#303030'
-                        }
-                      },
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
 
-                      scrollbar: {
-                        liveRedraw: false 
-                      },
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
 
-                      xAxis: [{
-                        type: 'datetime',
-                        minRange: 3600 * 1000,
-                        events: {
-                          afterSetExtremes: afterSetExtremes
-                        }
-                      }],
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
 
-                      yAxis: yAxis,
-                    
+                            yAxis: yAxis,
+                        
+                        });
+
                     });
+            }
+            
+            else if (vm.group.frequencies.selected === 'Daily') {
+                getDailyChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
+
+                  });
+            }
+            
+            else if (vm.group.frequencies.selected === 'Hourly') {
+                getHourlyChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
+
+                    });
+            }
+            
+            else if (vm.group.frequencies.selected === '30 Min') {
+                getThirtyMinChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
+
+                    });
+            }
+            
+            else if (vm.group.frequencies.selected === '20 Min') {
+                getTwentyMinChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
+
+                    });
+            }
+            
+            else if (vm.group.frequencies.selected === '15 Min') {
+                getFifteenMinChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
+
+                    });
+            }
+            
+            else if (vm.group.frequencies.selected === '10 Min') {
+                getTenMinChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'hour',
+                                    count: 1,
+                                    text: '1h'
+                                }, {
+                                    type: 'hour',
+                                    count: 12,
+                                    text: '12h'
+                                }, {
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
+
+                    });
+            }
+            
+            else if (vm.group.frequencies.selected === '5 Min') {
+                getFiveMinChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'hour',
+                                    count: 1,
+                                    text: '1h'
+                                }, {
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
 
                   });
               }
-              else if (vm.group.frequencies.selected === 'Daily') {
-                  getDailyChartData(moment(0).valueOf(), moment().valueOf())
-                  .then(function(data) {
-                    var seriesOptions = initSeriesOptions(data);
-                    chart = new Highcharts.stockChart({
+              
+              else if (vm.group.frequencies.selected === '1 Min') {
+                getOneMinChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
                     
-                      chart: {
-                          renderTo: chartId,
-                          style: {
-                              fontFamily: 'Roboto'
-                          },
-                          type: 'spline',
-                          zoomType: 'x'
-                      },
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
 
-                      credits: {
-                          enabled: false
-                      },
+                            credits: {
+                                enabled: false
+                            },
 
-                      lang: {
-                          noData: 'No data to display'
-                      },
-                      
-                      legend: {
-                          enabled: true,
-                          margin: 30
-                      },
-                      
-                      rangeSelector: {
-                        //allButtonsEnabled: true,
-                        buttons: [{
-                            type: 'day',
-                            count: 3,
-                            text: '3d'
-                        },{
-                            type: 'week',
-                            count: 1,
-                            text: '1w'
-                        }, {
-                            type: 'month',
-                            count: 1,
-                            text: '1m'
-                        }, {
-                            type: 'month',
-                            count: 3,
-                            text: '3m'
-                        }, {
-                            type: 'month',
-                            count: 6,
-                            text: '6m'
-                        }, {
-                            type: 'year',
-                            count: 1,
-                            text: '1y'
-                        }, {
-                            type: 'all',
-                            text: 'All'
-                        }],
-                        selected: 4,
-                        //inputEnabled: true
-                      },
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'hour',
+                                    count: 1,
+                                    text: '1h'
+                                }, {
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                //inputEnabled: true
+                            },
 
-                      navigator: {
-                          adaptToUpdatedData: false
-                      },
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
 
-                      series: seriesOptions,
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
                     
-                      title: {
-                          text: vm.group.group_name + ' at ' + vm.station.name
-                      },
-
-                      noData: {
-                        style: {
-                          fontWeight: 'bold',
-                          fontSize: '15px',
-                          color: '#303030'
-                        }
-                      },
-
-                      scrollbar: {
-                          liveRedraw: false 
-                      },
-
-                      xAxis: [{
-                        type: 'datetime',
-                        minRange: 3600 * 1000,
-                        events: {
-                            afterSetExtremes: afterSetExtremes
-                        }
-                      }],
-
-                      yAxis: yAxis,
-                    
-                    });
-
-                  });
-              }
-              else if (vm.group.frequencies.selected === 'Hourly') {
-                  getHourlyChartData(moment(0).valueOf(), moment().valueOf())
-                  .then(function(data) {
-                    var seriesOptions = initSeriesOptions(data);
-                    chart = new Highcharts.stockChart({
-                    
-                      chart: {
-                          renderTo: chartId,
-                          style: {
-                              fontFamily: 'Roboto'
-                          },
-                          type: 'spline',
-                          zoomType: 'x'
-                      },
-
-                      credits: {
-                          enabled: false
-                      },
-
-                      lang: {
-                          noData: 'No data to display'
-                      },
-                      
-                      legend: {
-                          enabled: true,
-                          margin: 30
-                      },
-                      
-                      rangeSelector: {
-                        //allButtonsEnabled: true,
-                        buttons: [{
-                          type: 'hour',
-                          count: 1,
-                          text: '1h'
-                        }, {
-                          type: 'day',
-                          count: 1,
-                          text: '1d'
-                        }, {
-                          type: 'month',
-                          count: 1,
-                          text: '1m'
-                        }, {
-                          type: 'year',
-                          count: 1,
-                          text: '1y'
-                        }, {
-                          type: 'all',
-                          text: 'All'
-                        }],
-                        selected: 4,
-                        //inputEnabled: true
-                      },
-
-                      navigator: {
-                        adaptToUpdatedData: false
-                      },
-
-                      series: seriesOptions,
-                    
-                      title: {
-                          text: vm.group.group_name + ' at ' + vm.station.name
-                      },
-
-                      noData: {
-                        style: {
-                          fontWeight: 'bold',
-                          fontSize: '15px',
-                          color: '#303030'
-                        }
-                      },
-
-                      scrollbar: {
-                        liveRedraw: false 
-                      },
-
-                      xAxis: [{
-                        type: 'datetime',
-                        minRange: 3600 * 1000,
-                        events: {
-                          afterSetExtremes: afterSetExtremes
-                        }
-                      }],
-
-                      yAxis: yAxis,
-                    
-                    });
-
-                  });
-              }
-              else if (vm.group.frequencies.selected === '5 Min') {
-                  getFiveMinChartData(moment(0).valueOf(), moment().valueOf())
-                  .then(function(data) {
-                    var seriesOptions = initSeriesOptions(data);
-                    chart = new Highcharts.stockChart({
-                    
-                      chart: {
-                          renderTo: chartId,
-                          style: {
-                              fontFamily: 'Roboto'
-                          },
-                          type: 'spline',
-                          zoomType: 'x'
-                      },
-
-                      credits: {
-                          enabled: false
-                      },
-
-                      lang: {
-                          noData: 'No data to display'
-                      },
-                      
-                      legend: {
-                          enabled: true,
-                          margin: 30
-                      },
-                      
-                      rangeSelector: {
-                        //allButtonsEnabled: true,
-                        buttons: [{
-                          type: 'hour',
-                          count: 1,
-                          text: '1h'
-                        }, {
-                          type: 'day',
-                          count: 1,
-                          text: '1d'
-                        }, {
-                          type: 'month',
-                          count: 1,
-                          text: '1m'
-                        }, {
-                          type: 'year',
-                          count: 1,
-                          text: '1y'
-                        }, {
-                          type: 'all',
-                          text: 'All'
-                        }],
-                        selected: 4,
-                        //inputEnabled: true
-                      },
-
-                      navigator: {
-                        adaptToUpdatedData: false
-                      },
-
-                      series: seriesOptions,
-                    
-                      title: {
-                          text: vm.group.group_name + ' at ' + vm.station.name
-                      },
-
-                      noData: {
-                        style: {
-                          fontWeight: 'bold',
-                          fontSize: '15px',
-                          color: '#303030'
-                        }
-                      },
-
-                      scrollbar: {
-                        liveRedraw: false 
-                      },
-
-                      xAxis: [{
-                        type: 'datetime',
-                        minRange: 3600 * 1000,
-                        events: {
-                          afterSetExtremes: afterSetExtremes
-                        }
-                      }],
-
-                      yAxis: yAxis,
-                    
-                    });
+                        });
 
                   });
               }
@@ -740,6 +1653,112 @@
                         vm.tableOptions.isReady = true;
                 });
             }
+            
+            else if (vm.group.frequencies.selected === 'Hourly') {
+                getHourlyTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'date_hour';
+                            vm.tableOptions.query.label = 'Date & Hour';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
+            else if (vm.group.frequencies.selected === '30 Min') {
+                getThirtyMinTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
+            else if (vm.group.frequencies.selected === '20 Min') {
+                getTwentyMinTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
+            else if (vm.group.frequencies.selected === '15 Min') {
+                getFifteenMinTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
+            else if (vm.group.frequencies.selected === '10 Min') {
+                getTenMinTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
+            else if (vm.group.frequencies.selected === '5 Min') {
+                getFiveMinTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
+            else if (vm.group.frequencies.selected === '1 Min') {
+                getOneMinTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
         }
         
         function inityAxis() {
@@ -749,20 +1768,20 @@
                 var unit = vm.group.parameters.list[i].parameter_unit;
                 var screenSizeIsLarge = $mdMedia('(min-width: 500px)');
                 var axis = {
-                  labels: {
-                    format: '{value} ' + unit,
-                    style: {
-                        color: Highcharts.getOptions().colors[i]
-                    }
-                  },
-                  opposite: (i % 2 == 0) ? true : false,
-                  title: {
-                    text: vm.group.parameters.list[i].parameter_name,
-                    style: {
-                        color: Highcharts.getOptions().colors[i]
-                    }
-                  },
-                  visible: (screenSizeIsLarge) ? true: false,
+                    labels: {
+                        format: '{value} ' + unit,
+                        style: {
+                            color: Highcharts.getOptions().colors[i]
+                        }
+                    },
+                    opposite: (i % 2 == 0) ? true : false,
+                    title: {
+                        text: vm.group.parameters.list[i].parameter_name,
+                        style: {
+                            color: Highcharts.getOptions().colors[i]
+                        }
+                    },
+                    visible: (screenSizeIsLarge) ? true: false,
                 };
 
                 yAxis.push(axis);

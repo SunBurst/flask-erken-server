@@ -7,6 +7,7 @@
             class="md-no-underline" ng-change="stationDataGroupItemVm.frequencyChange()">
             <md-optgroup label="Frequencies">
                 <md-option value="Dynamic">Dynamic</md-option>
+                <md-divider/>
                 <md-option ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
                     value="{[ frequency ]}">{[ frequency ]}</md-option>
             </md-optgroup>
@@ -14,58 +15,14 @@
     </md-input-container>
 
 </div>
+
 <md-card>
-    
-    <!-- <md-toolbar class="md-default">
-        <div class="md-toolbar-tools">
-            <h2 flex>{[ stationDataGroupItemVm.group.group_name ]}</h2>
-            <md-input-container>
-                <label>Frequency</label>
-                <md-select ng-model="stationDataGroupItemVm.group.frequencies.selected" 
-                    class="md-no-underline">
-                    <md-option value="Dynamic">Dynamic</md-option>
-                    <md-option ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
-                        value="{[ frequency ]}">{[ frequency ]}</md-option>
-                </md-select>
-            </md-input-container>
-            <md-button class="md-icon-button" aria-label="More">
-                <ng-md-icon icon="more_vert"></ng-md-icon>
-            </md-button>
-        </div>
-    </md-toolbar> -->
-    <!-- <md-card-title>
-        <md-card-title-text>
-            <span flex class="md-title">{[ stationDataGroupItemVm.group.group_name ]}</span>
-        </md-card-title-text>
-    </md-card-title> -->
-    <!-- <md-tabs md-selected="stationDataGroupItemVm.group.frequencies.selected" 
-        md-border-bottom md-stretch-tabs="always">
-        <md-tab ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list"
-            label="{[ frequency ]}">
-             md-on-select="stationDataGroupItemVm.frequencyChange(frequency)"
-        </md-tab>
-    </md-tabs> -->
-    <!-- <md-nav-bar md-selected-nav-item="stationDataGroupItemVm.group.frequencies.selected"
-        nav-bar-aria-label="data frequency navigation links">
-        <md-nav-item ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
-            md-nav-click="stationDataGroupItemVm.frequencyChange(frequency)" name="{[ frequency ]}">
-            {[ frequency ]}
-        </md-nav-item>
-    </md-nav-bar> -->
-        
-        <!-- <md-card-actions layout="row" layout-align="end center"> -->
-            
-            <!-- <md-button>Dynamic</md-button>
-            <md-button ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list">
-                {[ frequency ]}
-            </md-button> -->
-        <!-- </md-card-actions> -->
         
         <img class="md-card-image">
             <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" class="chart-group"></div>
         </img>
         
-        <md-divider></md-divider>
+        <md-divider/>
         
         <md-toolbar ng-if="stationDataGroupItemVm.tableOptions.isReady" class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
