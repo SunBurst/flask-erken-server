@@ -157,8 +157,28 @@
                             }
                         return groupsMeasurementFrequencies;
                     }],
-                    _groups: ['_groupList', '_getGroupsParameters', '_groupMeasurementFrequencies', '_groupUnits', 
-                        function(_groupList, _getGroupsParameters, _groupMeasurementFrequencies, _groupUnits) {
+                    _groupsQCLevelList: ['$stateParams', 'StationGroupsFactory', 
+                        function($stateParams, StationGroupsFactory) {
+                            var stationId = $stateParams.station_id;
+                            return StationGroupsFactory.getGroupsQCLevels(stationId)
+                                .then(function(response) {
+                                    return response.data;
+                                });
+                    }],
+                    _groupsQCLevels: ['_groupsQCLevelList', function(_groupsQCLevelList) {
+                        var groupsQCLevels = {};
+                        for (var i = 0; i < _groupsQCLevelList.length; i++) {
+                            var groupId = _groupsQCLevelList[i].group_id;
+                            var groupNotInObject = !(groupId in groupsQCLevels);
+                            if (groupNotInObject) {
+                                groupsQCLevels[groupId] = [];
+                            }
+                            groupsQCLevels[groupId].push(_groupsQCLevelList[i]);
+                        }
+                        return groupsQCLevels;
+                    }],
+                    _groups: ['_groupList', '_getGroupsParameters', '_groupMeasurementFrequencies', '_groupUnits', '_groupsQCLevels',
+                        function(_groupList, _getGroupsParameters, _groupMeasurementFrequencies, _groupUnits, _groupsQCLevels) {
                         var groups = {};
                         
                         for (var i = 0; i < _groupList.length; i++) {
@@ -170,10 +190,15 @@
                             };
                             groups[groupId]['frequencies'] = {
                                 'list': [],
-                                'selected': null
+                                'selected': undefined
                             };
                             groups[groupId]['units'] = {
                                 'list': []
+                            };
+                            groups[groupId]['qc_levels'] = {
+                                'list': [],
+                                'selected': [],
+                                'objects': {}
                             };
                             
                             var groupInParameters = (groupId in _getGroupsParameters);
@@ -201,6 +226,23 @@
                             
                             if (groupInUnits) {
                                 groups[groupId].units.list = _groupUnits[groupId];
+                            }
+                            
+                            var groupInQCLevels = (groupId in _groupsQCLevels);
+                            
+                            if (groupInQCLevels) {
+                                groups[groupId].qc_levels.list = _groupsQCLevels[groupId];
+                                for (var j = 0; j < _groupsQCLevels[groupId].length; j++) {
+                                    var qcLevel = _groupsQCLevels[groupId][j].qc_level;
+                                    var noQCLevelSelected = !(groups[groupId].qc_levels.selected.length);
+                                    if (noQCLevelSelected) {
+                                        groups[groupId].qc_levels.selected.push(qcLevel);
+                                    }
+                                    
+                                    groups[groupId].qc_levels.objects[qcLevel] = {
+                                        'qc_description': _groupsQCLevels[groupId][j].qc_description
+                                    };
+                                }
                             }
                             
                         }

@@ -16,7 +16,7 @@
         vm.station = _station;
         vm.groupList = _groupList;
         vm.groups = _groups;
-        
+
     }
     
 })();

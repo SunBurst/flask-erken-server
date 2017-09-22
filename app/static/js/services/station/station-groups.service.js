@@ -19,7 +19,9 @@
             getGroups: getGroups,
             getGroupMeasurementFrequencies: getGroupMeasurementFrequencies,
             getGroupParameters: getGroupParameters,
-            getGroupsParameters: getGroupsParameters
+            getGroupsParameters: getGroupsParameters,
+            getGroupsQCLevels: getGroupsQCLevels,
+            getGroupQCLevels: getGroupQCLevels
         };
         
         function getGroups(stationId) {
@@ -118,6 +120,57 @@
             }
             
             function getGroupMeasurementFrequenciesFailed(error) {
+                console.log(error);
+            }
+
+        }
+        
+        function getGroupsQCLevels(stationId) {
+            var resource = $resource('/api/group_qc_levels_by_station/:station_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({station_id: stationId}).$promise
+                .then(getGroupsQCLevelsComplete)
+                .catch(getGroupsQCLevelsFailed);
+                
+            function getGroupsQCLevelsComplete(response) {
+                return response;
+            }
+            
+            function getGroupsQCLevelsFailed(error) {
+                console.log(error);
+            }
+
+        }
+        
+        function getGroupQCLevels(stationId, groupId) {
+            var resource = $resource('/api/qc_levels_by_station_group/:station_id/:group_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        group_id: groupId
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({station_id: stationId, group_id: groupId}).$promise
+                .then(getGroupQCLevelsComplete)
+                .catch(getGroupQCLevelsFailed);
+                
+            function getGroupQCLevelsComplete(response) {
+                return response;
+            }
+            
+            function getGroupQCLevelsFailed(error) {
                 console.log(error);
             }
 

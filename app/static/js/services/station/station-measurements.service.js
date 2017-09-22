@@ -60,7 +60,9 @@
             getFiveMinGroupMeasurementsChart: getFiveMinGroupMeasurementsChart,
             getFiveMinGroupMeasurementsTimeGrouped: getFiveMinGroupMeasurementsTimeGrouped,
             getOneMinGroupMeasurementsChart: getOneMinGroupMeasurementsChart,
-            getOneMinGroupMeasurementsTimeGrouped: getOneMinGroupMeasurementsTimeGrouped
+            getOneMinGroupMeasurementsTimeGrouped: getOneMinGroupMeasurementsTimeGrouped,
+            getOneSecGroupMeasurementsChart: getOneSecGroupMeasurementsChart,
+            getOneSecGroupMeasurementsTimeGrouped: getOneSecGroupMeasurementsTimeGrouped
             
         };
         
@@ -1344,6 +1346,76 @@
             }
             
             function getOneMinGroupMeasurementsTimeGroupedFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getOneSecGroupMeasurementsChart(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/one_sec_group_measurements_by_station_chart/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter_id: parameterId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: false,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                station_id: stationId, 
+                parameter_id: parameterId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getOneSecGroupMeasurementsChartComplete)
+                .catch(getOneSecGroupMeasurementsChartFailed);
+                
+            function getOneSecGroupMeasurementsChartComplete(response) {
+                return response;
+            }
+            
+            function getOneSecGroupMeasurementsChartFailed(error) {
+                console.log(error);
+            }
+        
+        }
+        
+        function getOneSecGroupMeasurementsTimeGrouped(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/one_sec_group_measurements_by_station_time_grouped/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter_id: parameterId,
+                        qc_level: qcLevel,
+                        from_timestamp: fromTimestamp,
+                        to_timestamp: toTimestamp
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({
+                station_id: stationId, 
+                parameter_id: parameterId, 
+                qc_level: qcLevel, 
+                from_timestamp: fromTimestamp, 
+                to_timestamp: toTimestamp
+            }).$promise
+                .then(getOneSecGroupMeasurementsTimeGroupedComplete)
+                .catch(getOneSecGroupMeasurementsTimeGroupedFailed);
+                
+            function getOneSecGroupMeasurementsTimeGroupedComplete(response) {
+                return response;
+            }
+            
+            function getOneSecGroupMeasurementsTimeGroupedFailed(error) {
                 console.log(error);
             }
         

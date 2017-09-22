@@ -29,6 +29,7 @@
         vm.$onInit = onInit;
         vm.frequencyChange = frequencyChange;
         vm.getHeader = getHeader;
+        vm.qcLevelChange = qcLevelChange;
         vm.prepareCSVExport = prepareCSVExport;
         
         vm.tableOptions = {
@@ -422,12 +423,55 @@
                     });
                 }
                 
+                else if (vm.group.frequencies.selected === '1 Sec') {
+                    getOneSecChartData(min, max).then(function(data) {
+                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                            var parameterId = vm.group.parameters.list[i].parameter_id;
+                            var averageSeriesId = parameterId;
+                            var rangeSeriesId = parameterId + '-ranges';
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            if (parameterId in data) {
+                                averageSeries.setData(data[parameterId].averages);
+                                rangeSeries.setData(data[parameterId].ranges);
+                            }
+                            else {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                            
+                        }
+                        
+                        chart.hideLoading();
+                        chart.redraw();
+                    });
+                    vm.tableOptions.data = [];
+                    vm.tableOptions.count = 0;
+                    vm.tableOptions.isReady = false;
+                    getOneSecTableData(min, max).then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                    });
+                }
+                
             }
         }
         
         function frequencyChange() {
             initChart();
             initTable();
+        }
+        
+        function qcLevelChange() {
+        
         }
         
         function getChartData(start, end) {
@@ -465,6 +509,13 @@
                 });
         }
         
+        function getOneSecChartData(start, end) {
+            return stationMeasurements.getOneSecGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
         function getFiveMinTableData(start, end) {
             return stationMeasurements.getFiveMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
                 .then(function(response) {
@@ -474,6 +525,13 @@
         
         function getOneMinTableData(start, end) {
             return stationMeasurements.getOneMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneSecTableData(start, end) {
+            return stationMeasurements.getOneSecGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -644,7 +702,10 @@
                                     type: 'all',
                                     text: 'All'
                                 }],
-                              selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                selected: 4,
 
                             },
 
@@ -654,6 +715,10 @@
 
                             series: seriesOptions,
                         
+                            subtitle: {
+                                text: 'Frequency: ' + vm.group.frequencies.selected
+                            },
+                            
                             title: {
                                 text: vm.group.group_name + ' at ' + vm.station.name
                             },
@@ -743,6 +808,9 @@
                                     type: 'all',
                                     text: 'All'
                                 }],
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 selected: 4,
                                 //inputEnabled: true
                             },
@@ -847,6 +915,9 @@
                                     text: 'All'
                                 }],
                                 selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 //inputEnabled: true
                             },
 
@@ -950,6 +1021,9 @@
                                     text: 'All'
                                 }],
                                 selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 //inputEnabled: true
                             },
 
@@ -1053,6 +1127,9 @@
                                     text: 'All'
                                 }],
                                 selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 //inputEnabled: true
                             },
 
@@ -1156,6 +1233,9 @@
                                     text: 'All'
                                 }],
                                 selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 //inputEnabled: true
                             },
 
@@ -1267,6 +1347,9 @@
                                     text: 'All'
                                 }],
                                 selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 //inputEnabled: true
                             },
 
@@ -1374,6 +1457,9 @@
                                     text: 'All'
                                 }],
                                 selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 //inputEnabled: true
                             },
 
@@ -1481,6 +1567,127 @@
                                     text: 'All'
                                 }],
                                 selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                //inputEnabled: true
+                            },
+
+                            navigator: {
+                                adaptToUpdatedData: false
+                            },
+
+                            series: seriesOptions,
+                        
+                            title: {
+                                text: vm.group.group_name + ' at ' + vm.station.name
+                            },
+
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            },
+
+                            scrollbar: {
+                                liveRedraw: false 
+                            },
+
+                            xAxis: [{
+                                type: 'datetime',
+                                minRange: 3600 * 1000,
+                                events: {
+                                    afterSetExtremes: afterSetExtremes
+                                }
+                            }],
+
+                            yAxis: yAxis,
+                    
+                        });
+
+                  });
+              }
+              
+              else if (vm.group.frequencies.selected === '1 Sec') {
+                getOneSecChartData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        var seriesOptions = initSeriesOptions(data);
+                        chart = new Highcharts.stockChart({
+                    
+                            chart: {
+                                renderTo: chartId,
+                                style: {
+                                    fontFamily: 'Roboto'
+                                },
+                                type: 'spline',
+                                zoomType: 'x'
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            lang: {
+                                noData: 'No data to display'
+                            },
+                          
+                            legend: {
+                                enabled: true,
+                                margin: 30
+                            },
+                          
+                            rangeSelector: {
+                                //allButtonsEnabled: true,
+                                buttons: [{
+                                    type: 'minute',
+                                    count: 1,
+                                    text: '1M'
+                                }, {
+                                    type: 'minute',
+                                    count: 5,
+                                    text: '1M'
+                                }, {
+                                    type: 'hour',
+                                    count: 1,
+                                    text: '1h'
+                                }, {
+                                    type: 'day',
+                                    count: 1,
+                                    text: '1d'
+                                }, {
+                                    type: 'day',
+                                    count: 3,
+                                    text: '3d'
+                                }, {
+                                    type: 'week',
+                                    count: 1,
+                                    text: '1w'
+                                }, {
+                                    type: 'month',
+                                    count: 1,
+                                    text: '1m'
+                                }, {
+                                    type: 'month',
+                                    count: 3,
+                                    text: '3m'
+                                }, {
+                                    type: 'month',
+                                    count: 6,
+                                    text: '6m'
+                                }, {
+                                    type: 'year',
+                                    count: 1,
+                                    text: '1y'
+                                }, {
+                                    type: 'all',
+                                    text: 'All'
+                                }],
+                                selected: 4,
+                                inputBoxWidth: 130,
+                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 //inputEnabled: true
                             },
 
@@ -1746,6 +1953,21 @@
             
             else if (vm.group.frequencies.selected === '1 Min') {
                 getOneMinTableData(moment(0).valueOf(), moment().valueOf())
+                    .then(function(data) {
+                        if (Array.isArray(data) || data.length) {
+                            vm.tableOptions.query.order = 'timestamp';
+                            vm.tableOptions.query.label = 'Timestamp';
+                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                            vm.tableOptions.count = data.length;
+                            vm.tableOptions.data = data;
+                        }
+                        vm.tableOptions.isReady = true;
+                });
+            }
+            
+            else if (vm.group.frequencies.selected === '1 Sec') {
+                getOneSecTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
                         if (Array.isArray(data) || data.length) {
                             vm.tableOptions.query.order = 'timestamp';
