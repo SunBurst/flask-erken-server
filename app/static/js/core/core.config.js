@@ -17,12 +17,6 @@
         
         $urlRouterProvider.otherwise('/start');
         
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
-        });
-        
         var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
             'contrastDefaultColor': 'light',
             'contrastDarkColors': ['50'],

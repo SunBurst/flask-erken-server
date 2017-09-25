@@ -778,6 +778,7 @@ def get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level
                 parameters[parameter_id] = {
                     'id': parameter_id, 
                     'name': parameter_name, 
+                    'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
@@ -934,6 +935,7 @@ def get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_
                 parameters[parameter_id] = {
                     'id': parameter_id, 
                     'name': parameter_name, 
+                    'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
@@ -969,6 +971,7 @@ def get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_
                 parameters[parameter_id] = {
                     'id': parameter_id, 
                     'name': parameter_name, 
+                    'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
@@ -1042,6 +1045,7 @@ def get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_lev
                 parameters[parameter_id] = {
                     'id': parameter_id, 
                     'name': parameter_name, 
+                    'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
@@ -1081,6 +1085,7 @@ def get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_lev
                 parameters[parameter_id] = {
                     'id': parameter_id, 
                     'name': parameter_name, 
+                    'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
@@ -1119,6 +1124,7 @@ def get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_lev
                 parameters[parameter_id] = {
                     'id': parameter_id, 
                     'name': parameter_name, 
+                    'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
@@ -1155,6 +1161,7 @@ def get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_leve
                 parameters[parameter_id] = {
                     'id': parameter_id, 
                     'name': parameter_name, 
+                    'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
@@ -1310,6 +1317,7 @@ def get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_le
                     'id': parameter_id, 
                     'name': parameter_name, 
                     'unit': parameter_unit,
+                    'qc_level': qc_level,
                     'averages': [],
                     'ranges': []
                 }

@@ -21,9 +21,9 @@
         return directive;
     }
     
-    StationDataGroupItemCtrl.$inject = ['$mdMedia', 'stationMeasurements'];
+    StationDataGroupItemCtrl.$inject = ['$mdMedia', '$q', 'HighchartsDefaultOptions', 'stationMeasurements'];
     
-    function StationDataGroupItemCtrl($mdMedia, stationMeasurements) {
+    function StationDataGroupItemCtrl($mdMedia, $q, HighchartsDefaultOptions, stationMeasurements) {
         var vm = this;
         
         vm.$onInit = onInit;
@@ -32,27 +32,7 @@
         vm.qcLevelChange = qcLevelChange;
         vm.prepareCSVExport = prepareCSVExport;
         
-        vm.tableOptions = {
-            options: {
-                decapitate: false,
-                boundaryLinks: false,
-                limitSelect: true,
-                pageSelect: true
-            },
-            query: {
-                label: 'Timestamp',
-                order: 'timestamp',
-                dateFormat: 'yyyy-MM-dd HH:mm:ss',
-                momentDateFormat: 'YYYY-MM-DD HH:mm:ss',
-                limit: 5,
-                page: 1
-            },
-            count: 0,
-            header: [],
-            data: [],
-            isReady: false
-        };
-        
+        vm.tableOptionsAll = [];
         var chart;
         
         function afterSetExtremes(e) {
@@ -64,19 +44,31 @@
                     getChartData(min, max).then(function(data) {
                         for (var i = 0; i < vm.group.parameters.list.length; i++) {
                             var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
+                            for (var j = 0; j < vm.group.qc_levels.selected.length; j++) {
+                                var qcLevel = vm.group.qc_levels.selected[j];
+                                var averageSeriesId = parameterId + '-' + qcLevel;
+                                var rangeSeriesId = parameterId + '-' + qcLevel + '-ranges';
+                                var averageSeries = chart.get(averageSeriesId);
+                                var rangeSeries = chart.get(rangeSeriesId);
+                                
+                                var qcLevelDataFound = false;
+                                for (var k = 0; k < data.length; k++) {
+                                    if (parameterId in data[k]) {
+                                        var dataQcLevel = data[k][parameterId].qc_level;
+                                        if (qcLevel == dataQcLevel) {
+                                            qcLevelDataFound = true;
+                                            averageSeries.setData(data[k][parameterId].averages);
+                                            rangeSeries.setData(data[k][parameterId].ranges);
+                                        }
+                                    }
+                                }
+                                
+                                if (!qcLevelDataFound) {
+                                    averageSeries.setData([], false);
+                                    rangeSeries.setData([], false);
+                                }
+                            }
                             
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
                             
                         }
                         
@@ -471,14 +463,28 @@
         }
         
         function qcLevelChange() {
-        
+            initChart();
+            initTable();
         }
         
-        function getChartData(start, end) {
-            return stationMeasurements.getGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+        function getChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
+        }
+        
+        function getChartData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getChartDataByQCLevel(qcLevel, start, end)
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+
         }
         
         function getDailyChartData(start, end) {
@@ -607,38 +613,52 @@
                 });
         }
         
-        function getTableData(start, end) {
-            return stationMeasurements.getGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+        function getTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
-        function getHeader() {
+        function getTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getTableDataByQCLevel(qcLevel, start, end)
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getHeader(tableIndex) {
             var header = [];
-            var timeLabel = vm.tableOptions.query.label + ' (Local Time)';
+            var timeLabel = vm.tableOptionsAll[tableIndex].query.label + ' (Local Time)';
             header.push(timeLabel);
             
-            for (var i = 0; i < vm.tableOptions.header.length; i++) {
-                header.push(vm.tableOptions.header[i].header);
+            for (var i = 0; i < vm.tableOptionsAll[tableIndex].header.length; i++) {
+                header.push(vm.tableOptionsAll[tableIndex].header[i].header);
             }
             
             return header;
             
         }
         
-        function prepareCSVExport() {
+        function prepareCSVExport(tableIndex) {
             var data = [];
-            var timeLabel = vm.tableOptions.query.label;
-            for (var i = 0; i < vm.tableOptions.count; i++) {
-                var timestamp = vm.tableOptions.data[i][vm.tableOptions.query.order];
-                var date = moment(timestamp).format(vm.tableOptions.query.momentDateFormat);
+            var tableToExport = vm.tableOptionsAll[tableIndex];
+            var timeFormat = tableToExport.query.order;
+            var timeLabel = tableToExport.query.label;
+            for (var i = 0; i < tableToExport.count; i++) {
+                var timestamp = tableToExport.data[i][timeFormat];
+                var date = moment(timestamp).format(tableToExport.momentDateFormat);
                 var row = {timeLabel: date}
-                for (var j = 0; j < vm.tableOptions.header.length; j++) {
-                    var parameterId = vm.tableOptions.header[j].parameterId;
-                    var headerName = vm.tableOptions.header[j].header;
-                    var valueType = vm.tableOptions.header[j].valueType;
-                    var measurement = vm.tableOptions.data[i].data[parameterId][valueType]
+                for (var j = 0; j < tableToExport.header.length; j++) {
+                    var parameterId = tableToExport.header[j].parameterId;
+                    var headerName = tableToExport.header[j].header;
+                    var valueType = tableToExport.header[j].valueType;
+                    var measurement = tableToExport.data[i].data[parameterId][valueType]
                     row[headerName] = measurement;
                 }
                 
@@ -653,6 +673,7 @@
             var yAxis = inityAxis();
             
             if (vm.group.frequencies.selected === 'Dynamic') {
+                //var data = getChartData(moment(0).valueOf(), moment().valueOf());
                 getChartData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
                         var seriesOptions = initSeriesOptions(data);
@@ -704,6 +725,16 @@
                                 }],
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputDateParser: function (value) {
+                                    var temp_date;
+                                    if (HighchartsDefaultOptions.global.useUTC) {
+                                        temp_date = moment.utc(value);
+                                    }
+                                    else {
+                                        temp_date = moment(value);
+                                    }
+                                    return temp_date.valueOf();
+                                },
                                 inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 selected: 4,
 
@@ -715,9 +746,9 @@
 
                             series: seriesOptions,
                         
-                            subtitle: {
-                                text: 'Frequency: ' + vm.group.frequencies.selected
-                            },
+                            //subtitle: {
+                            //    text: 'Frequency: ' + vm.group.frequencies.selected
+                            //},
                             
                             title: {
                                 text: vm.group.group_name + ' at ' + vm.station.name
@@ -808,9 +839,18 @@
                                     type: 'all',
                                     text: 'All'
                                 }],
-                                inputBoxWidth: 130,
-                                inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                inputDateFormat: "%Y-%m-%d",
+                                inputEditDateFormat: "%Y-%m-%d",
+                                inputDateParser: function (value) {
+                                    var temp_date;
+                                    if (HighchartsDefaultOptions.global.useUTC) {
+                                        temp_date = moment.utc(value);
+                                    }
+                                    else {
+                                        temp_date = moment(value);
+                                    }
+                                    return temp_date.valueOf();
+                                },
                                 selected: 4,
                                 //inputEnabled: true
                             },
@@ -1735,59 +1775,67 @@
             var seriesOptions = [];
             
             for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                var seriesAverageData = [];
-                var seriesRangeData = [];
                 var parameterId = vm.group.parameters.list[i].parameter_id;
-                var seriesId = parameterId;
-                var seriesName = vm.group.parameters.list[i].parameter_name;
+                var parameterName = vm.group.parameters.list[i].parameter_name;
                 var unit = vm.group.parameters.list[i].parameter_unit;
-                
-                if (parameterId in data) {
-                    seriesAverageData = data[parameterId].averages;
-                    seriesRangeData = data[parameterId].ranges;
+                for (var j = 0; j < vm.group.qc_levels.selected.length; j++) {
+                    var seriesAverageData = [];
+                    var seriesRangeData = [];
+                    var qcLevel = vm.group.qc_levels.selected[j];
+                    var seriesId = parameterId + '-' + qcLevel;
+                    
+                    for (var k = 0; k < data.length; k++) {
+                        if (parameterId in data[k] && qcLevel == data[k][parameterId].qc_level) {
+                            seriesAverageData = data[k][parameterId].averages;
+                            seriesRangeData = data[k][parameterId].ranges;
+                        }
+                    }
+                    
+                    var averageSeries = {
+                        'id': seriesId,
+                        'name': parameterName + ' (Avg., QC Level: ' + qcLevel + ')',
+                        'yAxis': i,
+                        'color': Highcharts.getOptions().colors[i],
+                        'tooltip': {
+                            'valueDecimals': 2,
+                            'valueSuffix': ' ' + unit
+                        },
+                        'marker': {
+                            'fillColor': 'white',
+                            'lineWidth': 2,
+                            'lineColor': Highcharts.getOptions().colors[i]
+                        },
+                        'dataGrouping': {
+                            'enabled': false
+                        },
+                        'showInNavigator': true,
+                        'data': seriesAverageData
+                    };
+                    
+                    var rangeSeries = {
+                        'id': seriesId + '-ranges',
+                        'name': parameterName + ' (Min. - Max., QC Level: ' + qcLevel + ')',
+                        'type': 'areasplinerange',
+                        'yAxis': i,
+                        'lineWidth': 0,
+                        'color': Highcharts.getOptions().colors[i],
+                        'fillOpacity': 0.3,
+                        'marker': {
+                            'enabled': false
+                        },
+                        'tooltip': {
+                            'valueDecimals': 2,
+                            'valueSuffix': ' ' + unit
+                        },
+                        'visible': false,
+                        'data': seriesRangeData
+                    };
+                    
+                    seriesOptions.push(averageSeries);
+                    seriesOptions.push(rangeSeries);
+                    
                 }
                 
-                var averageSeries = {
-                    'id': seriesId,
-                    'name': seriesName + ' (Avg.)',
-                    'yAxis': i,
-                    'tooltip': {
-                        'valueDecimals': 2,
-                        'valueSuffix': ' ' + unit
-                    },
-                    'marker': {
-                        'fillColor': 'white',
-                        'lineWidth': 2,
-                        'lineColor': Highcharts.getOptions().colors[i]
-                    },
-                    'dataGrouping': {
-                        'enabled': false
-                    },
-                    'showInNavigator': true,
-                    'data': seriesAverageData
-                };
-                
-                var rangeSeries = {
-                    'id': seriesId + '-ranges',
-                    'name': seriesName + ' (Min. - Max.)',
-                    'type': 'areasplinerange',
-                    'yAxis': i,
-                    'lineWidth': 0,
-                    'color': Highcharts.getOptions().colors[i],
-                    'fillOpacity': 0.3,
-                    'marker': {
-                        'enabled': false
-                    },
-                    'tooltip': {
-                        'valueDecimals': 2,
-                        'valueSuffix': ' ' + unit
-                    },
-                    'visible': false,
-                    'data': seriesRangeData
-                };
-
-                seriesOptions.push(averageSeries);
-                seriesOptions.push(rangeSeries);
             }
 
             return seriesOptions;
@@ -1815,34 +1863,61 @@
         }
         
         function initTable() {
-            vm.tableOptions.header = initTableHeader();
+            vm.tableOptionsAll = [];
+            
             if (vm.group.frequencies.selected === 'Dynamic') {
                 getTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            var firstRow = data[0];
-                            if ('date' in firstRow) {
-                                vm.tableOptions.query.order = 'date';
-                                vm.tableOptions.query.label = 'Date';
-                                vm.tableOptions.query.dateFormat = 'yyyy-MM-dd';
-                                vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD';
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var firstRow = qcData[0];
+                                var dataQcLevel = firstRow.qc_level;
+                                var label = 'Timestamp';
+                                var order = 'timestamp';
+                                var dateFormat = 'yyyy-MM-dd HH:mm:ss';
+                                var momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+                                var header = initTableHeader();
+                                if ('date' in firstRow) {
+                                    order = 'date';
+                                    label = 'Date';
+                                    dateFormat = 'yyyy-MM-dd';
+                                    momentDateFormat = 'YYYY-MM-DD';
+                                }
+                                else if ('date_hour' in firstRow) {
+                                    order = 'date_hour';
+                                    label = 'Date & Hour';
+                                    dateFormat = 'yyyy-MM-dd HH:mm';
+                                    momentDateFormat = 'YYYY-MM-DD HH:mm';
+                                }
+                                else if ('timestamp' in firstRow) {}
+                                
+                                var tableOptions = {
+                                    'name': vm.group.group_name + ' - QC Level ' + dataQcLevel,
+                                    'options': {
+                                        'decapitate': false,
+                                        'boundaryLinks': false,
+                                        'limitSelect': true,
+                                        'pageSelect': true
+                                    },
+                                    'query': {
+                                        'label': label,
+                                        'order': order,
+                                        'dateFormat': dateFormat,
+                                        'momentDateFormat': momentDateFormat,
+                                        'limit': 5,
+                                        'page': 1
+                                    },
+                                    'count': qcData.length,
+                                    'header': header,
+                                    'data': qcData,
+                                    'isReady': true
+                                };
+
+                                vm.tableOptionsAll.push(tableOptions);
                             }
-                            else if ('date_hour' in firstRow) {
-                                vm.tableOptions.query.order = 'date_hour';
-                                vm.tableOptions.query.label = 'Date & Hour';
-                                vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
-                                vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
-                            }
-                            else if ('timestamp' in firstRow) {
-                                vm.tableOptions.query.order = 'timestamp';
-                                vm.tableOptions.query.label = 'Timestamp';
-                                vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                                vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            }
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
                         }
-                        vm.tableOptions.isReady = true;
+                        
                 });
             }
             

@@ -4,8 +4,8 @@
     <md-input-container>
         <label>QC Level(s)</label>
         <md-select ng-model="stationDataGroupItemVm.group.qc_levels.selected" multiple 
-            class="md-no-underline" ng-change="stationDataGroupItemVm.qcLevelChange()">
-            <md-optgroup label="QC Levels">
+            class="md-no-underline" md-on-close="stationDataGroupItemVm.qcLevelChange()">
+            <md-optgroup label="QC Levels (Highest - Lowest)">
                 <md-option ng-repeat="qclevel in stationDataGroupItemVm.group.qc_levels.list" 
                     value="{[ qclevel.qc_level ]}">{[ qclevel.qc_level ]}</md-option>
             </md-optgroup>
@@ -29,17 +29,64 @@
 
 <md-card>
         
-        <img class="md-card-image">
-            <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" class="chart-group"></div>
-        </img>
+    <img class="md-card-image">
+        <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" class="chart-group"></div>
+    </img>
         
-        <md-divider/>
+</md-card>
+
+        <md-card ng-repeat="qcTable in stationDataGroupItemVm.tableOptionsAll">
         
-        <md-toolbar ng-if="stationDataGroupItemVm.tableOptions.isReady" class="md-table-toolbar md-default">
+            <md-toolbar ng-if="qcTable.isReady" class="md-table-toolbar md-default">
+                <div class="md-toolbar-tools">
+                    <span>{[ qcTable.name ]}</span>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-csv="stationDataGroupItemVm.prepareCSVExport($index)"
+                        csv-header="stationDataGroupItemVm.getHeader($index)" aria-label="Export and download selected data set as CSV" 
+                            filename="{[ stationDataGroupItemVm.station.name ]} {[ qcTable.name ]}.csv" 
+                                lazy-load="true">
+                        <ng-md-icon icon="file_download" style="fill: #000000"></ng-md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            
+            <md-table-container ng-if="qcTable.isReady">
+                <table md-table>
+                    <thead ng-if="!qcTable.options.decapitate" md-head>
+                        <tr md-row>
+                            <th md-column>
+                                <span>{[ qcTable.query.label ]}</span>
+                            </th>
+                            <th md-column md-numeric>
+                                <span>QC Level</span>
+                            </th>
+                            <th md-column md-numeric ng-repeat="qcLevelParameter in qcTable.header">
+                                <span>{[ qcLevelParameter.header ]}</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row ng-repeat="measurement in qcTable.data | filter: filter.search | limitTo: qcTable.query.limit : (qcTable.query.page -1) * qcTable.query.limit" 
+                            md-select="measurement" md-auto-select="qcTable.options.autoSelect">
+                            <td md-cell>{[ measurement[qcTable.query.order] | date: qcTable.query.dateFormat ]}</td>
+                            <td md-cell>{[ measurement.qc_level ]}</td>
+                            <td md-cell ng-repeat="qcLevelParameter in qcTable.header">
+                                {[ measurement.data[qcLevelParameter.parameterId][qcLevelParameter.valueType] | number: 2 ]}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+            
+            <md-table-pagination md-limit="qcTable.query.limit" md-limit-options="[5, 10, 15]" md-page="qcTable.query.page" md-total="{[ qcTable.count ]}" md-page-select="qcTable.options.pageSelect"></md-table-pagination>
+            
+        </md-card>
+        
+        <!-- <md-toolbar ng-if="stationDataGroupItemVm.tableOptions.isReady" class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
                 <div flex></div>
                 <md-button class="md-icon-button" ng-csv="stationDataGroupItemVm.prepareCSVExport()"
-                    csv-header="stationDataGroupItemVm.getHeader()"
+                    csv-header="stationDataGroupItemVm.getHeader()" aria-label="Export and download selected data set as CSV" 
                         filename="{[ stationDataGroupItemVm.station.name ]} {[ stationDataGroupItemVm.group.group_name ]}.csv" 
                             lazy-load="true">
                     <ng-md-icon icon="file_download" style="fill: #000000"></ng-md-icon>
@@ -54,6 +101,9 @@
                         <th md-column>
                             <span>{[ stationDataGroupItemVm.tableOptions.query.label ]}</span>
                         </th>
+                        <th md-column md-numeric>
+                            <span>QC Level</span>
+                        </th>
                         <th md-column md-numeric ng-repeat="groupParameter in stationDataGroupItemVm.tableOptions.header">
                             <span>{[ groupParameter.header ]}</span>
                         </th>
@@ -63,6 +113,7 @@
                     <tr md-row ng-repeat="measurement in stationDataGroupItemVm.tableOptions.data | filter: filter.search | limitTo: stationDataGroupItemVm.tableOptions.query.limit : (stationDataGroupItemVm.tableOptions.query.page -1) * stationDataGroupItemVm.tableOptions.query.limit" 
                         md-select="measurement" md-auto-select="stationDataGroupItemVm.tableOptions.options.autoSelect">
                         <td md-cell>{[ measurement[stationDataGroupItemVm.tableOptions.query.order] | date: stationDataGroupItemVm.tableOptions.query.dateFormat ]}</td>
+                        <td md-cell>{[ measurement.qc_level ]}</td>
                         <td md-cell ng-repeat="groupParameter in stationDataGroupItemVm.tableOptions.header">
                             {[ measurement.data[groupParameter.parameterId][groupParameter.valueType] | number: 2 ]}
                         </td>
@@ -71,6 +122,4 @@
             </table>
         </md-table-container>
         
-        <md-table-pagination md-limit="stationDataGroupItemVm.tableOptions.query.limit" md-limit-options="[5, 10, 15]" md-page="stationDataGroupItemVm.tableOptions.query.page" md-total="{[ stationDataGroupItemVm.tableOptions.count ]}" md-page-select="stationDataGroupItemVm.tableOptions.options.pageSelect"></md-table-pagination>
-
-</md-card>
+        <md-table-pagination md-limit="stationDataGroupItemVm.tableOptions.query.limit" md-limit-options="[5, 10, 15]" md-page="stationDataGroupItemVm.tableOptions.query.page" md-total="{[ stationDataGroupItemVm.tableOptions.count ]}" md-page-select="stationDataGroupItemVm.tableOptions.options.pageSelect"></md-table-pagination> -->

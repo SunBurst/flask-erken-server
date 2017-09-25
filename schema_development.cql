@@ -227,6 +227,30 @@ CREATE TABLE hydroview_development.daily_group_measurements_by_station_grouped (
     AND min_index_interval = 128
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.daily_group_measurements_by_station_grouped_qc (
+    station_id text,
+    group_id text,
+    year int,
+    date timestamp,
+    qc_level int,
+    data map<text, frozen<averages>>,
+    PRIMARY KEY ((station_id, group_id, year), date, qc_level)
+) WITH CLUSTERING ORDER BY (date DESC, qc_level DESC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
 
 CREATE TABLE hydroview_development.thirty_min_group_measurements_by_station_grouped (
     station_id text,
@@ -402,7 +426,7 @@ CREATE TABLE hydroview_development.qc_levels_by_station_group (
     qc_level int,
     qc_description frozen<description>,
     PRIMARY KEY ((station_id, group_id), qc_level)
-) WITH CLUSTERING ORDER BY (qc_level ASC)
+) WITH CLUSTERING ORDER BY (qc_level DESC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -425,7 +449,7 @@ CREATE TABLE hydroview_development.group_qc_levels_by_station (
     group_id text,
     qc_description frozen<description>,
     PRIMARY KEY (station_id, group_name, qc_level, group_id)
-) WITH CLUSTERING ORDER BY (group_name ASC, qc_level ASC, group_id ASC)
+) WITH CLUSTERING ORDER BY (group_name ASC, qc_level DESC, group_id DESC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''

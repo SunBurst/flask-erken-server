@@ -36,8 +36,17 @@
         .constant('GoogleMapIcons', getGoogleMapIcons())
         .constant('GroupHighChartOptions', getGroupHighChartOptions())
         .constant('HeatMapOptions', getHeatMapOptions())
-        .constant('HighChartOptions', getHighChartOptions());
-
+        .constant('HighChartOptions', getHighChartOptions())
+        .constant('HighchartsDefaultOptions', getHighchartsDefaultOptions());
+    
+    function getHighchartsDefaultOptions() {
+        return Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+    }
+    
     function getDatePickerOptions() {
         return {
             applyClass: 'btn-success',
