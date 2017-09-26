@@ -29,429 +29,384 @@
         vm.$onInit = onInit;
         vm.frequencyChange = frequencyChange;
         vm.getHeader = getHeader;
-        vm.qcLevelChange = qcLevelChange;
         vm.prepareCSVExport = prepareCSVExport;
-        
+        vm.qcLevelChange = qcLevelChange;
         vm.tableOptionsAll = [];
+        
         var chart;
+        
+        function initDynamicTableOptions(qcData) {
+            var firstRow = qcData[0];
+            var dataQcLevel = firstRow.qc_level;
+            var label = 'Timestamp';
+            var order = 'timestamp';
+            var dateFormat = 'yyyy-MM-dd HH:mm:ss';
+            var momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
+            var header = initTableHeader();
+            if ('date' in firstRow) {
+                order = 'date';
+                label = 'Date';
+                dateFormat = 'yyyy-MM-dd';
+                momentDateFormat = 'YYYY-MM-DD';
+            }
+            else if ('date_hour' in firstRow) {
+                order = 'date_hour';
+                label = 'Date & Hour';
+                dateFormat = 'yyyy-MM-dd HH:mm';
+                momentDateFormat = 'YYYY-MM-DD HH:mm';
+            }
+            
+            var tableOptions = {
+                'name': vm.group.group_name + ' - QC Level ' + dataQcLevel,
+                'options': {
+                    'decapitate': false,
+                    'boundaryLinks': false,
+                    'limitSelect': true,
+                    'pageSelect': true
+                },
+                'query': {
+                    'label': label,
+                    'order': order,
+                    'dateFormat': dateFormat,
+                    'momentDateFormat': momentDateFormat,
+                    'limit': 5,
+                    'page': 1
+                },
+                'count': qcData.length,
+                'header': header,
+                'data': qcData,
+                'isReady': true
+            };
+            
+            return tableOptions;
+        }
+        
+        function initDateTableOptions(qcData) {
+            var firstRow = qcData[0];
+            var dataQcLevel = firstRow.qc_level;
+            var header = initTableHeader();
+            
+            var tableOptions = {
+                'name': vm.group.group_name + ' - QC Level ' + dataQcLevel,
+                'options': {
+                    'decapitate': false,
+                    'boundaryLinks': false,
+                    'limitSelect': true,
+                    'pageSelect': true
+                },
+                'query': {
+                    'label': 'Date',
+                    'order': 'date',
+                    'dateFormat': 'yyyy-MM-dd',
+                    'momentDateFormat': 'YYYY-MM-DD',
+                    'limit': 5,
+                    'page': 1
+                },
+                'count': qcData.length,
+                'header': header,
+                'data': qcData,
+                'isReady': true
+            };
+            
+            return tableOptions;
+        }
+        
+        function initDateHourTableOptions(qcData) {
+            var firstRow = qcData[0];
+            var dataQcLevel = firstRow.qc_level;
+            var header = initTableHeader();
+            
+            var tableOptions = {
+                'name': vm.group.group_name + ' - QC Level ' + dataQcLevel,
+                'options': {
+                    'decapitate': false,
+                    'boundaryLinks': false,
+                    'limitSelect': true,
+                    'pageSelect': true
+                },
+                'query': {
+                    'label': 'Date & Hour',
+                    'order': 'date_hour',
+                    'dateFormat': 'yyyy-MM-dd HH:mm',
+                    'momentDateFormat': 'YYYY-MM-DD HH:mm',
+                    'limit': 5,
+                    'page': 1
+                },
+                'count': qcData.length,
+                'header': header,
+                'data': qcData,
+                'isReady': true
+            };
+            
+            return tableOptions;
+        }
+        
+        function initTimestampTableOptions(qcData) {
+            var firstRow = qcData[0];
+            var dataQcLevel = firstRow.qc_level;
+            var header = initTableHeader();
+            
+            var tableOptions = {
+                'name': vm.group.group_name + ' - QC Level ' + dataQcLevel,
+                'options': {
+                    'decapitate': false,
+                    'boundaryLinks': false,
+                    'limitSelect': true,
+                    'pageSelect': true
+                },
+                'query': {
+                    'label': 'Timestamp',
+                    'order': 'timestamp',
+                    'dateFormat': 'yyyy-MM-dd HH:mm:ss',
+                    'momentDateFormat': 'YYYY-MM-DD HH:mm:ss',
+                    'limit': 5,
+                    'page': 1
+                },
+                'count': qcData.length,
+                'header': header,
+                'data': qcData,
+                'isReady': true
+            };
+            
+            return tableOptions;
+        }
+        
+        function updateChart(data) {
+            for (var i = 0; i < vm.group.parameters.list.length; i++) {
+                var parameterId = vm.group.parameters.list[i].parameter_id;
+                for (var j = 0; j < vm.group.qc_levels.selected.length; j++) {
+                    var qcLevel = vm.group.qc_levels.selected[j];
+                    var averageSeriesId = parameterId + '-' + qcLevel;
+                    var rangeSeriesId = parameterId + '-' + qcLevel + '-ranges';
+                    var averageSeries = chart.get(averageSeriesId);
+                    var rangeSeries = chart.get(rangeSeriesId);
+                    
+                    var qcLevelDataFound = false;
+                    for (var k = 0; k < data.length; k++) {
+                        if (parameterId in data[k]) {
+                            var dataQcLevel = data[k][parameterId].qc_level;
+                            if (qcLevel == dataQcLevel) {
+                                qcLevelDataFound = true;
+                                averageSeries.setData(data[k][parameterId].averages);
+                                rangeSeries.setData(data[k][parameterId].ranges);
+                            }
+                        }
+                    }
+                    
+                    if (!qcLevelDataFound) {
+                        averageSeries.setData([], false);
+                        rangeSeries.setData([], false);
+                    }
+                }
+                
+                
+            }
+            chart.hideLoading();
+            chart.redraw();
+        }
         
         function afterSetExtremes(e) {
             if (e.trigger != undefined) {
                 var min = Math.round(e.min);
                 var max = Math.round(e.max);
                 chart.showLoading('Loading data from server...');
+                
                 if (vm.group.frequencies.selected === 'Dynamic') {
-                    getChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            for (var j = 0; j < vm.group.qc_levels.selected.length; j++) {
-                                var qcLevel = vm.group.qc_levels.selected[j];
-                                var averageSeriesId = parameterId + '-' + qcLevel;
-                                var rangeSeriesId = parameterId + '-' + qcLevel + '-ranges';
-                                var averageSeries = chart.get(averageSeriesId);
-                                var rangeSeries = chart.get(rangeSeriesId);
-                                
-                                var qcLevelDataFound = false;
-                                for (var k = 0; k < data.length; k++) {
-                                    if (parameterId in data[k]) {
-                                        var dataQcLevel = data[k][parameterId].qc_level;
-                                        if (qcLevel == dataQcLevel) {
-                                            qcLevelDataFound = true;
-                                            averageSeries.setData(data[k][parameterId].averages);
-                                            rangeSeries.setData(data[k][parameterId].ranges);
-                                        }
-                                    }
-                                }
-                                
-                                if (!qcLevelDataFound) {
-                                    averageSeries.setData([], false);
-                                    rangeSeries.setData([], false);
-                                }
-                            }
-                            
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                    
+                    getDynamicChartData(min, max).then(function(data) {
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
-                    getTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            var firstRow = data[0];
-                            if ('date' in firstRow) {
-                                vm.tableOptions.query.order = 'date';
-                                vm.tableOptions.query.label = 'Date';
-                                vm.tableOptions.query.dateFormat = 'yyyy-MM-dd';
-                                vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD';
+                    
+                    vm.tableOptionsAll = [];
+                    
+                    getDynamicTableData(min, max).then(function(data) {
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initDynamicTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
                             }
-                            else if ('date_hour' in firstRow) {
-                                vm.tableOptions.query.order = 'date_hour';
-                                vm.tableOptions.query.label = 'Date & Hour';
-                                vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
-                                vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
-                            }
-                            else if ('timestamp' in firstRow) {
-                                vm.tableOptions.query.order = 'timestamp';
-                                vm.tableOptions.query.label = 'Timestamp';
-                                vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                                vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            }
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
                         }
-                        vm.tableOptions.isReady = true;
                     });
+
                 }
+                
                 else if (vm.group.frequencies.selected === 'Daily') {
+                    
                     getDailyChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getDailyTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'date';
-                            vm.tableOptions.query.label = 'Date';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initDateTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+
                 }
                 else if (vm.group.frequencies.selected === 'Hourly') {
+                    
                     getHourlyChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getHourlyTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'date_hour';
-                            vm.tableOptions.query.label = 'Date & Hour';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initDateHourTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 else if (vm.group.frequencies.selected === '30 Min') {
+                    
                     getThirtyMinChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getThirtyMinTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 
                 else if (vm.group.frequencies.selected === '20 Min') {
+                    
                     getTwentyMinChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getTwentyMinTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 
                 else if (vm.group.frequencies.selected === '15 Min') {
+                    
                     getFifteenMinChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getFifteenMinTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 
                 else if (vm.group.frequencies.selected === '10 Min') {
+                    
                     getTenMinChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getTenMinTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 
                 else if (vm.group.frequencies.selected === '5 Min') {
+                    
                     getFiveMinChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getFiveMinTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 
                 else if (vm.group.frequencies.selected === '1 Min') {
+                    
                     getOneMinChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getOneMinTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 
                 else if (vm.group.frequencies.selected === '1 Sec') {
+                    
                     getOneSecChartData(min, max).then(function(data) {
-                        for (var i = 0; i < vm.group.parameters.list.length; i++) {
-                            var parameterId = vm.group.parameters.list[i].parameter_id;
-                            var averageSeriesId = parameterId;
-                            var rangeSeriesId = parameterId + '-ranges';
-                            var averageSeries = chart.get(averageSeriesId);
-                            var rangeSeries = chart.get(rangeSeriesId);
-                            
-                            if (parameterId in data) {
-                                averageSeries.setData(data[parameterId].averages);
-                                rangeSeries.setData(data[parameterId].ranges);
-                            }
-                            else {
-                                averageSeries.setData([], false);
-                                rangeSeries.setData([], false);
-                            }
-                            
-                        }
-                        
-                        chart.hideLoading();
-                        chart.redraw();
+                        updateChart(data);
                     });
-                    vm.tableOptions.data = [];
-                    vm.tableOptions.count = 0;
-                    vm.tableOptions.isReady = false;
+                    
+                    vm.tableOptionsAll = [];
+                    
                     getOneSecTableData(min, max).then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(qcData) || qcData.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                     });
+                    
                 }
                 
             }
@@ -467,167 +422,404 @@
             initTable();
         }
         
-        function getChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+        // Dynamic
+        
+        function getDynamicChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDynamicGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
-        function getChartData(start, end) {
-            var promiseArray = [];
+        function getDynamicChartData(start, end) {
+            var promises = [];
             for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
                 var qcLevel = vm.group.qc_levels.selected[i];
-                var resource = getChartDataByQCLevel(qcLevel, start, end)
-                promiseArray.push(resource);
+                var resource = getDynamicChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
             }
-            return $q.all(promiseArray).then(function(data) {
+            return $q.all(promises).then(function(data) {
                 return data;
             })
 
         }
         
+        function getDynamicTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDynamicGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getDynamicTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getDynamicTableDataByQCLevel(qcLevel, start, end)
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
+        // Daily
+        
+        function getDailyChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDailyGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
         function getDailyChartData(start, end) {
-            return stationMeasurements.getDailyGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getDailyChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getDailyTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDailyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
         function getDailyTableData(start, end) {
-            return stationMeasurements.getDailyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
+            var promiseArray = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getDailyTableDataByQCLevel(qcLevel, start, end)
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
         }
         
-        function getFiveMinChartData(start, end) {
-            return stationMeasurements.getFiveMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
+        // Hourly
         
-        function getOneMinChartData(start, end) {
-            return stationMeasurements.getOneMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getOneSecChartData(start, end) {
-            return stationMeasurements.getOneSecGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getFiveMinTableData(start, end) {
-            return stationMeasurements.getFiveMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getOneMinTableData(start, end) {
-            return stationMeasurements.getOneMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getOneSecTableData(start, end) {
-            return stationMeasurements.getOneSecGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getThirtyMinChartData(start, end) {
-            return stationMeasurements.getThirtyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getTwentyMinChartData(start, end) {
-            return stationMeasurements.getTwentyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getFifteenMinChartData(start, end) {
-            return stationMeasurements.getFifteenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getTenMinChartData(start, end) {
-            return stationMeasurements.getTenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
+        function getHourlyChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getHourlyGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
         function getHourlyChartData(start, end) {
-            return stationMeasurements.getHourlyGroupMeasurementsChart(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
+            var promiseArray = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getHourlyChartDataByQCLevel(qcLevel, start, end)
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
         }
         
-        function getHourlyTableData(start, end) {
+        function getHourlyTableDataByQCLevel(qcLevel, start, end) {
             return stationMeasurements.getHourlyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
+        function getHourlyTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getHourlyTableDataByQCLevel(qcLevel, start, end)
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
+        // 30 Min
+        
+        function getThirtyMinChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getThirtyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getThirtyMinChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getThirtyMinChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getThirtyMinTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getThirtyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
         function getThirtyMinTableData(start, end) {
-            return stationMeasurements.getThirtyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getThirtyMinTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        // 20 Min
+        
+        function getTwentyMinChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTwentyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTwentyMinChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getTwentyMinChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getTwentyMinTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTwentyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
         function getTwentyMinTableData(start, end) {
-            return stationMeasurements.getTwentyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getTwentyMinTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        // 15 Min
+        
+        function getFifteenMinChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFifteenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFifteenMinChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getFifteenMinChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getFifteenMinTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFifteenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
         function getFifteenMinTableData(start, end) {
-            return stationMeasurements.getFifteenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getFifteenMinTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        // 10 Min
+        
+        function getTenMinChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTenMinChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getTenMinChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getTenMinTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
         }
         
         function getTenMinTableData(start, end) {
-            return stationMeasurements.getTenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-        
-        function getTableData(start, end) {
-            var promiseArray = [];
+            var promises = [];
             for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
                 var qcLevel = vm.group.qc_levels.selected[i];
-                var resource = getTableDataByQCLevel(qcLevel, start, end)
-                promiseArray.push(resource);
+                var resource = getTenMinTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
             }
-            return $q.all(promiseArray).then(function(data) {
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        // 5 Min
+        
+        function getFiveMinChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFiveMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFiveMinChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getFiveMinChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getFiveMinTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFiveMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFiveMinTableData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getFiveMinTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        // 1 Min
+        
+        function getOneMinChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneMinChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getOneMinChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getOneMinTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneMinTableData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getOneMinTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        // 1 Second
+        
+        function getOneSecChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getOneSecChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getOneSecChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneSecGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        
+        function getOneSecTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneSecGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneSecTableData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.group.qc_levels.selected.length; i++) {
+                var qcLevel = vm.group.qc_levels.selected[i];
+                var resource = getOneSecTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
                 return data;
             })
         }
@@ -652,14 +844,16 @@
             var timeLabel = tableToExport.query.label;
             for (var i = 0; i < tableToExport.count; i++) {
                 var timestamp = tableToExport.data[i][timeFormat];
-                var date = moment(timestamp).format(tableToExport.momentDateFormat);
+                var date = moment(timestamp).format(tableToExport.query.momentDateFormat);
                 var row = {timeLabel: date}
                 for (var j = 0; j < tableToExport.header.length; j++) {
                     var parameterId = tableToExport.header[j].parameterId;
                     var headerName = tableToExport.header[j].header;
                     var valueType = tableToExport.header[j].valueType;
-                    var measurement = tableToExport.data[i].data[parameterId][valueType]
-                    row[headerName] = measurement;
+                    if (parameterId in tableToExport.data[i].data) {
+                        var measurement = tableToExport.data[i].data[parameterId][valueType]
+                        row[headerName] = measurement;
+                    }
                 }
                 
                 data.push(row);
@@ -673,8 +867,7 @@
             var yAxis = inityAxis();
             
             if (vm.group.frequencies.selected === 'Dynamic') {
-                //var data = getChartData(moment(0).valueOf(), moment().valueOf());
-                getChartData(moment(0).valueOf(), moment().valueOf())
+                getDynamicChartData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
                         var seriesOptions = initSeriesOptions(data);
                         chart = new Highcharts.stockChart({
@@ -684,8 +877,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -702,8 +894,11 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
+                                    type: 'minute',
+                                    count: 1,
+                                    text: '1M'
+                                }, {
                                     type: 'hour',
                                     count: 1,
                                     text: '1h'
@@ -737,7 +932,6 @@
                                 },
                                 inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
                                 selected: 4,
-
                             },
 
                             navigator: {
@@ -745,10 +939,6 @@
                             },
 
                             series: seriesOptions,
-                        
-                            //subtitle: {
-                            //    text: 'Frequency: ' + vm.group.frequencies.selected
-                            //},
                             
                             title: {
                                 text: vm.group.group_name + ' at ' + vm.station.name
@@ -768,7 +958,7 @@
 
                             xAxis: [{
                                 type: 'datetime',
-                                minRange: 3600 * 1000,
+                                minRange: 60000,    // 1 min
                                 events: {
                                     afterSetExtremes: afterSetExtremes
                                 }
@@ -792,8 +982,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -810,7 +999,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'day',
                                     count: 3,
@@ -852,7 +1040,6 @@
                                     return temp_date.valueOf();
                                 },
                                 selected: 4,
-                                //inputEnabled: true
                             },
 
                             navigator: {
@@ -879,7 +1066,7 @@
 
                             xAxis: [{
                                 type: 'datetime',
-                                minRange: 3600 * 1000,
+                                minRange: 3600 * 1000 * 24 * 3,
                                 events: {
                                     afterSetExtremes: afterSetExtremes
                                 }
@@ -903,8 +1090,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -921,7 +1107,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'day',
                                     count: 1,
@@ -957,8 +1142,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -985,7 +1169,7 @@
 
                             xAxis: [{
                                 type: 'datetime',
-                                minRange: 3600 * 1000,
+                                minRange: 3600 * 1000 * 24,
                                 events: {
                                     afterSetExtremes: afterSetExtremes
                                 }
@@ -1009,8 +1193,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -1027,7 +1210,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'day',
                                     count: 1,
@@ -1063,8 +1245,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -1091,7 +1272,7 @@
 
                             xAxis: [{
                                 type: 'datetime',
-                                minRange: 3600 * 1000,
+                                minRange: 3600 * 1000 * 24,
                                 events: {
                                     afterSetExtremes: afterSetExtremes
                                 }
@@ -1115,8 +1296,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -1133,7 +1313,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'day',
                                     count: 1,
@@ -1169,8 +1348,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -1197,7 +1375,7 @@
 
                             xAxis: [{
                                 type: 'datetime',
-                                minRange: 3600 * 1000,
+                                minRange: 3600 * 1000 * 24,
                                 events: {
                                     afterSetExtremes: afterSetExtremes
                                 }
@@ -1221,8 +1399,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -1239,7 +1416,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'day',
                                     count: 1,
@@ -1275,8 +1451,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -1303,7 +1478,7 @@
 
                             xAxis: [{
                                 type: 'datetime',
-                                minRange: 3600 * 1000,
+                                minRange: 3600 * 1000 * 24,
                                 events: {
                                     afterSetExtremes: afterSetExtremes
                                 }
@@ -1327,8 +1502,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -1345,7 +1519,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'hour',
                                     count: 1,
@@ -1389,8 +1562,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -1441,8 +1613,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -1459,7 +1630,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'hour',
                                     count: 1,
@@ -1499,8 +1669,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -1551,8 +1720,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -1569,7 +1737,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'hour',
                                     count: 1,
@@ -1609,8 +1776,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -1661,8 +1827,7 @@
                                 style: {
                                     fontFamily: 'Roboto'
                                 },
-                                type: 'spline',
-                                zoomType: 'x'
+                                type: 'spline'
                             },
 
                             credits: {
@@ -1679,7 +1844,6 @@
                             },
                           
                             rangeSelector: {
-                                //allButtonsEnabled: true,
                                 buttons: [{
                                     type: 'minute',
                                     count: 1,
@@ -1687,7 +1851,7 @@
                                 }, {
                                     type: 'minute',
                                     count: 5,
-                                    text: '1M'
+                                    text: '5M'
                                 }, {
                                     type: 'hour',
                                     count: 1,
@@ -1727,8 +1891,7 @@
                                 selected: 4,
                                 inputBoxWidth: 130,
                                 inputDateFormat: "%Y-%m-%d %H:%M:%S",
-                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
-                                //inputEnabled: true
+                                inputEditDateFormat: "%Y-%m-%d %H:%M:%S"
                             },
 
                             navigator: {
@@ -1755,7 +1918,7 @@
 
                             xAxis: [{
                                 type: 'datetime',
-                                minRange: 3600 * 1000,
+                                minRange: 60000,
                                 events: {
                                     afterSetExtremes: afterSetExtremes
                                 }
@@ -1805,9 +1968,9 @@
                             'lineWidth': 2,
                             'lineColor': Highcharts.getOptions().colors[i]
                         },
-                        'dataGrouping': {
-                            'enabled': false
-                        },
+                        //'dataGrouping': {
+                        //    'enabled': false
+                        //},
                         'showInNavigator': true,
                         'data': seriesAverageData
                     };
@@ -1866,54 +2029,12 @@
             vm.tableOptionsAll = [];
             
             if (vm.group.frequencies.selected === 'Dynamic') {
-                getTableData(moment(0).valueOf(), moment().valueOf())
+                getDynamicTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
                         for (var j = 0; j < data.length; j++) {
                             var qcData = data[j];
                             if (Array.isArray(qcData) || qcData.length) {
-                                var firstRow = qcData[0];
-                                var dataQcLevel = firstRow.qc_level;
-                                var label = 'Timestamp';
-                                var order = 'timestamp';
-                                var dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                                var momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                                var header = initTableHeader();
-                                if ('date' in firstRow) {
-                                    order = 'date';
-                                    label = 'Date';
-                                    dateFormat = 'yyyy-MM-dd';
-                                    momentDateFormat = 'YYYY-MM-DD';
-                                }
-                                else if ('date_hour' in firstRow) {
-                                    order = 'date_hour';
-                                    label = 'Date & Hour';
-                                    dateFormat = 'yyyy-MM-dd HH:mm';
-                                    momentDateFormat = 'YYYY-MM-DD HH:mm';
-                                }
-                                else if ('timestamp' in firstRow) {}
-                                
-                                var tableOptions = {
-                                    'name': vm.group.group_name + ' - QC Level ' + dataQcLevel,
-                                    'options': {
-                                        'decapitate': false,
-                                        'boundaryLinks': false,
-                                        'limitSelect': true,
-                                        'pageSelect': true
-                                    },
-                                    'query': {
-                                        'label': label,
-                                        'order': order,
-                                        'dateFormat': dateFormat,
-                                        'momentDateFormat': momentDateFormat,
-                                        'limit': 5,
-                                        'page': 1
-                                    },
-                                    'count': qcData.length,
-                                    'header': header,
-                                    'data': qcData,
-                                    'isReady': true
-                                };
-
+                                var tableOptions = initDynamicTableOptions(qcData);
                                 vm.tableOptionsAll.push(tableOptions);
                             }
                         }
@@ -1924,135 +2045,117 @@
             else if (vm.group.frequencies.selected === 'Daily') {
                 getDailyTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'date';
-                            vm.tableOptions.query.label = 'Date';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initDateTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === 'Hourly') {
                 getHourlyTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'date_hour';
-                            vm.tableOptions.query.label = 'Date & Hour';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initDateHourTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === '30 Min') {
                 getThirtyMinTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === '20 Min') {
                 getTwentyMinTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === '15 Min') {
                 getFifteenMinTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === '10 Min') {
                 getTenMinTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === '5 Min') {
                 getFiveMinTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === '1 Min') {
                 getOneMinTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             
             else if (vm.group.frequencies.selected === '1 Sec') {
                 getOneSecTableData(moment(0).valueOf(), moment().valueOf())
                     .then(function(data) {
-                        if (Array.isArray(data) || data.length) {
-                            vm.tableOptions.query.order = 'timestamp';
-                            vm.tableOptions.query.label = 'Timestamp';
-                            vm.tableOptions.query.dateFormat = 'yyyy-MM-dd HH:mm:ss';
-                            vm.tableOptions.query.momentDateFormat = 'YYYY-MM-DD HH:mm:ss';
-                            vm.tableOptions.count = data.length;
-                            vm.tableOptions.data = data;
+                        for (var j = 0; j < data.length; j++) {
+                            var qcData = data[j];
+                            if (Array.isArray(data) || data.length) {
+                                var tableOptions = initTimestampTableOptions(qcData);
+                                vm.tableOptionsAll.push(tableOptions);
+                            }
                         }
-                        vm.tableOptions.isReady = true;
                 });
             }
             

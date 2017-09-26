@@ -18,37 +18,33 @@
         return {
             //Daily
             getDailySingleParameterMeasurements: getDailySingleParameterMeasurements,
-            getDailyParameterGroupMeasurements: getDailyParameterGroupMeasurements,
             getDailyProfileMeasurements: getDailyProfileMeasurements,
-            getDailyChartParameterGroupMeasurements: getDailyChartParameterGroupMeasurements,
             getDailyChartProfileMeasurements: getDailyChartProfileMeasurements,
             getDailyChartSingleParameterMeasurements: getDailyChartSingleParameterMeasurements,
             //High Frequency
             getHighFrequencySingleParameterMeasurements: getHighFrequencySingleParameterMeasurements,
-            getHighFrequencyParameterGroupMeasurements: getHighFrequencyParameterGroupMeasurements,
             getHighFrequencyProfileMeasurements: getHighFrequencyProfileMeasurements,
-            getHighFrequencyChartParameterGroupMeasurements: getHighFrequencyChartParameterGroupMeasurements,
             getHighFrequencyChartProfileMeasurements: getHighFrequencyChartProfileMeasurements,
             getHighFrequencyChartSingleParameterMeasurements: getHighFrequencyChartSingleParameterMeasurements,
             //Hourly
             getHourlySingleParameterMeasurements: getHourlySingleParameterMeasurements,
-            getHourlyParameterGroupMeasurements: getHourlyParameterGroupMeasurements,
             getHourlyProfileMeasurements: getHourlyProfileMeasurements,
             getHourlyChartSingleParameterMeasurements: getHourlyChartSingleParameterMeasurements,
-            getHourlyChartParameterGroupMeasurements: getHourlyChartParameterGroupMeasurements,
             getHourlyChartProfileMeasurements: getHourlyChartProfileMeasurements,
             getMeasurementFrequencies: getMeasurementFrequencies,
             //Groups
-            getGroupMeasurements: getGroupMeasurements,
-            getGroupMeasurementsChart: getGroupMeasurementsChart,
-            getGroupMeasurementsTimeGrouped: getGroupMeasurementsTimeGrouped,
+            getDynamicGroupMeasurements: getDynamicGroupMeasurements,
+            getDynamicGroupMeasurementsChart: getDynamicGroupMeasurementsChart,
+            getDynamicGroupMeasurementsTimeGrouped: getDynamicGroupMeasurementsTimeGrouped,
             getDailyGroupMeasurements: getDailyGroupMeasurements,
             getDailyGroupMeasurementsChart: getDailyGroupMeasurementsChart,            
+            getDailyGroupMeasurementsTimeGrouped: getDailyGroupMeasurementsTimeGrouped,
             getFiveMinGroupMeasurements: getFiveMinGroupMeasurements,
+            getFiveMinGroupMeasurementsChart: getFiveMinGroupMeasurementsChart,
+            getFiveMinGroupMeasurementsTimeGrouped: getFiveMinGroupMeasurementsTimeGrouped,
             getHourlyGroupMeasurementsChart: getHourlyGroupMeasurementsChart,
             getHourlyGroupMeasurementsTimeGrouped: getHourlyGroupMeasurementsTimeGrouped,
             getHourlyGroupMeasurements: getHourlyGroupMeasurements,
-            getDailyGroupMeasurementsTimeGrouped: getDailyGroupMeasurementsTimeGrouped,
             getThirtyMinGroupMeasurementsChart: getThirtyMinGroupMeasurementsChart,
             getThirtyMinGroupMeasurementsTimeGrouped: getThirtyMinGroupMeasurementsTimeGrouped,
             getTwentyMinGroupMeasurementsChart: getTwentyMinGroupMeasurementsChart,
@@ -57,8 +53,6 @@
             getFifteenMinGroupMeasurementsTimeGrouped: getFifteenMinGroupMeasurementsTimeGrouped,
             getTenMinGroupMeasurementsChart: getTenMinGroupMeasurementsChart,
             getTenMinGroupMeasurementsTimeGrouped: getTenMinGroupMeasurementsTimeGrouped,
-            getFiveMinGroupMeasurementsChart: getFiveMinGroupMeasurementsChart,
-            getFiveMinGroupMeasurementsTimeGrouped: getFiveMinGroupMeasurementsTimeGrouped,
             getOneMinGroupMeasurementsChart: getOneMinGroupMeasurementsChart,
             getOneMinGroupMeasurementsTimeGrouped: getOneMinGroupMeasurementsTimeGrouped,
             getOneSecGroupMeasurementsChart: getOneSecGroupMeasurementsChart,
@@ -101,41 +95,6 @@
         
         }
         
-        function getDailyParameterGroupMeasurements(stationId, groupId, qcLevel, fromDate, toDate) {
-            var resource = $resource('/api/daily_parameter_group_measurements_by_station/:station_id/:group_id/:qc_level/:from_date/:to_date', {}, {
-                query: {
-                    method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId,
-                        qc_level: qcLevel,
-                        from_date: fromDate,
-                        to_date: toDate
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                station_id: stationId, 
-                group_id: groupId, 
-                qc_level: qcLevel, 
-                from_date: fromDate, 
-                to_date: toDate
-            }).$promise
-                .then(getDailyParameterGroupMeasurementsComplete)
-                .catch(getDailyParameterGroupMeasurementsFailed);
-                
-            function getDailyParameterGroupMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getDailyParameterGroupMeasurementsFailed(error) {
-                console.log(error);
-            }
-        
-        }
-        
         function getDailyProfileMeasurements(stationId, parameterId, qcLevel, fromDate, toDate) {
             var resource = $resource('/api/daily_profile_measurements_by_station/:station_id/:parameter_id/:qc_level/:from_date/:to_date', {}, {
                 query: {
@@ -166,41 +125,6 @@
             }
             
             function getDailyProfileMeasurementsFailed(error) {
-                console.log(error);
-            }
-        
-        }
-        
-        function getDailyChartParameterGroupMeasurements(stationId, groupId, qcLevel, fromDate, toDate) {
-            var resource = $resource('/api/daily_parameter_group_measurements_by_station_chart/:station_id/:group_id/:qc_level/:from_date/:to_date', {}, {
-                query: {
-                    method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId,
-                        qc_level: qcLevel,
-                        from_date: fromDate,
-                        to_date: toDate
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                station_id: stationId, 
-                group_id: groupId, 
-                qc_level: qcLevel, 
-                from_date: fromDate, 
-                to_date: toDate
-            }).$promise
-                .then(getDailyChartParameterGroupMeasurementsComplete)
-                .catch(getDailyChartParameterGroupMeasurementsFailed);
-                
-            function getDailyChartParameterGroupMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getDailyChartParameterGroupMeasurementsFailed(error) {
                 console.log(error);
             }
         
@@ -311,41 +235,6 @@
 
         }
         
-        function getHighFrequencyParameterGroupMeasurements(stationId, groupId, qcLevel, fromTimestamp, toTimestamp) {
-            var resource = $resource('/api/parameter_group_measurements_by_station/:station_id/:group_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
-                query: {
-                    method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId,
-                        qc_level: qcLevel,
-                        from_timestamp: fromTimestamp,
-                        to_timestamp: toTimestamp
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                station_id: stationId, 
-                group_id: groupId, 
-                qc_level: qcLevel, 
-                from_timestamp: fromTimestamp, 
-                to_timestamp: toTimestamp
-            }).$promise
-                .then(getHighFrequencyParameterGroupMeasurementsComplete)
-                .catch(getHighFrequencyParameterGroupMeasurementsFailed);
-                
-            function getHighFrequencyParameterGroupMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHighFrequencyParameterGroupMeasurementsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
         function getHighFrequencyProfileMeasurements(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
             var resource = $resource('/api/profile_measurements_by_station/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
                 query: {
@@ -379,41 +268,6 @@
                 console.log(error);
             }
 
-        }
-        
-        function getHighFrequencyChartParameterGroupMeasurements(stationId, groupId, qcLevel, fromTimestamp, toTimestamp) {
-            var resource = $resource('/api/five_min_parameter_group_measurements_by_station_chart/:station_id/:group_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
-                query: {
-                    method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId,
-                        qc_level: qcLevel,
-                        from_timestamp: fromTimestamp,
-                        to_timestamp: toTimestamp
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                station_id: stationId, 
-                group_id: groupId, 
-                qc_level: qcLevel, 
-                from_timestamp: fromTimestamp, 
-                to_timestamp: toTimestamp
-            }).$promise
-                .then(getHighFrequencyChartParameterGroupMeasurementsComplete)
-                .catch(getHighFrequencyChartParameterGroupMeasurementsFailed);
-                
-            function getHighFrequencyChartParameterGroupMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHighFrequencyChartParameterGroupMeasurementsFailed(error) {
-                console.log(error);
-            }
-        
         }
         
         function getHighFrequencyChartProfileMeasurements(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
@@ -521,41 +375,6 @@
 
         }
         
-        function getHourlyParameterGroupMeasurements(stationId, groupId, qcLevel, fromDateHour, toDateHour) {
-            var resource = $resource('/api/hourly_parameter_group_measurements_by_station/:station_id/:group_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
-                query: {
-                    method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId,
-                        qc_level: qcLevel,
-                        from_date_hour: fromDateHour,
-                        to_date_hour: toDateHour
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                station_id: stationId, 
-                group_id: groupId, 
-                qc_level: qcLevel, 
-                from_date_hour: fromDateHour, 
-                to_date_hour: toDateHour
-            }).$promise
-                .then(getHourlyParameterGroupMeasurementsComplete)
-                .catch(getHourlyParameterGroupMeasurementsFailed);
-                
-            function getHourlyParameterGroupMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHourlyParameterGroupMeasurementsFailed(error) {
-                console.log(error);
-            }
-        
-        }
-        
         function getHourlyChartSingleParameterMeasurements(stationId, parameterId, qcLevel, fromDateHour, toDateHour) {
             var resource = $resource('/api/hourly_single_parameter_measurements_by_station_chart/:station_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
                 query: {
@@ -626,41 +445,6 @@
         
         }
         
-        function getHourlyChartParameterGroupMeasurements(stationId, groupId, qcLevel, fromDateHour, toDateHour) {
-            var resource = $resource('/api/hourly_parameter_group_measurements_by_station_chart/:station_id/:group_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
-                query: {
-                    method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId,
-                        qc_level: qcLevel,
-                        from_date_hour: fromDateHour,
-                        to_date_hour: toDateHour
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({
-                station_id: stationId, 
-                group_id: groupId, 
-                qc_level: qcLevel, 
-                from_date_hour: fromDateHour, 
-                to_date_hour: toDateHour
-            }).$promise
-                .then(getHourlyChartParameterGroupMeasurementsComplete)
-                .catch(getHourlyChartParameterGroupMeasurementsFailed);
-                
-            function getHourlyChartParameterGroupMeasurementsComplete(response) {
-                return response;
-            }
-            
-            function getHourlyChartParameterGroupMeasurementsFailed(error) {
-                console.log(error);
-            }
-        
-        }
-        
         function getHourlyChartProfileMeasurements(stationId, parameterId, qcLevel, fromDateHour, toDateHour) {
             var resource = $resource('/api/hourly_profile_measurements_by_station_chart/:station_id/:parameter_id/:qc_level/:from_date_hour/:to_date_hour', {}, {
                 query: {
@@ -721,7 +505,7 @@
 
         }
         
-        function getGroupMeasurementsChart(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+        function getDynamicGroupMeasurementsChart(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
             var resource = $resource('/api/group_measurements_by_station_chart/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
                 query: {
                     method: 'GET', params: {
@@ -756,7 +540,7 @@
         
         }
         
-        function getGroupMeasurements(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+        function getDynamicGroupMeasurements(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
             var resource = $resource('/api/group_measurements_by_station/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
                 query: {
                     method: 'GET', params: {
@@ -1526,7 +1310,7 @@
         
         }
         
-        function getGroupMeasurementsTimeGrouped(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
+        function getDynamicGroupMeasurementsTimeGrouped(stationId, parameterId, qcLevel, fromTimestamp, toTimestamp) {
             var resource = $resource('/api/group_measurements_by_station_time_grouped/:station_id/:parameter_id/:qc_level/:from_timestamp/:to_timestamp', {}, {
                 query: {
                     method: 'GET', params: {

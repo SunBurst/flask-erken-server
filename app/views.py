@@ -357,33 +357,200 @@ def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from
     
     delta = to_dt - from_dt
 
-    if delta.days > 465:
+    if delta.days < 12: # delta < 12 days
+        print("delta < 12 days")
+        if delta.days < 6: # delta < 6 days
+            print("delta < 6 days")
+            if delta.days < 4: # delta < 4 days
+                print("delta < 4 days")
+                if delta.days < 3: # delta < 3 days
+                    print("delta < 3 days")
+                    if delta.days < 2:  # delta < 2 days
+                        print("delta < 2 days")
+                        if delta.days < 1:  # delta < 1 days
+                            print("delta < 1 days")
+                            if (delta.seconds // 3600) < 5: # delta < 5 hours                             
+                                print("delta < 5 hours")
+                                if ((delta.seconds // 60) % 60) < 5:    # delta < 5 minutes
+                                    print("delta < 5 minutes")
+                                    if '1 Sec' in frequencies:
+                                        return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Min' in frequencies:
+                                        return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                else:   # 5 hours > delta >= 5 minutes
+                                    print("5 hours > delta >= 5 minutes")
+                                    if '1 Min' in frequencies:
+                                        return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Sec' in frequencies:
+                                        return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            else:   # 1 days > delta >= 5 hours 
+                                print("1 days > delta >= 5 hours")
+                                if '5 Min' in frequencies:
+                                    return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '1 Min' in frequencies:
+                                    return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                                elif '1 Sec' in frequencies:
+                                    return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '10 Min' in frequencies:
+                                    return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '15 Min' in frequencies:
+                                    return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '20 Min' in frequencies:
+                                    return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '30 Min' in frequencies:
+                                    return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif 'Hourly' in frequencies:
+                                    return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif 'Daily' in frequencies:
+                                    return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        else:   # 2 days < delta >= 1 days
+                            print("2 days < delta >= 1 days")
+                            if '10 Min' in frequencies:
+                                return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '5 Min' in frequencies:
+                                return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '1 Min' in frequencies:
+                                return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                            elif '1 Sec' in frequencies:
+                                return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '15 Min' in frequencies:
+                                return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '20 Min' in frequencies:
+                                return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '30 Min' in frequencies:
+                                return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif 'Hourly' in frequencies:
+                                return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif 'Daily' in frequencies:
+                                return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    else:   # 3 days > delta >= 2 days
+                        print("3 days > delta >= 2 days")
+                        if '15 Min' in frequencies:
+                            return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '10 Min' in frequencies:
+                            return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '5 Min' in frequencies:
+                            return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '1 Min' in frequencies:
+                            return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                        elif '1 Sec' in frequencies:
+                            return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '20 Min' in frequencies:
+                            return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '30 Min' in frequencies:
+                            return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif 'Hourly' in frequencies:
+                            return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif 'Daily' in frequencies:
+                            return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                else:   # 4 days > delta >= 3 days
+                    print("4 days > delta >= 3 days")
+                    if '20 Min' in frequencies:
+                        return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '15 Min' in frequencies:
+                        return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '10 Min' in frequencies:
+                        return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '5 Min' in frequencies:
+                        return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '1 Min' in frequencies:
+                        return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                    elif '1 Sec' in frequencies:
+                        return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '30 Min' in frequencies:
+                        return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif 'Hourly' in frequencies:
+                        return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif 'Daily' in frequencies:
+                        return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            else:   # 6 days < delta >= 4 days
+                print("6 days < delta >= 4 days")
+                if '30 Min' in frequencies:
+                    return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '20 Min' in frequencies:
+                    return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '15 Min' in frequencies:
+                    return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '10 Min' in frequencies:
+                    return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '5 Min' in frequencies:
+                    return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '1 Min' in frequencies:
+                    return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                elif '1 Sec' in frequencies:
+                    return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif 'Hourly' in frequencies:
+                    return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif 'Daily' in frequencies:
+                    return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        else:   # 12 days > delta >= 6 days
+            print("12 days > delta >= 6 days")
+            if 'Hourly' in frequencies:
+                return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '30 Min' in frequencies:
+                return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '20 Min' in frequencies:
+                return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '15 Min' in frequencies:
+                return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '10 Min' in frequencies:
+                return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '5 Min' in frequencies:
+                return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '1 Min' in frequencies:
+                return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '1 Sec' in frequencies:
+                return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif 'Daily' in frequencies:
+                return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+    else:   # unbound > delta >= 12 days
+        print("unbound > delta >= 12 days")
         if 'Daily' in frequencies:
             return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif 'Hourly' in frequencies:
             return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '30 Min' in frequencies:
+            return get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '20 Min' in frequencies:
+            return get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '15 Min' in frequencies:
+            return get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '10 Min' in frequencies:
+            return get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif '5 Min' in frequencies:
             return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-    else:   # days <= 465
-        if delta.days <= 30:
-            if delta.days <= 1:
-                if '5 Min' in frequencies:
-                    return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-                elif 'Hourly' in frequencies:
-                    return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            else: # 1 < days <= 30
-                if 'Hourly' in frequencies:
-                    return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-                elif '5 Min' in frequencies:
-                    return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-        else:   # 30 < days <= 465 
-            if 'Daily' in frequencies:
-                return get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            elif 'Hourly' in frequencies:
-                return get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            elif '5 Min' in frequencies:
-                return get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-    
+        elif '1 Min' in frequencies:
+            return get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '1 Sec' in frequencies:
+            return get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     
     return json.dumps({}, cls=CustomEncoder)
     
