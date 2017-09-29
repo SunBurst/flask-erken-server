@@ -85,6 +85,28 @@ CREATE TABLE IF NOT EXISTS hydroview_development.profile_measurements_by_station
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
+CREATE TABLE IF NOT EXISTS hydroview_development.parameter_sensors_by_station (
+    station_id text,
+    parameter text,
+    parameter_type text,
+    sensors map<text, text>,
+    PRIMARY KEY (station_id, parameter, parameter_type)
+) WITH CLUSTERING ORDER BY (parameter ASC, parameter_type ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
 CREATE TABLE IF NOT EXISTS hydroview_development.sensors_by_station (
     station_id text,
     sensor_name text,
@@ -449,7 +471,30 @@ CREATE TABLE hydroview_development.group_qc_levels_by_station (
     group_id text,
     qc_description frozen<description>,
     PRIMARY KEY (station_id, group_name, qc_level, group_id)
-) WITH CLUSTERING ORDER BY (group_name ASC, qc_level DESC, group_id DESC)
+) WITH CLUSTERING ORDER BY (group_name ASC, qc_level DESC, group_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.parameter_qc_levels_by_station (
+    station_id text,
+    parameter text,
+    qc_level int,
+    parameter_type text,
+    qc_description frozen<description>,
+    PRIMARY KEY (station_id, parameter, qc_level, parameter_type)
+) WITH CLUSTERING ORDER BY (parameter ASC, qc_level DESC, parameter_type ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -585,17 +630,19 @@ CREATE TABLE IF NOT EXISTS hydroview_development.parameters_all_measurement_type
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE IF NOT EXISTS hydroview_development.hourly_single_parameter_measurements_by_station (
+CREATE TABLE hydroview_development.hourly_single_parameter_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
     year int,
     date_hour timestamp,
     sensor_name text,
     sensor_id text,
     avg_value float,
+    max_value float,
+    min_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, year), date_hour, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, year), date_hour, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (date_hour DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
@@ -612,17 +659,19 @@ CREATE TABLE IF NOT EXISTS hydroview_development.hourly_single_parameter_measure
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE IF NOT EXISTS hydroview_development.thirty_min_single_param_measurements_by_station (
+CREATE TABLE hydroview_development.thirty_min_single_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
     year int,
     timestamp timestamp,
     sensor_name text,
     sensor_id text,
     avg_value float,
+    max_value float,
+    min_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, year), timestamp, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, year), timestamp, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
@@ -639,17 +688,19 @@ CREATE TABLE IF NOT EXISTS hydroview_development.thirty_min_single_param_measure
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE IF NOT EXISTS hydroview_development.twenty_min_single_param_measurements_by_station (
+CREATE TABLE hydroview_development.twenty_min_single_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
     year int,
     timestamp timestamp,
     sensor_name text,
     sensor_id text,
     avg_value float,
+    max_value float,
+    min_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, year), timestamp, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, year), timestamp, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
@@ -666,17 +717,19 @@ CREATE TABLE IF NOT EXISTS hydroview_development.twenty_min_single_param_measure
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE IF NOT EXISTS hydroview_development.fifteen_min_sing_param_measurements_by_station (
+CREATE TABLE hydroview_development.fifteen_min_single_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
-    month_first_day timestamp,
+    month_first_day date,
     timestamp timestamp,
     sensor_name text,
     sensor_id text,
     avg_value float,
+    max_value float,
+    min_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
@@ -693,17 +746,19 @@ CREATE TABLE IF NOT EXISTS hydroview_development.fifteen_min_sing_param_measurem
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_single_parameter_measurements_by_station (
+CREATE TABLE hydroview_development.ten_min_single_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
-    month_first_day timestamp,
+    month_first_day date,
     timestamp timestamp,
     sensor_name text,
     sensor_id text,
     avg_value float,
+    max_value float,
+    min_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
@@ -720,44 +775,19 @@ CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_single_parameter_measur
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE IF NOT EXISTS hydroview_development.five_min_single_param_measurements_by_station (
+CREATE TABLE hydroview_development.five_min_single_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
-    month_first_day timestamp,
+    month_first_day date,
     timestamp timestamp,
     sensor_name text,
     sensor_id text,
     avg_value float,
+    max_value float,
+    min_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
-    AND bloom_filter_fp_chance = 0.01
-    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
-    AND comment = ''
-    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
-    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
-    AND crc_check_chance = 1.0
-    AND dclocal_read_repair_chance = 0.1
-    AND default_time_to_live = 0
-    AND gc_grace_seconds = 864000
-    AND max_index_interval = 2048
-    AND memtable_flush_period_in_ms = 0
-    AND min_index_interval = 128
-    AND read_repair_chance = 0.0
-    AND speculative_retry = '99PERCENTILE';
-
-CREATE TABLE IF NOT EXISTS hydroview_development.one_min_single_parameter_measurements_by_station (
-    station_id text,
-    parameter_id text,
-    qc_level int,
-    week_first_day timestamp,
-    timestamp timestamp,
-    sensor_name text,
-    sensor_id text,
-    avg_value float,
-    unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, week_first_day), timestamp, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
@@ -774,17 +804,48 @@ CREATE TABLE IF NOT EXISTS hydroview_development.one_min_single_parameter_measur
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
     
-CREATE TABLE IF NOT EXISTS hydroview_development.second_single_parameter_measurements_by_station (
+CREATE TABLE hydroview_development.one_min_single_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
-    hour timestamp,
+    week_first_day date,
     timestamp timestamp,
     sensor_name text,
     sensor_id text,
     avg_value float,
+    max_value float,
+    min_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, hour), timestamp, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, week_first_day), timestamp, sensor_name, sensor_id)
+) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.one_sec_single_measurements_by_station (
+    station_id text,
+    parameter text,
+    qc_level int,
+    date date,
+    timestamp timestamp,
+    sensor_name text,
+    sensor_id text,
+    avg_value float,
+    max_value float,
+    min_value float,
+    unit text static,
+    PRIMARY KEY ((station_id, parameter, qc_level, date), timestamp, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (timestamp DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
@@ -823,7 +884,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.video_urls_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE IF NOT EXISTS hydroview_development.five_min_parameter_group_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.five_min_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -916,6 +977,51 @@ CREATE TABLE hydroview_development.group_measurement_frequencies_by_station (
     measurement_frequencies list<text>,
     PRIMARY KEY (station_id, group_id)
 ) WITH CLUSTERING ORDER BY (group_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+    
+CREATE TABLE hydroview_development.parameter_measurement_frequencies_by_station (
+    station_id text,
+    parameter text,
+    parameter_type text,
+    measurement_frequencies list<text>,
+    PRIMARY KEY (station_id, parameter, parameter_type)
+) WITH CLUSTERING ORDER BY (parameter ASC, parameter_type ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE hydroview_development.parameters_by_station (
+    station_id text,
+    parameter text,
+    parameter_type text,
+    parameter_description frozen<description>,
+    parameter_unit text,
+    PRIMARY KEY ((station_id), parameter, parameter_type)
+) WITH CLUSTERING ORDER BY (parameter ASC, parameter_type ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1156,7 +1262,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_group_measurements_by_s
     station_id text,
     group_id text,
     qc_level int,
-    month_first_day timestamp,
+    month_first_day date,
     timestamp timestamp,
     parameter_name text,
     parameter_id text,
@@ -1183,15 +1289,17 @@ CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_group_measurements_by_s
 
 CREATE TABLE IF NOT EXISTS hydroview_development.daily_single_parameter_measurements_by_station (
     station_id text,
-    parameter_id text,
+    parameter text,
     qc_level int,
     year int,
     date timestamp,
     sensor_name text,
     sensor_id text,
+    min_value float,
     avg_value float,
+    max_value float,
     unit text static,
-    PRIMARY KEY ((station_id, parameter_id, qc_level, year), date, sensor_name, sensor_id)
+    PRIMARY KEY ((station_id, parameter, qc_level, year), date, sensor_name, sensor_id)
 ) WITH CLUSTERING ORDER BY (date DESC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}

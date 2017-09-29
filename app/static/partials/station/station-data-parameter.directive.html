@@ -1,12 +1,12 @@
 <div layout="row" layout-xs="column">
-    <h1 flex class="md-headline">{[ stationDataGroupItemVm.group.group_name ]}</h1>
+    <h1 flex class="md-headline">{[ stationDataParameterItemVm.parameter.parameter ]}</h1>
 
     <md-input-container>
         <label>QC Level(s)</label>
-        <md-select ng-model="stationDataGroupItemVm.group.qc_levels.selected" multiple 
-            class="md-no-underline" md-on-close="stationDataGroupItemVm.qcLevelChange()">
+        <md-select ng-model="stationDataParameterItemVm.parameter.qc_levels.selected" multiple 
+            class="md-no-underline" md-on-close="stationDataParameterItemVm.qcLevelChange()">
             <md-optgroup label="QC Levels (Highest - Lowest)">
-                <md-option ng-repeat="qclevel in stationDataGroupItemVm.group.qc_levels.list" 
+                <md-option ng-repeat="qclevel in stationDataParameterItemVm.parameter.qc_levels.list" 
                     value="{[ qclevel.qc_level ]}">{[ qclevel.qc_level ]}</md-option>
             </md-optgroup>
         </md-select>
@@ -14,12 +14,12 @@
     
     <md-input-container>
         <label>Frequency</label>
-        <md-select ng-model="stationDataGroupItemVm.group.frequencies.selected" 
-            class="md-no-underline" ng-change="stationDataGroupItemVm.frequencyChange()">
+        <md-select ng-model="stationDataParameterItemVm.parameter.frequencies.selected" 
+            class="md-no-underline" ng-change="stationDataParameterItemVm.frequencyChange()">
             <md-optgroup label="Frequencies">
                 <md-option value="Dynamic">Dynamic</md-option>
                 <md-divider/>
-                <md-option ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
+                <md-option ng-repeat="frequency in stationDataParameterItemVm.parameter.frequencies.list" 
                     value="{[ frequency ]}">{[ frequency ]}</md-option>
             </md-optgroup>
         </md-select>
@@ -30,20 +30,20 @@
 <md-card>
         
     <img class="md-card-image">
-        <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" class="chart-group"></div>
+        <div id="{[ stationDataParameterItemVm.chartId ]}" class="chart-group"></div>
     </img>
-        
+
 </md-card>
 
-<md-card ng-repeat="qcTable in stationDataGroupItemVm.tableOptionsAll">
+<md-card ng-repeat="qcTable in stationDataParameterItemVm.tableOptionsAll">
 
     <md-toolbar ng-if="qcTable.isReady" class="md-table-toolbar md-default">
         <div class="md-toolbar-tools">
             <span>{[ qcTable.name ]}</span>
             <span flex></span>
-            <md-button class="md-icon-button" ng-csv="stationDataGroupItemVm.prepareCSVExport($index)"
-                csv-header="stationDataGroupItemVm.getHeader($index)" aria-label="Export and download selected data set as CSV" 
-                    filename="{[ stationDataGroupItemVm.station.name ]} {[ qcTable.name ]}.csv" 
+            <md-button class="md-icon-button" ng-csv="stationDataParameterItemVm.prepareCSVExport($index)"
+                csv-header="stationDataParameterItemVm.getHeader($index)" aria-label="Export and download selected data set as CSV" 
+                    filename="{[ stationDataParameterItemVm.station.name ]} {[ qcTable.name ]}.csv" 
                         lazy-load="true">
                 <ng-md-icon icon="file_download" style="fill: #000000"></ng-md-icon>
             </md-button>
@@ -60,6 +60,9 @@
                     <th md-column md-numeric>
                         <span>QC Level</span>
                     </th>
+                    <th md-column>
+                        <span>Sensor</span>
+                    </th>
                     <th md-column md-numeric ng-repeat="qcLevelParameter in qcTable.header">
                         <span>{[ qcLevelParameter.header ]}</span>
                     </th>
@@ -70,8 +73,9 @@
                     md-select="measurement" md-auto-select="qcTable.options.autoSelect">
                     <td md-cell>{[ measurement[qcTable.query.order] | date: qcTable.query.dateFormat ]}</td>
                     <td md-cell>{[ measurement.qc_level ]}</td>
+                    <td md-cell>{[ measurement.sensor_name ]}</td>
                     <td md-cell ng-repeat="qcLevelParameter in qcTable.header">
-                        {[ measurement.data[qcLevelParameter.parameterId][qcLevelParameter.valueType] | number: 2 ]}
+                        {[ measurement[qcLevelParameter.valueType] | number: 2 ]}
                     </td>
                 </tr>
             </tbody>

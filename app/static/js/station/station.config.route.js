@@ -73,12 +73,6 @@
                     //}
                 }
             })
-            .state('station.data.frequency', {
-                url: '/frequency/:frequency',
-                templateUrl: '/static/partials/station/station-data-frequency.html',
-                controller: 'StationDataFrequencyCtrl',
-                controllerAs: 'stationDataFrequencyVm',
-            })
             .state('station.data.groups', {
                 url: '/groups',
                 templateUrl: '/static/partials/station/station-data-groups.html',
@@ -151,11 +145,8 @@
                             var groupsMeasurementFrequencies = {};
                             for (var i = 0; i < _groupMeasurementFrequenciesList.length; i++) {
                                 groupsMeasurementFrequencies[_groupMeasurementFrequenciesList[i].group_id] = _groupMeasurementFrequenciesList[i];
-                                if (i == 0) {
-                                    groupsMeasurementFrequencies[_groupMeasurementFrequenciesList[i].group_id]['selected'] = 0;
-                                }
                             }
-                        return groupsMeasurementFrequencies;
+                            return groupsMeasurementFrequencies;
                     }],
                     _groupsQCLevelList: ['$stateParams', 'StationGroupsFactory', 
                         function($stateParams, StationGroupsFactory) {
@@ -246,7 +237,7 @@
                             }
                             
                         }
-    
+
                         return groups;
                     }]
                 }
@@ -254,27 +245,183 @@
             .state('station.data.parameters', {
                 url: '/parameters',
                 templateUrl: '/static/partials/station/station-data-parameters.html',
-                controller: 'StationDataFrequencyParametersCtrl',
-                controllerAs: 'StationDataFrequencyParametersVm',
+                controller: 'StationDataParametersCtrl',
+                controllerAs: 'stationDataParametersVm',
+                resolve: {
+                    _station: function(stationStorage) {
+                        var station = stationStorage.getStation();
+                        return station;
+                    }, 
+                    _parameterList: ['$stateParams', 'StationParametersFactory', 
+                        function($stateParams, StationParametersFactory) {
+                            var stationId = $stateParams.station_id;
+                            return StationParametersFactory.getParameters(stationId)
+                                .then(function(response) {
+                                    return response.data;
+                                });
+                    }],
+                    _parameterMeasurementFrequenciesList: ['$stateParams', 'StationParametersFactory', 
+                        function($stateParams, StationParametersFactory) {
+                            var stationId = $stateParams.station_id;
+                            return StationParametersFactory.getParameterMeasurementFrequencies(stationId)
+                                .then(function(response) {
+                                    return response.data;
+                                });
+                    }],
+                    _parameterMeasurementFrequencies: ['_parameterMeasurementFrequenciesList', 
+                        function(_parameterMeasurementFrequenciesList) {
+                            var parameterMeasurementFrequencies = {};
+                            for (var i = 0; i < _parameterMeasurementFrequenciesList.length; i++) {
+                                var parameter = _parameterMeasurementFrequenciesList[i].parameter;
+                                var parameterType = _parameterMeasurementFrequenciesList[i].parameter_type;
+                                var parameterNotInObject = !(parameter in parameterMeasurementFrequencies);
+                                if (parameterNotInObject) {
+                                    parameterMeasurementFrequencies[parameter] = {};
+                                }
+                                var parameterTypeNotInObject = !(parameterType in parameterMeasurementFrequencies[parameter]);
+                                if (parameterTypeNotInObject) {
+                                    parameterMeasurementFrequencies[parameter][parameterType] = _parameterMeasurementFrequenciesList[i].measurement_frequencies;
+                                }
+                            }
+                            return parameterMeasurementFrequencies;
+                    }],
+                    _parameterQCLevelList: ['$stateParams', 'StationParametersFactory', 
+                        function($stateParams, StationParametersFactory) {
+                            var stationId = $stateParams.station_id;
+                            return StationParametersFactory.getParameterQCLevels(stationId)
+                                .then(function(response) {
+                                    return response.data;
+                                });
+                    }],
+                    _parameterQCLevels: ['_parameterQCLevelList', function(_parameterQCLevelList) {
+                        var parameterQCLevels = {};
+                        for (var i = 0; i < _parameterQCLevelList.length; i++) {
+                            var parameter = _parameterQCLevelList[i].parameter;
+                            var parameterType = _parameterQCLevelList[i].parameter_type;
+                            var parameterNotInObject = !(parameter in parameterQCLevels);
+                            if (parameterNotInObject) {
+                                parameterQCLevels[parameter] = {};
+                            }
+                            var parameterTypeNotInObject = !(parameterType in parameterQCLevels[parameter]);
+                            if (parameterTypeNotInObject) {
+                                parameterQCLevels[parameter][parameterType] = [];
+                            }
+                            parameterQCLevels[parameter][parameterType].push(_parameterQCLevelList[i]);
+                        }
+                        return parameterQCLevels;
+                    }],
+                    _parameterSensorList: ['$stateParams', 'StationParametersFactory',
+                        function($stateParams, StationParametersFactory) {
+                            var stationId = $stateParams.station_id;
+                            return StationParametersFactory.getParameterSensors(stationId)
+                                .then(function(response) {
+                                    return response.data;
+                                });
+                    }],
+                    _parameterSensors: ['_parameterSensorList', function(_parameterSensorList) {
+                        var parameterSensors = {};
+                        
+                        for (var i = 0; i < _parameterSensorList.length; i++) {
+                            var parameter = _parameterSensorList[i].parameter;
+                            var parameterType = _parameterSensorList[i].parameter_type;
+                            var parameterNotInObject = !(parameter in parameterSensors);
+                            if (parameterNotInObject) {
+                                parameterSensors[parameter] = {};
+                            }
+                            var parameterTypeNotInObject = !(parameterType in parameterSensors[parameter]);
+                            if (parameterTypeNotInObject) {
+                                parameterSensors[parameter][parameterType] = {};
+                            }
+                            parameterSensors[parameter][parameterType] = _parameterSensorList[i];
+                        }
+
+                        return parameterSensors;
+                    }],
+                    _parameters: ['_parameterList', '_parameterMeasurementFrequencies', '_parameterQCLevels', '_parameterSensors',
+                        function(_parameterList, _parameterMeasurementFrequencies, _parameterQCLevels, _parameterSensors) {
+                            var parameters = {};
+                            for (var i = 0; i < _parameterList.length; i++) {
+                                var parameter = _parameterList[i].parameter;
+                                var parameterType = _parameterList[i].parameter_type;
+                                
+                                var parameterNotInParameters = !(parameter in parameters);
+                                if (parameterNotInParameters) {
+                                    parameters[parameter] = {};
+                                }
+                                
+                                var parameterTypeNotInParameters = !(parameterType in parameters[parameter]);
+                                if (parameterTypeNotInParameters) {
+                                    parameters[parameter][parameterType] = {}
+                                }
+                                
+                                parameters[parameter][parameterType] = _parameterList[i];
+                                
+                                parameters[parameter][parameterType]['frequencies'] = {
+                                    'list': [],
+                                    'selected': undefined
+                                };
+
+                                parameters[parameter][parameterType]['qc_levels'] = {
+                                    'list': [],
+                                    'selected': [],
+                                    'objects': {}
+                                };
+                                
+                                parameters[parameter][parameterType]['sensors'] = {};
+                                
+                                var parameterIdInMeasurementFrequencies = (parameter in _parameterMeasurementFrequencies);
+
+                                if (parameterIdInMeasurementFrequencies) {
+                                    var parameterTypeInMeasurementFrequencies = (parameterType in _parameterMeasurementFrequencies[parameter]);
+                                    if (parameterTypeInMeasurementFrequencies) {
+                                        parameters[parameter][parameterType].frequencies.list = _parameterMeasurementFrequencies[parameter][parameterType];
+                                        parameters[parameter][parameterType].frequencies.selected = 'Dynamic';
+                                    }
+                                }
+                                
+                                var parameterInQCLevels = (parameter in _parameterQCLevels);
+                                
+                                if (parameterInQCLevels) {
+                                    
+                                    var parameterTypeInQCLevels = (parameterType in _parameterQCLevels[parameter]);
+                                    if (parameterTypeInQCLevels) {
+                                        parameters[parameter][parameterType].qc_levels.list = _parameterQCLevels[parameter][parameterType];
+                                        for (var j = 0; j < _parameterQCLevels[parameter][parameterType].length; j++) {
+                                            var qcLevel = _parameterQCLevels[parameter][parameterType][j].qc_level;
+                                            var noQCLevelSelected = !(parameters[parameter][parameterType].qc_levels.selected.length);
+                                            if (noQCLevelSelected) {
+                                                parameters[parameter][parameterType].qc_levels.selected.push(qcLevel);
+                                            }
+                                            
+                                            parameters[parameter][parameterType].qc_levels.objects[qcLevel] = {
+                                                'qc_description': _parameterQCLevels[parameter][parameterType][j].qc_description
+                                            };
+                                        }
+                                    }
+                                    
+                                }
+                                
+                                var parameterInSensors = (parameter in _parameterSensors);
+                                if (parameterInSensors) {
+                                    var parameterTypeInSensors = (parameterType in _parameterSensors[parameter]);
+                                    if (parameterTypeInSensors) {
+                                        parameters[parameter][parameterType].sensors = _parameterSensors[parameter][parameterType];
+                                    }
+                                }
+                                
+                            }
+    
+                        return parameters;
+                    }]
+                }
+                    
             })
-            .state('station.data.sensors', {
-                url: '/sensors',
-                templateUrl: '/static/partials/station/station-data -sensors.html',
-                controller: 'StationDataFrequencySensorsCtrl',
-                controllerAs: 'StationDataFrequencySensorsVm',
-            })
-            .state('station.data.frequency.charts', {
-                url: '/charts',
-                templateUrl: '/static/partials/station/station-data-charts.html',
-                controller: 'StationDataChartsCtrl',
-                controllerAs: 'stationDataChartsVm',
-            })
-            .state('station.data.frequency.tables', {
-                url: '/tables',
-                templateUrl: '/static/partials/station/station-data-tables.html',
-                controller: 'StationDataTablesCtrl',
-                controllerAs: 'stationDataTablesVm'
-            })
+            //.state('station.data.sensors', {
+            //    url: '/sensors',
+            //    templateUrl: '/static/partials/station/station-data -sensors.html',
+            //    controller: 'StationDataFrequencySensorsCtrl',
+            //    controllerAs: 'StationDataFrequencySensorsVm',
+            //})
             .state('station.cams-and-photos', {
                 url: '/cams-and-photos',
                 templateUrl: '/static/partials/station/station-cams-and-photos.html',

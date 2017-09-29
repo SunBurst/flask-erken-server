@@ -21,7 +21,9 @@
         return directive;
     }
     
-    StationDataGroupItemCtrl.$inject = ['$mdMedia', '$q', 'HighchartsDefaultOptions', 'stationMeasurements'];
+    StationDataGroupItemCtrl.$inject = [
+        '$mdMedia', '$q', 'HighchartsDefaultOptions', 'stationMeasurements'
+    ];
     
     function StationDataGroupItemCtrl($mdMedia, $q, HighchartsDefaultOptions, stationMeasurements) {
         var vm = this;
@@ -250,6 +252,7 @@
                     });
 
                 }
+                
                 else if (vm.group.frequencies.selected === 'Hourly') {
                     
                     getHourlyChartData(min, max).then(function(data) {
@@ -269,6 +272,7 @@
                     });
                     
                 }
+                
                 else if (vm.group.frequencies.selected === '30 Min') {
                     
                     getThirtyMinChartData(min, max).then(function(data) {
@@ -1936,7 +1940,7 @@
         function initSeriesOptions(data) {
             
             var seriesOptions = [];
-            
+
             for (var i = 0; i < vm.group.parameters.list.length; i++) {
                 var parameterId = vm.group.parameters.list[i].parameter_id;
                 var parameterName = vm.group.parameters.list[i].parameter_name;

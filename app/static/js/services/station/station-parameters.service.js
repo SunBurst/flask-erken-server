@@ -16,38 +16,64 @@
         };
         
         return {
-            getGroupParameters: getGroupParameters,
-            getParametersAllMeasurementTypes: getParametersAllMeasurementTypes
+            getParameters: getParameters,
+            getParameterMeasurementFrequencies: getParameterMeasurementFrequencies,
+            getParameterQCLevels: getParameterQCLevels,
+            getParameterSensors: getParameterSensors
         };
         
-        function getGroupParameters(stationId, groupId) {
-            var resource = $resource('/api/group_parameters_by_station_group/:station_id/:group_id', {}, {
+        function getParameterMeasurementFrequencies(stationId) {
+            var resource = $resource('/api/parameter_measurement_frequencies_by_station/:station_id', {}, {
                 query: {
                     method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId
+                        station_id: stationId
                     },
                     isArray: true,
                     interceptor: customInterceptor
                 }
             });
             
-            return resource.query({station_id: stationId, group_id: groupId}).$promise
-                .then(getGroupParametersComplete)
-                .catch(getGroupParametersFailed);
+            return resource.query({station_id: stationId}).$promise
+                .then(getParameterMeasurementFrequenciesComplete)
+                .catch(getParameterMeasurementFrequenciesFailed);
                 
-            function getGroupParametersComplete(response) {
+            function getParameterMeasurementFrequenciesComplete(response) {
                 return response;
             }
             
-            function getGroupParametersFailed(error) {
+            function getParameterMeasurementFrequenciesFailed(error) {
                 console.log(error);
             }
 
         }
         
-        function getParametersAllMeasurementTypes(stationId) {
-            var resource = $resource('/api/parameters_all_measurement_types_by_station/:station_id', {}, {
+        function getParameterQCLevels(stationId) {
+            var resource = $resource('/api/parameter_qc_levels_by_station/:station_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({station_id: stationId}).$promise
+                .then(getParameterQCLevelsComplete)
+                .catch(getParameterQCLevelsFailed);
+                
+            function getParameterQCLevelsComplete(response) {
+                return response;
+            }
+            
+            function getParameterQCLevelsFailed(error) {
+                console.log(error);
+            }
+
+        }
+        
+        function getParameters(stationId) {
+            var resource = $resource('/api/parameters_by_station/:station_id', {}, {
                 query: {
                     method: 'GET', params: {
                         station_id: stationId, 
@@ -58,14 +84,39 @@
             });
             
             return resource.query({station_id: stationId}).$promise
-                .then(getParametersAllMeasurementTypesComplete)
-                .catch(getParametersAllMeasurementTypesFailed);
+                .then(getParametersComplete)
+                .catch(getParametersFailed);
                 
-            function getParametersAllMeasurementTypesComplete(response) {
+            function getParametersComplete(response) {
                 return response;
             }
             
-            function getParametersAllMeasurementTypesFailed(error) {
+            function getParametersFailed(error) {
+                console.log(error);
+            }
+
+        }
+        
+        function getParameterSensors(stationId) {
+            var resource = $resource('/api/parameter_sensors_by_station/:station_id', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({station_id: stationId}).$promise
+                .then(getParameterSensorsComplete)
+                .catch(getParameterSensorsFailed);
+                
+            function getParameterSensorsComplete(response) {
+                return response;
+            }
+            
+            function getParameterSensorsFailed(error) {
                 console.log(error);
             }
 
