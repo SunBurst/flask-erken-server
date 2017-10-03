@@ -337,8 +337,40 @@
 
                         return parameterSensors;
                     }],
-                    _parameters: ['_parameterList', '_parameterMeasurementFrequencies', '_parameterQCLevels', '_parameterSensors',
-                        function(_parameterList, _parameterMeasurementFrequencies, _parameterQCLevels, _parameterSensors) {
+                    _profileParameterVerticalPositions: ['$q', '$stateParams', 'StationParametersFactory', '_parameterList', 
+                        function($q, $stateParams, StationParametersFactory, _parameterList) {
+                            
+                            var stationId = $stateParams.station_id;
+                            var profileVerticalPositions = {};
+                            var promiseArray = [];
+                            
+                            for (var i = 0; i < _parameterList.length; i++) {
+                                var parameter = _parameterList[i].parameter;
+                                var parameterType = _parameterList[i].parameter_type;
+                                if (parameterType === 'profile') {
+                                    var resource = StationParametersFactory.getProfileParameterVerticalPositions(stationId, parameter);
+                                    promiseArray.push(resource);
+                                }
+                                
+                            }
+
+                            return $q.all(promiseArray).then(function(response) {
+                                for (var i = 0; i < response.length; i++) {
+                                    for (var j = 0; j < response[i].data.length; j++) {
+                                        var parameter = response[i].data[j].parameter;
+                                        var parameterNotInObject = !(parameter in profileVerticalPositions);
+                                        if (parameterNotInObject) {
+                                            profileVerticalPositions[parameter] = response[i].data;
+                                        }
+                                        
+                                    }
+                                }
+                                return profileVerticalPositions;       
+                            });
+                        
+                    }],
+                    _parameters: ['_parameterList', '_parameterMeasurementFrequencies', '_parameterQCLevels', '_parameterSensors', '_profileParameterVerticalPositions',
+                        function(_parameterList, _parameterMeasurementFrequencies, _parameterQCLevels, _parameterSensors, _profileParameterVerticalPositions) {
                             var parameters = {};
                             for (var i = 0; i < _parameterList.length; i++) {
                                 var parameter = _parameterList[i].parameter;
@@ -368,6 +400,8 @@
                                 };
                                 
                                 parameters[parameter][parameterType]['sensors'] = {};
+                                
+                                parameters[parameter][parameterType]['vertical_positions'] = [];
                                 
                                 var parameterIdInMeasurementFrequencies = (parameter in _parameterMeasurementFrequencies);
 
@@ -406,6 +440,13 @@
                                     var parameterTypeInSensors = (parameterType in _parameterSensors[parameter]);
                                     if (parameterTypeInSensors) {
                                         parameters[parameter][parameterType].sensors = _parameterSensors[parameter][parameterType];
+                                    }
+                                }
+                                
+                                if (parameterType === 'profile') {
+                                    var parameterInProfileVerticalPositions = (parameter in _profileParameterVerticalPositions);
+                                    if (parameterInProfileVerticalPositions) {
+                                        parameters[parameter][parameterType]['vertical_positions'] = _profileParameterVerticalPositions[parameter];
                                     }
                                 }
                                 

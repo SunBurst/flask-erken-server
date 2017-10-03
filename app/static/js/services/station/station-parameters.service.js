@@ -19,7 +19,8 @@
             getParameters: getParameters,
             getParameterMeasurementFrequencies: getParameterMeasurementFrequencies,
             getParameterQCLevels: getParameterQCLevels,
-            getParameterSensors: getParameterSensors
+            getParameterSensors: getParameterSensors,
+            getProfileParameterVerticalPositions: getProfileParameterVerticalPositions
         };
         
         function getParameterMeasurementFrequencies(stationId) {
@@ -117,6 +118,32 @@
             }
             
             function getParameterSensorsFailed(error) {
+                console.log(error);
+            }
+
+        }
+        
+        function getProfileParameterVerticalPositions(stationId, parameter) {
+            var resource = $resource('/api/profile_vertical_positions_by_station_parameter/:station_id/:parameter', {}, {
+                query: {
+                    method: 'GET', params: {
+                        station_id: stationId,
+                        parameter: parameter
+                    },
+                    isArray: true,
+                    interceptor: customInterceptor
+                }
+            });
+            
+            return resource.query({station_id: stationId, parameter: parameter}).$promise
+                .then(getProfileParameterVerticalPositionsComplete)
+                .catch(getProfileParameterVerticalPositionsFailed);
+                
+            function getProfileParameterVerticalPositionsComplete(response) {
+                return response;
+            }
+            
+            function getProfileParameterVerticalPositionsFailed(error) {
                 console.log(error);
             }
 

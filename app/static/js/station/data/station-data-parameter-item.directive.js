@@ -529,6 +529,26 @@
 
         }
         
+        function getDailyProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDailyProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getDailyProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getDailyProfileChartDataByQCLevel(qcLevel, start, end);
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+
+        }
+        
         function getDailyTableDataByQCLevel(qcLevel, start, end) {
             return stationMeasurements.getDailySingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
                 .then(function(response) {
@@ -589,6 +609,26 @@
             })
         }
         
+        function getHourlyProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getHourlyProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getHourlyProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getHourlyProfileChartDataByQCLevel(qcLevel, start, end);
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+
+        }
+        
         // 30 Min
         
         function getThirtyMinChartDataByQCLevel(qcLevel, start, end) {
@@ -622,6 +662,25 @@
             for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
                 var qcLevel = vm.parameter.qc_levels.selected[i];
                 var resource = getThirtyMinTableDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getThirtyMinProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getThirtyMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getThirtyMinProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getThirtyMinProfileChartDataByQCLevel(qcLevel, start, end)
                 promises.push(resource);
             }
             return $q.all(promises).then(function(data) {
@@ -988,6 +1047,7 @@
 
                         });
                     }
+                    
             }
             
             else if (vm.parameter.frequencies.selected === 'Daily') {
@@ -1111,6 +1171,129 @@
 
                       });
                   }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getDailyProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                    chart: {
+                                        renderTo: vm.chartId,
+                                        style: {
+                                            fontFamily: 'Roboto'
+                                        },
+                                        type: 'spline'
+                                    },
+
+                                    credits: {
+                                        enabled: false
+                                    },
+
+                                    lang: {
+                                        noData: 'No data to display'
+                                    },
+                                  
+                                    legend: {
+                                        enabled: true,
+                                        margin: 30
+                                    },
+                                  
+                                    rangeSelector: {
+                                        buttons: [{
+                                            type: 'day',
+                                            count: 3,
+                                            text: '3d'
+                                        }, {
+                                            type: 'week',
+                                            count: 1,
+                                            text: '1w'
+                                        }, {
+                                            type: 'month',
+                                            count: 1,
+                                            text: '1m'
+                                        }, {
+                                            type: 'month',
+                                            count: 3,
+                                            text: '3m'
+                                        }, {
+                                            type: 'month',
+                                            count: 6,
+                                            text: '6m'
+                                        }, {
+                                            type: 'year',
+                                            count: 1,
+                                            text: '1y'
+                                        }, {
+                                            type: 'all',
+                                            text: 'All'
+                                        }],
+                                        inputDateFormat: "%Y-%m-%d",
+                                        inputEditDateFormat: "%Y-%m-%d",
+                                        inputDateParser: function (value) {
+                                            var temp_date;
+                                            if (HighchartsDefaultOptions.global.useUTC) {
+                                                temp_date = moment.utc(value);
+                                            }
+                                            else {
+                                                temp_date = moment(value);
+                                            }
+                                            return temp_date.valueOf();
+                                        },
+                                        selected: 4,
+                                    },
+
+                                    navigator: {
+                                        adaptToUpdatedData: false
+                                    },
+
+                                    series: seriesOptions,
+                                
+                                    title: {
+                                        text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    },
+
+                                    noData: {
+                                        style: {
+                                            fontWeight: 'bold',
+                                            fontSize: '15px',
+                                            color: '#303030'
+                                        }
+                                    },
+
+                                    scrollbar: {
+                                        liveRedraw: false 
+                                    },
+
+                                    xAxis: [{
+                                        type: 'datetime',
+                                        minRange: 3600 * 1000 * 24 * 3,
+                                        events: {
+                                            afterSetExtremes: afterSetExtremes
+                                        }
+                                    }],
+
+                                    yAxis: [{
+                                        labels: {
+                                            format: '{value} ' + vm.parameter.parameter_unit,
+                                            style: {
+                                                color: Highcharts.getOptions().colors[0]
+                                            }
+                                        },
+                                        title: {
+                                            text: vm.parameter.parameter,
+                                            style: {
+                                                color: Highcharts.getOptions().colors[0]
+                                            }
+                                        },
+                                    }],
+                            
+                                });
+
+                            
+                        });
+                            
+                  }
             }
             
             else if (vm.parameter.frequencies.selected === 'Hourly') {
@@ -1228,6 +1411,124 @@
                             });
 
                       });
+                  }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getHourlyProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 3600 * 1000 * 24,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+
+                            
+                        });
+                            
                   }
             }
             
@@ -1347,6 +1648,124 @@
 
                       });
                   }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getThirtyMinProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 3600 * 1000 * 24,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+
+                            
+                        });
+                            
+                  }
             }
                   
             else if (vm.parameter.frequencies.selected === '20 Min') {
@@ -1465,6 +1884,124 @@
 
                       });
                   }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getTwentyMinProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 3600 * 1000 * 24,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+
+                            
+                        });
+                            
+                  }
             }
                   
             else if (vm.parameter.frequencies.selected === '15 Min') {
@@ -1582,6 +2119,124 @@
                             });
 
                       });
+                  }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getFifteenMinProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 3600 * 1000 * 24,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+
+                            
+                        });
+                            
                   }
                 
             }
@@ -1710,6 +2365,131 @@
 
                       });
                   }
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getTenMinProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'hour',
+                                        count: 1,
+                                        text: '1h'
+                                    }, {
+                                        type: 'hour',
+                                        count: 12,
+                                        text: '12h'
+                                    }, {
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 3600 * 1000,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+
+                            
+                        });
+                            
+                  }
             }
                   
             else if (vm.parameter.frequencies.selected === '5 Min') {
@@ -1835,6 +2615,132 @@
                             });
 
                       });
+                  }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getFiveMinProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'hour',
+                                        count: 1,
+                                        text: '1h'
+                                    }, {
+                                        type: 'hour',
+                                        count: 12,
+                                        text: '12h'
+                                    }, {
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 3600 * 1000,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+
+                            
+                        });
+                            
                   }
                 
             }
@@ -1962,6 +2868,132 @@
                             });
 
                       });
+                  }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getOneMinProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'hour',
+                                        count: 1,
+                                        text: '1h'
+                                    }, {
+                                        type: 'hour',
+                                        count: 12,
+                                        text: '12h'
+                                    }, {
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 3600 * 1000,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+
+                            
+                        });
+                            
                   }
                 
             }
@@ -2098,9 +3130,142 @@
 
                       });
                   }
+                  
+                  else if (vm.parameter.parameter_type === 'profile') {
+                      getOneSecProfileChartData(moment(0).valueOf(), moment().valueOf())
+                          .then(function(data) {
+                              var seriesOptions = initProfileSeriesOptions(data);
+                              chart = new Highcharts.stockChart({
+                        
+                                chart: {
+                                    renderTo: vm.chartId,
+                                    style: {
+                                        fontFamily: 'Roboto'
+                                    },
+                                    type: 'spline'
+                                },
+
+                                credits: {
+                                    enabled: false
+                                },
+
+                                lang: {
+                                    noData: 'No data to display'
+                                },
+                              
+                                legend: {
+                                    enabled: true,
+                                    margin: 30
+                                },
+                              
+                                rangeSelector: {
+                                    buttons: [{
+                                        type: 'minute',
+                                        count: 1,
+                                        text: '1M'
+                                    }, {
+                                        type: 'minute',
+                                        count: 5,
+                                        text: '5M'
+                                    }, {
+                                        type: 'hour',
+                                        count: 1,
+                                        text: '1h'
+                                    }, {
+                                        type: 'hour',
+                                        count: 12,
+                                        text: '12h'
+                                    }, {
+                                        type: 'day',
+                                        count: 1,
+                                        text: '1d'
+                                    }, {
+                                        type: 'day',
+                                        count: 3,
+                                        text: '3d'
+                                    }, {
+                                        type: 'week',
+                                        count: 1,
+                                        text: '1w'
+                                    }, {
+                                        type: 'month',
+                                        count: 1,
+                                        text: '1m'
+                                    }, {
+                                        type: 'month',
+                                        count: 3,
+                                        text: '3m'
+                                    }, {
+                                        type: 'month',
+                                        count: 6,
+                                        text: '6m'
+                                    }, {
+                                        type: 'year',
+                                        count: 1,
+                                        text: '1y'
+                                    }, {
+                                        type: 'all',
+                                        text: 'All'
+                                    }],
+                                    inputBoxWidth: 130,
+                                    inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                    selected: 2,
+                                },
+
+                                navigator: {
+                                    adaptToUpdatedData: false
+                                },
+
+                                series: seriesOptions,
+                            
+                                title: {
+                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                },
+
+                                noData: {
+                                    style: {
+                                        fontWeight: 'bold',
+                                        fontSize: '15px',
+                                        color: '#303030'
+                                    }
+                                },
+
+                                scrollbar: {
+                                    liveRedraw: false 
+                                },
+
+                                xAxis: [{
+                                    type: 'datetime',
+                                    minRange: 60000,
+                                    events: {
+                                        afterSetExtremes: afterSetExtremes
+                                    }
+                                }],
+
+                                yAxis: [{
+                                    labels: {
+                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    title: {
+                                        text: vm.parameter.parameter,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }],
+                        
+                            });
+                            
+                        });
+                            
+                  }
                 
             }
-            
+
         }
         
         function initSeriesOptions(data) {
@@ -2165,6 +3330,85 @@
                         seriesOptions.push(averageSeries);
                         seriesOptions.push(rangeSeries);
                         
+                    }
+                }
+            }
+
+            return seriesOptions;
+        }
+        
+        function initProfileSeriesOptions(data) {
+            var seriesOptions = [];
+
+            var parameter = vm.parameter.parameter;
+            var unit = vm.parameter.parameter_unit;
+            for (var i = 0; i < vm.parameter.vertical_positions.length; i++) {
+                var vertPos = vm.parameter.vertical_positions[i].vertical_position;
+                for (var sensorId in vm.parameter.sensors.sensors) {
+                    if (vm.parameter.sensors.sensors.hasOwnProperty(sensorId)) {
+                        var sensorName = vm.parameter.sensors.sensors[sensorId];
+                        for (var j = 0; j < vm.parameter.qc_levels.selected.length; j++) {
+                            var qcLevel = vm.parameter.qc_levels.selected[j];
+                            
+                            var seriesAverageData = [];
+                            var seriesRangeData = [];
+                            
+                            var seriesId = stringToDashLowerCase(vertPos + '-' + sensorId + '-' + qcLevel);
+
+                            for (var k = 0; k < data.length; k++) {
+                                if (sensorId in data[k] && qcLevel == data[k][sensorId].qc_level) {
+                                    for (var l = 0; l < data[k][sensorId].data.length; l++) {
+                                        if (vertPos == data[k][sensorId].data[l].vertical_position) {
+                                            seriesAverageData = data[k][sensorId].data[l].averages;
+                                            seriesRangeData = data[k][sensorId].data[l].ranges;
+                                        }
+                                        
+                                    }
+                                }   
+                            }
+                            
+                            var averageSeries = {
+                                'id': seriesId,
+                                'name': vertPos + ' m ' + sensorName + ' (Avg., QC Level: ' + qcLevel + ')',
+                                'color': Highcharts.getOptions().colors[i],
+                                'tooltip': {
+                                    'valueDecimals': 2,
+                                    'valueSuffix': ' ' + unit
+                                },
+                                'marker': {
+                                    'fillColor': 'white',
+                                    'lineWidth': 2,
+                                    'lineColor': Highcharts.getOptions().colors[i]
+                                },
+                                //'dataGrouping': {
+                                //    'enabled': false
+                                //},
+                                'showInNavigator': true,
+                                'data': seriesAverageData
+                            };
+                            
+                            var rangeSeries = {
+                                'id': seriesId + '-ranges',
+                                'name': vertPos + ' m ' + sensorName + ' (Min. - Max., QC Level: ' + qcLevel + ')',
+                                'type': 'areasplinerange',
+                                'lineWidth': 0,
+                                'color': Highcharts.getOptions().colors[i],
+                                'fillOpacity': 0.3,
+                                'marker': {
+                                    'enabled': false
+                                },
+                                'tooltip': {
+                                    'valueDecimals': 2,
+                                    'valueSuffix': ' ' + unit
+                                },
+                                'visible': false,
+                                'data': seriesRangeData
+                            };
+                            
+                            seriesOptions.push(averageSeries);
+                            seriesOptions.push(rangeSeries);
+                        }
+                            
                     }
                 }
             }
