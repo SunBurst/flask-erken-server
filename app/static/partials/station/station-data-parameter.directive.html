@@ -60,6 +60,9 @@
                     <th md-column md-numeric>
                         <span>QC Level</span>
                     </th>
+                    <th ng-if="stationDataParameterItemVm.isOfParameterType('profile')" md-column md-numeric>
+                        <span>Vertical Position (m)</span>
+                    </th>
                     <th md-column>
                         <span>Sensor</span>
                     </th>
@@ -73,6 +76,9 @@
                     md-select="measurement" md-auto-select="qcTable.options.autoSelect">
                     <td md-cell>{[ measurement[qcTable.query.order] | date: qcTable.query.dateFormat ]}</td>
                     <td md-cell>{[ measurement.qc_level ]}</td>
+                    <td md-cell ng-if="stationDataParameterItemVm.isOfParameterType('profile')">
+                        {[ measurement.vertical_position ]}
+                    </td>
                     <td md-cell>{[ measurement.sensor_name ]}</td>
                     <td md-cell ng-repeat="qcLevelParameter in qcTable.header">
                         {[ measurement[qcLevelParameter.valueType] | number: 2 ]}

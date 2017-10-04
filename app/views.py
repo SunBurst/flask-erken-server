@@ -245,9 +245,9 @@ def get_measurement_frequencies_by_station(station_id):
         data = row
     
     return json.dumps(data, cls=CustomEncoder)
-
-@app.route('/api/group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+    
+@app.route('/api/dynamic_group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_dynamic_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     
     frequencies_query = "SELECT * FROM group_measurement_frequencies_by_station WHERE station_id=? AND group_id=?"
     prepared_frequencies_query = session.prepare(frequencies_query)
@@ -269,91 +269,190 @@ def get_group_measurements_by_station(station_id, group_id, qc_level, from_times
     
     delta = to_dt - from_dt
 
-    if delta.days > 465:
-        if 'Daily' in frequencies:
-            return get_daily_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-        elif 'Hourly' in frequencies:
-            return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-        elif '5 Min' in frequencies:
-            return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-    else:   # days <= 465
-        if delta.days <= 30:
-            if delta.days <= 1:
-                if '5 Min' in frequencies:
-                    return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-                elif 'Hourly' in frequencies:
-                    return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            else: # 1 < days <= 30
-                if 'Hourly' in frequencies:
-                    return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+    if delta.days < 12: # delta < 12 days
+        if delta.days < 6: # delta < 6 days
+            if delta.days < 4: # delta < 4 days
+                if delta.days < 3: # delta < 3 days
+                    if delta.days < 2:  # delta < 2 days
+                        if delta.days < 1:  # delta < 1 days
+                            if delta.seconds < (60 * 60 * 5): # delta < 5 hours                             
+                                if delta.seconds < (60 * 5):    # delta < 5 minutes
+                                    if '1 Sec' in frequencies:
+                                        return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Min' in frequencies:
+                                        return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                else:   # 5 hours > delta >= 5 minutes
+                                    if '1 Min' in frequencies:
+                                        return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Sec' in frequencies:
+                                        return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            else:   # 1 days > delta >= 5 hours 
+                                if '5 Min' in frequencies:
+                                    return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '1 Min' in frequencies:
+                                    return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                                elif '1 Sec' in frequencies:
+                                    return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '10 Min' in frequencies:
+                                    return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '15 Min' in frequencies:
+                                    return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '20 Min' in frequencies:
+                                    return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif '30 Min' in frequencies:
+                                    return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif 'Hourly' in frequencies:
+                                    return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                                elif 'Daily' in frequencies:
+                                    return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        else:   # 2 days < delta >= 1 days
+                            if '10 Min' in frequencies:
+                                return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '5 Min' in frequencies:
+                                return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '1 Min' in frequencies:
+                                return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                            elif '1 Sec' in frequencies:
+                                return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '15 Min' in frequencies:
+                                return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '20 Min' in frequencies:
+                                return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif '30 Min' in frequencies:
+                                return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif 'Hourly' in frequencies:
+                                return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                            elif 'Daily' in frequencies:
+                                return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    else:   # 3 days > delta >= 2 days
+                        if '15 Min' in frequencies:
+                            return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '10 Min' in frequencies:
+                            return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '5 Min' in frequencies:
+                            return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '1 Min' in frequencies:
+                            return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                        elif '1 Sec' in frequencies:
+                            return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '20 Min' in frequencies:
+                            return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif '30 Min' in frequencies:
+                            return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif 'Hourly' in frequencies:
+                            return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                        elif 'Daily' in frequencies:
+                            return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                else:   # 4 days > delta >= 3 days
+                    if '20 Min' in frequencies:
+                        return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '15 Min' in frequencies:
+                        return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '10 Min' in frequencies:
+                        return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '5 Min' in frequencies:
+                        return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '1 Min' in frequencies:
+                        return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                    elif '1 Sec' in frequencies:
+                        return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif '30 Min' in frequencies:
+                        return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif 'Hourly' in frequencies:
+                        return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    elif 'Daily' in frequencies:
+                        return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            else:   # 6 days < delta >= 4 days
+                if '30 Min' in frequencies:
+                    return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '20 Min' in frequencies:
+                    return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '15 Min' in frequencies:
+                    return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '10 Min' in frequencies:
+                    return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
                 elif '5 Min' in frequencies:
-                    return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-        else:   # 30 < days <= 465 
-            if 'Daily' in frequencies:
-                return get_daily_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            elif 'Hourly' in frequencies:
-                return get_hourly_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                    return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif '1 Min' in frequencies:
+                    return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)                                
+                elif '1 Sec' in frequencies:
+                    return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif 'Hourly' in frequencies:
+                    return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+                elif 'Daily' in frequencies:
+                    return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        else:   # 12 days > delta >= 6 days
+            if 'Hourly' in frequencies:
+                return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '30 Min' in frequencies:
+                return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '20 Min' in frequencies:
+                return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '15 Min' in frequencies:
+                return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '10 Min' in frequencies:
+                return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
             elif '5 Min' in frequencies:
-                return get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-    
-    
-    return json.dumps([], cls=CustomEncoder)
-    
-@app.route('/api/group_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
-    
-    frequencies_query = "SELECT * FROM group_measurement_frequencies_by_station WHERE station_id=? AND group_id=?"
-    prepared_frequencies_query = session.prepare(frequencies_query)
-    frequencies_rows = session.execute_async(prepared_frequencies_query, (station_id, group_id,)).result()
-    frequencies = []
-    
-    try:
-        frequencies_row = frequencies_rows[0]
-    except IndexError as e:
-        print(e)
-    else:
-        frequencies = frequencies_row.get('measurement_frequencies', [])
-        
-    if not frequencies:
-        return json.dumps([], cls=CustomEncoder)
-    
-    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
-    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
-    
-    delta = to_dt - from_dt
-
-    if delta.days > 465:
+                return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '1 Min' in frequencies:
+                return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif '1 Sec' in frequencies:
+                return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+            elif 'Daily' in frequencies:
+                return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+    else:   # unbound > delta >= 12 days
         if 'Daily' in frequencies:
             return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif 'Hourly' in frequencies:
             return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '30 Min' in frequencies:
+            return get_thirty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '20 Min' in frequencies:
+            return get_twenty_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '15 Min' in frequencies:
+            return get_fifteen_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '10 Min' in frequencies:
+            return get_ten_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
         elif '5 Min' in frequencies:
             return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-    else:   # days <= 465
-        if delta.days <= 30:
-            if delta.days <= 1:
-                if '5 Min' in frequencies:
-                    return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-                elif 'Hourly' in frequencies:
-                    return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            else: # 1 < days <= 30
-                if 'Hourly' in frequencies:
-                    return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-                elif '5 Min' in frequencies:
-                    return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-        else:   # 30 < days <= 465 
-            if 'Daily' in frequencies:
-                return get_daily_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            elif 'Hourly' in frequencies:
-                return get_hourly_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
-            elif '5 Min' in frequencies:
-                return get_five_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '1 Min' in frequencies:
+            return get_one_min_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
+        elif '1 Sec' in frequencies:
+            return get_one_sec_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp)
     
     
-    return json.dumps([], cls=CustomEncoder)
+    return json.dumps({}, cls=CustomEncoder)
 
-@app.route('/api/group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+@app.route('/api/dynamic_group_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_dynamic_group_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     
     frequencies_query = "SELECT * FROM group_measurement_frequencies_by_station WHERE station_id=? AND group_id=?"
     prepared_frequencies_query = session.prepare(frequencies_query)
@@ -556,19 +655,417 @@ def get_group_measurements_by_station_chart(station_id, group_id, qc_level, from
     
     return json.dumps({}, cls=CustomEncoder)
 
-@app.route('/api/single_parameter_measurements_by_station_chart/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_single_parameter_measurements_by_station_chart(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+@app.route('/api/dynamic_single_parameter_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_dynamic_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    
+    frequencies_query = "SELECT * FROM parameter_measurement_frequencies_by_station WHERE station_id=? AND parameter=? AND parameter_type='single'"
+    prepared_frequencies_query = session.prepare(frequencies_query)
+    frequencies_rows = session.execute_async(prepared_frequencies_query, (station_id, parameter,)).result()
+    frequencies = []
+    
+    try:
+        frequencies_row = frequencies_rows[0]
+    except IndexError as e:
+        print(e)
+    else:
+        frequencies = frequencies_row.get('measurement_frequencies', [])
+        
+    if not frequencies:
+        return json.dumps({}, cls=CustomEncoder)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    delta = to_dt - from_dt
+
+    if delta.days < 12: # delta < 12 days
+        if delta.days < 6: # delta < 6 days
+            if delta.days < 4: # delta < 4 days
+                if delta.days < 3: # delta < 3 days
+                    if delta.days < 2:  # delta < 2 days
+                        if delta.days < 1:  # delta < 1 days
+                            if delta.seconds < (60 * 60 * 5): # delta < 5 hours                             
+                                if delta.seconds < (60 * 5):    # delta < 5 minutes
+                                    if '1 Sec' in frequencies:
+                                        return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Min' in frequencies:
+                                        return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                else:   # 5 hours > delta >= 5 minutes
+                                    if '1 Min' in frequencies:
+                                        return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Sec' in frequencies:
+                                        return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            else:   # 1 days > delta >= 5 hours 
+                                if '5 Min' in frequencies:
+                                    return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '1 Min' in frequencies:
+                                    return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                                elif '1 Sec' in frequencies:
+                                    return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '10 Min' in frequencies:
+                                    return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '15 Min' in frequencies:
+                                    return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '20 Min' in frequencies:
+                                    return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '30 Min' in frequencies:
+                                    return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif 'Hourly' in frequencies:
+                                    return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif 'Daily' in frequencies:
+                                    return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        else:   # 2 days < delta >= 1 days
+                            if '10 Min' in frequencies:
+                                return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '5 Min' in frequencies:
+                                return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '1 Min' in frequencies:
+                                return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                            elif '1 Sec' in frequencies:
+                                return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '15 Min' in frequencies:
+                                return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '20 Min' in frequencies:
+                                return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '30 Min' in frequencies:
+                                return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif 'Hourly' in frequencies:
+                                return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif 'Daily' in frequencies:
+                                return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    else:   # 3 days > delta >= 2 days
+                        if '15 Min' in frequencies:
+                            return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '10 Min' in frequencies:
+                            return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '5 Min' in frequencies:
+                            return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '1 Min' in frequencies:
+                            return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                        elif '1 Sec' in frequencies:
+                            return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '20 Min' in frequencies:
+                            return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '30 Min' in frequencies:
+                            return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif 'Hourly' in frequencies:
+                            return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif 'Daily' in frequencies:
+                            return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                else:   # 4 days > delta >= 3 days
+                    if '20 Min' in frequencies:
+                        return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '15 Min' in frequencies:
+                        return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '10 Min' in frequencies:
+                        return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '5 Min' in frequencies:
+                        return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '1 Min' in frequencies:
+                        return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                    elif '1 Sec' in frequencies:
+                        return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '30 Min' in frequencies:
+                        return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif 'Hourly' in frequencies:
+                        return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif 'Daily' in frequencies:
+                        return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            else:   # 6 days < delta >= 4 days
+                if '30 Min' in frequencies:
+                    return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '20 Min' in frequencies:
+                    return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '15 Min' in frequencies:
+                    return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '10 Min' in frequencies:
+                    return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '5 Min' in frequencies:
+                    return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '1 Min' in frequencies:
+                    return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                elif '1 Sec' in frequencies:
+                    return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif 'Hourly' in frequencies:
+                    return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif 'Daily' in frequencies:
+                    return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        else:   # 12 days > delta >= 6 days
+            if 'Hourly' in frequencies:
+                return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '30 Min' in frequencies:
+                return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '20 Min' in frequencies:
+                return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '15 Min' in frequencies:
+                return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '10 Min' in frequencies:
+                return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '5 Min' in frequencies:
+                return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '1 Min' in frequencies:
+                return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '1 Sec' in frequencies:
+                return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif 'Daily' in frequencies:
+                return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+    else:   # unbound > delta >= 12 days
+        if 'Daily' in frequencies:
+            return get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif 'Hourly' in frequencies:
+            return get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '30 Min' in frequencies:
+            return get_thirty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '20 Min' in frequencies:
+            return get_twenty_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '15 Min' in frequencies:
+            return get_fifteen_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '10 Min' in frequencies:
+            return get_ten_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '5 Min' in frequencies:
+            return get_five_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '1 Min' in frequencies:
+            return get_one_min_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '1 Sec' in frequencies:
+            return get_one_sec_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp)
     
     return json.dumps({}, cls=CustomEncoder)
     
-@app.route('/api/single_parameter_measurements_by_station_time_grouped/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_single_parameter_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
+@app.route('/api/dynamic_single_parameter_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_dynamic_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
     
+    frequencies_query = "SELECT * FROM parameter_measurement_frequencies_by_station WHERE station_id=? AND parameter=? AND parameter_type='single'"
+    prepared_frequencies_query = session.prepare(frequencies_query)
+    frequencies_rows = session.execute_async(prepared_frequencies_query, (station_id, parameter,)).result()
+    frequencies = []
+    
+    try:
+        frequencies_row = frequencies_rows[0]
+    except IndexError as e:
+        print(e)
+    else:
+        frequencies = frequencies_row.get('measurement_frequencies', [])
+        
+    if not frequencies:
+        return json.dumps({}, cls=CustomEncoder)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    delta = to_dt - from_dt
+
+    if delta.days < 12: # delta < 12 days
+        if delta.days < 6: # delta < 6 days
+            if delta.days < 4: # delta < 4 days
+                if delta.days < 3: # delta < 3 days
+                    if delta.days < 2:  # delta < 2 days
+                        if delta.days < 1:  # delta < 1 days
+                            if delta.seconds < (60 * 60 * 5): # delta < 5 hours                             
+                                if delta.seconds < (60 * 5):    # delta < 5 minutes
+                                    if '1 Sec' in frequencies:
+                                        return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Min' in frequencies:
+                                        return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                else:   # 5 hours > delta >= 5 minutes
+                                    if '1 Min' in frequencies:
+                                        return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '1 Sec' in frequencies:
+                                        return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '5 Min' in frequencies:
+                                        return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '10 Min' in frequencies:
+                                        return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '15 Min' in frequencies:
+                                        return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '20 Min' in frequencies:
+                                        return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif '30 Min' in frequencies:
+                                        return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Hourly' in frequencies:
+                                        return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                    elif 'Daily' in frequencies:
+                                        return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            else:   # 1 days > delta >= 5 hours 
+                                if '5 Min' in frequencies:
+                                    return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '1 Min' in frequencies:
+                                    return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                                elif '1 Sec' in frequencies:
+                                    return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '10 Min' in frequencies:
+                                    return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '15 Min' in frequencies:
+                                    return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '20 Min' in frequencies:
+                                    return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif '30 Min' in frequencies:
+                                    return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif 'Hourly' in frequencies:
+                                    return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                                elif 'Daily' in frequencies:
+                                    return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        else:   # 2 days < delta >= 1 days
+                            if '10 Min' in frequencies:
+                                return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '5 Min' in frequencies:
+                                return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '1 Min' in frequencies:
+                                return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                            elif '1 Sec' in frequencies:
+                                return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '15 Min' in frequencies:
+                                return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '20 Min' in frequencies:
+                                return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif '30 Min' in frequencies:
+                                return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif 'Hourly' in frequencies:
+                                return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                            elif 'Daily' in frequencies:
+                                return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    else:   # 3 days > delta >= 2 days
+                        if '15 Min' in frequencies:
+                            return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '10 Min' in frequencies:
+                            return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '5 Min' in frequencies:
+                            return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '1 Min' in frequencies:
+                            return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                        elif '1 Sec' in frequencies:
+                            return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '20 Min' in frequencies:
+                            return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif '30 Min' in frequencies:
+                            return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif 'Hourly' in frequencies:
+                            return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                        elif 'Daily' in frequencies:
+                            return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                else:   # 4 days > delta >= 3 days
+                    if '20 Min' in frequencies:
+                        return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '15 Min' in frequencies:
+                        return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '10 Min' in frequencies:
+                        return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '5 Min' in frequencies:
+                        return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '1 Min' in frequencies:
+                        return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                    elif '1 Sec' in frequencies:
+                        return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif '30 Min' in frequencies:
+                        return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif 'Hourly' in frequencies:
+                        return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                    elif 'Daily' in frequencies:
+                        return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            else:   # 6 days < delta >= 4 days
+                if '30 Min' in frequencies:
+                    return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '20 Min' in frequencies:
+                    return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '15 Min' in frequencies:
+                    return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '10 Min' in frequencies:
+                    return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '5 Min' in frequencies:
+                    return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif '1 Min' in frequencies:
+                    return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)                                
+                elif '1 Sec' in frequencies:
+                    return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif 'Hourly' in frequencies:
+                    return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+                elif 'Daily' in frequencies:
+                    return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        else:   # 12 days > delta >= 6 days
+            if 'Hourly' in frequencies:
+                return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '30 Min' in frequencies:
+                return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '20 Min' in frequencies:
+                return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '15 Min' in frequencies:
+                return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '10 Min' in frequencies:
+                return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '5 Min' in frequencies:
+                return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '1 Min' in frequencies:
+                return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif '1 Sec' in frequencies:
+                return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            elif 'Daily' in frequencies:
+                return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+    else:   # unbound > delta >= 12 days
+        if 'Daily' in frequencies:
+            return get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif 'Hourly' in frequencies:
+            return get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '30 Min' in frequencies:
+            return get_thirty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '20 Min' in frequencies:
+            return get_twenty_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '15 Min' in frequencies:
+            return get_fifteen_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '10 Min' in frequencies:
+            return get_ten_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '5 Min' in frequencies:
+            return get_five_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '1 Min' in frequencies:
+            return get_one_min_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+        elif '1 Sec' in frequencies:
+            return get_one_sec_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp)
+            
     return json.dumps([], cls=CustomEncoder)
 
-@app.route('/api/daily_single_parameter_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_daily_stations_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
-    query = "SELECT * FROM daily_single_parameter_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date>=? AND date<=?"
+@app.route('/api/daily_single_parameter_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
+def get_daily_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM daily_single_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date>=? AND date<=?"
     prepared = session.prepare(query)
     
     from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
@@ -589,7 +1086,7 @@ def get_daily_stations_parameter_measurements_by_station(station_id, parameter, 
 @app.route('/api/daily_single_parameter_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_date>/<int:to_date>', methods=['GET'])
 def get_daily_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_date, to_date):
     
-    query = "SELECT * FROM daily_single_parameter_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"
+    query = "SELECT * FROM daily_single_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date>=? AND date<=? ORDER BY date ASC"
     prepared = session.prepare(query)
     
     from_dt = datetime.fromtimestamp(from_date/1000.0)
@@ -624,7 +1121,7 @@ def get_daily_single_parameter_measurements_by_station_chart(station_id, paramet
 
 @app.route('/api/hourly_single_parameter_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
 def get_hourly_single_parameter_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
-    query = "SELECT * FROM hourly_single_parameter_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
+    query = "SELECT * FROM hourly_single_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
     prepared = session.prepare(query)
     
     from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
@@ -644,7 +1141,7 @@ def get_hourly_single_parameter_measurements_by_station(station_id, parameter, q
 
 @app.route('/api/hourly_single_parameter_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>/')
 def get_hourly_single_parameter_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
-    query = "SELECT * FROM hourly_single_parameter_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=? ORDER BY date_hour ASC"
+    query = "SELECT * FROM hourly_single_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=? ORDER BY date_hour ASC"
     prepared = session.prepare(query)
     
     from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
@@ -1094,6 +1591,14 @@ def get_one_sec_single_parameter_measurements_by_station_chart(station_id, param
 
     return json.dumps(sensors, cls=CustomEncoder)
 
+@app.route('/api/dynamic_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_dynamic_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    return json.dumps([], cls=CustomEncoder)
+
+@app.route('/api/dynamic_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_dynamic_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    return json.dumps({}, cls=CustomEncoder)
+    
 @app.route('/api/daily_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_date>/<int:to_date>')
 def get_daily_profile_measurements_by_station(station_id, parameter, qc_level, from_date, to_date):
     query = "SELECT * FROM daily_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date>=? AND date<=?"
@@ -1164,7 +1669,27 @@ def get_daily_profile_measurements_by_station_chart(station_id, parameter, qc_le
                     ])
 
     return json.dumps(sensors, cls=CustomEncoder)
+
+@app.route('/api/hourly_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_hourly_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM hourly_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=?"
+    prepared = session.prepare(query)
     
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    for year in range(from_dt.year, to_dt.year + 1):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, year, from_timestamp, to_timestamp, )))
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/hourly_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
 def get_hourly_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
     query = "SELECT * FROM hourly_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND year=? AND date_hour>=? AND date_hour<=? ORDER BY date_hour ASC"
@@ -1215,7 +1740,29 @@ def get_hourly_profile_measurements_by_station_chart(station_id, parameter, qc_l
                     ])
 
     return json.dumps(sensors, cls=CustomEncoder)
+
+@app.route('/api/thirty_min_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_thirty_min_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM thirty_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
     
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/thirty_min_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
 def get_thirty_min_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
     query = "SELECT * FROM thirty_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
@@ -1230,6 +1777,464 @@ def get_thirty_min_profile_measurements_by_station_chart(station_id, parameter, 
     while (current_first_day_of_month <= to_dt):
         futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
         current_first_day_of_month += relativedelta(months=1)
+    
+    sensors = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            vertical_position = row.get('vertical_position')
+            sensor_id = row.get('sensor_id')
+            sensor_name = row.get('sensor_name')
+            parameter_unit = row.get('unit')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {
+                    'id': sensor_id, 
+                    'name': sensor_name, 
+                    'qc_level': qc_level,
+                    'unit': parameter_unit,
+                    'vertical_positions': [],
+                    'data': []
+                }
+            
+            if vertical_position not in sensors[sensor_id]['vertical_positions']:
+                sensors[sensor_id]['vertical_positions'].append(vertical_position)
+                sensors[sensor_id]['data'].append({
+                    'vertical_position': vertical_position,
+                    'averages': [],
+                    'ranges': []
+                })
+            
+            for vert_pos_item in sensors[sensor_id]['data']:
+                if vertical_position == vert_pos_item.get('vertical_position'):
+                    vert_pos_item['averages'].append([
+                        row.get('timestamp'), row.get('avg_value')
+                    ])
+                    vert_pos_item['ranges'].append([
+                        row.get('timestamp'), row.get('min_value'), row.get('max_value')
+                    ])
+
+    return json.dumps(sensors, cls=CustomEncoder)
+
+@app.route('/api/twenty_min_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_twenty_min_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM twenty_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/twenty_min_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_twenty_min_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM twenty_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+
+    futures = []
+    
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    sensors = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            vertical_position = row.get('vertical_position')
+            sensor_id = row.get('sensor_id')
+            sensor_name = row.get('sensor_name')
+            parameter_unit = row.get('unit')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {
+                    'id': sensor_id, 
+                    'name': sensor_name, 
+                    'qc_level': qc_level,
+                    'unit': parameter_unit,
+                    'vertical_positions': [],
+                    'data': []
+                }
+            
+            if vertical_position not in sensors[sensor_id]['vertical_positions']:
+                sensors[sensor_id]['vertical_positions'].append(vertical_position)
+                sensors[sensor_id]['data'].append({
+                    'vertical_position': vertical_position,
+                    'averages': [],
+                    'ranges': []
+                })
+            
+            for vert_pos_item in sensors[sensor_id]['data']:
+                if vertical_position == vert_pos_item.get('vertical_position'):
+                    vert_pos_item['averages'].append([
+                        row.get('timestamp'), row.get('avg_value')
+                    ])
+                    vert_pos_item['ranges'].append([
+                        row.get('timestamp'), row.get('min_value'), row.get('max_value')
+                    ])
+
+    return json.dumps(sensors, cls=CustomEncoder)
+
+@app.route('/api/fifteen_min_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_fifteen_min_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM fifteen_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/fifteen_min_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_fifteen_min_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM fifteen_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+
+    futures = []
+    
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    sensors = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            vertical_position = row.get('vertical_position')
+            sensor_id = row.get('sensor_id')
+            sensor_name = row.get('sensor_name')
+            parameter_unit = row.get('unit')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {
+                    'id': sensor_id, 
+                    'name': sensor_name, 
+                    'qc_level': qc_level,
+                    'unit': parameter_unit,
+                    'vertical_positions': [],
+                    'data': []
+                }
+            
+            if vertical_position not in sensors[sensor_id]['vertical_positions']:
+                sensors[sensor_id]['vertical_positions'].append(vertical_position)
+                sensors[sensor_id]['data'].append({
+                    'vertical_position': vertical_position,
+                    'averages': [],
+                    'ranges': []
+                })
+            
+            for vert_pos_item in sensors[sensor_id]['data']:
+                if vertical_position == vert_pos_item.get('vertical_position'):
+                    vert_pos_item['averages'].append([
+                        row.get('timestamp'), row.get('avg_value')
+                    ])
+                    vert_pos_item['ranges'].append([
+                        row.get('timestamp'), row.get('min_value'), row.get('max_value')
+                    ])
+
+    return json.dumps(sensors, cls=CustomEncoder)
+
+@app.route('/api/ten_min_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_ten_min_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM ten_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/ten_min_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_ten_min_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM ten_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+
+    futures = []
+    
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    sensors = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            vertical_position = row.get('vertical_position')
+            sensor_id = row.get('sensor_id')
+            sensor_name = row.get('sensor_name')
+            parameter_unit = row.get('unit')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {
+                    'id': sensor_id, 
+                    'name': sensor_name, 
+                    'qc_level': qc_level,
+                    'unit': parameter_unit,
+                    'vertical_positions': [],
+                    'data': []
+                }
+            
+            if vertical_position not in sensors[sensor_id]['vertical_positions']:
+                sensors[sensor_id]['vertical_positions'].append(vertical_position)
+                sensors[sensor_id]['data'].append({
+                    'vertical_position': vertical_position,
+                    'averages': [],
+                    'ranges': []
+                })
+            
+            for vert_pos_item in sensors[sensor_id]['data']:
+                if vertical_position == vert_pos_item.get('vertical_position'):
+                    vert_pos_item['averages'].append([
+                        row.get('timestamp'), row.get('avg_value')
+                    ])
+                    vert_pos_item['ranges'].append([
+                        row.get('timestamp'), row.get('min_value'), row.get('max_value')
+                    ])
+
+    return json.dumps(sensors, cls=CustomEncoder)
+    
+@app.route('/api/five_min_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_five_min_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM five_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/five_min_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_five_min_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM five_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+
+    futures = []
+    
+    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
+    while (current_first_day_of_month <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
+        current_first_day_of_month += relativedelta(months=1)
+    
+    sensors = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            vertical_position = row.get('vertical_position')
+            sensor_id = row.get('sensor_id')
+            sensor_name = row.get('sensor_name')
+            parameter_unit = row.get('unit')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {
+                    'id': sensor_id, 
+                    'name': sensor_name, 
+                    'qc_level': qc_level,
+                    'unit': parameter_unit,
+                    'vertical_positions': [],
+                    'data': []
+                }
+            
+            if vertical_position not in sensors[sensor_id]['vertical_positions']:
+                sensors[sensor_id]['vertical_positions'].append(vertical_position)
+                sensors[sensor_id]['data'].append({
+                    'vertical_position': vertical_position,
+                    'averages': [],
+                    'ranges': []
+                })
+            
+            for vert_pos_item in sensors[sensor_id]['data']:
+                if vertical_position == vert_pos_item.get('vertical_position'):
+                    vert_pos_item['averages'].append([
+                        row.get('timestamp'), row.get('avg_value')
+                    ])
+                    vert_pos_item['ranges'].append([
+                        row.get('timestamp'), row.get('min_value'), row.get('max_value')
+                    ])
+
+    return json.dumps(sensors, cls=CustomEncoder)
+
+@app.route('/api/one_min_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_one_min_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM one_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND week_first_day=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    year, week_number, weekday = from_dt.isocalendar()
+    current_first_day_of_week = datetime.strptime('{} {} 1'.format(year, week_number), '%Y %W %w')
+    while (current_first_day_of_week <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_week, from_timestamp, to_timestamp, )))
+        current_first_day_of_week += relativedelta(weeks=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/one_min_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_one_min_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM one_min_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND week_first_day=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+
+    futures = []
+    
+    year, week_number, weekday = from_dt.isocalendar()
+    current_first_day_of_week = datetime.strptime('{} {} 1'.format(year, week_number), '%Y %W %w')
+    while (current_first_day_of_week <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_first_day_of_week, from_timestamp, to_timestamp, )))
+        current_first_day_of_week += relativedelta(weeks=1)
+    
+    sensors = OrderedDict()
+    
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            vertical_position = row.get('vertical_position')
+            sensor_id = row.get('sensor_id')
+            sensor_name = row.get('sensor_name')
+            parameter_unit = row.get('unit')
+            
+            if sensor_id not in sensors:
+                sensors[sensor_id] = {
+                    'id': sensor_id, 
+                    'name': sensor_name, 
+                    'qc_level': qc_level,
+                    'unit': parameter_unit,
+                    'vertical_positions': [],
+                    'data': []
+                }
+            
+            if vertical_position not in sensors[sensor_id]['vertical_positions']:
+                sensors[sensor_id]['vertical_positions'].append(vertical_position)
+                sensors[sensor_id]['data'].append({
+                    'vertical_position': vertical_position,
+                    'averages': [],
+                    'ranges': []
+                })
+            
+            for vert_pos_item in sensors[sensor_id]['data']:
+                if vertical_position == vert_pos_item.get('vertical_position'):
+                    vert_pos_item['averages'].append([
+                        row.get('timestamp'), row.get('avg_value')
+                    ])
+                    vert_pos_item['ranges'].append([
+                        row.get('timestamp'), row.get('min_value'), row.get('max_value')
+                    ])
+
+    return json.dumps(sensors, cls=CustomEncoder)
+
+@app.route('/api/one_sec_profile_measurements_by_station/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_one_sec_profile_measurements_by_station(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM one_sec_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND date=? AND timestamp>=? AND timestamp<=?"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+    
+    futures = []
+    current_day = datetime(from_dt.year, from_dt.month, from_dt.day)
+    while (current_day <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_day, from_timestamp, to_timestamp, )))
+        current_day += relativedelta(days=1)
+    
+    data = []
+    for future in futures:
+        rows = future.result()
+        for row in rows:
+            data.append(row)
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/one_sec_profile_measurements_by_station_chart/<string:station_id>/<string:parameter>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>')
+def get_one_sec_profile_measurements_by_station_chart(station_id, parameter, qc_level, from_timestamp, to_timestamp):
+    query = "SELECT * FROM one_sec_profile_measurements_by_station WHERE station_id=? AND parameter=? AND qc_level=? AND date=? AND timestamp>=? AND timestamp<=? ORDER BY timestamp ASC"
+    prepared = session.prepare(query)
+    
+    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
+
+    futures = []
+    
+    current_day = datetime(from_dt.year, from_dt.month, from_dt.day)
+    while (current_day <= to_dt):
+        futures.append(session.execute_async(prepared, (station_id, parameter, qc_level, current_day, from_timestamp, to_timestamp, )))
+        current_day += relativedelta(days=1)
     
     sensors = OrderedDict()
     
@@ -1757,28 +2762,6 @@ def get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_leve
 
     return json.dumps(parameters, cls=CustomEncoder)
 
-@app.route('/api/parameter_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_parameter_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp):
-    query = "SELECT * FROM parameter_group_measurements_by_station WHERE station_id=? AND group_id=? AND qc_level=? AND month_first_day=? AND timestamp>=? AND timestamp<=?"
-    prepared = session.prepare(query)
-    
-    from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
-    to_dt = datetime.fromtimestamp(to_timestamp/1000.0)
-    
-    futures = []
-
-    current_first_day_of_month = datetime(from_dt.year, from_dt.month, 1)
-    while (current_first_day_of_month <= to_dt):
-        futures.append(session.execute_async(prepared, (station_id, group_id, qc_level, current_first_day_of_month, from_timestamp, to_timestamp, )))
-        current_first_day_of_month += relativedelta(months=1)
-
-    data = []
-    for future in futures:
-        rows = future.result()
-        for row in rows:
-            data.append(row)
-    
-    return json.dumps(data, cls=CustomEncoder)
     
 @app.route('/api/five_min_group_measurements_by_station/<string:station_id>/<string:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
 def get_five_min_group_measurements_by_station(station_id, group_id, qc_level, from_timestamp, to_timestamp):

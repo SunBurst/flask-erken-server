@@ -31,6 +31,7 @@
         vm.$onInit = onInit;
         vm.frequencyChange = frequencyChange;
         vm.getHeader = getHeader;
+        vm.isOfParameterType = isOfParameterType;
         vm.prepareCSVExport = prepareCSVExport;
         vm.qcLevelChange = qcLevelChange;
         
@@ -38,6 +39,10 @@
         vm.tableOptionsAll = [];
         
         var chart;
+        
+        function isOfParameterType(type) {
+            return vm.parameter.parameter_type === type;
+        }
         
         function initDynamicTableOptions(qcData) {
             var firstRow = qcData[0];
@@ -179,8 +184,8 @@
                 if (vm.parameter.sensors.sensors.hasOwnProperty(sensorId)) {
                     for (var j = 0; j < vm.parameter.qc_levels.selected.length; j++) {
                         var qcLevel = vm.parameter.qc_levels.selected[j];
-                        var averageSeriesId = sensorId + '-' + qcLevel;
-                        var rangeSeriesId = sensorId + '-' + qcLevel + '-ranges';
+                        var averageSeriesId = stringToDashLowerCase(sensorId + '-' + qcLevel);
+                        var rangeSeriesId = stringToDashLowerCase(sensorId + '-' + qcLevel + '-ranges');
                         var averageSeries = chart.get(averageSeriesId);
                         var rangeSeries = chart.get(rangeSeriesId);
                         
@@ -208,6 +213,51 @@
             chart.redraw();
         }
         
+        function updateProfileChart(data) {
+            for (var i = 0; i < vm.parameter.vertical_positions.length; i++) {
+                var vertPos = vm.parameter.vertical_positions[i].vertical_position;
+                
+                for (var sensorId in vm.parameter.sensors.sensors) {
+                    if (vm.parameter.sensors.sensors.hasOwnProperty(sensorId)) {
+                        for (var j = 0; j < vm.parameter.qc_levels.selected.length; j++) {
+                            var qcLevel = vm.parameter.qc_levels.selected[j];
+                            var averageSeriesId = stringToDashLowerCase(vertPos + '-' + sensorId + '-' + qcLevel);
+                            var rangeSeriesId = stringToDashLowerCase(vertPos + '-' + sensorId + '-' + qcLevel + '-ranges');
+                            var averageSeries = chart.get(averageSeriesId);
+                            var rangeSeries = chart.get(rangeSeriesId);
+                            
+                            var qcLevelDataFound = false;
+                            for (var k = 0; k < data.length; k++) {
+                                if (sensorId in data[k]) {
+                                    var dataQcLevel = data[k][sensorId].qc_level;
+                                    if (qcLevel == dataQcLevel) {
+                                        qcLevelDataFound = true;
+                                        for (var l = 0; l < data[k][sensorId].data.length; l++) {
+                                            if (vertPos == data[k][sensorId].data[l].vertical_position) {
+                                                averageSeries.setData(data[k][sensorId].data[l].averages);
+                                                rangeSeries.setData(data[k][sensorId].data[l].ranges);
+                                            }
+                                            
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                            
+                            if (!qcLevelDataFound) {
+                                averageSeries.setData([], false);
+                                rangeSeries.setData([], false);
+                            }
+                        }
+                    
+                    }
+                }
+            }
+
+            chart.hideLoading();
+            chart.redraw();
+        }
+        
         function afterSetExtremes(e) {
             if (e.trigger != undefined) {
                 var min = Math.round(e.min);
@@ -216,202 +266,392 @@
                 
                 if (vm.parameter.frequencies.selected === 'Dynamic') {
                     
-                    getDynamicChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getDynamicTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initDynamicTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getDynamicChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getDynamicTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDynamicTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getDynamicProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getDynamicProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDynamicTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
 
                 }
                 
                 else if (vm.parameter.frequencies.selected === 'Daily') {
                     
-                    getDailyChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getDailyTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initDateTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getDailyChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getDailyTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDateTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    
+                    else if (vm.isOfParameterType('profile')) {
+                        getDailyProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getDailyProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDateTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
 
                 }
                 
                 else if (vm.parameter.frequencies.selected === 'Hourly') {
                     
-                    getHourlyChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getHourlyTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initDateHourTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getHourlyChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getHourlyTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDateHourTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getHourlyProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getHourlyProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDateHourTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
 
                 }
                 
                 else if (vm.parameter.frequencies.selected === '30 Min') {
                     
-                    getThirtyMinChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getThirtyMinTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getThirtyMinChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getThirtyMinTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getThirtyMinProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getThirtyMinProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
                     
                 }
                 
                 else if (vm.parameter.frequencies.selected === '20 Min') {
                     
-                    getTwentyMinChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getTwentyMinTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getTwentyMinChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getTwentyMinTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getTwentyMinProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getTwentyMinProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
                     
                 }
                 
                 else if (vm.parameter.frequencies.selected === '15 Min') {
                     
-                    getFifteenMinChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getFifteenMinTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getFifteenMinChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getFifteenMinTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getFifteenMinProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getFifteenMinProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
                     
                 }
                 
                 else if (vm.parameter.frequencies.selected === '10 Min') {
                     
-                    getTenMinChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getTenMinTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getTenMinChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getTenMinTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getTenMinProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getTenMinProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
                     
                 }
                 
                 else if (vm.parameter.frequencies.selected === '5 Min') {
                     
-                    getFiveMinChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getFiveMinTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getFiveMinChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getFiveMinTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getFiveMinProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getFiveMinProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
                     
                 }
                 
                 else if (vm.parameter.frequencies.selected === '1 Min') {
                     
-                    getOneMinChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getOneMinTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getOneMinChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getOneMinTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getOneMinProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getOneMinProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
                     
                 }
                 
                 else if (vm.parameter.frequencies.selected === '1 Sec') {
                     
-                    getOneSecChartData(min, max).then(function(data) {
-                        updateChart(data);
-                    });
-                    
-                    vm.tableOptionsAll = [];
-                    
-                    getOneSecTableData(min, max).then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                    if (vm.isOfParameterType('single')) {
+                        getOneSecChartData(min, max).then(function(data) {
+                            updateChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getOneSecTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                    });
-                    
+                        });
+                    }
+                    else if (vm.isOfParameterType('profile')) {
+                        getOneSecProfileChartData(min, max).then(function(data) {
+                            updateProfileChart(data);
+                        });
+                        
+                        vm.tableOptionsAll = [];
+                        
+                        getOneSecProfileTableData(min, max).then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                        });
+                    }
                 }
                 
             }
@@ -426,6 +666,10 @@
             var header = [];
             var timeLabel = vm.tableOptionsAll[tableIndex].query.label + ' (Local Time)';
             header.push(timeLabel);
+            if (vm.isOfParameterType('profile')) {
+                var verticalPositionLabel = 'Vertical Position (m)';
+                header.push(verticalPositionLabel);
+            }
             
             for (var i = 0; i < vm.tableOptionsAll[tableIndex].header.length; i++) {
                 header.push(vm.tableOptionsAll[tableIndex].header[i].header);
@@ -440,17 +684,22 @@
             var tableToExport = vm.tableOptionsAll[tableIndex];
             var timeFormat = tableToExport.query.order;
             var timeLabel = tableToExport.query.label;
+            
             for (var i = 0; i < tableToExport.count; i++) {
                 var timestamp = tableToExport.data[i][timeFormat];
                 var date = moment(timestamp).format(tableToExport.query.momentDateFormat);
-                var row = {timeLabel: date}
+                var row = {timeLabel: date};
+                if (vm.isOfParameterType('profile')) {
+                    row['Vertical Position (m)'] = tableToExport.data[i].vertical_position;
+                }
+                
                 for (var j = 0; j < tableToExport.header.length; j++) {
                     var headerName = tableToExport.header[j].header;
                     var valueType = tableToExport.header[j].valueType;
                     var measurement = tableToExport.data[i][valueType]
                     row[headerName] = measurement;
                 }
-                
+
                 data.push(row);
             }
             
@@ -488,8 +737,28 @@
 
         }
         
+        function getDynamicProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDynamicProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getDynamicProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getDynamicProfileChartDataByQCLevel(qcLevel, start, end);
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+
+        }
+        
         function getDynamicTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDynamicSingleParameterMeasurementsTimeGrouped(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationMeasurements.getDynamicSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -500,6 +769,25 @@
             for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
                 var qcLevel = vm.parameter.qc_levels.selected[i];
                 var resource = getDynamicTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getDynamicProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDynamicProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getDynamicProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getDynamicProfileTableDataByQCLevel(qcLevel, start, end);
                 promiseArray.push(resource);
             }
             return $q.all(promiseArray).then(function(data) {
@@ -568,6 +856,25 @@
             })
         }
         
+        function getDailyProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getDailyProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getDailyProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getDailyProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
         // Hourly
         
         function getHourlyChartDataByQCLevel(qcLevel, start, end) {
@@ -629,6 +936,25 @@
 
         }
         
+        function getHourlyProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getHourlyProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getHourlyProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getHourlyProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
         // 30 Min
         
         function getThirtyMinChartDataByQCLevel(qcLevel, start, end) {
@@ -688,6 +1014,25 @@
             })
         }
         
+        function getThirtyMinProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getThirtyMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getThirtyMinProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getThirtyMinProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
         // 20 Min
         
         function getTwentyMinChartDataByQCLevel(qcLevel, start, end) {
@@ -724,6 +1069,44 @@
                 promises.push(resource);
             }
             return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getTwentyMinProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTwentyMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTwentyMinProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getTwentyMinProfileChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getTwentyMinProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTwentyMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTwentyMinProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getTwentyMinProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
                 return data;
             })
         }
@@ -768,6 +1151,44 @@
             })
         }
         
+        function getFifteenMinProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFifteenMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFifteenMinProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getFifteenMinProfileChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getFifteenMinProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFifteenMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFifteenMinProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getFifteenMinProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
         // 10 Min
         
         function getTenMinChartDataByQCLevel(qcLevel, start, end) {
@@ -804,6 +1225,44 @@
                 promises.push(resource);
             }
             return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getTenMinProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTenMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTenMinProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getTenMinProfileChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getTenMinProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getTenMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getTenMinProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getTenMinProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
                 return data;
             })
         }
@@ -848,6 +1307,44 @@
             })
         }
         
+        function getFiveMinProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFiveMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFiveMinProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getFiveMinProfileChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getFiveMinProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getFiveMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getFiveMinProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getFiveMinProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
         // 1 Min
         
         function getOneMinChartDataByQCLevel(qcLevel, start, end) {
@@ -884,6 +1381,44 @@
                 promises.push(resource);
             }
             return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getOneMinProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneMinProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getOneMinProfileChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getOneMinProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneMinProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getOneMinProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
                 return data;
             })
         }
@@ -928,9 +1463,47 @@
             })
         }
         
+        function getOneSecProfileChartDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneSecProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneSecProfileChartData(start, end) {
+            var promises = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getOneSecProfileChartDataByQCLevel(qcLevel, start, end)
+                promises.push(resource);
+            }
+            return $q.all(promises).then(function(data) {
+                return data;
+            })
+        }
+        
+        function getOneSecProfileTableDataByQCLevel(qcLevel, start, end) {
+            return stationMeasurements.getOneSecProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+        
+        function getOneSecProfileTableData(start, end) {
+            var promiseArray = [];
+            for (var i = 0; i < vm.parameter.qc_levels.selected.length; i++) {
+                var qcLevel = vm.parameter.qc_levels.selected[i];
+                var resource = getOneSecProfileTableDataByQCLevel(qcLevel, start, end);
+                promiseArray.push(resource);
+            }
+            return $q.all(promiseArray).then(function(data) {
+                return data;
+            })
+        }
+        
         function initChart() {
             if (vm.parameter.frequencies.selected === 'Dynamic') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getDynamicChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -1051,7 +1624,7 @@
             }
             
             else if (vm.parameter.frequencies.selected === 'Daily') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getDailyChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -1172,7 +1745,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getDailyProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -1297,7 +1870,7 @@
             }
             
             else if (vm.parameter.frequencies.selected === 'Hourly') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getHourlyChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -1413,7 +1986,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getHourlyProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -1533,7 +2106,7 @@
             }
             
             else if (vm.parameter.frequencies.selected === '30 Min') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getThirtyMinChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -1649,7 +2222,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getThirtyMinProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -1769,7 +2342,7 @@
             }
                   
             else if (vm.parameter.frequencies.selected === '20 Min') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getTwentyMinChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -1885,7 +2458,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getTwentyMinProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -2005,7 +2578,7 @@
             }
                   
             else if (vm.parameter.frequencies.selected === '15 Min') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getFifteenMinChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -2121,7 +2694,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getFifteenMinProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -2242,7 +2815,7 @@
             }
             
             else if (vm.parameter.frequencies.selected === '10 Min') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getTenMinChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -2365,7 +2938,7 @@
 
                       });
                   }
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getTenMinProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -2493,7 +3066,7 @@
             }
                   
             else if (vm.parameter.frequencies.selected === '5 Min') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getFiveMinChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -2617,7 +3190,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getFiveMinProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -2746,7 +3319,7 @@
             }
             
             else if (vm.parameter.frequencies.selected === '1 Min') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getOneMinChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -2870,7 +3443,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getOneMinProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -2999,7 +3572,7 @@
             }
             
             else if (vm.parameter.frequencies.selected === '1 Sec') {
-                if (vm.parameter.parameter_type === 'single') {
+                if (vm.isOfParameterType('single')) {
                     getOneSecChartData(moment(0).valueOf(), moment().valueOf())
                         .then(function(data) {
                             var seriesOptions = initSeriesOptions(data);
@@ -3131,7 +3704,7 @@
                       });
                   }
                   
-                  else if (vm.parameter.parameter_type === 'profile') {
+                  else if (vm.isOfParameterType('profile')) {
                       getOneSecProfileChartData(moment(0).valueOf(), moment().valueOf())
                           .then(function(data) {
                               var seriesOptions = initProfileSeriesOptions(data);
@@ -3450,134 +4023,275 @@
             vm.tableOptionsAll = [];
             
             if (vm.parameter.frequencies.selected === 'Dynamic') {
-                getDynamicTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(qcData) || qcData.length) {
-                                var tableOptions = initDynamicTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getDynamicTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDynamicTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                        
-                });
+                            
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getDynamicProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(qcData) || qcData.length) {
+                                    var tableOptions = initDynamicTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                            
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === 'Daily') {
-                getDailyTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initDateTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getDailyTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initDateTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getDailyProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initDateTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === 'Hourly') {
-                getHourlyTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initDateHourTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getHourlyTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initDateHourTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getHourlyProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initDateHourTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === '30 Min') {
-                getThirtyMinTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getThirtyMinTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getThirtyMinProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === '20 Min') {
-                getTwentyMinTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getTwentyMinTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getTwentyMinProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === '15 Min') {
-                getFifteenMinTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getFifteenMinTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getFifteenMinProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === '10 Min') {
-                getTenMinTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getTenMinTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getTenMinProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === '5 Min') {
-                getFiveMinTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getFiveMinTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getFiveMinProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === '1 Min') {
-                getOneMinTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getOneMinTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getOneMinProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
             else if (vm.parameter.frequencies.selected === '1 Sec') {
-                getOneSecTableData(moment(0).valueOf(), moment().valueOf())
-                    .then(function(data) {
-                        for (var j = 0; j < data.length; j++) {
-                            var qcData = data[j];
-                            if (Array.isArray(data) || data.length) {
-                                var tableOptions = initTimestampTableOptions(qcData);
-                                vm.tableOptionsAll.push(tableOptions);
+                if (vm.isOfParameterType('single')) {
+                    getOneSecTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
                             }
-                        }
-                });
+                    });
+                }
+                else if (vm.isOfParameterType('profile')) {
+                    getOneSecProfileTableData(moment(0).valueOf(), moment().valueOf())
+                        .then(function(data) {
+                            for (var j = 0; j < data.length; j++) {
+                                var qcData = data[j];
+                                if (Array.isArray(data) || data.length) {
+                                    var tableOptions = initTimestampTableOptions(qcData);
+                                    vm.tableOptionsAll.push(tableOptions);
+                                }
+                            }
+                    });
+                }
             }
             
         }

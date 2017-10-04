@@ -630,7 +630,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.parameters_all_measurement_type
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_single_parameter_measurements_by_station (
+CREATE TABLE hydroview_development.hourly_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1126,7 +1126,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.daily_profile_measurements_by_s
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, year), date, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (date DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (date DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1310,7 +1310,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_group_measurements_by_s
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE IF NOT EXISTS hydroview_development.daily_single_parameter_measurements_by_station (
+CREATE TABLE IF NOT EXISTS hydroview_development.daily_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1353,7 +1353,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.hourly_profile_measurements_by_
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, year), date_hour, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (date_hour DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (date_hour DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1383,7 +1383,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.thirty_min_profile_measurements
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1413,7 +1413,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.twenty_min_profile_measurements
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1443,7 +1443,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.fifteen_min_profile_measurement
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1473,7 +1473,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.ten_min_profile_measurements_by
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1503,7 +1503,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.five_min_profile_measurements_b
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, month_first_day), timestamp, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1533,7 +1533,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.one_min_profile_measurements_by
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, week_first_day), timestamp, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
@@ -1563,7 +1563,7 @@ CREATE TABLE IF NOT EXISTS hydroview_development.one_sec_profile_measurements_by
     max_value float,
     unit text static,
     PRIMARY KEY ((station_id, parameter, qc_level, date), timestamp, vertical_position, sensor_name, sensor_id)
-) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position DESC, sensor_name ASC, sensor_id ASC)
+) WITH CLUSTERING ORDER BY (timestamp DESC, vertical_position ASC, sensor_name ASC, sensor_id ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''
