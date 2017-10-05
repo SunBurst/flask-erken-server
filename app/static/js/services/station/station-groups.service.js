@@ -21,7 +21,6 @@
             getGroupParameters: getGroupParameters,
             getGroupsParameters: getGroupsParameters,
             getGroupsQCLevels: getGroupsQCLevels,
-            getGroupQCLevels: getGroupQCLevels
         };
         
         function getGroups(stationId) {
@@ -145,32 +144,6 @@
             }
             
             function getGroupsQCLevelsFailed(error) {
-                console.log(error);
-            }
-
-        }
-        
-        function getGroupQCLevels(stationId, groupId) {
-            var resource = $resource('/api/qc_levels_by_station_group/:station_id/:group_id', {}, {
-                query: {
-                    method: 'GET', params: {
-                        station_id: stationId,
-                        group_id: groupId
-                    },
-                    isArray: true,
-                    interceptor: customInterceptor
-                }
-            });
-            
-            return resource.query({station_id: stationId, group_id: groupId}).$promise
-                .then(getGroupQCLevelsComplete)
-                .catch(getGroupQCLevelsFailed);
-                
-            function getGroupQCLevelsComplete(response) {
-                return response;
-            }
-            
-            function getGroupQCLevelsFailed(error) {
                 console.log(error);
             }
 

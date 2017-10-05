@@ -894,7 +894,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -999,7 +1012,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -1107,7 +1133,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -1210,7 +1249,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -1313,7 +1365,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -1416,9 +1481,22 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
-                          
+                            
                             rangeSelector: {
                                 buttons: [{
                                     type: 'day',
@@ -1519,7 +1597,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -1630,7 +1721,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -1737,7 +1841,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {
@@ -1844,7 +1961,20 @@
                           
                             legend: {
                                 enabled: true,
-                                margin: 30
+                                margin: 30,
+                                layout: 'horizontal',
+                                verticalAlign: 'bottom',
+                                maxHeight: 100,
+                                navigation: {
+                                    activeColor: '#3E576F',
+                                    animation: true,
+                                    arrowSize: 12,
+                                    inactiveColor: '#CCC',
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: '#333'
+                                    }
+                                }
                             },
                           
                             rangeSelector: {

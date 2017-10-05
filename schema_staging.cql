@@ -1,35 +1,35 @@
-CREATE KEYSPACE hydroview_development WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+CREATE KEYSPACE hydroview_staging WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 
-CREATE TYPE hydroview_development.averages (
+CREATE TYPE hydroview_staging.averages (
     min_value float,
     avg_value float,
     max_value float,
     unit text
 );
 
-CREATE TYPE hydroview_development.description (
+CREATE TYPE hydroview_staging.description (
     short_description text,
     long_description text
 );
 
-CREATE TYPE hydroview_development.name (
+CREATE TYPE hydroview_staging.name (
     first_name text,
     last_name text
 );
 
-CREATE TYPE hydroview_development.position (
+CREATE TYPE hydroview_staging.position (
     latitude double,
     longitude double
 );
 
-CREATE TYPE hydroview_development.thumbnails (
+CREATE TYPE hydroview_staging.thumbnails (
     xl blob,
     l blob,
     m blob,
     s blob
 );
 
-CREATE TABLE hydroview_development.daily_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.daily_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -59,7 +59,7 @@ CREATE TABLE hydroview_development.daily_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.fifteen_min_group_meas_by_station_grouped (
+CREATE TABLE hydroview_staging.fifteen_min_group_meas_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -83,7 +83,7 @@ CREATE TABLE hydroview_development.fifteen_min_group_meas_by_station_grouped (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_single_measurements_by_station (
+CREATE TABLE hydroview_staging.hourly_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -112,7 +112,7 @@ CREATE TABLE hydroview_development.hourly_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.group_qc_levels_by_station (
+CREATE TABLE hydroview_staging.group_qc_levels_by_station (
     station_id text,
     group_name text,
     qc_level int,
@@ -135,7 +135,7 @@ CREATE TABLE hydroview_development.group_qc_levels_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.daily_parameter_group_measurements_by_station (
+CREATE TABLE hydroview_staging.daily_parameter_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -164,7 +164,7 @@ CREATE TABLE hydroview_development.daily_parameter_group_measurements_by_station
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameters_by_station_group (
+CREATE TABLE hydroview_staging.parameters_by_station_group (
     station_id text,
     group_id text,
     parameter_name text,
@@ -188,7 +188,7 @@ CREATE TABLE hydroview_development.parameters_by_station_group (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameter_groups_by_station (
+CREATE TABLE hydroview_staging.parameter_groups_by_station (
     station_id text,
     group_name text,
     group_id text,
@@ -211,7 +211,7 @@ CREATE TABLE hydroview_development.parameter_groups_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.daily_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.daily_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -235,7 +235,7 @@ CREATE TABLE hydroview_development.daily_group_measurements_by_station_grouped (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.five_min_group_measurements_by_station (
+CREATE TABLE hydroview_staging.five_min_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -264,7 +264,7 @@ CREATE TABLE hydroview_development.five_min_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_min_group_measurements_by_station (
+CREATE TABLE hydroview_staging.one_min_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -293,7 +293,7 @@ CREATE TABLE hydroview_development.one_min_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.five_min_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.five_min_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -323,7 +323,7 @@ CREATE TABLE hydroview_development.five_min_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_parameter_group_measurements_by_station (
+CREATE TABLE hydroview_staging.hourly_parameter_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -352,7 +352,7 @@ CREATE TABLE hydroview_development.hourly_parameter_group_measurements_by_statio
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.networks (
+CREATE TABLE hydroview_staging.networks (
     bucket int,
     name text,
     id text,
@@ -376,7 +376,7 @@ CREATE TABLE hydroview_development.networks (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.webcam_live_urls_by_station (
+CREATE TABLE hydroview_staging.webcam_live_urls_by_station (
     station_id text,
     url text,
     PRIMARY KEY (station_id, url)
@@ -396,7 +396,7 @@ CREATE TABLE hydroview_development.webcam_live_urls_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_sec_group_measurements_by_station (
+CREATE TABLE hydroview_staging.one_sec_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -425,7 +425,7 @@ CREATE TABLE hydroview_development.one_sec_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_min_single_measurements_by_station (
+CREATE TABLE hydroview_staging.one_min_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -454,7 +454,7 @@ CREATE TABLE hydroview_development.one_min_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.webcam_photos_by_station (
+CREATE TABLE hydroview_staging.webcam_photos_by_station (
     station_id text,
     date date,
     timestamp timestamp,
@@ -476,7 +476,7 @@ CREATE TABLE hydroview_development.webcam_photos_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.five_min_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.five_min_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -500,7 +500,7 @@ CREATE TABLE hydroview_development.five_min_group_measurements_by_station_groupe
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.thirty_min_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.thirty_min_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -524,7 +524,7 @@ CREATE TABLE hydroview_development.thirty_min_group_measurements_by_station_grou
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameters_by_station (
+CREATE TABLE hydroview_staging.parameters_by_station (
     station_id text,
     parameter text,
     parameter_type text,
@@ -547,7 +547,7 @@ CREATE TABLE hydroview_development.parameters_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.fifteen_min_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.fifteen_min_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -577,7 +577,7 @@ CREATE TABLE hydroview_development.fifteen_min_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.thirty_min_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.thirty_min_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -607,7 +607,7 @@ CREATE TABLE hydroview_development.thirty_min_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_sec_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.one_sec_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -631,7 +631,7 @@ CREATE TABLE hydroview_development.one_sec_group_measurements_by_station_grouped
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameter_measurement_frequencies_by_station (
+CREATE TABLE hydroview_staging.parameter_measurement_frequencies_by_station (
     station_id text,
     parameter text,
     parameter_type text,
@@ -653,7 +653,7 @@ CREATE TABLE hydroview_development.parameter_measurement_frequencies_by_station 
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.daily_single_measurements_by_station (
+CREATE TABLE hydroview_staging.daily_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -682,7 +682,7 @@ CREATE TABLE hydroview_development.daily_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.twenty_min_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.twenty_min_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -706,7 +706,7 @@ CREATE TABLE hydroview_development.twenty_min_group_measurements_by_station_grou
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.station_info_by_station (
+CREATE TABLE hydroview_staging.station_info_by_station (
     id text PRIMARY KEY,
     description frozen<description>,
     environment_category text,
@@ -728,7 +728,7 @@ CREATE TABLE hydroview_development.station_info_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.thirty_min_single_measurements_by_station (
+CREATE TABLE hydroview_staging.thirty_min_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -757,7 +757,7 @@ CREATE TABLE hydroview_development.thirty_min_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_min_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.one_min_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -787,7 +787,7 @@ CREATE TABLE hydroview_development.one_min_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.ten_min_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.ten_min_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -811,7 +811,7 @@ CREATE TABLE hydroview_development.ten_min_group_measurements_by_station_grouped
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.ten_min_single_measurements_by_station (
+CREATE TABLE hydroview_staging.ten_min_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -840,7 +840,7 @@ CREATE TABLE hydroview_development.ten_min_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.stations_by_network (
+CREATE TABLE hydroview_staging.stations_by_network (
     network_id text,
     station_name text,
     station_id text,
@@ -865,7 +865,7 @@ CREATE TABLE hydroview_development.stations_by_network (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.thirty_min_group_measurements_by_station (
+CREATE TABLE hydroview_staging.thirty_min_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -894,7 +894,7 @@ CREATE TABLE hydroview_development.thirty_min_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_min_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.one_min_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -918,7 +918,7 @@ CREATE TABLE hydroview_development.one_min_group_measurements_by_station_grouped
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.twenty_min_group_measurements_by_station (
+CREATE TABLE hydroview_staging.twenty_min_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -947,7 +947,7 @@ CREATE TABLE hydroview_development.twenty_min_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_sec_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.one_sec_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -977,7 +977,7 @@ CREATE TABLE hydroview_development.one_sec_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.group_parameters_by_station (
+CREATE TABLE hydroview_staging.group_parameters_by_station (
     station_id text,
     group_id text,
     parameter_name text,
@@ -1003,7 +1003,7 @@ CREATE TABLE hydroview_development.group_parameters_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.video_urls_by_station (
+CREATE TABLE hydroview_staging.video_urls_by_station (
     station_id text,
     date date,
     timestamp timestamp,
@@ -1025,7 +1025,7 @@ CREATE TABLE hydroview_development.video_urls_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.network_info_by_network (
+CREATE TABLE hydroview_staging.network_info_by_network (
     id text PRIMARY KEY,
     description frozen<description>,
     image blob,
@@ -1046,7 +1046,7 @@ CREATE TABLE hydroview_development.network_info_by_network (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.sensors_by_station (
+CREATE TABLE hydroview_staging.sensors_by_station (
     station_id text,
     sensor_name text,
     sensor_id text,
@@ -1069,7 +1069,7 @@ CREATE TABLE hydroview_development.sensors_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.twenty_min_single_measurements_by_station (
+CREATE TABLE hydroview_staging.twenty_min_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1098,7 +1098,7 @@ CREATE TABLE hydroview_development.twenty_min_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.hourly_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1128,7 +1128,7 @@ CREATE TABLE hydroview_development.hourly_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.stations (
+CREATE TABLE hydroview_staging.stations (
     bucket int,
     name text,
     id text,
@@ -1153,7 +1153,7 @@ CREATE TABLE hydroview_development.stations (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.ten_min_group_measurements_by_station (
+CREATE TABLE hydroview_staging.ten_min_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -1182,7 +1182,7 @@ CREATE TABLE hydroview_development.ten_min_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameter_qc_levels_by_station (
+CREATE TABLE hydroview_staging.parameter_qc_levels_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1205,7 +1205,7 @@ CREATE TABLE hydroview_development.parameter_qc_levels_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.parameter_sensors_by_station (
+CREATE TABLE hydroview_staging.parameter_sensors_by_station (
     station_id text,
     parameter text,
     parameter_type text,
@@ -1227,7 +1227,7 @@ CREATE TABLE hydroview_development.parameter_sensors_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.twenty_min_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.twenty_min_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1257,7 +1257,7 @@ CREATE TABLE hydroview_development.twenty_min_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.ten_min_profile_measurements_by_station (
+CREATE TABLE hydroview_staging.ten_min_profile_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1287,7 +1287,7 @@ CREATE TABLE hydroview_development.ten_min_profile_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.hourly_group_measurements_by_station_grouped (
+CREATE TABLE hydroview_staging.hourly_group_measurements_by_station_grouped (
     station_id text,
     group_id text,
     qc_level int,
@@ -1311,7 +1311,7 @@ CREATE TABLE hydroview_development.hourly_group_measurements_by_station_grouped 
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.fifteen_min_single_measurements_by_station (
+CREATE TABLE hydroview_staging.fifteen_min_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1340,7 +1340,7 @@ CREATE TABLE hydroview_development.fifteen_min_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.vertical_positions_by_station_profile_parameter (
+CREATE TABLE hydroview_staging.vertical_positions_by_station_profile_parameter (
     station_id text,
     parameter text,
     vertical_position float,
@@ -1361,7 +1361,7 @@ CREATE TABLE hydroview_development.vertical_positions_by_station_profile_paramet
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.group_measurement_frequencies_by_station (
+CREATE TABLE hydroview_staging.group_measurement_frequencies_by_station (
     station_id text,
     group_id text,
     measurement_frequencies list<text>,
@@ -1382,7 +1382,7 @@ CREATE TABLE hydroview_development.group_measurement_frequencies_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.fifteen_min_group_measurements_by_station (
+CREATE TABLE hydroview_staging.fifteen_min_group_measurements_by_station (
     station_id text,
     group_id text,
     qc_level int,
@@ -1411,7 +1411,7 @@ CREATE TABLE hydroview_development.fifteen_min_group_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.one_sec_single_measurements_by_station (
+CREATE TABLE hydroview_staging.one_sec_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,
@@ -1440,7 +1440,7 @@ CREATE TABLE hydroview_development.one_sec_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview_development.five_min_single_measurements_by_station (
+CREATE TABLE hydroview_staging.five_min_single_measurements_by_station (
     station_id text,
     parameter text,
     qc_level int,

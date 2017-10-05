@@ -1510,7 +1510,7 @@
                             chart = new Highcharts.stockChart({
                         
                                 chart: {
-                                    renderTo: chartId,
+                                    renderTo: vm.chartId,
                                     style: {
                                         fontFamily: 'Roboto'
                                     },
@@ -1527,7 +1527,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -1620,6 +1633,136 @@
 
                         });
                     }
+                    else if (vm.isOfParameterType('profile')) {
+                        getDynamicProfileChartData(moment(0).valueOf(), moment().valueOf())
+                            .then(function(data) {
+                                var seriesOptions = initProfileSeriesOptions(data);
+                                chart = new Highcharts.stockChart({
+                            
+                                    chart: {
+                                        renderTo: vm.chartId,
+                                        style: {
+                                            fontFamily: 'Roboto'
+                                        },
+                                        type: 'spline'
+                                    },
+
+                                    credits: {
+                                        enabled: false
+                                    },
+
+                                    lang: {
+                                        noData: 'No data to display'
+                                    },
+                                  
+                                    legend: {
+                                        enabled: true,
+                                        margin: 30,
+                                        layout: 'horizontal',
+                                        verticalAlign: 'bottom',
+                                        maxHeight: 100,
+                                        navigation: {
+                                            activeColor: '#3E576F',
+                                            animation: true,
+                                            arrowSize: 12,
+                                            inactiveColor: '#CCC',
+                                            style: {
+                                                fontWeight: 'bold',
+                                                color: '#333'
+                                            }
+                                        }
+                                    },
+                                  
+                                    rangeSelector: {
+                                        buttons: [{
+                                            type: 'minute',
+                                            count: 1,
+                                            text: '1M'
+                                        }, {
+                                            type: 'hour',
+                                            count: 1,
+                                            text: '1h'
+                                        }, {
+                                            type: 'day',
+                                            count: 1,
+                                            text: '1d'
+                                        }, { 
+                                            type: 'month',
+                                            count: 1,
+                                            text: '1m'
+                                        }, {
+                                            type: 'year',
+                                            count: 1,
+                                            text: '1y'
+                                        }, {
+                                            type: 'all',
+                                            text: 'All'
+                                        }],
+                                        inputBoxWidth: 130,
+                                        inputDateFormat: "%Y-%m-%d %H:%M:%S",
+                                        inputDateParser: function (value) {
+                                            var temp_date;
+                                            if (HighchartsDefaultOptions.global.useUTC) {
+                                                temp_date = moment.utc(value);
+                                            }
+                                            else {
+                                                temp_date = moment(value);
+                                            }
+                                            return temp_date.valueOf();
+                                        },
+                                        inputEditDateFormat: "%Y-%m-%d %H:%M:%S",
+                                        selected: 4,
+                                    },
+
+                                    navigator: {
+                                        adaptToUpdatedData: false
+                                    },
+
+                                    series: seriesOptions,
+                                    
+                                    title: {
+                                        text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    },
+
+                                    noData: {
+                                        style: {
+                                            fontWeight: 'bold',
+                                            fontSize: '15px',
+                                            color: '#303030'
+                                        }
+                                    },
+
+                                    scrollbar: {
+                                        liveRedraw: false 
+                                    },
+
+                                    xAxis: [{
+                                        type: 'datetime',
+                                        minRange: 60000,    // 1 min
+                                        events: {
+                                            afterSetExtremes: afterSetExtremes
+                                        }
+                                    }],
+
+                                    yAxis: [{
+                                        labels: {
+                                            format: '{value} ' + vm.parameter.parameter_unit,
+                                            style: {
+                                                color: Highcharts.getOptions().colors[0]
+                                            }
+                                        },
+                                        title: {
+                                            text: vm.parameter.parameter,
+                                            style: {
+                                                color: Highcharts.getOptions().colors[0]
+                                            }
+                                        },
+                                    }]
+                                
+                                });
+
+                            });
+                    }
                     
             }
             
@@ -1648,7 +1791,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -1769,7 +1925,20 @@
                                   
                                     legend: {
                                         enabled: true,
-                                        margin: 30
+                                        margin: 30,
+                                        layout: 'horizontal',
+                                        verticalAlign: 'bottom',
+                                        maxHeight: 100,
+                                        navigation: {
+                                            activeColor: '#3E576F',
+                                            animation: true,
+                                            arrowSize: 12,
+                                            inactiveColor: '#CCC',
+                                            style: {
+                                                fontWeight: 'bold',
+                                                color: '#333'
+                                            }
+                                        }
                                     },
                                   
                                     rangeSelector: {
@@ -1894,7 +2063,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2010,7 +2192,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2130,7 +2325,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2246,7 +2454,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2366,7 +2587,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2482,7 +2716,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2602,7 +2849,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2718,7 +2978,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2839,7 +3112,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -2962,7 +3248,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -3090,7 +3389,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -3214,7 +3526,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -3343,7 +3668,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -3467,7 +3805,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -3596,7 +3947,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {
@@ -3728,7 +4092,20 @@
                               
                                 legend: {
                                     enabled: true,
-                                    margin: 30
+                                    margin: 30,
+                                    layout: 'horizontal',
+                                    verticalAlign: 'bottom',
+                                    maxHeight: 100,
+                                    navigation: {
+                                        activeColor: '#3E576F',
+                                        animation: true,
+                                        arrowSize: 12,
+                                        inactiveColor: '#CCC',
+                                        style: {
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }
+                                    }
                                 },
                               
                                 rangeSelector: {

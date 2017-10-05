@@ -48,30 +48,7 @@
                 url: '/data',
                 templateUrl: '/static/partials/station/station-data.html',
                 controller: 'StationDataCtrl',
-                controllerAs: 'stationDataVm',
-                resolve: {
-                    //_parametersAllMeasurementTypes: function($stateParams, StationParametersFactory, stationStorage) {
-                    //    var stationId = $stateParams.station_id;
-                    //    return StationParametersFactory.getParametersAllMeasurementTypes(stationId)
-                    //        .then(function(response) {
-                    //            var data = response.data;
-                    //            var initObjects = true;
-                    //            stationStorage.setParametersAllMeasurementTypesList(data, initObjects);
-                    //            return data;
-                    //        });
-                    //},
-                    //_parameterAllMeasurementTypesSelection: ['_parametersAllMeasurementTypes', 'stationDataStorage', function(_parametersAllMeasurementTypes, stationDataStorage) {
-                    //    return stationDataStorage.setParametersAllMeasurementTypesSelection(_parametersAllMeasurementTypes);
-                    //}],
-                    //_measurementFrequencies: function($stateParams, stationMeasurements, stationDataStorage) {
-                    //    var stationId = $stateParams.station_id;
-                    //    return stationMeasurements.getMeasurementFrequencies(stationId)
-                    //    .then(function(response) {
-                    //        var data = response.data;
-                    //        return stationDataStorage.setMeasurementFrequencies(data);
-                    //    });
-                    //}
-                }
+                controllerAs: 'stationDataVm'
             })
             .state('station.data.groups', {
                 url: '/groups',
