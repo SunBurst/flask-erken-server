@@ -123,19 +123,19 @@
 
         }
         
-        function getProfileParameterVerticalPositions(stationId, parameter) {
-            var resource = $resource('/api/profile_vertical_positions_by_station_parameter/:station_id/:parameter', {}, {
+        function getProfileParameterVerticalPositions(stationId, parameterId) {
+            var resource = $resource('/api/profile_vertical_positions_by_station_parameter/:station_id/:parameter_id', {}, {
                 query: {
                     method: 'GET', params: {
                         station_id: stationId,
-                        parameter: parameter
+                        parameter_id: parameterId
                     },
                     isArray: true,
                     interceptor: customInterceptor
                 }
             });
             
-            return resource.query({station_id: stationId, parameter: parameter}).$promise
+            return resource.query({station_id: stationId, parameter_id: parameterId}).$promise
                 .then(getProfileParameterVerticalPositionsComplete)
                 .catch(getProfileParameterVerticalPositionsFailed);
                 

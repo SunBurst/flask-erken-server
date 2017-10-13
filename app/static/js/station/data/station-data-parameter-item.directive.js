@@ -22,10 +22,11 @@
     }
     
     StationDataParameterItemCtrl.$inject = [
-        '$mdMedia', '$q', 'CoreFactory', 'HighchartsDefaultOptions', 'stationMeasurements'
+        '$mdMedia', '$q', 'CoreFactory', 'HighchartsDefaultOptions', 
+        'stationProfileMeasurements', 'stationSingleParameterMeasurements'
     ];
     
-    function StationDataParameterItemCtrl($mdMedia, $q, CoreFactory, HighchartsDefaultOptions, stationMeasurements) {
+    function StationDataParameterItemCtrl($mdMedia, $q, CoreFactory, HighchartsDefaultOptions, stationProfileMeasurements, stationSingleParameterMeasurements) {
         var vm = this;
         
         vm.$onInit = onInit;
@@ -66,7 +67,7 @@
             }
             
             var tableOptions = {
-                'name': vm.parameter.parameter + ' - QC Level ' + dataQcLevel,
+                'name': vm.parameter.parameter_name + ' - QC Level ' + dataQcLevel,
                 'options': {
                     'decapitate': false,
                     'boundaryLinks': false,
@@ -95,7 +96,7 @@
             var dataQcLevel = firstRow.qc_level;
             var header = initTableHeader();
             var tableOptions = {
-                'name': vm.parameter.parameter + ' - QC Level ' + dataQcLevel,
+                'name': vm.parameter.parameter_name + ' - QC Level ' + dataQcLevel,
                 'options': {
                     'decapitate': false,
                     'boundaryLinks': false,
@@ -125,7 +126,7 @@
             var header = initTableHeader();
             
             var tableOptions = {
-                'name': vm.parameter.parameter + ' - QC Level ' + dataQcLevel,
+                'name': vm.parameter.parameter_name + ' - QC Level ' + dataQcLevel,
                 'options': {
                     'decapitate': false,
                     'boundaryLinks': false,
@@ -155,7 +156,7 @@
             var header = initTableHeader();
             
             var tableOptions = {
-                'name': vm.parameter.parameter + ' - QC Level ' + dataQcLevel,
+                'name': vm.parameter.parameter_name + ' - QC Level ' + dataQcLevel,
                 'options': {
                     'decapitate': false,
                     'boundaryLinks': false,
@@ -707,7 +708,7 @@
         }
         
         function generateChartId() {
-            var str = 'chart-' + vm.parameter.parameter + '-' + vm.parameter.parameter_type;
+            var str = 'chart-' + vm.parameter.parameter_id + '-' + vm.parameter.parameter_type;
             return stringToDashLowerCase(str);
         }
         
@@ -718,7 +719,7 @@
         // Dynamic
         
         function getDynamicChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDynamicSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getDynamicSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -738,7 +739,7 @@
         }
         
         function getDynamicProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDynamicProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getDynamicProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -758,7 +759,7 @@
         }
         
         function getDynamicTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDynamicSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getDynamicSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -777,7 +778,7 @@
         }
         
         function getDynamicProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDynamicProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getDynamicProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -798,7 +799,7 @@
         // Daily
         
         function getDailyChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDailySingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getDailySingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -818,7 +819,7 @@
         }
         
         function getDailyProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDailyProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getDailyProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -838,7 +839,7 @@
         }
         
         function getDailyTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDailySingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getDailySingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -857,7 +858,7 @@
         }
         
         function getDailyProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDailyProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getDailyProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -878,7 +879,7 @@
         // Hourly
         
         function getHourlyChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getHourlySingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getHourlySingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -898,7 +899,7 @@
         }
         
         function getHourlyTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getHourlySingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getHourlySingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -917,7 +918,7 @@
         }
         
         function getHourlyProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getHourlyProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getHourlyProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -937,7 +938,7 @@
         }
         
         function getHourlyProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getHourlyProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getHourlyProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -958,7 +959,7 @@
         // 30 Min
         
         function getThirtyMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getThirtyMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getThirtyMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -977,7 +978,7 @@
         }
         
         function getThirtyMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getThirtyMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getThirtyMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -996,7 +997,7 @@
         }
         
         function getThirtyMinProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getThirtyMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getThirtyMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1015,7 +1016,7 @@
         }
         
         function getThirtyMinProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getThirtyMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getThirtyMinProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1036,7 +1037,7 @@
         // 20 Min
         
         function getTwentyMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTwentyMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getTwentyMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1055,7 +1056,7 @@
         }
         
         function getTwentyMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTwentyMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getTwentyMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1074,7 +1075,7 @@
         }
         
         function getTwentyMinProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTwentyMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getTwentyMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1093,7 +1094,7 @@
         }
         
         function getTwentyMinProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTwentyMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getTwentyMinProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1114,7 +1115,7 @@
         // 15 Min
         
         function getFifteenMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFifteenMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getFifteenMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1133,7 +1134,7 @@
         }
         
         function getFifteenMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFifteenMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getFifteenMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1152,7 +1153,7 @@
         }
         
         function getFifteenMinProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFifteenMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getFifteenMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1171,7 +1172,7 @@
         }
         
         function getFifteenMinProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFifteenMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getFifteenMinProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1192,7 +1193,7 @@
         // 10 Min
         
         function getTenMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTenMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getTenMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1211,7 +1212,7 @@
         }
         
         function getTenMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTenMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getTenMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1230,7 +1231,7 @@
         }
         
         function getTenMinProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTenMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getTenMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1249,7 +1250,7 @@
         }
         
         function getTenMinProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTenMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getTenMinProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1270,7 +1271,7 @@
         // 5 Min
         
         function getFiveMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFiveMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getFiveMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1289,7 +1290,7 @@
         }
         
         function getFiveMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFiveMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getFiveMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1308,7 +1309,7 @@
         }
         
         function getFiveMinProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFiveMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getFiveMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1327,7 +1328,7 @@
         }
         
         function getFiveMinProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFiveMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getFiveMinProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1348,7 +1349,7 @@
         // 1 Min
         
         function getOneMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getOneMinSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1367,7 +1368,7 @@
         }
         
         function getOneMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getOneMinSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1386,7 +1387,7 @@
         }
         
         function getOneMinProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getOneMinProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1405,7 +1406,7 @@
         }
         
         function getOneMinProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneMinProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getOneMinProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1426,7 +1427,7 @@
         // 1 Sec
         
         function getOneSecChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneSecSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getOneSecSingleParameterMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1445,7 +1446,7 @@
         }
         
         function getOneSecTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneSecSingleParameterMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationSingleParameterMeasurements.getOneSecSingleParameterMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1464,7 +1465,7 @@
         }
         
         function getOneSecProfileChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneSecProfileMeasurementsChart(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getOneSecProfileMeasurementsChart(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1483,7 +1484,7 @@
         }
         
         function getOneSecProfileTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneSecProfileMeasurements(vm.station.id, vm.parameter.parameter, qcLevel, start, end)
+            return stationProfileMeasurements.getOneSecProfileMeasurements(vm.station.id, vm.parameter.parameter_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -1591,7 +1592,7 @@
                                 series: seriesOptions,
                                 
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -1622,7 +1623,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -1721,7 +1722,7 @@
                                     series: seriesOptions,
                                     
                                     title: {
-                                        text: vm.parameter.parameter + ' at ' + vm.station.name
+                                        text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                     },
 
                                     noData: {
@@ -1752,7 +1753,7 @@
                                             }
                                         },
                                         title: {
-                                            text: vm.parameter.parameter,
+                                            text: vm.parameter.parameter_name,
                                             style: {
                                                 color: Highcharts.getOptions().colors[0]
                                             }
@@ -1858,7 +1859,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -1889,7 +1890,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -1992,7 +1993,7 @@
                                     series: seriesOptions,
                                 
                                     title: {
-                                        text: vm.parameter.parameter + ' at ' + vm.station.name
+                                        text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                     },
 
                                     noData: {
@@ -2023,7 +2024,7 @@
                                             }
                                         },
                                         title: {
-                                            text: vm.parameter.parameter,
+                                            text: vm.parameter.parameter_name,
                                             style: {
                                                 color: Highcharts.getOptions().colors[0]
                                             }
@@ -2125,7 +2126,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -2156,7 +2157,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2254,7 +2255,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -2285,7 +2286,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2387,7 +2388,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -2418,7 +2419,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2516,7 +2517,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -2547,7 +2548,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2649,7 +2650,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -2680,7 +2681,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2778,7 +2779,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -2809,7 +2810,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2911,7 +2912,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -2942,7 +2943,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3040,7 +3041,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -3071,7 +3072,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3182,7 +3183,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -3213,7 +3214,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3318,7 +3319,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -3349,7 +3350,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3459,7 +3460,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -3490,7 +3491,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3596,7 +3597,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -3627,7 +3628,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3738,7 +3739,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -3769,7 +3770,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3875,7 +3876,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -3906,7 +3907,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -4025,7 +4026,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -4056,7 +4057,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -4170,7 +4171,7 @@
                                 series: seriesOptions,
                             
                                 title: {
-                                    text: vm.parameter.parameter + ' at ' + vm.station.name
+                                    text: vm.parameter.parameter_name + ' at ' + vm.station.name
                                 },
 
                                 noData: {
@@ -4201,7 +4202,7 @@
                                         }
                                     },
                                     title: {
-                                        text: vm.parameter.parameter,
+                                        text: vm.parameter.parameter_name,
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -4222,7 +4223,7 @@
             
             var seriesOptions = [];
 
-            var parameter = vm.parameter.parameter;
+            var parameter = vm.parameter.parameter_id;
             var unit = vm.parameter.parameter_unit;
             for (var sensorId in vm.parameter.sensors.sensors) {
                 if (vm.parameter.sensors.sensors.hasOwnProperty(sensorId)) {
@@ -4290,7 +4291,7 @@
         function initProfileSeriesOptions(data) {
             var seriesOptions = [];
 
-            var parameter = vm.parameter.parameter;
+            var parameter = vm.parameter.parameter_id;
             var unit = vm.parameter.parameter_unit;
             for (var i = 0; i < vm.parameter.vertical_positions.length; i++) {
                 var vertPos = vm.parameter.vertical_positions[i].vertical_position;
@@ -4379,19 +4380,19 @@
         
         function initTableHeader() {
             var tableHeader = [];
-            var parameter = vm.parameter.parameter;
+            var parameterName = vm.parameter.parameter_name;
             var unit = vm.parameter.parameter_unit;
-            var minHeader = 'Min. ' + parameter;
-            var avgHeader = 'Avg. ' + parameter;
-            var maxHeader = 'Max. ' + parameter;
+            var minHeader = 'Min. ' + parameterName;
+            var avgHeader = 'Avg. ' + parameterName;
+            var maxHeader = 'Max. ' + parameterName;
             if (unit) {
                 minHeader += ' (' + unit + ')';
                 avgHeader += ' (' + unit + ')';
                 maxHeader += ' (' + unit + ')';
             }
-            tableHeader.push({'parameter': parameter, 'header': minHeader, 'valueType': 'min_value'});
-            tableHeader.push({'parameter': parameter, 'header': avgHeader, 'valueType': 'avg_value'});
-            tableHeader.push({'parameter': parameter, 'header': maxHeader, 'valueType': 'max_value'});
+            tableHeader.push({'parameter': parameterName, 'header': minHeader, 'valueType': 'min_value'});
+            tableHeader.push({'parameter': parameterName, 'header': avgHeader, 'valueType': 'avg_value'});
+            tableHeader.push({'parameter': parameterName, 'header': maxHeader, 'valueType': 'max_value'});
 
             return tableHeader;
         }

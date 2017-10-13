@@ -249,15 +249,15 @@
                         function(_parameterMeasurementFrequenciesList) {
                             var parameterMeasurementFrequencies = {};
                             for (var i = 0; i < _parameterMeasurementFrequenciesList.length; i++) {
-                                var parameter = _parameterMeasurementFrequenciesList[i].parameter;
+                                var parameterId = _parameterMeasurementFrequenciesList[i].parameter_id;
                                 var parameterType = _parameterMeasurementFrequenciesList[i].parameter_type;
-                                var parameterNotInObject = !(parameter in parameterMeasurementFrequencies);
+                                var parameterNotInObject = !(parameterId in parameterMeasurementFrequencies);
                                 if (parameterNotInObject) {
-                                    parameterMeasurementFrequencies[parameter] = {};
+                                    parameterMeasurementFrequencies[parameterId] = {};
                                 }
-                                var parameterTypeNotInObject = !(parameterType in parameterMeasurementFrequencies[parameter]);
+                                var parameterTypeNotInObject = !(parameterType in parameterMeasurementFrequencies[parameterId]);
                                 if (parameterTypeNotInObject) {
-                                    parameterMeasurementFrequencies[parameter][parameterType] = _parameterMeasurementFrequenciesList[i].measurement_frequencies;
+                                    parameterMeasurementFrequencies[parameterId][parameterType] = _parameterMeasurementFrequenciesList[i].measurement_frequencies;
                                 }
                             }
                             return parameterMeasurementFrequencies;
@@ -273,17 +273,17 @@
                     _parameterQCLevels: ['_parameterQCLevelList', function(_parameterQCLevelList) {
                         var parameterQCLevels = {};
                         for (var i = 0; i < _parameterQCLevelList.length; i++) {
-                            var parameter = _parameterQCLevelList[i].parameter;
+                            var parameterId = _parameterQCLevelList[i].parameter_id;
                             var parameterType = _parameterQCLevelList[i].parameter_type;
-                            var parameterNotInObject = !(parameter in parameterQCLevels);
+                            var parameterNotInObject = !(parameterId in parameterQCLevels);
                             if (parameterNotInObject) {
-                                parameterQCLevels[parameter] = {};
+                                parameterQCLevels[parameterId] = {};
                             }
-                            var parameterTypeNotInObject = !(parameterType in parameterQCLevels[parameter]);
+                            var parameterTypeNotInObject = !(parameterType in parameterQCLevels[parameterId]);
                             if (parameterTypeNotInObject) {
-                                parameterQCLevels[parameter][parameterType] = [];
+                                parameterQCLevels[parameterId][parameterType] = [];
                             }
-                            parameterQCLevels[parameter][parameterType].push(_parameterQCLevelList[i]);
+                            parameterQCLevels[parameterId][parameterType].push(_parameterQCLevelList[i]);
                         }
                         return parameterQCLevels;
                     }],
@@ -299,17 +299,17 @@
                         var parameterSensors = {};
                         
                         for (var i = 0; i < _parameterSensorList.length; i++) {
-                            var parameter = _parameterSensorList[i].parameter;
+                            var parameterId = _parameterSensorList[i].parameter_id;
                             var parameterType = _parameterSensorList[i].parameter_type;
-                            var parameterNotInObject = !(parameter in parameterSensors);
+                            var parameterNotInObject = !(parameterId in parameterSensors);
                             if (parameterNotInObject) {
-                                parameterSensors[parameter] = {};
+                                parameterSensors[parameterId] = {};
                             }
-                            var parameterTypeNotInObject = !(parameterType in parameterSensors[parameter]);
+                            var parameterTypeNotInObject = !(parameterType in parameterSensors[parameterId]);
                             if (parameterTypeNotInObject) {
-                                parameterSensors[parameter][parameterType] = {};
+                                parameterSensors[parameterId][parameterType] = {};
                             }
-                            parameterSensors[parameter][parameterType] = _parameterSensorList[i];
+                            parameterSensors[parameterId][parameterType] = _parameterSensorList[i];
                         }
 
                         return parameterSensors;
@@ -322,10 +322,10 @@
                             var promiseArray = [];
                             
                             for (var i = 0; i < _parameterList.length; i++) {
-                                var parameter = _parameterList[i].parameter;
+                                var parameterId = _parameterList[i].parameter_id;
                                 var parameterType = _parameterList[i].parameter_type;
                                 if (parameterType === 'profile') {
-                                    var resource = StationParametersFactory.getProfileParameterVerticalPositions(stationId, parameter);
+                                    var resource = StationParametersFactory.getProfileParameterVerticalPositions(stationId, parameterId);
                                     promiseArray.push(resource);
                                 }
                                 
@@ -334,10 +334,10 @@
                             return $q.all(promiseArray).then(function(response) {
                                 for (var i = 0; i < response.length; i++) {
                                     for (var j = 0; j < response[i].data.length; j++) {
-                                        var parameter = response[i].data[j].parameter;
-                                        var parameterNotInObject = !(parameter in profileVerticalPositions);
+                                        var parameterId = response[i].data[j].parameter_id;
+                                        var parameterNotInObject = !(parameterId in profileVerticalPositions);
                                         if (parameterNotInObject) {
-                                            profileVerticalPositions[parameter] = response[i].data;
+                                            profileVerticalPositions[parameterId] = response[i].data;
                                         }
                                         
                                     }
@@ -350,80 +350,80 @@
                         function(_parameterList, _parameterMeasurementFrequencies, _parameterQCLevels, _parameterSensors, _profileParameterVerticalPositions) {
                             var parameters = {};
                             for (var i = 0; i < _parameterList.length; i++) {
-                                var parameter = _parameterList[i].parameter;
+                                var parameterId = _parameterList[i].parameter_id;
                                 var parameterType = _parameterList[i].parameter_type;
                                 
-                                var parameterNotInParameters = !(parameter in parameters);
+                                var parameterNotInParameters = !(parameterId in parameters);
                                 if (parameterNotInParameters) {
-                                    parameters[parameter] = {};
+                                    parameters[parameterId] = {};
                                 }
                                 
-                                var parameterTypeNotInParameters = !(parameterType in parameters[parameter]);
+                                var parameterTypeNotInParameters = !(parameterType in parameters[parameterId]);
                                 if (parameterTypeNotInParameters) {
-                                    parameters[parameter][parameterType] = {}
+                                    parameters[parameterId][parameterType] = {}
                                 }
                                 
-                                parameters[parameter][parameterType] = _parameterList[i];
+                                parameters[parameterId][parameterType] = _parameterList[i];
                                 
-                                parameters[parameter][parameterType]['frequencies'] = {
+                                parameters[parameterId][parameterType]['frequencies'] = {
                                     'list': [],
                                     'selected': undefined
                                 };
 
-                                parameters[parameter][parameterType]['qc_levels'] = {
+                                parameters[parameterId][parameterType]['qc_levels'] = {
                                     'list': [],
                                     'selected': [],
                                     'objects': {}
                                 };
                                 
-                                parameters[parameter][parameterType]['sensors'] = {};
+                                parameters[parameterId][parameterType]['sensors'] = {};
                                 
-                                parameters[parameter][parameterType]['vertical_positions'] = [];
+                                parameters[parameterId][parameterType]['vertical_positions'] = [];
                                 
-                                var parameterIdInMeasurementFrequencies = (parameter in _parameterMeasurementFrequencies);
+                                var parameterIdInMeasurementFrequencies = (parameterId in _parameterMeasurementFrequencies);
 
                                 if (parameterIdInMeasurementFrequencies) {
-                                    var parameterTypeInMeasurementFrequencies = (parameterType in _parameterMeasurementFrequencies[parameter]);
+                                    var parameterTypeInMeasurementFrequencies = (parameterType in _parameterMeasurementFrequencies[parameterId]);
                                     if (parameterTypeInMeasurementFrequencies) {
-                                        parameters[parameter][parameterType].frequencies.list = _parameterMeasurementFrequencies[parameter][parameterType];
-                                        parameters[parameter][parameterType].frequencies.selected = 'Dynamic';
+                                        parameters[parameterId][parameterType].frequencies.list = _parameterMeasurementFrequencies[parameterId][parameterType];
+                                        parameters[parameterId][parameterType].frequencies.selected = 'Dynamic';
                                     }
                                 }
                                 
-                                var parameterInQCLevels = (parameter in _parameterQCLevels);
+                                var parameterInQCLevels = (parameterId in _parameterQCLevels);
                                 
                                 if (parameterInQCLevels) {
                                     
-                                    var parameterTypeInQCLevels = (parameterType in _parameterQCLevels[parameter]);
+                                    var parameterTypeInQCLevels = (parameterType in _parameterQCLevels[parameterId]);
                                     if (parameterTypeInQCLevels) {
-                                        parameters[parameter][parameterType].qc_levels.list = _parameterQCLevels[parameter][parameterType];
-                                        for (var j = 0; j < _parameterQCLevels[parameter][parameterType].length; j++) {
-                                            var qcLevel = _parameterQCLevels[parameter][parameterType][j].qc_level;
-                                            var noQCLevelSelected = !(parameters[parameter][parameterType].qc_levels.selected.length);
+                                        parameters[parameterId][parameterType].qc_levels.list = _parameterQCLevels[parameterId][parameterType];
+                                        for (var j = 0; j < _parameterQCLevels[parameterId][parameterType].length; j++) {
+                                            var qcLevel = _parameterQCLevels[parameterId][parameterType][j].qc_level;
+                                            var noQCLevelSelected = !(parameters[parameterId][parameterType].qc_levels.selected.length);
                                             if (noQCLevelSelected) {
-                                                parameters[parameter][parameterType].qc_levels.selected.push(qcLevel);
+                                                parameters[parameterId][parameterType].qc_levels.selected.push(qcLevel);
                                             }
                                             
-                                            parameters[parameter][parameterType].qc_levels.objects[qcLevel] = {
-                                                'qc_description': _parameterQCLevels[parameter][parameterType][j].qc_description
+                                            parameters[parameterId][parameterType].qc_levels.objects[qcLevel] = {
+                                                'qc_description': _parameterQCLevels[parameterId][parameterType][j].qc_description
                                             };
                                         }
                                     }
                                     
                                 }
                                 
-                                var parameterInSensors = (parameter in _parameterSensors);
+                                var parameterInSensors = (parameterId in _parameterSensors);
                                 if (parameterInSensors) {
-                                    var parameterTypeInSensors = (parameterType in _parameterSensors[parameter]);
+                                    var parameterTypeInSensors = (parameterType in _parameterSensors[parameterId]);
                                     if (parameterTypeInSensors) {
-                                        parameters[parameter][parameterType].sensors = _parameterSensors[parameter][parameterType];
+                                        parameters[parameterId][parameterType].sensors = _parameterSensors[parameterId][parameterType];
                                     }
                                 }
                                 
                                 if (parameterType === 'profile') {
-                                    var parameterInProfileVerticalPositions = (parameter in _profileParameterVerticalPositions);
+                                    var parameterInProfileVerticalPositions = (parameterId in _profileParameterVerticalPositions);
                                     if (parameterInProfileVerticalPositions) {
-                                        parameters[parameter][parameterType]['vertical_positions'] = _profileParameterVerticalPositions[parameter];
+                                        parameters[parameterId][parameterType]['vertical_positions'] = _profileParameterVerticalPositions[parameterId];
                                     }
                                 }
                                 

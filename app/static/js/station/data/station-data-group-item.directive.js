@@ -22,10 +22,10 @@
     }
     
     StationDataGroupItemCtrl.$inject = [
-        '$mdMedia', '$q', 'HighchartsDefaultOptions', 'stationMeasurements'
+        '$mdMedia', '$q', 'HighchartsDefaultOptions', 'stationGroupMeasurements'
     ];
     
-    function StationDataGroupItemCtrl($mdMedia, $q, HighchartsDefaultOptions, stationMeasurements) {
+    function StationDataGroupItemCtrl($mdMedia, $q, HighchartsDefaultOptions, stationGroupMeasurements) {
         var vm = this;
         
         vm.$onInit = onInit;
@@ -429,7 +429,7 @@
         // Dynamic
         
         function getDynamicChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDynamicGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getDynamicGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -449,7 +449,7 @@
         }
         
         function getDynamicTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDynamicGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getDynamicGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -470,7 +470,7 @@
         // Daily
         
         function getDailyChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDailyGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getDailyGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -489,7 +489,7 @@
         }
         
         function getDailyTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getDailyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getDailyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -510,7 +510,7 @@
         // Hourly
         
         function getHourlyChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getHourlyGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getHourlyGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -529,7 +529,7 @@
         }
         
         function getHourlyTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getHourlyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
+            return stationGroupMeasurements.getHourlyGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, 0, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -550,7 +550,7 @@
         // 30 Min
         
         function getThirtyMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getThirtyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getThirtyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -569,7 +569,7 @@
         }
         
         function getThirtyMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getThirtyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getThirtyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -590,7 +590,7 @@
         // 20 Min
         
         function getTwentyMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTwentyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getTwentyMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -609,7 +609,7 @@
         }
         
         function getTwentyMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTwentyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getTwentyMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -630,7 +630,7 @@
         // 15 Min
         
         function getFifteenMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFifteenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getFifteenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -649,7 +649,7 @@
         }
         
         function getFifteenMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFifteenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getFifteenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -670,7 +670,7 @@
         // 10 Min
         
         function getTenMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getTenMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -689,7 +689,7 @@
         }
         
         function getTenMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getTenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getTenMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -710,7 +710,7 @@
         // 5 Min
         
         function getFiveMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFiveMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getFiveMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -729,7 +729,7 @@
         }
         
         function getFiveMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getFiveMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getFiveMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -750,7 +750,7 @@
         // 1 Min
         
         function getOneMinChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getOneMinGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -769,7 +769,7 @@
         }
         
         function getOneMinTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getOneMinGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -802,7 +802,7 @@
         }
         
         function getOneSecChartDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneSecGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getOneSecGroupMeasurementsChart(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });
@@ -810,7 +810,7 @@
         
         
         function getOneSecTableDataByQCLevel(qcLevel, start, end) {
-            return stationMeasurements.getOneSecGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
+            return stationGroupMeasurements.getOneSecGroupMeasurementsTimeGrouped(vm.station.id, vm.group.group_id, qcLevel, start, end)
                 .then(function(response) {
                     return response.data;
                 });

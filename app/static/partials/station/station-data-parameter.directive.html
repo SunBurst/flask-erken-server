@@ -1,5 +1,5 @@
 <div layout="row" layout-xs="column">
-    <h1 flex class="md-headline">{[ stationDataParameterItemVm.parameter.parameter ]}</h1>
+    <h1 flex class="md-headline">{[ stationDataParameterItemVm.parameter.parameter_name ]}</h1>
 
     <md-input-container>
         <label>QC Level(s)</label>
@@ -79,7 +79,7 @@
                     <td md-cell ng-if="stationDataParameterItemVm.isOfParameterType('profile')">
                         {[ measurement.vertical_position ]}
                     </td>
-                    <td md-cell>{[ measurement.sensor_name ]}</td>
+                    <td md-cell>{[ stationDataParameterItemVm.parameter.sensors.sensors[measurement.sensor_id] ]}</td>
                     <td md-cell ng-repeat="qcLevelParameter in qcTable.header">
                         {[ measurement[qcLevelParameter.valueType] | number: 2 ]}
                     </td>

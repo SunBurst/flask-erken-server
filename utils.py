@@ -4,6 +4,7 @@ import time
 import uuid
 
 from base64 import b64encode
+from collections import OrderedDict
 from datetime import datetime
 
 from cassandra.util import OrderedMapSerializedKey
@@ -13,8 +14,12 @@ from cassandra_udts import Averages, Description, Livewebcam, Position, Thumbnai
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
+        print(type(obj), obj)
         if isinstance(obj, OrderedMapSerializedKey):
-            return dict(obj)
+            return {str(k):v for k,v in obj.items()}
+        elif isinstance(obj, OrderedDict):
+            print("ORDEREDDICT")
+            return {str(k):v for k,v in obj.items()}
         elif isinstance(obj, uuid.UUID):
             return str(obj)
         elif isinstance(obj, Averages):
