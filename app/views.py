@@ -2649,20 +2649,19 @@ def get_daily_group_measurements_by_station_chart(station_id, group_id, qc_level
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
-            if parameter_id not in parameters:
-                parameters[parameter_id] = {
+            parameter_id_str = str(parameter_id)
+            if parameter_id_str not in parameters:
+                parameters[parameter_id_str] = {
                     'id': parameter_id, 
-                    'name': parameter_name, 
                     'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
                     'ranges': []
                 }
 
-            parameters[parameter_id]['averages'].append([row.get('date'), row.get('avg_value')])
-            parameters[parameter_id]['ranges'].append([row.get('date'), row.get('min_value'), row.get('max_value')])
+            parameters[parameter_id_str]['averages'].append([row.get('date'), row.get('avg_value')])
+            parameters[parameter_id_str]['ranges'].append([row.get('date'), row.get('min_value'), row.get('max_value')])
 
     return json.dumps(parameters, cls=CustomEncoder)
 
@@ -2804,12 +2803,10 @@ def get_thirty_min_group_measurements_by_station_chart(station_id, group_id, qc_
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
                     'id': parameter_id, 
-                    'name': parameter_name, 
                     'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
@@ -2839,12 +2836,10 @@ def get_twenty_min_group_measurements_by_station_chart(station_id, group_id, qc_
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
                     'id': parameter_id, 
-                    'name': parameter_name, 
                     'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
@@ -2874,7 +2869,6 @@ def get_fifteen_min_group_measurements_by_station_chart(station_id, group_id, qc
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
@@ -2911,7 +2905,6 @@ def get_ten_min_group_measurements_by_station_chart(station_id, group_id, qc_lev
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
@@ -2950,7 +2943,6 @@ def get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_lev
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
@@ -2964,8 +2956,6 @@ def get_one_min_group_measurements_by_station_chart(station_id, group_id, qc_lev
 
             parameters[parameter_id]['averages'].append([row.get('timestamp'), row.get('avg_value')])
             parameters[parameter_id]['ranges'].append([row.get('timestamp'), row.get('min_value'), row.get('max_value')])
-
-    #series = [parameters_data for parameter_id, parameters_data in parameters.items()]
 
     return json.dumps(parameters, cls=CustomEncoder)
     
@@ -2989,12 +2979,10 @@ def get_one_sec_group_measurements_by_station_chart(station_id, group_id, qc_lev
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
                     'id': parameter_id, 
-                    'name': parameter_name, 
                     'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
@@ -3024,12 +3012,10 @@ def get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_leve
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
                     'id': parameter_id, 
-                    'name': parameter_name, 
                     'qc_level': qc_level,
                     'unit': parameter_unit,
                     'averages': [],
@@ -3038,7 +3024,6 @@ def get_hourly_group_measurements_by_station_chart(station_id, group_id, qc_leve
 
             parameters[parameter_id]['averages'].append([row.get('date_hour'), row.get('avg_value')])
             parameters[parameter_id]['ranges'].append([row.get('date_hour'), row.get('min_value'), row.get('max_value')])
-    #series = [parameters_data for parameter_id, parameters_data in parameters.items()]
 
     return json.dumps(parameters, cls=CustomEncoder)
 
@@ -3157,12 +3142,10 @@ def get_five_min_group_measurements_by_station_chart(station_id, group_id, qc_le
         rows = future.result()
         for row in rows:
             parameter_id = row.get('parameter_id')
-            parameter_name = row.get('parameter_name')
             parameter_unit = row.get('unit')
             if parameter_id not in parameters:
                 parameters[parameter_id] = {
                     'id': parameter_id, 
-                    'name': parameter_name, 
                     'unit': parameter_unit,
                     'qc_level': qc_level,
                     'averages': [],
