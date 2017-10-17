@@ -672,6 +672,8 @@
                 header.push(verticalPositionLabel);
             }
             
+            header.push('Sensor');
+            
             for (var i = 0; i < vm.tableOptionsAll[tableIndex].header.length; i++) {
                 header.push(vm.tableOptionsAll[tableIndex].header[i].header);
             }
@@ -689,15 +691,19 @@
             for (var i = 0; i < tableToExport.count; i++) {
                 var timestamp = tableToExport.data[i][timeFormat];
                 var date = moment(timestamp).format(tableToExport.query.momentDateFormat);
+                var sensorId = tableToExport.data[i].sensor_id;
+                var sensorName = vm.parameter.sensors.sensors[sensorId];
                 var row = {timeLabel: date};
                 if (vm.isOfParameterType('profile')) {
                     row['Vertical Position (m)'] = tableToExport.data[i].vertical_position;
                 }
                 
+                row['Sensor'] = sensorName;
+                
                 for (var j = 0; j < tableToExport.header.length; j++) {
                     var headerName = tableToExport.header[j].header;
                     var valueType = tableToExport.header[j].valueType;
-                    var measurement = tableToExport.data[i][valueType]
+                    var measurement = tableToExport.data[i][valueType];
                     row[headerName] = measurement;
                 }
 
