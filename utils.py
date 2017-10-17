@@ -14,11 +14,9 @@ from cassandra_udts import Averages, Description, Livewebcam, Position, Thumbnai
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
-        print(type(obj), obj)
         if isinstance(obj, OrderedMapSerializedKey):
             return {str(k):v for k,v in obj.items()}
         elif isinstance(obj, OrderedDict):
-            print("ORDEREDDICT")
             return {str(k):v for k,v in obj.items()}
         elif isinstance(obj, uuid.UUID):
             return str(obj)
