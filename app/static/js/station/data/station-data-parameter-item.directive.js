@@ -1524,10 +1524,6 @@
                                     type: 'spline'
                                 },
                                 
-                                boost: {
-                                    useGPUTranslations: true
-                                },
-                                
                                 credits: {
                                     enabled: false
                                 },
@@ -1664,10 +1660,6 @@
                                             fontFamily: 'Roboto'
                                         },
                                         type: 'spline'
-                                    },
-
-                                    boost: {
-                                        useGPUTranslations: true
                                     },
                                 
                                     credits: {
