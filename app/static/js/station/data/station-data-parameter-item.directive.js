@@ -1623,7 +1623,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -1753,7 +1753,7 @@
 
                                     yAxis: [{
                                         labels: {
-                                            format: '{value} ' + vm.parameter.parameter_unit,
+                                            format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                             style: {
                                                 color: Highcharts.getOptions().colors[0]
                                             }
@@ -1890,7 +1890,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2024,7 +2024,7 @@
 
                                     yAxis: [{
                                         labels: {
-                                            format: '{value} ' + vm.parameter.parameter_unit,
+                                            format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                             style: {
                                                 color: Highcharts.getOptions().colors[0]
                                             }
@@ -2157,7 +2157,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2286,7 +2286,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2419,7 +2419,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2548,7 +2548,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2681,7 +2681,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2810,7 +2810,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -2943,7 +2943,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3072,7 +3072,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3214,7 +3214,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3350,7 +3350,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3491,7 +3491,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3628,7 +3628,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3770,7 +3770,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -3907,7 +3907,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -4057,7 +4057,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
@@ -4202,7 +4202,7 @@
 
                                 yAxis: [{
                                     labels: {
-                                        format: '{value} ' + vm.parameter.parameter_unit,
+                                        format: '{value} ' + (vm.parameter.parameter_unit ? vm.parameter.parameter_unit : ''),
                                         style: {
                                             color: Highcharts.getOptions().colors[0]
                                         }
