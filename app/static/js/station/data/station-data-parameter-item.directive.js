@@ -4361,6 +4361,7 @@
                                 //    'enabled': false
                                 //},
                                 'showInNavigator': true,
+                                'visible': false,
                                 'data': seriesAverageData
                             };
                             
