@@ -1523,7 +1523,11 @@
                                     },
                                     type: 'spline'
                                 },
-
+                                
+                                boost: {
+                                    useGPUTranslations: true
+                                },
+                                
                                 credits: {
                                     enabled: false
                                 },
@@ -1662,6 +1666,10 @@
                                         type: 'spline'
                                     },
 
+                                    boost: {
+                                        useGPUTranslations: true
+                                    },
+                                
                                     credits: {
                                         enabled: false
                                     },
