@@ -1687,7 +1687,11 @@
                                             }
                                         }
                                     },
-                                  
+                                    
+                                    plotOptions: {
+                                        enableMouseTracking: false
+                                    },
+                                    
                                     rangeSelector: {
                                         buttons: [{
                                             type: 'minute',
