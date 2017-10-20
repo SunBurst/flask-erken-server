@@ -6,15 +6,18 @@
         .controller('StationOverviewCtrl', StationOverviewCtrl);
     
     StationOverviewCtrl.$inject = [
-        'GoogleMapDefaultOptions', 'GoogleMapIcons', 'stationStorage'
+        '$mdDialog', 'GoogleMapDefaultOptions', 'GoogleMapIcons', 'stationStorage'
     ];
     
-    function StationOverviewCtrl(GoogleMapDefaultOptions, GoogleMapIcons, stationStorage) {
+    function StationOverviewCtrl($mdDialog, GoogleMapDefaultOptions, GoogleMapIcons, stationStorage) {
         var vm = this;
 
+        vm.customFullscreen = false;
         vm.station = stationStorage.getStation();
         vm.sensorList = stationStorage.getSensorList();
         vm.sensors = stationStorage.getSensors();
+        vm.showDownloadInfoDialog = showDownloadInfoDialog;
+        
         vm.map = { 
             center: { 
                 latitude: vm.station.position.latitude, 
@@ -38,6 +41,23 @@
                 title: vm.station.name
             }
         };
+        
+        function showDownloadInfoDialog(ev) {
+            $mdDialog.show({
+                controller: 'StationDownloadInfoDialogController',
+                controllerAs: 'StationDownloadInfoDialogControllerVm',
+                templateUrl: '/static/partials/station/station-overview-download-info.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                fullscreen: vm.customFullscreen 
+            })
+            .then(function(answer) {
+                vm.status = 'You said the information was "' + answer + '".';
+            }, function() {
+                vm.status = 'You cancelled the dialog.';
+            });
+        }
 
     }
     

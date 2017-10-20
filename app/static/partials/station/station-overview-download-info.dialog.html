@@ -1,0 +1,53 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <form ng-cloak>
+        
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h2>Download Station Info</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="StationDownloadInfoDialogControllerVm.cancel()">
+                    <ng-md-icon icon="close" style="fill: #ffffff" aria-label="Close dialog"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        
+        <md-dialog-content>
+            <div class="md-dialog-content">   
+                <div flex="100" layout="column">
+                    <div layout="row" layout-wrap flex>
+                        <div flex-xs flex="50">
+                            <md-checkbox aria-label="Select All"
+                                ng-checked="StationDownloadInfoDialogControllerVm.isChecked()"
+                                    md-indeterminate="StationDownloadInfoDialogControllerVm.isIndeterminate()"
+                                        ng-click="StationDownloadInfoDialogControllerVm.toggleAll()">
+                                <span ng-if="StationDownloadInfoDialogControllerVm.isChecked()">Un-</span>Select All
+                            </md-checkbox>
+                        </div>
+                        <div class="demo-select-all-checkboxes" flex="100" ng-repeat="(infoField, infoFieldObj) in StationDownloadInfoDialogControllerVm.selectedInfoFields">
+                        <md-checkbox 
+                            ng-checked="infoFieldObj.selected" 
+                                ng-model="infoFieldObj.selected">
+                                    {[ infoField ]}
+                        </md-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-csv="StationDownloadInfoDialogControllerVm.prepareCSVExport()"
+                csv-header="StationDownloadInfoDialogControllerVm.getHeader()"
+                    aria-label="Export and download station info as CSV" 
+                        filename="{[ StationDownloadInfoDialogControllerVm.station.name ]} Info.csv" 
+                            lazy-load="true">
+                                Download
+            </md-button>
+            <md-button ng-click="StationDownloadInfoDialogControllerVm.cancel()">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    
+    </form>
+</md-dialog>
