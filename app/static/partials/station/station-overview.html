@@ -60,8 +60,8 @@
                 <md-content>
                     <md-list flex>
                         <md-list-item class="md-2-line" ng-repeat="sensor in stationOverviewVm.sensors" ng-click="null">
-                            <!-- <img class="md-avatar" data-ng-src="data:image/png;base64, {[ station.image ]}"/> -->
-                            <!-- <img ng-if="{[ sensor.sensor_image ]}" data-ng-src="data:image/png;base64, {[ sensor.sensor_image ]}" class="md-avatar" alt="{[ sensor.sensor_name ]}"/> -->
+                            <img ng-if="stationOverviewVm.isImage(sensor.sensor_image)" data-ng-src="data:image/png;base64, {[ sensor.sensor_image ]}" class="md-avatar" alt="{[ sensor.sensor_name ]}"/>
+                            <ng-md-icon ng-if="!stationOverviewVm.isImage(sensor.sensor_image)" class="md-avatar" icon="developer_dashboard" size="40"></ng-md-icon> 
                             <div class="md-list-item-text" layout="column">
                                 <h3>{[ sensor.sensor_name ]}</h3>
                                 <p>{[ sensor.sensor_description.short_description ]}</p>

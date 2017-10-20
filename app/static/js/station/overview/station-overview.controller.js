@@ -13,6 +13,7 @@
         var vm = this;
 
         vm.customFullscreen = false;
+        vm.isImage = isImage;
         vm.station = stationStorage.getStation();
         vm.sensorList = stationStorage.getSensorList();
         vm.sensors = stationStorage.getSensors();
@@ -41,6 +42,13 @@
                 title: vm.station.name
             }
         };
+        
+        function isImage(img) {
+            if (!img) {
+                return false;
+            }
+            return true;
+        }
         
         function showDownloadInfoDialog(ev) {
             $mdDialog.show({
