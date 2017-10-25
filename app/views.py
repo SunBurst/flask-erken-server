@@ -153,7 +153,25 @@ def get_parameter_sensors_by_station(station_id):
     data = [row for row in rows]
 
     return json.dumps(data, cls=CustomEncoder)
-    
+
+@app.route('/api/groups_by_sensor/<uuid:sensor_id>', methods=['GET'])
+def get_groups_by_sensor(sensor_id):
+    query = "SELECT * FROM parameter_groups_by_sensor WHERE sensor_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (sensor_id,)).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+
+@app.route('/api/parameters_by_sensor/<uuid:sensor_id>', methods=['GET'])
+def get_parameters_by_sensor(sensor_id):
+    query = "SELECT * FROM parameters_by_sensor WHERE sensor_id=?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (sensor_id,)).result()
+    data = [row for row in rows]
+
+    return json.dumps(data, cls=CustomEncoder)
+
 @app.route('/api/dynamic_group_measurements_by_station_time_grouped/<uuid:station_id>/<uuid:group_id>/<int:qc_level>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
 def get_dynamic_group_measurements_by_station_time_grouped(station_id, group_id, qc_level, from_timestamp, to_timestamp):
     

@@ -13,15 +13,16 @@
                         <span flex></span>
                         <md-button class="md-icon-button" aria-label="Export and station information as CSV"
                             ng-click="stationOverviewVm.showDownloadInfoDialog($event)">
+                            <md-tooltip md-direction="left">Download Station Info</md-tooltip>
                             <ng-md-icon icon="file_download" style="fill: #ffffff"></ng-md-icon>
                         </md-button>
                     </div>
                 </md-toolbar>
                 <md-card-content>
-                    <div layout="row" layout-align="space-between center">
+                    <div layout="row" layout-xs="column" layout-align="space-between center">
                         <p class="md-body-2">Environment Category: </p><p class="md-body-2">{[ stationOverviewVm.station.environment_category ]}</p>
                     </div>
-                    <div layout="row" layout-align="space-between center">
+                    <div layout="row"  layout-xs="column" layout-align="space-between center">
                         <p class="md-body-2">Position (WGS84): </p><p class="md-body-2">{[ stationOverviewVm.station.position.latitude ]}, {[ stationOverviewVm.station.position.longitude ]}</p>
                     </div>
                     <h4 class="title">Description </h4><p class="md-body-2">{[ stationOverviewVm.station.description.long_description ]}</p>
@@ -47,30 +48,75 @@
 
     </div>
 
-    <div layout="column" flex>
-        <md-card>
-            <md-toolbar class="md-hue-2">
-                <div class="md-toolbar-tools">
-                    <h3>
-                        <span>Sensors</span>
-                    </h3>
-                </div>
-            </md-toolbar>
-            <md-card-content>
-                <md-content>
+    <div layout="row" layout-xs="column">
+        
+        <div flex-xs flex-gt-xs="50" layout="column">
+            <md-card>
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+                        <h3>
+                            <span>Sensors</span>
+                        </h3>
+                    </div>
+                </md-toolbar>
+                <md-card-content>
                     <md-list flex>
-                        <md-list-item class="md-2-line" ng-repeat="sensor in stationOverviewVm.sensors" ng-click="null">
+                        <md-list-item class="md-2-line md-long-text" ng-repeat="sensor in stationOverviewVm.sensors" ng-click="stationOverviewVm.showSensorInfoDialog($event, sensor)">
                             <img ng-if="stationOverviewVm.isImage(sensor.sensor_image)" data-ng-src="data:image/png;base64, {[ sensor.sensor_image ]}" class="md-avatar" alt="{[ sensor.sensor_name ]}"/>
                             <ng-md-icon ng-if="!stationOverviewVm.isImage(sensor.sensor_image)" class="md-avatar" icon="developer_dashboard" size="40"></ng-md-icon> 
                             <div class="md-list-item-text" layout="column">
                                 <h3>{[ sensor.sensor_name ]}</h3>
                                 <p>{[ sensor.sensor_description.short_description ]}</p>
                             </div>
+                            <md-button class="md-secondary" hide show-gt-xs ng-click="stationOverviewVm.showSensorInfoDialog($event, sensor)">More Info</md-button>
+                            <!-- <ng-md-icon class="md-secondary" icon="info" size="24"></ng-md-icon> -->
                         </md-list-item>
                     </md-list>
-                </md-content>
-            </md-card-content>
-        </md-card>
+                </md-card-content>
+            </md-card>
+        </div>
+        
+         <div flex-xs flex-gt-xs="50" layout="column">
+            <md-card>
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+                        <h3>
+                            <span>Data Collection</span>
+                        </h3>
+                    </div>
+                </md-toolbar>
+                <md-card-content>
+                    <!-- <md-content> -->
+                        <md-list flex>
+                            <md-subheader class="md-no-sticky">Groups</md-subheader>
+                            <md-list-item class="md-2-line" ng-click="null">
+                                <ng-md-icon class="md-avatar" icon="multiline_chart" size="40"></ng-md-icon> 
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Humidity</h3>
+                                    <p>blah blah....</p>
+                                </div>
+                                <!--<img ng-if="stationOverviewVm.isImage(sensor.sensor_image)" data-ng-src="data:image/png;base64, {[ sensor.sensor_image ]}" class="md-avatar" alt="{[ sensor.sensor_name ]}"/>
+                                <ng-md-icon ng-if="!stationOverviewVm.isImage(sensor.sensor_image)" class="md-avatar" icon="developer_dashboard" size="40"></ng-md-icon> 
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{[ sensor.sensor_name ]}</h3>
+                                    <p>{[ sensor.sensor_description.short_description ]}</p>
+                                </div>-->
+                            </md-list-item>
+                            <md-divider ></md-divider>
+                            <md-subheader class="md-no-sticky">Parameters</md-subheader>
+                            <md-list-item class="md-2-line" ng-click="null">
+                                <ng-md-icon class="md-avatar" icon="show_chart" size="40"></ng-md-icon> 
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Water Temperature</h3>
+                                    <p>blah blah....</p>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    <!-- </md-content> -->
+                </md-card-content>
+            </md-card>
+         </div>
+        
     </div>
 
 </md-content>

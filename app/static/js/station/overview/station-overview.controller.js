@@ -18,6 +18,7 @@
         vm.sensorList = stationStorage.getSensorList();
         vm.sensors = stationStorage.getSensors();
         vm.showDownloadInfoDialog = showDownloadInfoDialog;
+        vm.showSensorInfoDialog = showSensorInfoDialog;
         
         vm.map = { 
             center: { 
@@ -64,6 +65,21 @@
                 vm.status = 'You said the information was "' + answer + '".';
             }, function() {
                 vm.status = 'You cancelled the dialog.';
+            });
+        }
+        
+        function showSensorInfoDialog(ev, sensor) {
+            $mdDialog.show({
+                controller: 'StationSensorInfoDialogController',
+                controllerAs: 'StationSensorInfoDialogControllerVm',
+                templateUrl: '/static/partials/station/station-overview-sensor-info.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                locals: {
+                    sensor: sensor
+                },
+                fullscreen: vm.customFullscreen 
             });
         }
 
