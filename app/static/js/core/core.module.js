@@ -5,6 +5,7 @@
         'ui.router',
         'ngMaterial',
         'ngResource',
+        'ngRoute',
         'highcharts-ng',
         'uiGmapgoogle-maps',
         //'ui-rangeSlider',

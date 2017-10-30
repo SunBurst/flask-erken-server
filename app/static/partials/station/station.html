@@ -11,7 +11,7 @@
                 <div show-gt-sm>Overview</div>
             </md-tab-label>
         </md-tab>
-        <md-tab ui-sref=".data">
+        <md-tab ui-sref=".data.parameters">
             <md-table-label>
                 <ng-md-icon class="md-icon" icon="show_chart" size="24"></ng-md-icon>
                 <div show-gt-sm>Data</div>
@@ -29,7 +29,12 @@
 </md-toolbar>
 
 <md-content flex md-scroll-y>
-    <div layout="column" layout-fill>
-        <ui-view></ui-view>
+    <div flex layout="column" layout-fill>
+        <ui-view ng-hide="stateLoading"/>
+        <md-content ng-show="stateLoading" class="md-padding">
+            <div flex layout="column" layout-align="center center">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </md-content>
     </div>
 </md-content>

@@ -3,7 +3,8 @@
     
     angular
         .module('app.station')
-        .config(config);
+        .config(config)
+        .run(stateChangeWatcher);
         
     function config($stateProvider) {
         
@@ -11,8 +12,10 @@
             .state('station', {
                 url: '/station/:station_id',
                 templateUrl: 'static/partials/station/station.html',
+                abstract: true,
                 controller: 'StationCtrl',
                 controllerAs: 'stationVm',
+                redirectTo: 'station.overview',
                 resolve: {
                     _station: function($stateParams, StationFactory, stationStorage) {
                         var stationId = $stateParams.station_id;
@@ -31,22 +34,36 @@
                 controller: 'StationOverviewCtrl',
                 controllerAs: 'stationOverviewVm',
                 resolve: {
-                    _sensors: function($stateParams, StationSensorsFactory, stationStorage) {
+                    _sensors: function($stateParams, StationSensorsFactory) {
                         var stationId = $stateParams.station_id;
                         return StationSensorsFactory.getSensors(stationId)
                             .then(function(response) {
-                                var data = response.data;
-                                var initObjects = true;
-                                stationStorage.setSensorList(data, initObjects);
-                                return data;
+                                return response.data;
                             });
-                    }
+                    },
+                    _groups: ['$stateParams', 'StationGroupsFactory', 
+                        function($stateParams, StationGroupsFactory) {
+                            var stationId = $stateParams.station_id;
+                            return StationGroupsFactory.getGroups(stationId)
+                                .then(function(response) {
+                                    return response.data;
+                                });
+                    }],
+                    _parameters: ['$stateParams', 'StationParametersFactory', 
+                        function($stateParams, StationParametersFactory) {
+                            var stationId = $stateParams.station_id;
+                            return StationParametersFactory.getParameters(stationId)
+                                .then(function(response) {
+                                    return response.data;
+                                });
+                    }],
                 }
                 
             })
             .state('station.data', {
                 url: '/data',
                 templateUrl: '/static/partials/station/station-data.html',
+                abstract: true,
                 controller: 'StationDataCtrl',
                 controllerAs: 'stationDataVm'
             })
@@ -434,12 +451,6 @@
                 }
                     
             })
-            //.state('station.data.sensors', {
-            //    url: '/sensors',
-            //    templateUrl: '/static/partials/station/station-data -sensors.html',
-            //    controller: 'StationDataFrequencySensorsCtrl',
-            //    controllerAs: 'StationDataFrequencySensorsVm',
-            //})
             .state('station.cams-and-photos', {
                 url: '/cams-and-photos',
                 templateUrl: '/static/partials/station/station-cams-and-photos.html',
@@ -458,7 +469,17 @@
                 }
                 
             })
+        
+    }
     
+    function stateChangeWatcher($rootScope) {
+        $rootScope.$on('$stateChangeStart', function() {
+            $rootScope.stateLoading = true;
+        })
+          
+        $rootScope.$on('$stateChangeSuccess', function() {
+            $rootScope.stateLoading = false;
+        })
     }
     
 })();

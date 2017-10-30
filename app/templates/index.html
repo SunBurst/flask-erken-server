@@ -66,7 +66,7 @@
                     <md-list-item ng-show="sidebarVm.loadingStations">
                         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                     </md-list-item>
-                    <md-list-item ng-repeat="station in sidebarVm.stations" class="md-3-line" ui-sref="station({ station_id: station.id })" layout-align="start center">
+                    <md-list-item ng-repeat="station in sidebarVm.stations" class="md-3-line" ui-sref="station.overview({ station_id: station.id })" layout-align="start center">
                         <img ng-if="sidebarVm.isImage(station.thumbnails.xl)" data-ng-src="data:image/png;base64, {[ station.thumbnails.xl ]}" class="md-avatar" alt="{[ station.name ]}"/>
                         <ng-md-icon ng-if="!sidebarVm.isImage(station.thumbnails.xl)" class="md-avatar" icon="place" size="40"></ng-md-icon> 
                         <div class="md-list-item-text" layout="column">
@@ -95,7 +95,8 @@
     <!-- <script src="/static/bower_components/jquery/dist/jquery.js"></script> -->
     <!-- <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script> -->
     <!-- <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.1/angular-sanitize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-csv/0.3.6/ng-csv.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script> --> <!-- Minified -->

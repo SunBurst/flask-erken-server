@@ -89,11 +89,11 @@
                     <!-- <md-content> -->
                         <md-list flex>
                             <md-subheader class="md-no-sticky">Groups</md-subheader>
-                            <md-list-item class="md-2-line" ng-click="null">
+                            <md-list-item class="md-2-line" ng-repeat="group in stationOverviewVm.groups" ng-click="null">
                                 <ng-md-icon class="md-avatar" icon="multiline_chart" size="40"></ng-md-icon> 
                                 <div class="md-list-item-text" layout="column">
-                                    <h3>Humidity</h3>
-                                    <p>blah blah....</p>
+                                    <h3>{[ group.group_name ]}</h3>
+                                    <p>{[ group.group_description.short_description ]}.</p>
                                 </div>
                                 <!--<img ng-if="stationOverviewVm.isImage(sensor.sensor_image)" data-ng-src="data:image/png;base64, {[ sensor.sensor_image ]}" class="md-avatar" alt="{[ sensor.sensor_name ]}"/>
                                 <ng-md-icon ng-if="!stationOverviewVm.isImage(sensor.sensor_image)" class="md-avatar" icon="developer_dashboard" size="40"></ng-md-icon> 
@@ -104,11 +104,11 @@
                             </md-list-item>
                             <md-divider ></md-divider>
                             <md-subheader class="md-no-sticky">Parameters</md-subheader>
-                            <md-list-item class="md-2-line" ng-click="null">
+                            <md-list-item class="md-2-line" ng-repeat="parameter in stationOverviewVm.parameters" ng-click="null">
                                 <ng-md-icon class="md-avatar" icon="show_chart" size="40"></ng-md-icon> 
                                 <div class="md-list-item-text" layout="column">
-                                    <h3>Water Temperature</h3>
-                                    <p>blah blah....</p>
+                                    <h3>{[ parameter.parameter_name ]}</h3>
+                                    <p>{[ parameter.parameter_description.short_description ]}</p>
                                 </div>
                             </md-list-item>
                         </md-list>

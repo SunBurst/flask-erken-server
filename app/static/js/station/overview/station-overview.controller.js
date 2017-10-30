@@ -6,17 +6,18 @@
         .controller('StationOverviewCtrl', StationOverviewCtrl);
     
     StationOverviewCtrl.$inject = [
-        '$mdDialog', 'GoogleMapDefaultOptions', 'GoogleMapIcons', 'stationStorage'
+        '$mdDialog', 'GoogleMapDefaultOptions', '_sensors', '_groups', '_parameters', 'GoogleMapIcons', 'stationStorage'
     ];
     
-    function StationOverviewCtrl($mdDialog, GoogleMapDefaultOptions, GoogleMapIcons, stationStorage) {
+    function StationOverviewCtrl($mdDialog, GoogleMapDefaultOptions, _sensors, _groups, _parameters, GoogleMapIcons, stationStorage) {
         var vm = this;
 
         vm.customFullscreen = false;
+        vm.groups = _groups;
         vm.isImage = isImage;
+        vm.parameters = _parameters;
         vm.station = stationStorage.getStation();
-        vm.sensorList = stationStorage.getSensorList();
-        vm.sensors = stationStorage.getSensors();
+        vm.sensors = _sensors;
         vm.showDownloadInfoDialog = showDownloadInfoDialog;
         vm.showSensorInfoDialog = showSensorInfoDialog;
         

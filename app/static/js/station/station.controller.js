@@ -9,11 +9,11 @@
     
     function StationCtrl($state, stationStorage) {
         var vm = this;
-        vm.initTab = "overview";
+        //vm.initTab = "overview";
         vm.station = stationStorage.getStation();
-        vm.selectedItem = vm.initTab;
+        //vm.selectedItem = vm.initTab;
         
-        $state.go("station." + vm.initTab);
+        //$state.go("station." + vm.initTab);
 
     }
     
