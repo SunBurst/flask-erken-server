@@ -30,11 +30,6 @@
 
 <md-content flex md-scroll-y>
     <div flex layout="column" layout-fill>
-        <ui-view ng-hide="stateLoading"/>
-        <md-content ng-show="stateLoading" class="md-padding">
-            <div flex layout="column" layout-align="center center">
-                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-            </div>
-        </md-content>
+        <ui-view/>
     </div>
 </md-content>

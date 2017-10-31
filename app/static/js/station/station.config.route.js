@@ -3,8 +3,7 @@
     
     angular
         .module('app.station')
-        .config(config)
-        .run(stateChangeWatcher);
+        .config(config);
         
     function config($stateProvider) {
         
@@ -470,16 +469,6 @@
                 
             })
         
-    }
-    
-    function stateChangeWatcher($rootScope) {
-        $rootScope.$on('$stateChangeStart', function() {
-            $rootScope.stateLoading = true;
-        })
-          
-        $rootScope.$on('$stateChangeSuccess', function() {
-            $rootScope.stateLoading = false;
-        })
     }
     
 })();
