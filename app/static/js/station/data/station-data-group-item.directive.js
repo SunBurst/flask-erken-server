@@ -22,10 +22,10 @@
     }
     
     StationDataGroupItemCtrl.$inject = [
-        '$mdMedia', '$q', 'HighchartsDefaultOptions', 'stationGroupMeasurements'
+        '$scope', '$mdMedia', '$q', 'HighchartsDefaultOptions', 'stationGroupMeasurements'
     ];
     
-    function StationDataGroupItemCtrl($mdMedia, $q, HighchartsDefaultOptions, stationGroupMeasurements) {
+    function StationDataGroupItemCtrl($scope, $mdMedia, $q, HighchartsDefaultOptions, stationGroupMeasurements) {
         var vm = this;
         
         vm.$onInit = onInit;
@@ -34,8 +34,16 @@
         vm.prepareCSVExport = prepareCSVExport;
         vm.qcLevelChange = qcLevelChange;
         vm.tableOptionsAll = [];
+        vm.viewChart = true;
+        vm.viewTable = false;
+        vm.changeDataView = changeDataView;
         
         var chart;
+        
+        function changeDataView() {
+            vm.viewChart = !vm.viewChart;
+            vm.viewTable = !vm.viewTable;
+        }
         
         function initDynamicTableOptions(qcData) {
             var firstRow = qcData[0];
@@ -887,7 +895,7 @@
                             credits: {
                                 enabled: false
                             },
-
+                            
                             lang: {
                                 noData: 'No data to display'
                             },

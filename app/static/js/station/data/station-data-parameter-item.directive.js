@@ -35,14 +35,21 @@
         vm.isOfParameterType = isOfParameterType;
         vm.prepareCSVExport = prepareCSVExport;
         vm.qcLevelChange = qcLevelChange;
-        
         vm.chartId;
         vm.tableOptionsAll = [];
+        vm.viewChart = true;
+        vm.viewTable = false;
+        vm.changeDataView = changeDataView;
         
         var chart;
         
         function isOfParameterType(type) {
             return vm.parameter.parameter_type === type;
+        }
+        
+        function changeDataView() {
+            vm.viewChart = !vm.viewChart;
+            vm.viewTable = !vm.viewTable;
         }
         
         function initDynamicTableOptions(qcData) {
@@ -1528,6 +1535,32 @@
                                     enabled: false
                                 },
 
+                                exporting: {
+                                    menuItemDefinitions: {
+                                        
+                                        tableView: {
+                                            onclick: function () {
+                                                console.log("table view");
+                                            },
+                                            text: 'View table'
+                                        }
+                                    },
+                                    buttons: {
+                                        contextButton: {
+                                            menuItems: [
+                                                'printChart',
+                                                'separator',
+                                                'downloadPNG',
+                                                'downloadJPEG',
+                                                'downloadPDF',
+                                                'downloadSVG',
+                                                'separator',
+                                                'tableView'
+                                            ]
+                                        }
+                                    }
+                                },
+                                
                                 lang: {
                                     noData: 'No data to display'
                                 },

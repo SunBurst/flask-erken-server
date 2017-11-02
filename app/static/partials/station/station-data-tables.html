@@ -1,8 +1,0 @@
-<div ng-repeat="parameter in stationDataTablesVm.parameterSelection">
-    <div ng-if="parameter.selected">
-        <div ng-if="stationDataVm.isParameterType(parameter.measurement_type_id, 'group')" ng-include="'/static/partials/station/station-data-tables-group.html'"></div>
-        <div ng-if="stationDataVm.isParameterType(parameter.measurement_type_id, 'parameter')" ng-include="'/static/partials/station/station-data-tables-parameter.html'"></div>
-        <div ng-if="stationDataVm.isParameterType(parameter.measurement_type_id, 'profile')" ng-include="'/static/partials/station/station-data-tables-profile.html'"></div>
-    </div>
-</div>
-

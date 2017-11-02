@@ -1,83 +1,136 @@
-<div layout="row" layout-xs="column">
-    <h1 flex class="md-headline">{[ stationDataGroupItemVm.group.group_name ]}</h1>
-
-    <md-input-container>
-        <label>QC Level(s)</label>
-        <md-select ng-model="stationDataGroupItemVm.group.qc_levels.selected" multiple 
-            class="md-no-underline" md-on-close="stationDataGroupItemVm.qcLevelChange()">
-            <md-optgroup label="QC Levels (Highest - Lowest)">
-                <md-option ng-repeat="qclevel in stationDataGroupItemVm.group.qc_levels.list" 
-                    value="{[ qclevel.qc_level ]}">{[ qclevel.qc_level ]}</md-option>
-            </md-optgroup>
-        </md-select>
-    </md-input-container>
-    
-    <md-input-container>
-        <label>Frequency</label>
-        <md-select ng-model="stationDataGroupItemVm.group.frequencies.selected" 
-            class="md-no-underline" ng-change="stationDataGroupItemVm.frequencyChange()">
-            <md-optgroup label="Frequencies">
-                <md-option value="Dynamic">Dynamic</md-option>
-                <md-divider/>
-                <md-option ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
-                    value="{[ frequency ]}">{[ frequency ]}</md-option>
-            </md-optgroup>
-        </md-select>
-    </md-input-container>
-
-</div>
-
 <md-card>
-        
-    <img class="md-card-image">
-        <div id="chart-{[ stationDataGroupItemVm.group.group_id ]}" style="height: 500px"></div>
-    </img>
-        
-</md-card>
-
-<md-card ng-repeat="qcTable in stationDataGroupItemVm.tableOptionsAll">
-
-    <md-toolbar ng-if="qcTable.isReady" class="md-table-toolbar md-default">
+    
+    <md-toolbar>
         <div class="md-toolbar-tools">
-            <span>{[ qcTable.name ]}</span>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-csv="stationDataGroupItemVm.prepareCSVExport($index)"
+            <md-button class="md-icon-button" aria-label="Group icon" ng-disabled="true">
+                <ng-md-icon class="md-avatar" icon="multiline_chart" size="24"></ng-md-icon> 
+            </md-button>
+            <h2 flex md-truncate>
+                {[ stationDataGroupItemVm.group.group_name ]}
+            </h2>
+            <!-- <md-button class="md-icon-button" ng-csv="stationDataGroupItemVm.prepareCSVExport($index)"
                 csv-header="stationDataGroupItemVm.getHeader($index)" aria-label="Export and download selected data set as CSV" 
                     filename="{[ stationDataGroupItemVm.station.name ]} {[ qcTable.name ]}.csv" 
                         lazy-load="true">
-                <ng-md-icon icon="file_download" style="fill: #000000"></ng-md-icon>
-            </md-button>
+                <ng-md-icon icon="file_download" style="fill: #ffffff"></ng-md-icon>
+            </md-button> -->
         </div>
     </md-toolbar>
     
-    <md-table-container ng-if="qcTable.isReady">
-        <table md-table>
-            <thead ng-if="!qcTable.options.decapitate" md-head>
-                <tr md-row>
-                    <th md-column>
-                        <span>{[ qcTable.query.label ]}</span>
-                    </th>
-                    <th md-column md-numeric>
-                        <span>QC Level</span>
-                    </th>
-                    <th md-column md-numeric ng-repeat="qcLevelParameter in qcTable.header">
-                        <span>{[ qcLevelParameter.header ]}</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody md-body>
-                <tr md-row ng-repeat="measurement in qcTable.data | filter: filter.search | limitTo: qcTable.query.limit : (qcTable.query.page -1) * qcTable.query.limit" 
-                    md-select="measurement" md-auto-select="qcTable.options.autoSelect">
-                    <td md-cell>{[ measurement[qcTable.query.order] | date: qcTable.query.dateFormat ]}</td>
-                    <td md-cell>{[ measurement.qc_level ]}</td>
-                    <td md-cell ng-repeat="qcLevelParameter in qcTable.header">
-                        {[ measurement.data[qcLevelParameter.parameterId][qcLevelParameter.valueType] | number: 2 ]}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </md-table-container>
+    <div layout="row" layout-xs="column">
+        
+        <md-button ng-class="{'md-raised md-primary': stationDataGroupItemVm.viewChart}" ng-click="stationDataGroupItemVm.changeDataView()">
+            <md-icon>
+                <ng-md-icon class="md-icon" icon="insert_chart" size="24"></ng-md-icon>
+            </md-icon>
+                Chart
+        </md-button>
+        
+        <md-button ng-class="{'md-raised md-primary': stationDataGroupItemVm.viewTable}" ng-click="stationDataGroupItemVm.changeDataView()">
+            <md-icon>
+                <ng-md-icon class="md-icon" icon="view_list" size="24"></ng-md-icon>
+            </md-icon>
+                Table
+        </md-button>
+        
+        <span flex></span>
+            
+        <md-input-container>
+            <label>QC Level(s)</label>
+            <md-select ng-model="stationDataGroupItemVm.group.qc_levels.selected" multiple 
+                class="md-no-underline" md-on-close="stationDataGroupItemVm.qcLevelChange()">
+                <md-optgroup label="QC Levels (Highest - Lowest)">
+                    <md-option ng-repeat="qclevel in stationDataGroupItemVm.group.qc_levels.list" 
+                        value="{[ qclevel.qc_level ]}">{[ qclevel.qc_level ]}</md-option>
+                </md-optgroup>
+            </md-select>
+        </md-input-container>
+        
+        <md-input-container>
+            <label>Frequency</label>
+            <md-select ng-model="stationDataGroupItemVm.group.frequencies.selected" 
+                class="md-no-underline" ng-change="stationDataGroupItemVm.frequencyChange()">
+                <md-optgroup label="Frequencies">
+                    <md-option value="Dynamic">Dynamic</md-option>
+                    <md-divider/>
+                    <md-option ng-repeat="frequency in stationDataGroupItemVm.group.frequencies.list" 
+                        value="{[ frequency ]}">{[ frequency ]}</md-option>
+                </md-optgroup>
+            </md-select>
+        </md-input-container>
+        
+    </div>
     
-    <md-table-pagination md-limit="qcTable.query.limit" md-limit-options="[5, 10, 15]" md-page="qcTable.query.page" md-total="{[ qcTable.count ]}" md-page-select="qcTable.options.pageSelect"></md-table-pagination>
+    <md-divider/>
+    
+    <img class="md-card-image">
+        
+        <div ng-show="stationDataGroupItemVm.viewChart" id="chart-{[ stationDataGroupItemVm.group.group_id ]}" style="height: 500px"></div>
+        <div ng-show="!stationDataGroupItemVm.viewChart">
+            <md-card ng-repeat="qcTable in stationDataGroupItemVm.tableOptionsAll">
+
+                <md-toolbar ng-if="qcTable.isReady" class="md-table-toolbar md-default">
+                    <div class="md-toolbar-tools">
+                        <span>{[ qcTable.name ]}</span>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-csv="stationDataGroupItemVm.prepareCSVExport($index)"
+                            csv-header="stationDataGroupItemVm.getHeader($index)" aria-label="Export and download selected data set as CSV" 
+                                filename="{[ stationDataGroupItemVm.station.name ]} {[ qcTable.name ]}.csv" 
+                                    lazy-load="true">
+                            <ng-md-icon icon="file_download" style="fill: #000000"></ng-md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                
+                <md-table-container ng-if="qcTable.isReady">
+                    <table md-table>
+                        <thead ng-if="!qcTable.options.decapitate" md-head>
+                            <tr md-row>
+                                <th md-column>
+                                    <span>{[ qcTable.query.label ]}</span>
+                                </th>
+                                <th md-column md-numeric>
+                                    <span>QC Level</span>
+                                </th>
+                                <th md-column md-numeric ng-repeat="qcLevelParameter in qcTable.header">
+                                    <span>{[ qcLevelParameter.header ]}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row ng-repeat="measurement in qcTable.data | filter: filter.search | limitTo: qcTable.query.limit : (qcTable.query.page -1) * qcTable.query.limit" 
+                                md-select="measurement" md-auto-select="qcTable.options.autoSelect">
+                                <td md-cell>{[ measurement[qcTable.query.order] | date: qcTable.query.dateFormat ]}</td>
+                                <td md-cell>{[ measurement.qc_level ]}</td>
+                                <td md-cell ng-repeat="qcLevelParameter in qcTable.header">
+                                    {[ measurement.data[qcLevelParameter.parameterId][qcLevelParameter.valueType] | number: 2 ]}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+                
+                <md-table-pagination md-limit="qcTable.query.limit" md-limit-options="[5, 10, 15]" md-page="qcTable.query.page" md-total="{[ qcTable.count ]}" md-page-select="qcTable.options.pageSelect"></md-table-pagination>
+                
+            </md-card>
+        </div>
+    
+    </img>
+    
+    <md-divider/>
+    
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">{[ stationDataGroupItemVm.group.group_name ]}</span>
+        </md-card-title-text>
+    </md-card-title>
+    
+    <md-card-content>
+        <p>
+            {[ stationDataGroupItemVm.group.group_description.long_description ]}
+        </p>
+    </md-card-content>
     
 </md-card>
+
+
