@@ -44,8 +44,8 @@
         
         function getWebcamPhotosOnDate() {
             var stationId = vm.station.id;
-            var onDate = vm.datePickerModel.date.valueOf();
-            return StationWebcamsFactory.getWebcamPhotos(stationId, onDate)
+            var onDate = Number(vm.datePickerModel.date);
+            return StationWebcamsFactory.getHourlyWebcamPhotos(stationId, onDate)
                 .then(function(response) {
                     return response.data;
                 });
@@ -105,6 +105,7 @@
         function updateWebcamPhotos() {
             vm.getWebcamPhotosOnDate().then(function(data) {
                 vm.webcamPhotos = data;
+                console.log(vm.webcamPhotos);
             });
         }
         

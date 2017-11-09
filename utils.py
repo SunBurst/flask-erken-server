@@ -7,7 +7,7 @@ from base64 import b64encode
 from collections import OrderedDict
 from datetime import datetime
 
-from cassandra.util import OrderedMapSerializedKey
+from cassandra.util import Date, OrderedMapSerializedKey
 
 from cassandra_udts import Averages, Description, Livewebcam, Position, Thumbnails
 
@@ -32,6 +32,8 @@ class CustomEncoder(json.JSONEncoder):
         elif isinstance(obj, datetime):
             timestamp_utc = pytz.utc.localize(obj)
             return int(timestamp_utc.timestamp()) * 1e3
+        elif isinstance(obj, Date):
+            return obj.seconds
         elif isinstance(obj, bytes):
             base64_bytes = b64encode(obj)
             base64_string = base64_bytes.decode('utf-8')

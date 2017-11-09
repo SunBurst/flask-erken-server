@@ -67,19 +67,19 @@ def get_video_urls_by_station(station_id, on_timestamp):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/webcam_photos_by_station/<uuid:station_id>/<int:on_timestamp>', methods=['GET'])
-def get_webcam_photos_by_station_on_timestamp(station_id, on_timestamp):
-    query = "SELECT * FROM webcam_photos_by_station WHERE station_id=? AND date=? ORDER BY timestamp ASC"
+@app.route('/api/hourly_webcam_photos_by_station/<uuid:station_id>/<int:on_timestamp>', methods=['GET'])
+def get_hourly_webcam_photos_by_station_on_timestamp(station_id, on_timestamp):
+    query = "SELECT * FROM hourly_webcam_photos_by_station WHERE station_id=? AND date=? ORDER BY timestamp ASC"
     prepared = session.prepare(query)
-    on_dt = datetime.fromtimestamp(on_date/1000)
+    on_dt = datetime.fromtimestamp(on_timestamp/1000)
     rows = session.execute_async(prepared, (station_id, on_dt,)).result()   
     data = [row for row in rows]
-    
+
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/webcam_photos_by_station/<uuid:station_id>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
-def get_webcam_photos_by_station(station_id, from_timestamp, to_timestamp):
-    query = "SELECT * FROM webcam_photos_by_station WHERE station_id=? AND date=? AND timestamp >=? AND timestamp <=?"
+@app.route('/api/hourly_webcam_photos_by_station/<uuid:station_id>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_hourly_webcam_photos_by_station(station_id, from_timestamp, to_timestamp):
+    query = "SELECT * FROM hourly_webcam_photos_by_station WHERE station_id=? AND date=? AND timestamp >=? AND timestamp <=?"
     prepared = session.prepare(query)
     
     from_dt = datetime.fromtimestamp(from_timestamp/1000.0)
@@ -102,10 +102,10 @@ def get_webcam_photos_by_station(station_id, from_timestamp, to_timestamp):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/webcam_photos_by_station_by_limit/<uuid:station_id>/<int:on_timestamp>', methods=['GET'])
-@app.route('/api/webcam_photos_by_station_by_limit/<uuid:station_id>/<int:on_timestamp>/<int:limit>', methods=['GET'])
-def get_webcam_photos_by_station_by_limit(station_id, on_timestamp, limit=None):
-    query = "SELECT * FROM webcam_photos_by_station WHERE station_id=? AND date=?"
+@app.route('/api/hourly_webcam_photos_by_station_by_limit/<uuid:station_id>/<int:on_timestamp>', methods=['GET'])
+@app.route('/api/hourly_webcam_photos_by_station_by_limit/<uuid:station_id>/<int:on_timestamp>/<int:limit>', methods=['GET'])
+def get_hourly_webcam_photos_by_station_by_limit(station_id, on_timestamp, limit=None):
+    query = "SELECT * FROM hourly_webcam_photos_by_station WHERE station_id=? AND date=?"
     date_partition = datetime.fromtimestamp(on_timestamp/1000.0)
     if limit:
         query += " LIMIT ?"

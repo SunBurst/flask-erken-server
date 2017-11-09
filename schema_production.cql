@@ -448,7 +448,7 @@ CREATE TABLE hydroview.one_min_single_measurements_by_station (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE hydroview.webcam_photos_by_station (
+CREATE TABLE hydroview.hourly_webcam_photos_by_station (
     station_id uuid,
     date date,
     timestamp timestamp,

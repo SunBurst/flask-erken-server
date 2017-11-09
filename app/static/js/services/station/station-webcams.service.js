@@ -17,8 +17,9 @@
         
         return {
             getLiveWebcams: getLiveWebcams,
-            getWebcamPhotos: getWebcamPhotos,
-            getWebcamPhotosByLimit: getWebcamPhotosByLimit
+            getHourlyWebcamPhotos: getHourlyWebcamPhotos,
+            getHourlyWebcamPhotosByLimit: getHourlyWebcamPhotosByLimit,
+            getHourlyWebcamPhotosOnDate: getHourlyWebcamPhotosOnDate
         };
         
         function getLiveWebcams(stationId) {
@@ -45,8 +46,8 @@
             }
         }
         
-        function getWebcamPhotosOnDate(stationId, onDate) {
-            var resource = $resource('/api/webcam_photos_by_station/:station_id/:on_date', {}, {
+        function getHourlyWebcamPhotosOnDate(stationId, onDate) {
+            var resource = $resource('/api/hourly_webcam_photos_by_station/:station_id/:on_date', {}, {
                 query: {
                     method: 'GET', params: {
                         station_id: stationId,
@@ -73,8 +74,8 @@
             }
         }
         
-        function getWebcamPhotos(stationId, fromTimestamp, toTimestamp) {
-            var resource = $resource('/api/webcam_photos_by_station/:station_id/:from_timestamp/:to_timestamp', {}, {
+        function getHourlyWebcamPhotos(stationId, fromTimestamp, toTimestamp) {
+            var resource = $resource('/api/hourly_webcam_photos_by_station/:station_id/:from_timestamp/:to_timestamp', {}, {
                 query: {
                     method: 'GET', params: {
                         station_id: stationId,
@@ -104,8 +105,8 @@
             }
         }
         
-        function getWebcamPhotosByLimit(stationId, limit) {
-            var resource = $resource('/api/webcam_photos_by_station_by_limit/:station_id/:limit/', {}, {
+        function getHourlyWebcamPhotosByLimit(stationId, limit) {
+            var resource = $resource('/api/hourly_webcam_photos_by_station_by_limit/:station_id/:limit/', {}, {
                 query: {
                     method: 'GET', params: {
                         station_id: stationId,

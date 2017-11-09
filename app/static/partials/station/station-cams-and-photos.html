@@ -18,12 +18,11 @@
             </div>
         </md-toolbar>
         <md-card-content>
-            <md-input-container flex-gt-md="30">
-                <label>Select Date</label>
-                    <input time="false" date="true" mdc-datetime-picker="" type="text" id="date" placeholder="Date"
-                        ng-model="stationCamsAndPhotosVm.datePickerModel.date" class=" md-input" readonly="readonly"
-                        ng-change="stationCamsAndPhotosVm.dateChange()">
-            </md-input-container>
+            <div flex-gt-xs>
+              <md-datepicker ng-model="stationCamsAndPhotosVm.datePickerModel.date" md-placeholder="Enter date"
+                  ng-change="stationCamsAndPhotosVm.dateChange()">
+              </md-datepicker>
+            </div>
         </md-card-content>
     </md-card>
 
@@ -62,17 +61,21 @@
             <div ng-show="stationCamsAndPhotosVm.noWebcamPhotos()">
                 <p class="md-body-1">No photos available!</p>
             </div>
-            <div layout-xs="column" layout="row" layout-wrap layout-align="space-around center">
-                <md-card flex-gt-xs="33" ng-repeat="webcamPhoto in stationCamsAndPhotosVm.webcamPhotos" 
-                    ng-click="stationCamsAndPhotosVm.showPhoto($event, $index)">
-                    <md-card-header>
-                        <md-card-header-text>
-                            <span class="md-subhead">{[ webcamPhoto.timestamp | date: 'yyyy-MM-dd HH:mm:ss Z' ]}</span>
-                        </md-card-header-text>
-                    </md-card-header>
-                    <img data-ng-src="data:image/png;base64, {[ webcamPhoto.photo ]}" fallback-src="http://google.com/favicon.ico" class="md-card-image" alt="{[ webcamPhoto.station_id ]}">
-                </md-card>
-            </div>
+            <md-grid-list
+                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                md-row-height-gt-md="1:1" md-row-height="2:2"
+                md-gutter="12px" md-gutter-gt-sm="8px">
+                
+                <md-grid-tile class="gray" ng-repeat="webcamPhoto in stationCamsAndPhotosVm.webcamPhotos" 
+                  ng-click="stationCamsAndPhotosVm.showPhoto($event, $index)">
+                    <img data-ng-src="data:image/png;base64, {[ webcamPhoto.photo ]}" alt="{[ webcamPhoto.timestamp ]}">
+                        <md-grid-tile-footer>
+                            <h3>{[ webcamPhoto.timestamp | date: 'yyyy-MM-dd HH:mm:ss' ]}</h3>
+                        </md-grid-tile-footer>
+                </md-grid-tile>
+
+            </md-grid-list>
+
     </md-card>
 
 </md-content>
