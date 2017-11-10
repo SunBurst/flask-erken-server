@@ -78,7 +78,11 @@ md-tabs.noTabPanel md-tabs-wrapper {
 .demo-select-all-checkboxes {
   padding-left: 30px; }
 
-md-grid-tile img {
+/*.photo-grid md-grid-tile img {
     max-width: 100%;
     height: auto;
+}*/
+
+.photo-grid md-grid-tile md-grid-tile-footer {
+    background: rgba(0, 0, 0, 0.68)
 }

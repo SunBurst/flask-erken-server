@@ -453,8 +453,18 @@
             .state('station.cams-and-photos', {
                 url: '/cams-and-photos',
                 templateUrl: '/static/partials/station/station-cams-and-photos.html',
+                abstract: true,
                 controller: 'StationCamsAndPhotosCtrl',
                 controllerAs: 'stationCamsAndPhotosVm',
+                resolve: {
+                }
+                
+            })
+            .state('station.cams-and-photos.livewebcams', {
+                url: '/livewebcams',
+                templateUrl: '/static/partials/station/station-cams-and-photos-livewebcams.html',
+                controller: 'StationCamsAndPhotosLiveWebcamsCtrl',
+                controllerAs: 'stationCamsAndPhotosLiveWebcamsCtrlVm',
                 resolve: {
                     _liveWebcams: function($stateParams, StationWebcamsFactory, stationStorage) {
                         var stationId = $stateParams.station_id;
@@ -465,6 +475,24 @@
                                 return data;
                             });
                     }
+                }
+                
+            })
+            .state('station.cams-and-photos.videos', {
+                url: '/videos',
+                templateUrl: '/static/partials/station/station-cams-and-photos-videos.html',
+                controller: 'StationCamsAndPhotosVideosCtrl',
+                controllerAs: 'stationCamsAndPhotosVideosCtrlVm',
+                resolve: {
+                }
+                
+            })
+            .state('station.cams-and-photos.photos', {
+                url: '/photos',
+                templateUrl: '/static/partials/station/station-cams-and-photos-photos.html',
+                controller: 'StationCamsAndPhotosPhotosCtrl',
+                controllerAs: 'stationCamsAndPhotosPhotosCtrlVm',
+                resolve: {
                 }
                 
             })

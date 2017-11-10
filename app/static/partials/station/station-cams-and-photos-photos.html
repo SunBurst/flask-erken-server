@@ -1,0 +1,46 @@
+<md-content class="md-padding">
+    
+    <md-card>
+    
+        <md-toolbar class="md-hue-1">
+            <div class="md-toolbar-tools">
+                <h2>Photo Archive</h2>
+                <span flex></span>
+                <md-datepicker ng-model="stationCamsAndPhotosPhotosCtrlVm.datePickerModel.date" md-placeholder="Enter date"
+                    ng-change="stationCamsAndPhotosPhotosCtrlVm.dateChange()">
+                </md-datepicker>
+            </div>
+        </md-toolbar>
+        
+        <md-divider/>
+        
+        <md-card-content>
+        
+            <div class="photo-grid">
+            
+                <div ng-show="stationCamsAndPhotosPhotosCtrlVm.noWebcamPhotos()">
+                    <p class="md-body-1">No photos available!</p>
+                </div>
+                
+                <md-grid-list
+                    md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                    md-row-height-gt-md="1:1" md-row-height="2:2"
+                    md-gutter="12px" md-gutter-gt-sm="8px">
+                    
+                    <md-grid-tile class="darkBlue" ng-repeat="webcamPhoto in stationCamsAndPhotosPhotosCtrlVm.webcamPhotos" 
+                      ng-click="stationCamsAndPhotosPhotosCtrlVm.showPhoto($event, $index)">
+                        <img data-ng-src="data:image/png;base64, {[ webcamPhoto.photo ]}" alt="{[ webcamPhoto.timestamp ]}" layout-fill>
+                            <md-grid-tile-footer>
+                                <h3>{[ webcamPhoto.timestamp | date: 'yyyy-MM-dd HH:mm:ss Z' ]}</h3>
+                            </md-grid-tile-footer>
+                    </md-grid-tile>
+
+                </md-grid-list>
+            
+            </div>
+        
+        </md-card-content>
+    
+    </md-card>
+    
+</md-content>

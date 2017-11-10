@@ -1,0 +1,37 @@
+<md-content class="md-padding">
+    
+    <md-card>
+    
+        <md-toolbar class="md-hue-1">
+            <div class="md-toolbar-tools">
+                <h2>Video Archive</h2>
+                <span flex></span>
+                <md-datepicker ng-model="stationCamsAndPhotosVideosCtrlVm.datePickerModel.date" md-placeholder="Enter date"
+                    ng-change="stationCamsAndPhotosVideosCtrlVm.dateChange()">
+                </md-datepicker>
+            </div>
+        </md-toolbar>
+        
+        <md-divider/>
+        
+        <md-card-content>
+        
+            <div layout="column">
+                
+                <div ng-show="stationCamsAndPhotosVideosCtrlVm.noVideos()">
+                    <p class="md-body-1">No videos available!</p>
+                </div>
+                
+                <embed-video ng-repeat="videoUrl in stationCamsAndPhotosVideosCtrlVm.videoUrls" 
+                    data-ng-href="{[ videoUrl.video_url ]}" height="400" width="100%"
+                        iframe-id="youtube{[ $index ]}" enablejsapi="1" controls=1>
+                    <a href="{[ videoUrl.video_url ]}">Watch</a>
+                </embed-video>
+                
+            </div>
+
+        </md-card-content>
+    
+    </md-card>
+    
+</md-content>

@@ -1,81 +1,13 @@
-<md-content class="md-padding">
-    
-    <div layout-xs="column" layout="row" layout-wrap>
-        <div ng-show="stationCamsAndPhotosVm.noLiveWebcams()">
-            <p class="md-body-1">No live webcams available!</p>
-        </div>
-        <md-card ng-repeat="liveWebcam in stationCamsAndPhotosVm.liveWebcams" flex-xs="100" flex-gt-md="50">
-            <img data-ng-src="{[ liveWebcam.url ]}" class="md-card-image" alt="{[ liveWebcam.station_id ]}">
-        </md-card>
-    </div>
+<md-tabs md-border-bottom md-stretch-tabs="always">
+    <md-tab ui-sref=".livewebcams">
+        Live
+    </md-tab>
+    <md-tab ui-sref=".photos">
+        Photos
+    </md-tab>
+    <md-tab ui-sref=".videos">
+        Videos
+    </md-tab>
+</md-tabs>
 
-    <md-card>
-        <md-toolbar class="md-hue-2">
-            <div class="md-toolbar-tools">
-                <h3>
-                    <span>Archive</span>
-                </h3>
-            </div>
-        </md-toolbar>
-        <md-card-content>
-            <div flex-gt-xs>
-              <md-datepicker ng-model="stationCamsAndPhotosVm.datePickerModel.date" md-placeholder="Enter date"
-                  ng-change="stationCamsAndPhotosVm.dateChange()">
-              </md-datepicker>
-            </div>
-        </md-card-content>
-    </md-card>
-
-    <md-card>
-        <md-toolbar class="md-hue-2">
-            <div class="md-toolbar-tools">
-                <h3>
-                    <span>Videos</span>
-                </h3>
-            </div>
-        </md-toolbar>
-        <md-card-content>
-            <div ng-show="stationCamsAndPhotosVm.noVideos()">
-                <p class="md-body-1">No videos available!</p>
-            </div>
-            <div layout-xs="column" layout="row" layout-wrap>
-                <div ng-repeat="videoUrl in stationCamsAndPhotosVm.videoUrls" flex-xs="100" flex-gt-md="50">
-                    <embed-video data-ng-href="{[ videoUrl.video_url ]}" width="100%" height=480 
-                        iframe-id="youtube{[ $index ]}" enablejsapi="1" controls=1>
-                        <a href="{[ videoUrl.video_url ]}">Watch</a>
-                    </embed-video>
-                </div>
-            </div>
-        </md-card-content>
-    </md-card>
-
-    <md-card>
-        <md-toolbar class="md-hue-2">
-            <div class="md-toolbar-tools">
-                <h3>
-                    <span>Photos</span>
-                </h3>
-            </div>
-        </md-toolbar>
-        <md-card-content>
-            <div ng-show="stationCamsAndPhotosVm.noWebcamPhotos()">
-                <p class="md-body-1">No photos available!</p>
-            </div>
-            <md-grid-list
-                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
-                md-row-height-gt-md="1:1" md-row-height="2:2"
-                md-gutter="12px" md-gutter-gt-sm="8px">
-                
-                <md-grid-tile class="gray" ng-repeat="webcamPhoto in stationCamsAndPhotosVm.webcamPhotos" 
-                  ng-click="stationCamsAndPhotosVm.showPhoto($event, $index)">
-                    <img data-ng-src="data:image/png;base64, {[ webcamPhoto.photo ]}" alt="{[ webcamPhoto.timestamp ]}">
-                        <md-grid-tile-footer>
-                            <h3>{[ webcamPhoto.timestamp | date: 'yyyy-MM-dd HH:mm:ss' ]}</h3>
-                        </md-grid-tile-footer>
-                </md-grid-tile>
-
-            </md-grid-list>
-
-    </md-card>
-
-</md-content>
+<ui-view/>
