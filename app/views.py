@@ -57,12 +57,31 @@ def get_webcam_live_urls_by_station(station_id):
     
     return json.dumps(data, cls=CustomEncoder)
 
-@app.route('/api/video_urls_by_station/<uuid:station_id>/<int:on_timestamp>', methods=['GET'])
-def get_video_urls_by_station(station_id, on_timestamp):
-    query = "SELECT * FROM video_urls_by_station WHERE station_id=? AND date=? ORDER BY timestamp ASC"
+@app.route('/api/video_urls_by_station/<uuid:station_id>/<int:from_timestamp>/<int:to_timestamp>', methods=['GET'])
+def get_video_urls_by_station(station_id, from_timestamp, to_timestamp):
+    query = "SELECT * FROM video_urls_by_station WHERE station_id=? AND added_date>=? AND added_date<=?"
     prepared = session.prepare(query)
-    on_dt = datetime.fromtimestamp(on_timestamp/1000)
-    rows = session.execute_async(prepared, (station_id, on_dt,)).result()   
+    from_dt = datetime.fromtimestamp(from_timestamp/1000)
+    to_dt = datetime.fromtimestamp(to_timestamp/1000)
+    rows = session.execute_async(prepared, (station_id, from_dt, to_dt,)).result()   
+    data = [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/video_urls_by_station_asc_limit/<uuid:station_id>/<int:limit>', methods=['GET'])
+def get_video_urls_by_station_asc_limit(station_id, limit):
+    query = "SELECT * FROM video_urls_by_station WHERE station_id=? ORDER BY added_date ASC LIMIT ?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id, limit,)).result()   
+    data = [row for row in rows]
+    
+    return json.dumps(data, cls=CustomEncoder)
+    
+@app.route('/api/video_urls_by_station_desc_limit/<uuid:station_id>/<int:limit>', methods=['GET'])
+def get_video_urls_by_station_desc_limit(station_id, limit):
+    query = "SELECT * FROM video_urls_by_station WHERE station_id=? ORDER BY added_date DESC LIMIT ?"
+    prepared = session.prepare(query)
+    rows = session.execute_async(prepared, (station_id, limit,)).result()   
     data = [row for row in rows]
     
     return json.dumps(data, cls=CustomEncoder)

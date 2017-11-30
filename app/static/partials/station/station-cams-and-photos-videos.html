@@ -1,37 +1,21 @@
 <md-content class="md-padding">
     
-    <md-card>
-    
-        <md-toolbar class="md-hue-1">
-            <div class="md-toolbar-tools">
-                <h2>Video Archive</h2>
-                <span flex></span>
-                <md-datepicker ng-model="stationCamsAndPhotosVideosCtrlVm.datePickerModel.date" md-placeholder="Enter date"
-                    ng-change="stationCamsAndPhotosVideosCtrlVm.dateChange()">
-                </md-datepicker>
-            </div>
-        </md-toolbar>
+    <div layout="column">
         
-        <md-divider/>
-        
-        <md-card-content>
-        
+        <md-virtual-repeat-container id="vertical-container">
             <div layout="column">
-                
-                <div ng-show="stationCamsAndPhotosVideosCtrlVm.noVideos()">
+                <div ng-show="stationCamsAndPhotosVideosCtrlVm.videos.noVideos()">
                     <p class="md-body-1">No videos available!</p>
                 </div>
-                
-                <embed-video ng-repeat="videoUrl in stationCamsAndPhotosVideosCtrlVm.videoUrls" 
-                    data-ng-href="{[ videoUrl.video_url ]}" height="400" width="100%"
-                        iframe-id="youtube{[ $index ]}" enablejsapi="1" controls=1>
-                    <a href="{[ videoUrl.video_url ]}">Watch</a>
-                </embed-video>
-                
+                <div md-virtual-repeat="videoUrl in stationCamsAndPhotosVideosCtrlVm.videos" md-on-demand>
+                    <div>
+                        <iframe width="100%" height="350" ng-src="{[ videoUrl.video_url | trustAsResourceUrl ]}" 
+                            frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
             </div>
-
-        </md-card-content>
-    
-    </md-card>
+        </md-virtual-repeat-container>
+ 
+    </div>
     
 </md-content>

@@ -1023,11 +1023,10 @@ CREATE TABLE hydroview.group_parameters_by_station (
 
 CREATE TABLE hydroview.video_urls_by_station (
     station_id uuid,
-    date date,
-    timestamp timestamp,
+    added_date timestamp,
     video_url text,
-    PRIMARY KEY ((station_id, date), timestamp)
-) WITH CLUSTERING ORDER BY (timestamp DESC)
+    PRIMARY KEY ((station_id), added_date, video_url)
+) WITH CLUSTERING ORDER BY (added_date DESC, video_url ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
     AND comment = ''

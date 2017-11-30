@@ -13,9 +13,8 @@
         'ngSanitize', 
         'ngCsv',
         'md.data.table',
-        'videosharing-embed',
-        'ngMdIcons'
-        //'youtube-embed'
+        'ngMdIcons',
+        'ngYoutubeEmbed'
     ]);
     
 })();
